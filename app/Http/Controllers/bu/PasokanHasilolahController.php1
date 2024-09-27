@@ -1,0 +1,210 @@
+<?php
+
+namespace App\Http\Controllers\bu;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Pasokan_hasil_olah_bbm;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\Importpasokanhasil;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
+
+class PasokanHasilolahController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $pesan = [
+            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'izin_id.required' => 'izin_id masih kosong',
+            'bulan.required' => 'bulan masih kosong',
+            'produk.required' => 'produk masih kosong',
+            'provinsi.required' => 'provinsi masih kosong',
+
+            'kabupaten_kota.required' => 'kabupaten_kota masih kosong',
+            'sektor.required' => 'sektor masih kosong',
+            'volume.required' => 'volume masih kosong',
+            'satuan.required' => 'satuan masih kosong',
+            'status.required' => 'status masih kosong',
+
+            'catatan.required' => 'catatan masih kosong',
+            'petugas.required' => 'petugas masih kosong',
+        ];
+
+        $validatedData = $request->validate([
+            'badan_usaha_id' => 'required',
+            'izin_id' => 'required',
+            'bulan' => 'required',
+            'produk' => 'required',
+            'provinsi' => 'required',
+
+            'kabupaten_kota' => 'required',
+            'sektor' => 'required',
+            'volume' => 'required',
+            'satuan' => 'required',
+            'status' => 'required',
+
+            'catatan' => 'required',
+            'petugas' => 'required',
+        ], $pesan);
+
+        Pasokan_hasil_olah_bbm::create($validatedData);
+       
+        if ($validatedData) {
+            //redirect dengan pesan sukses
+            Alert::success('success', 'Data berhasil ditambahkan');
+            return back();
+        } else {
+            //redirect dengan pesan error
+            Alert::error('error', 'Data gagal berhasil ditambahkan');
+            return back();
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update_pasokan(Request $request, $id)
+    {
+        // dd($id);
+        $pasokan_olah = $id;
+        $pesan = [
+            'id.required' => 'id masih kosong',
+            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'izin_id.required' => 'izin_id masih kosong',
+            'bulan.required' => 'bulan masih kosong',
+            'produk.required' => 'produk masih kosong',
+            'provinsi.required' => 'provinsi masih kosong',
+            'kabupaten_kota.required' => 'kabupaten_kota masih kosong',
+            'sektor.required' => 'sektor masih kosong',
+            'volume.required' => 'volume masih kosong',
+            'satuan.required' => 'satuan masih kosong',
+            'status.required' => 'status masih kosong',
+            'catatan.required' => 'catatan masih kosong',
+            'petugas.required' => 'petugas masih kosong',
+        ];
+
+        $rules = [
+            'id' => 'required',
+            'badan_usaha_id' => 'required',
+            'izin_id' => 'required',
+            'bulan' => 'required',
+            'produk' => 'required',
+            'provinsi' => 'required',
+            'kabupaten_kota' => 'required',
+            'sektor' => 'required',
+            'volume' => 'required',
+            'satuan' => 'required',
+            'status' => 'required',
+            'catatan' => 'required',
+            'petugas' => 'required',
+
+        ];
+
+        $validatedData = $request->validate($rules, $pesan);
+
+        Pasokan_hasil_olah_bbm::where('id', $pasokan_olah)
+            ->update($validatedData);
+
+        if ($validatedData) {
+            //redirect dengan pesan sukses
+            Alert::success('success', 'Data berhasil diupdate');
+            return back();
+        } else {
+            //redirect dengan pesan error
+            Alert::error('error', 'Data gagal diupdate');
+            return back();
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        Pasokan_hasil_olah_bbm::destroy($id);
+       
+        if ($id) {
+            //redirect dengan pesan sukses
+            Alert::success('success', 'Data berhasil ditambahkan');
+            return back();
+        } else {
+            //redirect dengan pesan error
+            Alert::error('error', 'Data gagal berhasil ditambahkan');
+            return back();
+        }
+    }
+    public function importpasokanx()
+    {
+        $import = Excel::import(new Importpasokanhasil, request()->file('file'));
+
+        if ($import) {
+            //redirect dengan pesan sukses
+            Alert::success('success', 'Data excel berhasil diupload');
+            return back();
+        } else {
+            //redirect dengan pesan error
+            Alert::error('error', 'Data excel gagal diupload');
+            return back();
+
+            // return redirect('/show/hasil-olahan/minyak-bumi')->with(['success' => 'Data excel berhasil diupload']);
+        }
+    }
+    public function get_pasokan_ho($id)
+    {
+        $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
+        $data['provinsi'] = DB::select("SELECT provinces.name FROM provinces GROUP BY provinces.name");
+        $data['find'] = Pasokan_hasil_olah_bbm::find($id);
+        return response()->json(['data' => $data]);
+    }
+    public function submit_pasokan_olahx(Request $request, $id)
+    {
+       $idx=$id;
+        $validatedData = DB::update("update pasokan_hasil_olah_bbms set status='1' where id='$idx'");
+
+        if ($validatedData) {
+            //redirect dengan pesan sukses
+            Alert::success('success', 'Data berhasil dikirim');
+            return back();
+        } else {
+            //redirect dengan pesan error
+            Alert::error('error', 'Data gagal dikirim');
+            return back();
+        }
+    }
+}

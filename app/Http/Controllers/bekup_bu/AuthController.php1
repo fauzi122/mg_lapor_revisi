@@ -1,0 +1,213 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\T_perusahaan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Mail;
+use App\Mail\GenOTPMail;
+use Illuminate\Support\Facades\Session;
+
+class AuthController extends Controller
+{
+	public function index()
+	{
+		$perusahaan = DB::table('r_permohonan_izin as a')
+			->join('t_perusahaan as b', 'a.ID_PERUSAHAAN', '=', 'b.ID_PERUSAHAAN')
+			->join('fgen_r_template_izin as c', 'a.ID_TEMPLATE', '=', 'c.ID_TEMPLATE')
+			->join('t_perusahaan as d', 'a.ID_PERUSAHAAN', '=', 'd.ID_PERUSAHAAN')
+			->where('a.ID_CURR_PROSES', '140')
+			->whereNotNull('a.TGL_DISETUJUI')
+			->whereNotNull('a.NOMOR_IZIN')
+			->where(function ($query) {
+				$query->where('c.NAMA_TEMPLATE', 'LIKE', '%niaga%')
+					->orWhere('c.NAMA_TEMPLATE', 'LIKE', '%penyimpanan%')
+					->orWhere('c.NAMA_TEMPLATE', 'LIKE', '%pengolahan%')
+					->orWhere('c.NAMA_TEMPLATE', 'LIKE', '%pengangkutan%');
+			})
+			->groupBy('b.ID_PERUSAHAAN', 'd.EMAIL_PERUSAHAAN', 'b.NAMA_PERUSAHAAN')
+			->select('b.ID_PERUSAHAAN', 'd.EMAIL_PERUSAHAAN', 'b.NAMA_PERUSAHAAN')
+			->get();
+
+		return view('badan_usaha.index', compact('perusahaan'));
+	}
+
+	public function indexEvaluator()
+	{
+		return view('evaluator.login');
+	}
+
+	// $perusahaan = DB::select("SELECT b.* FROM `t_perusahaan` AS b WHERE b.`NAMA_PERUSAHAAN` <> '' ORDER BY b.`ID_PERUSAHAAN` ASC LIMIT 100");
+	// dd($perusahaan);
+	// exit;
+
+	public function postloginIzin(Request $request)
+	{
+
+		$bu = $request->perusahaan;
+
+		$check = User::where('badan_usaha_id', $bu)->count();
+
+		if ($check == '0') {
+			// dd('hai');
+			//insert ke table user dulu
+			$perusahaan = DB::table('t_perusahaan')
+				->where('ID_PERUSAHAAN', $bu)
+				->first();
+
+			$storeUser = User::create([
+				'name' => $perusahaan->NAMA_PERUSAHAAN,
+				'email' => $perusahaan->EMAIL_PERUSAHAAN,
+				'npwp' => $perusahaan->NPWP,
+				'password' => bcrypt('-'),
+				'badan_usaha_id' => $perusahaan->ID_PERUSAHAAN,
+				'role' => 'BU',
+			]);
+		}
+
+		$user = User::where('badan_usaha_id', $bu)->first();
+		// dd($user);
+		$email = $user->email;
+		$password = '-';
+		$credentials = [
+			'email' => $email,
+			'password' => $password
+		];
+
+		$dologin = Auth::attempt($credentials);
+
+		if ($dologin) {
+			return redirect('/');
+		} else {
+			// dd('hai');
+			return redirect('/login')->with('statusLogin', 'Eror Autentikasi');
+		}
+	}
+
+	public function postloginEvaluator(Request $request)
+	{
+
+		$token = $request->otp;
+
+		$user = User::where('remember_token', $token)->first();
+		// dd($user);
+		$email = $user->email;
+		$password = '-';
+		$token = $user->remember_token;
+		$credentials = [
+			'email' => $email,
+			'password' => $password,
+			'remember_token' => $token
+		];
+
+		$dologin = Auth::attempt($credentials);
+		if ($dologin) {
+			//update remember token jadi kosong
+			$updateUser = User::where('remember_token', $token)->update([
+				'remember_token'	=> ''
+			]);
+			return redirect('/master');
+		} else {
+			// dd('hai');
+			return redirect('/evaluator/login')->with('statusLogin', 'Eror Autentikasi');
+		}
+	}
+
+	function sumSimilarTemplates($templateCounts, $templateNameToMatch)
+	{
+		$count = 0;
+		foreach ($templateCounts as $templateName => $templateCount) {
+			if (strpos($templateName, $templateNameToMatch) !== false) {
+				$count += $templateCount;
+			}
+		}
+		return $count;
+	}
+
+	public function dashboard()
+	{
+		$ID_PERUSAHAAN = Auth::user()->badan_usaha_id;
+		$data['T_perusahaan'] = T_perusahaan::where('ID_PERUSAHAAN', $ID_PERUSAHAAN)->first();
+
+		$result = DB::select("SELECT NAMA_TEMPLATE, COUNT(ID_TEMPLATE) AS template_count FROM fgen_r_template_izin WHERE (NAMA_TEMPLATE LIKE '%niaga%' OR NAMA_TEMPLATE LIKE '%pengolahan%' OR NAMA_TEMPLATE LIKE '%pengangkutan%' OR NAMA_TEMPLATE LIKE '%penyimpanan%') AND ID_TEMPLATE IN (SELECT ID_TEMPLATE FROM r_permohonan_izin WHERE ID_PERUSAHAAN = $ID_PERUSAHAAN AND ID_CURR_PROSES = '140' GROUP BY ID_TEMPLATE) GROUP BY NAMA_TEMPLATE");
+
+		$template_counts = array();
+		foreach ($result as $row) {
+			$templateName = strtolower($row->NAMA_TEMPLATE);
+			$template_counts[$templateName] = $row->template_count;
+		}
+
+		$data['template_counts'] = $template_counts;
+		Session::put('j_niaga', $this->sumSimilarTemplates($template_counts, 'niaga'));
+		Session::put('j_pengolahan', $this->sumSimilarTemplates($template_counts, 'pengolahan'));
+		Session::put('j_penyimpanan', $this->sumSimilarTemplates($template_counts, 'penyimpanan'));
+		Session::put('j_pengangkutan', $this->sumSimilarTemplates($template_counts, 'pengangkutan'));
+
+		// echo json_encode($data);exit;
+
+		// return view('badan_usaha.dashboard', compact('j_niaga'));
+		return view('badan_usaha.dashboard')->with($data);
+	}
+
+	public function logoutBU()
+	{
+
+		Auth::logout();
+		return redirect('/login')->with('statusLogin', 'Sukses Logout');
+	}
+
+	public function logout()
+	{
+
+		Auth::logout();
+		return redirect('/evaluator/login')->with('statusLogin', 'Sukses Logout');
+	}
+
+	public function genOTP(Request $request)
+	{
+		$request->validate([
+			'nip' => 'required'
+		]);
+		$randomString = Str::random(8);
+
+		//cek dulu di SSO ada atau tidak**
+
+
+		$nip = $request->nip;
+		$email = 'xx@gmail.com';
+
+		//cek NIP di table user
+		$checkNIP = User::where('email', $nip)->count();
+
+		if ($checkNIP == '0') {
+			//insert ke table user
+			$storeUser = User::create([
+				'name'	=> 'Siti',
+				'email'	=> $nip,
+				'password' => bcrypt('-'),
+				'remember_token'	=> $randomString,
+				'role'	=> 'ADM',
+			]);
+		} else {
+			//update remember token
+			$updateUser = User::where('email', $nip)->update([
+				'remember_token'	=> $randomString
+			]);
+		}
+
+		//send email**
+		$data = [
+			'title' => 'Test Email Evaluator',
+			'body' => $randomString
+		];
+
+		Mail::to('vanturgo16@gmail.com')->send(new GenOTPMail($data));
+
+
+		return redirect('/evaluator/login')->with('statusToken', 'Sukses Generate Token, Silahkan Cek Email Anda');
+	}
+}
