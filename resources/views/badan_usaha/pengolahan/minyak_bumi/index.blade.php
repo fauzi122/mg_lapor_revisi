@@ -67,6 +67,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Bulan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -75,12 +76,21 @@
                                                 @foreach ($pengolahanProduksiMB as $ppmb)
                                                     @php
                                                         $id = Crypt::encryptString($ppmb->bulan . ',' . $ppmb->badan_usaha_id);
+                                                        $bulan = date('m', strtotime($ppmb->bulan));
+                                                        $tahun = date('Y', strtotime($ppmb->bulan));
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi">{{ dateIndonesia($ppmb->bulan) }}
+                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi">{{ bulan($bulan) }}
+                                                                    <i class="bx bx-check"
+                                                                        title="lihat data laporan"></i></a>
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <b><a
+                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi">{{ $tahun }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>

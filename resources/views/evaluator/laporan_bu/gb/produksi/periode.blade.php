@@ -42,6 +42,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Bulan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <!-- <th>Catatan</th> -->
                                                     <th>Aksi</th>
@@ -51,11 +52,19 @@
                                                 @foreach ($query as $data)
                                                     @php
                                                         $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id);
+                                                        $bulan = date('m', strtotime($data->bulan));
+                                                        $tahun = date('Y', strtotime($data->bulan));
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
-                                                            <b><a href="/laporan/produksi/gb/{{ $id }}">{{ dateIndonesia($data->bulan) }}
+                                                            <b><a href="/laporan/produksi/gb/{{ $id }}">{{ bulan($bulan) }}
+                                                                    <i
+                                                                            class="bx bx-check"
+                                                                            title="lihat data laporan"></i></a><b>
+                                                        </td>
+                                                        <td>
+                                                            <b><a href="/laporan/produksi/gb/{{ $id }}">{{ $bulan }}
                                                                     <i
                                                                             class="bx bx-check"
                                                                             title="lihat data laporan"></i></a><b>

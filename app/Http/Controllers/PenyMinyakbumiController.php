@@ -72,9 +72,8 @@ class PenyMinyakbumiController extends Controller
             'statusx'
         ));
     }
-    public function show_pggbx($id)
+    public function show_pggbx($filter, $id)
     {
-
         $pecah = explode(',', Crypt::decryptString($id));
         $pggb = Penygasbumi::get();
         $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -87,13 +86,19 @@ class PenyMinyakbumiController extends Controller
 
         // Mengambil substring dari bulan
         $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
+        $tahun_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 4) : '';
         $statusx = $bulan_ambil->status;
 
-
-        $pggb = Penygasbumi::where([
-            'bulan' => $pecah[0],
-            'badan_usaha_id' => $pecah[1]
-        ])->orderBy('status', 'desc')->get();
+        
+        if ($filter == 'bulan') {
+            $pggb = Penygasbumi::where([
+                'bulan' => $pecah[0],
+                'badan_usaha_id' => $pecah[1]
+            ])->orderBy('status', 'desc')->get();
+        } else {
+            $pggb = Penygasbumi::where('bulan', 'like' , "%" . $tahun_ambilx . "%")
+                                ->orderBy('status', 'desc')->get();
+        }
 
         return view('badan_usaha.penyimpanan.gas_bumi.show', compact(
             'pggb',
