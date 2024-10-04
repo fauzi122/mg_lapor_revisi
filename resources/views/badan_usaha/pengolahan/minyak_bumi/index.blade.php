@@ -76,21 +76,19 @@
                                                 @foreach ($pengolahanProduksiMB as $ppmb)
                                                     @php
                                                         $id = Crypt::encryptString($ppmb->bulan . ',' . $ppmb->badan_usaha_id);
-                                                        $bulan = date('m', strtotime($ppmb->bulan));
-                                                        $tahun = date('Y', strtotime($ppmb->bulan));
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi">{{ bulan($bulan) }}
+                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi">{{ getBulan($ppmb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
                                                         </td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi">{{ $tahun }}
+                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi/tahun">{{ getTahun($ppmb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
@@ -175,6 +173,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Bulan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -188,7 +187,14 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/pasokan">{{ dateIndonesia($ppmb->bulan) }}
+                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/pasokan">{{ getBulan($ppmb->bulan) }}
+                                                                    <i class="bx bx-check"
+                                                                        title="lihat data laporan"></i></a>
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <b><a
+                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/pasokan/tahun">{{ getTahun($ppmb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
@@ -275,6 +281,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Bulan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -289,7 +296,15 @@
                                                         <td>
                                                             <b>
                                                                 <a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/distribusi">{{ dateIndonesia($ppmb->bulan) }}
+                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/distribusi">{{ getBulan($ppmb->bulan) }}
+                                                                    <i class="bx bx-check" title="lihat data laporan"></i>
+                                                                </a>
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <b>
+                                                                <a
+                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/distribusi/tahun">{{ getTahun($ppmb->bulan) }}
                                                                     <i class="bx bx-check" title="lihat data laporan"></i>
                                                                 </a>
                                                             </b>
@@ -376,6 +391,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Bulan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -389,7 +405,14 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/produksi">{{ dateIndonesia($ppgb->bulan) }}
+                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/produksi">{{ getBulan($ppgb->bulan) }}
+                                                                    <i class="bx bx-check"
+                                                                        title="lihat data laporan"></i></a>
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <b><a
+                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/produksi/tahun">{{ getTahun($ppgb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
@@ -474,6 +497,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Bulan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -487,7 +511,14 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/pasokan">{{ dateIndonesia($ppgb->bulan) }}
+                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/pasokan">{{ getBulan($ppgb->bulan) }}
+                                                                    <i class="bx bx-check"
+                                                                        title="lihat data laporan"></i></a>
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <b><a
+                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/pasokan/tahun">{{ getTahun($ppgb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
@@ -573,6 +604,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Bulan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -587,7 +619,15 @@
                                                         <td>
                                                             <b>
                                                                 <a
-                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/distribusi">{{ dateIndonesia($ppgb->bulan) }}
+                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/distribusi">{{ getBulan($ppgb->bulan) }}
+                                                                    <i class="bx bx-check" title="lihat data laporan"></i>
+                                                                </a>
+                                                            </b>
+                                                        </td>
+                                                        <td>
+                                                            <b>
+                                                                <a
+                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/distribusi/tahun">{{ getTahun($ppgb->bulan) }}
                                                                     <i class="bx bx-check" title="lihat data laporan"></i>
                                                                 </a>
                                                             </b>

@@ -90,17 +90,25 @@ class EvProduksiGasBumiController extends Controller
         return view('evaluator.laporan_bu.gb.produksi.periode', $data);
     }
 
-    public function show($kode = '')
+    public function show($kode = '', $filter = null)
     {
 
         $pecah = explode(',', Crypt::decryptString($kode));
+
+        if ($filter && $filter === "tahun") {
+            $filterBy = substr($pecah[0], 0, 4);
+        } 
+        else {
+            $filterBy = $pecah[0];
+        }
+
         $query = DB::table('pengolahans as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN')
             ->where('a.jenis', 'Gas Bumi')
             ->where('a.tipe', 'Produksi')
             ->where('a.badan_usaha_id', $pecah[1])
-            ->where('a.bulan', $pecah[0])
+            ->where('a.bulan', 'like', "%". $filterBy ."%")
             ->whereIn('a.status', [1, 2,3])
             ->get();
 
