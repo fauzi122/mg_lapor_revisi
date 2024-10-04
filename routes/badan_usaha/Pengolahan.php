@@ -7,9 +7,9 @@ use App\Http\Controllers\PengolahanController;
 Route::controller(PengolahanController::class)->group(function () {
   // Pengolahan Minyak Bumi
   Route::get('/pengolahan-minyak-bumi-hasil-olah', 'index');
-  route::get('/pengolahan-minyak-bumi-hasil-olah/show/{id}/{pengolahan}', 'show_mb_ho');
+  route::get('/pengolahan-minyak-bumi-hasil-olah/show/{id}/{pengolahan}/{filter?}', 'show_mb_ho');
   // Route::get('/pengolahan-gas-bumi', 'show_gb');
-  route::get('/pengolahan-gas-bumi/show/{id}/{pengolahan}', 'show_gb');
+  route::get('/pengolahan-gas-bumi/show/{id}/{pengolahan}/{filter?}', 'show_gb');
 
   // Fungsi AJAX
   Route::get('/get_intakeKilang', 'get_intakeKilang');

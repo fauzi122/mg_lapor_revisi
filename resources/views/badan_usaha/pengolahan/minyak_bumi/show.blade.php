@@ -55,6 +55,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Bulan</th>
+                                                <th>Tahun</th>
                                                 <th>Status</th>
                                                 <th>Catatan</th>
                                                 <th>Produk</th>
@@ -70,7 +71,8 @@
                                             @foreach ($pengolahanProduksiMB as $ppmb)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ date('F Y', strtotime($ppmb->bulan)) }}</td>
+                                                    <td>{{ getBulan($ppmb->bulan) }}</td>
+                                                    <td>{{ getTahun($ppmb->bulan) }}</td>
                                                     <td>
                                                         @if ($ppmb->status == 1 && $ppmb->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -221,6 +223,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Bulan</th>
+                                                <th>Tahun</th>
                                                 <th>Status</th>
                                                 <th>Catatan</th>
                                                 <th>Kategori Pemasok</th>
@@ -237,7 +240,8 @@
                                             @foreach ($pengolahanPasokanMB as $ppmb)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ date('F Y', strtotime($ppmb->bulan)) }}</td>
+                                                    <td>{{ getBulan($ppmb->bulan) }}</td>
+                                                    <td>{{ getTahun($ppmb->bulan) }}</td>
                                                     <td>
                                                         @if ($ppmb->status == 1 && $ppmb->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -391,6 +395,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Bulan</th>
+                                                <th>Tahun</th>
                                                 <th>Status</th>
                                                 <th>Catatan</th>
                                                 <th>Produk</th>
@@ -407,7 +412,8 @@
                                             @foreach ($pengolahanDistribusiMB as $ppmb)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ date('F Y', strtotime($ppmb->bulan)) }}</td>
+                                                    <td>{{ getBulan($ppmb->bulan) }}</td>
+                                                    <td>{{ getTahun($ppmb->bulan) }}</td>
                                                     <td>
                                                         @if ($ppmb->status == 1 && $ppmb->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>

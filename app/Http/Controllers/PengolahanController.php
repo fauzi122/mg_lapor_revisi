@@ -84,7 +84,7 @@ class PengolahanController extends Controller
     ));
   }
 
-  public function show_mb_ho($id, $jenis)
+  public function show_mb_ho($id, $jenis, $filter = null)
   {
     $pecah = explode(',', Crypt::decryptString($id));
     $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -120,20 +120,27 @@ class PengolahanController extends Controller
     $bulan_ambil_distribusix = $bulan_ambil_distribusi ? substr($bulan_ambil_distribusi->bulan, 0, 7) : '';
     $status_distribusix = $bulan_ambil_distribusi->status ?? '';
 
+    if ($filter && $filter === "tahun") {
+      $filterBy = substr($pecah[0], 0, 4);
+    } else {
+      $filterBy = $pecah[0];
+    }
+    
     $pengolahanProduksiMB = Pengolahan::where([
-      'bulan' => $pecah[0],
+      ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
       'jenis' => 'Minyak Bumi',
       'tipe' => 'Produksi',
     ])->orderBy('status', 'desc')->get();
+    
     $pengolahanPasokanMB = Pengolahan::where([
-      'bulan' => $pecah[0],
+      ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
       'jenis' => 'Minyak Bumi',
       'tipe' => 'Pasokan',
     ])->orderBy('status', 'desc')->get();
     $pengolahanDistribusiMB = Pengolahan::where([
-      'bulan' => $pecah[0],
+      ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
       'jenis' => 'Minyak Bumi',
       'tipe' => 'Distribusi',
@@ -174,7 +181,7 @@ class PengolahanController extends Controller
     // ));
   }
 
-  public function show_gb($id, $jenis)
+  public function show_gb($id, $jenis, $filter = null)
   {
     $pecah = explode(',', Crypt::decryptString($id));
     $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -210,20 +217,27 @@ class PengolahanController extends Controller
     $bulan_ambil_distribusix = $bulan_ambil_distribusi ? substr($bulan_ambil_distribusi->bulan, 0, 7) : '';
     $status_distribusix = $bulan_ambil_distribusi->status ?? '';
 
+
+    if ($filter && $filter === "tahun") {
+      $filterBy = substr($pecah[0], 0, 4);
+    } else {
+      $filterBy = $pecah[0];
+    }
+    
     $pengolahanProduksiGB = Pengolahan::where([
-      'bulan' => $pecah[0],
+      ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
       'jenis' => 'Gas Bumi',
       'tipe' => 'Produksi',
     ])->orderBy('status', 'desc')->get();
     $pengolahanPasokanGB = Pengolahan::where([
-      'bulan' => $pecah[0],
+      ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
       'jenis' => 'Gas Bumi',
       'tipe' => 'Pasokan',
     ])->orderBy('status', 'desc')->get();
     $pengolahanDistribusiGB = Pengolahan::where([
-      'bulan' => $pecah[0],
+      ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
       'jenis' => 'Gas Bumi',
       'tipe' => 'Distribusi',

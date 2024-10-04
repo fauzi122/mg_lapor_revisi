@@ -53,6 +53,16 @@ function rupiah($angka) {
     return "Rp " . number_format($angka, 2, ',', '.');
 }
 
+function getBulan($date) {
+    $bulan = date('m', strtotime($date));
+    return bulan($bulan);
+}
+
+function getTahun($date) {
+    $tahun = date('Y', strtotime($date));
+    return $tahun;
+}
+
 // Contoh penggunaan:
 // echo "Hari ini adalah " . hari_ini();
 // echo 'Hari ini : '.dateIndonesia(date('Y-m-d'));
