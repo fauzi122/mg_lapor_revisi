@@ -40,6 +40,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -51,7 +52,10 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/ekspor">{{ dateIndonesia($data->bulan_peb) }}<i
+                                                <td><b><a href="/eksport-import/show/{{ $id }}/ekspor">{{ getBulan($data->bulan_peb) }}<i
+                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
+                                                </td>
+                                                <td><b><a href="/eksport-import/show/{{ $id }}/ekspor/tahun">{{ getTahun($data->bulan_peb) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
@@ -148,6 +152,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -159,7 +164,10 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/impor">{{ dateIndonesia($data->bulan_pib) }}<i
+                                                <td><b><a href="/eksport-import/show/{{ $id }}/impor">{{ getBulan($data->bulan_pib) }}<i
+                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
+                                                </td>
+                                                <td><b><a href="/eksport-import/show/{{ $id }}/impor/tahun">{{ getTahun($data->bulan_pib) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>

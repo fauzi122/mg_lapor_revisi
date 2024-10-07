@@ -41,6 +41,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <!-- <th>Catatan</th> -->
                                             <th>Aksi</th>
@@ -53,7 +54,10 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/niaga/harga/show/{{ $id }}/bbmjbu">{{ dateIndonesia($data->bulan) }}<i
+                                                <td><b><a href="/niaga/harga/show/{{ $id }}/bbmjbu">{{ getBUlan($data->bulan) }}<i
+                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
+                                                </td>
+                                                <td><b><a href="/niaga/harga/show/{{ $id }}/bbmjbu/tahun">{{ getTahun($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
@@ -149,6 +153,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <!-- <th>Catatan</th> -->
                                             <th>Aksi</th>
@@ -161,7 +166,10 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/niaga/harga/show/{{ $id }}/hargalpg">{{ dateIndonesia($data->bulan) }}<i
+                                                <td><b><a href="/niaga/harga/show/{{ $id }}/hargalpg">{{ getBulan($data->bulan) }}<i
+                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
+                                                </td>
+                                                <td><b><a href="/niaga/harga/show/{{ $id }}/hargalpg/tahun">{{ getTahun($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
