@@ -51,9 +51,7 @@ use App\Http\Controllers\Evaluator\{
 	DataUserController,
 	SubsidiLpg
 };
-
-
-
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +66,13 @@ use App\Http\Controllers\Evaluator\{
 
 // Route::get('/redirect-laporan/{q}', [AuthController::class, 'postloginIzin'])->name('post.izin'); //Redirect from izin
 //auth BU
+Route::get('/test', function(){
+	return view('test');
+});
+Route::post('/test', function(Request $r){
+	dd($r);
+});
+
 Route::get('/real-time-data', [RealTimeDataController::class, 'getData']);
 Route::get('/real-time-data-view', [RealTimeDataController::class, 'index']);
 Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -231,7 +236,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 
 	Route::controller(PenyMinyakbumiController::class)->group(function () {
 		Route::get('/penyimpananMinyakBumi', 'index');
-		route::get('/penyimpanan-minyak-bumi/show/{id}', 'show_pmbx');
+		route::get('/penyimpanan-minyak-bumi/show/{id}/{filter?}', 'show_pmbx');
 		Route::post('/simpan_pmb', 'simpan_pmbx');
 		Route::put('/update_pmb/{id}', 'update_pmbx');
 		Route::delete('/hapus_pmb/{id}', 'hapus_pmbx');
@@ -260,7 +265,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 	Route::resource('/harga-bbm-jbu', HargabbmController::class);
 	Route::controller(HargabbmController::class)->group(function () {
 		Route::get('/niaga/harga', 'index');
-		Route::get('/niaga/harga/show/{id}/{harga}', 'show_niagahargax');
+		Route::get('/niaga/harga/show/{id}/{harga}/{filter?}', 'show_niagahargax');
 		Route::post('/importhargajbu', 'importhargajbux');
 		Route::get('/get-harga-bbm/{id}', 'get_harga_bbm');
 		Route::put('/submit_harga-bbm-jbu/{id}', 'submit_harga_bbm_jbux');

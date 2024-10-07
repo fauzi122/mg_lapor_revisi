@@ -43,7 +43,7 @@ class HargabbmController extends Controller
   /**
    * Show the form for creating a new resource.
    */
-  public function show_niagahargax($id, $harga)
+  public function show_niagahargax($id, $harga, $filter = null)
   {
       // dd($harga);
       // die;
@@ -75,13 +75,19 @@ class HargabbmController extends Controller
       // dd($harga);
       // die;
 
+      if ($filter && $filter === "tahun") {
+        $filterBy = substr($pecah[0], 0, 4);
+      } else {
+        $filterBy = $pecah[0];
+      }
+
       $hargabbmjbu = Harga_bbm_jbu::where([
-        'bulan' => $pecah[0],
+        ['bulan', 'like', "%". $filterBy ."%"],
         'badan_usaha_id' => $pecah[1]
       ])->orderBy('status', 'desc')->get();
 
       $hargalpg = HargaLPG::where([
-        'bulan' => $pecah[0],
+        ['bulan', 'like', "%". $filterBy ."%"],
         'badan_usaha_id' => $pecah[1]
       ])->orderBy('status', 'desc')->get();
 

@@ -76,6 +76,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Bulan PEB</th>
+                                        <th>Tahun PEB</th>
                                         <th>Status</th>
                                         <th>Catatan</th>
                                         <th>Produk</th>
@@ -101,7 +102,8 @@
                                     @foreach ($expor as $expor)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ dateIndonesia($expor->bulan_peb) }}</td>
+                                        <td>{{ getBulan($expor->bulan_peb) }}</td>
+                                        <td>{{ getTahun($expor->bulan_peb) }}</td>
                                         <td>
                                             @if ($expor->status == 1 && $expor->catatan)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -232,6 +234,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Bulan PIB</th>
+                                        <th>Tahun PIB</th>
                                         <th>Status</th>
                                         <th>Catatan</th>
                                         <th>Produk</th>
@@ -258,7 +261,8 @@
                                     @foreach ($impor as $impor)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ dateIndonesia($impor->bulan_pib) }}</td>
+                                        <td>{{ getBulan($impor->bulan_pib) }}</td>
+                                        <td>{{ getTahun($impor->bulan_pib) }}</td>
                                         <td>
                                             @if ($impor->status == 1 && $impor->catatan)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>

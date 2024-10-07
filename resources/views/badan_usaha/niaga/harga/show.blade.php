@@ -55,6 +55,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Bulan</th>
+                                                <th>Tahun</th>
                                                 <th>Sektor</th>
                                                 <th>Produk</th>
                                                 <th>Provinsi</th>
@@ -72,7 +73,8 @@
                                             @foreach ($hargabbmjbu as $hargabbmjbu)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ dateIndonesia($hargabbmjbu->bulan) }}</td>
+                                                    <td>{{ getBulan($hargabbmjbu->bulan) }}</td>
+                                                    <td>{{ getTahun($hargabbmjbu->bulan) }}</td>
                                                     <td>{{ $hargabbmjbu->sektor }}</td>
                                                     <td>{{ $hargabbmjbu->produk }}</td>
                                                     <td>{{ $hargabbmjbu->provinsi }}</td>
