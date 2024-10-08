@@ -93,6 +93,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Catatan</th>
                                             <th>Produk</th>
@@ -120,7 +121,8 @@
                                         @foreach ($pmb as $pmb)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ dateIndonesia($pmb->bulan) }}</td>
+                                                <td>{{ getBulan($pmb->bulan) }}</td>
+                                                <td>{{ getTahun($pmb->bulan) }}</td>
                                                 <td>
                                                     @if ($pmb->status == 1 && $pmb->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>

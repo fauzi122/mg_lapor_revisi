@@ -5,7 +5,7 @@ use App\Http\Controllers\bu\EksportImportController;
 
 Route::controller(EksportImportController::class)->group(function () {
   Route::get('/eksport-import', 'index');
-  route::get('/eksport-import/show/{id}/{eix}', 'show_eix');
+  route::get('/eksport-import/show/{id}/{eix}/{filter?}', 'show_eix');
   Route::post('/simpan_export', 'simpan_exportx');
   Route::put('/update_export/{id}', 'update_exportx');
   Route::delete('/hapus_export/{id}', 'hapus_exportx');
@@ -26,4 +26,6 @@ Route::controller(EksportImportController::class)->group(function () {
   Route::get('/get-incoterms', 'get_incoterms');
   Route::post('/import_eksport', 'import_eksportx');
   Route::post('/import_import', 'import_importx');
+  Route::get('/get-pelabuhan', 'get_pelabuhan');
+  Route::get('/get-incoterms', 'get_incoterms');
 });

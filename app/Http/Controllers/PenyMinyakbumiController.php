@@ -43,7 +43,7 @@ class PenyMinyakbumiController extends Controller
 
         return view('badan_usaha.penyimpanan.gas_bumi.index', compact('pm'));
     }
-    public function show_pmbx($id)
+    public function show_pmbx($id, $filter = null)
     {
         $pecah = explode(',', Crypt::decryptString($id));
         $pggb = Penyminyakbumi::get();
@@ -59,9 +59,15 @@ class PenyMinyakbumiController extends Controller
         $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
         $statusx = $bulan_ambil->status;
 
+        if ($filter && $filter === "tahun") {
+            $filterBy = substr($pecah[0], 0, 4);
+          } else {
+            $filterBy = $pecah[0];
+          }
+
 
         $pmb = Penyminyakbumi::where([
-            'bulan' => $pecah[0],
+            ['bulan', 'like', "%". $filterBy ."%"],
             'badan_usaha_id' => $pecah[1]
         ])->orderBy('status', 'desc')->get();
 

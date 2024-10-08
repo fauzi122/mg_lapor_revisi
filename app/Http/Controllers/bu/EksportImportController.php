@@ -37,7 +37,7 @@ class EksportImportController extends Controller
       'impor'
     ));
   }
-  public function show_eix($id, $eix)
+  public function show_eix($id, $eix, $filter = null)
   {
     $eixx = $eix;
 
@@ -61,13 +61,18 @@ class EksportImportController extends Controller
     $bulan_ambil_imporsx = $bulan_ambil_impors ? substr($bulan_ambil_impors->bulan_pib, 0, 7) : '';
     $statusbulan_ambil_imporsx = $bulan_ambil_impors->status ?? '';
 
+    if ($filter && $filter === "tahun") {
+      $filterBy = substr($pecah[0], 0, 4);
+    } else {
+      $filterBy = $pecah[0];
+    }
     $expor = Ekspor::where([
-      'bulan_peb' => $pecah[0],
+      ['bulan_peb', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1]
-    ])->orderBy('status', 'desc')->get();
-
+      ])->orderBy('status', 'desc')->get();
+      
     $impor = Impor::where([
-      'bulan_pib' => $pecah[0],
+      ['bulan_pib', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1]
     ])->orderBy('status', 'desc')->get();
 
@@ -470,7 +475,11 @@ class EksportImportController extends Controller
   public function get_incoterms()
   {
 
+
     $data = DB::select("SELECT * FROM `inco_terms` ORDER BY incoterm");
+
+    $data = DB::select("SELECT * FROM `inco_terms` ORDER BY incoterm ASC");
+
     // $data = Produk::get();
     return response()->json(['data' => $data]);
   }

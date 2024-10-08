@@ -71,6 +71,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Bulan</th>
+                                        <th>Tahun</th>
                                         <th>Status</th>
                                         <th>Catatan</th>
                                         <th>No Tangki</th>
@@ -94,7 +95,8 @@
                                     @foreach ($pggb as $pggb)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{dateIndonesia($pggb->bulan)}}</td>
+                                        <td>{{getBulan($pggb->bulan)}}</td>
+                                        <td>{{getTahun($pggb->bulan)}}</td>
                                         <td>		
                                         @if ($pggb->status == 1 && $pggb->catatan)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
