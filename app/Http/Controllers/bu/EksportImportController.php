@@ -470,7 +470,7 @@ class EksportImportController extends Controller
   public function get_incoterms()
   {
 
-    $data = DB::select("SELECT * FROM `inco_terms` ORDER BY ");
+    $data = DB::select("SELECT * FROM `inco_terms` ORDER BY incoterm");
     // $data = Produk::get();
     return response()->json(['data' => $data]);
   }
@@ -509,7 +509,7 @@ class EksportImportController extends Controller
 
     $cekdb = DB::table('impors')
       ->where('badan_usaha_id', $badan_usaha_id)
-      ->where('bulan', $bulan)
+      ->where('bulan_pib', $bulan)
       ->orderBy('status', 'desc')
       ->first();
 

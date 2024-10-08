@@ -132,7 +132,7 @@
                                 <h5 class="mb-0">Impor</h5>
                                 <div>
                                     <button type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms();" data-bs-toggle="modal"
+                                        onclick="produk(); provinsi(); negara();" data-bs-toggle="modal"
                                         data-bs-target="#inputimpor">Buat Laporan</button>
                                     <button type="button" class="btn btn-success waves-effect waves-light"
                                         data-bs-toggle="modal" data-bs-target="#excelimport">Import Excel</button>
@@ -142,7 +142,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="table2" class="table table-bordered dt-responsive nowrap w-100">
+                                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
                                         <tr>
