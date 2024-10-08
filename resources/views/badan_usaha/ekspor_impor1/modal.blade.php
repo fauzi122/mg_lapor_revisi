@@ -1,5 +1,4 @@
 <!-- input simpan_ekspor -->
-{{-- tes --}}
 <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -222,7 +221,6 @@
                         </div>
                     @enderror
                 </div>
-
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Bulan PEB</label>
@@ -709,7 +707,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="example-text-input" class="form-label">Pelabuhan Muat</label>
+                    <label for="example-text-input" class="form-label">pelabuhan Muat</label>
                     <input class="form-control" type="text" id="example-text-input" name="pelabuhan_muat">
                     @error('pelabuhan_muat')
                         <div class="form-group has-danger mb-0">
@@ -720,20 +718,12 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Pelabuhan Bongkar</label>
-                    <select class="form-select pelabuhan" name="pelabuhan_bongkar" id="pelabuhan_bongkar">
-                        <option>Pilih Pelabuhan</option>
-                    </select>
+                    <input class="form-control" type="text" id="example-text-input" name="pelabuhan_bongkar">
                     @error('pelabuhan_bongkar')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
                         </div>
                     @enderror
-                    {{-- <input class="form-control" type="text" id="example-text-input" name="pelabuhan_bongkar">
-                    @error('pelabuhan_bongkar')
-                        <div class="form-group has-danger mb-0">
-                            <div class="form-control-feedback">{{ $message }}</div>
-                        </div>
-                    @enderror --}}
                 </div>
 
                 <div class="mb-3">
@@ -784,22 +774,13 @@
                 </div>
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Incoterms</label>
-                    <input class="form-control" type="hidden" id="example-text-input" name="status" value="0">
-                    <select class="form-select incoterms" name="incoterms" id="incoterms">
-                        <option>Pilih Incoterms</option>
-                    </select>
+                    <input class="form-control" type="text" id="example-text-input" name="incoterms">
                     <input class="form-control" type="hidden" id="example-text-input" name="status" value="0">
                     @error('incoterms')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
                         </div>
                     @enderror
-                    {{-- <input class="form-control" type="text" id="example-text-input" name="incoterms">
-                    @error('incoterms')
-                        <div class="form-group has-danger mb-0">
-                            <div class="form-control-feedback">{{ $message }}</div>
-                        </div>
-                    @enderror --}}
                 </div>
 
             </div>
@@ -1252,7 +1233,7 @@
                 
             </div>
             <div class="modal-footer">
-                <a href="https://lapor.duniasakha.com/storage/template/templateExpor.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
+                <a href="https://lapor.duniasakha.com/storage/template/excel_ekpor.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                 <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
             </div>
@@ -1289,7 +1270,7 @@
                 
             </div>
             <div class="modal-footer">
-                <a href="https://lapor.duniasakha.com/storage/template/templateImpor.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
+                <a href="https://lapor.duniasakha.com/storage/template/excel_import.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                 <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
             </div>

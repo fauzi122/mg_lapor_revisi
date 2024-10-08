@@ -1,6 +1,5 @@
 @extends('layouts.frontand.app')
 @section('content')
-{{-- tes --}}
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
@@ -41,7 +40,6 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
-                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -53,10 +51,7 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/ekspor">{{ getBulan($data->bulan_peb) }}<i
-                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
-                                                </td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/ekspor/tahun">{{ getTahun($data->bulan_peb) }}<i
+                                                <td><b><a href="/eksport-import/show/{{ $id }}/ekspor">{{ dateIndonesia($data->bulan_peb) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
@@ -137,7 +132,7 @@
                                 <h5 class="mb-0">Impor</h5>
                                 <div>
                                     <button type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms();" data-bs-toggle="modal"
+                                        onclick="produk(); provinsi(); negara();" data-bs-toggle="modal"
                                         data-bs-target="#inputimpor">Buat Laporan</button>
                                     <button type="button" class="btn btn-success waves-effect waves-light"
                                         data-bs-toggle="modal" data-bs-target="#excelimport">Import Excel</button>
@@ -147,13 +142,12 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="table2" class="table table-bordered dt-responsive nowrap w-100">
+                                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
-                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -165,10 +159,7 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/impor">{{ getBulan($data->bulan_pib) }}<i
-                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
-                                                </td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/impor/tahun">{{ getTahun($data->bulan_pib) }}<i
+                                                <td><b><a href="/eksport-import/show/{{ $id }}/impor">{{ dateIndonesia($data->bulan_pib) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
