@@ -2,7 +2,7 @@
 // routes/badan_usaha/EksporImpor.php
 
 use App\Http\Controllers\bu\EksportImportController;
-// tes
+
 Route::controller(EksportImportController::class)->group(function () {
   Route::get('/eksport-import', 'index');
   route::get('/eksport-import/show/{id}/{eix}/{filter?}', 'show_eix');
