@@ -68,6 +68,9 @@
 
     <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
+    {{-- Dropdown Modal --}}
+    <link href="{{ asset('assets/css/dropdown-modal.css') }}" rel="stylesheet" type="text/css" />
+
 </head>
 
 <body>

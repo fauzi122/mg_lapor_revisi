@@ -580,7 +580,7 @@ class PengolahanController extends Controller
       'intake_kilang' => 'required',
       'satuan' => 'required',
       'provinsi' => 'required',
-      'kabupaten_kota' => 'required',
+      'kabupaten_kota' => 'required|array',
       'volume' => 'required',
       'keterangan' => 'required',
       'jenis' => 'required',
@@ -608,7 +608,22 @@ class PengolahanController extends Controller
       }
     }
 
-    Pengolahan::create($validatedData);
+    $dataPengolahan = new Pengolahan();
+    $dataPengolahan->badan_usaha_id = $validatedData['badan_usaha_id'];
+    $dataPengolahan->bulan = $validatedData['bulan'];
+    $dataPengolahan->kategori_pemasok = $validatedData['kategori_pemasok'];
+    $dataPengolahan->intake_kilang = $validatedData['intake_kilang'];
+    $dataPengolahan->satuan = $validatedData['satuan'];
+    $dataPengolahan->provinsi = $validatedData['provinsi'];
+    $dataPengolahan->kabupaten_kota = json_encode($validatedData['kabupaten_kota']); // Mengonversi array ke JSON
+    $dataPengolahan->volume = $validatedData['volume'];
+    $dataPengolahan->keterangan = $validatedData['keterangan'];
+    $dataPengolahan->jenis = $validatedData['jenis'];
+    $dataPengolahan->tipe = $validatedData['tipe'];
+
+    $dataPengolahan->save();
+
+    // Pengolahan::create($validatedData);
     // $validatedData = PengolahanMinyakBumiPasokan::create(['badan_usaha_id' => '3','izin_id' => '10']);
 
     if ($validatedData) {

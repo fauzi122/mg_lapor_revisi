@@ -444,12 +444,30 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kabupaten / Kota</label>
                         <select class="form-select nama_kota" name="kabupaten_kota" id="nama_kota" required>
                             <option value="">Pilih Kabupaten / Kota</option>
                         </select>
                         @error('kabupaten_kota')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div> --}}
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Kabupaten / Kota</label>
+                        <div class="dd-wrapper">
+                            <button class="dd-toggle" type="button" onclick="ddShow()">
+                              <span>Pilih Kabupaten / Kota</span>
+                              <i class="bx bx-chevron-down"></i>
+                            </button>
+                            <div class="dd-menu d-none nama_kab">
+                              {{-- <label><input type="checkbox" name="kabupaten_kota[]" value=""/><span>Kabupaten Tangerang</span></label> --}}
+                            </div>
+                        </div>
+                        @error('kabupaten_kota[]')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>

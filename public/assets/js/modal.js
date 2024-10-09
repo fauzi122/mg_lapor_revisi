@@ -1013,6 +1013,9 @@ $(".name_provinsi").change(function () {
                         value.nama_kota +
                         `</option>`
                 );
+                $(".nama_kab").append(
+                    `<label><input type="checkbox" name="kabupaten_kota[]" value="${value.nama_kota}"/><span>${value.nama_kota}</span></label>`
+                );
             });
         },
         error: function (xhr, status, error) {
@@ -1339,4 +1342,10 @@ function incoterms() {
             alert("Terjadi kesalahan saat mengirim data.");
         },
     });
+}
+
+function ddShow() {
+    const ddMenu = document.querySelector(".dd-menu");
+
+    ddMenu.classList.toggle("d-none");
 }
