@@ -238,6 +238,9 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($pengolahanPasokanMB as $ppmb)
+                                                @php
+                                                    $kabKota = json_decode($ppmb->kabupaten_kota);
+                                                @endphp
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ getBulan($ppmb->bulan) }}</td>
@@ -334,7 +337,12 @@
                                                         </center>  --}}
                                                     </td>
                                                     <td>{{ $ppmb->provinsi }}</td>
-                                                    <td>{{ $ppmb->kabupaten_kota }}</td>
+                                                    {{-- <td>{{ $ppmb->kabupaten_kota }}</td> --}}
+                                                    <td>
+                                                        @foreach ($kabKota as $kabKota)
+                                                            <p> {{$loop->iteration.". " . $kabKota }}</p>
+                                                        @endforeach
+                                                    </td>
                                                     <td>{{ $ppmb->volume }}</td>
                                                     <td>{{ $ppmb->satuan }}</td>
                                                     <td>{{ $ppmb->keterangan }}</td>

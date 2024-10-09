@@ -1,0 +1,40 @@
+.dd-toggle,
+.dd-menu {
+    border: 2px solid #f1f1f5;
+}
+.dd-toggle {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 5px;
+}
+.dd-toggle i {
+    font-size: 1.5rem;
+}
+.dd-wrapper {
+    width: 100%;
+}
+.dd-menu {
+    box-sizing: border-box;
+    width: inherit;
+    background-color: white;
+    padding: 8px;
+    border-radius: 5px;
+    max-height: 300px;
+    overflow: auto;
+    position: absolute;
+    bottom: 1;
+    z-index: 100;
+}
+.dd-menu label {
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.dd-menu label span {
+    margin-left: 5px;
+}
