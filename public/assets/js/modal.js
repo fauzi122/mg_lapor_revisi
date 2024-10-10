@@ -948,6 +948,23 @@ $(".name_produk").change(function () {
                         `</option>`
                 );
             });
+
+            // Distribusi/Penjualan Domestik Kilang modal
+            if (
+                value.replace(/\s+/g, "").toLowerCase() ===
+                "bahanbakarspesifikasitertentu"
+            ) {
+                $(".name_produk")
+                    .parent()
+                    .after(
+                        `
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input class="form-control" type="text" id="nama" name="nama" required>
+                    </div>
+                    `
+                    );
+            }
         },
         error: function (xhr, status, error) {
             // Tangkap pesan error jika ada
@@ -1285,6 +1302,25 @@ function sektor() {
         },
     });
 }
+
+$(".nama_sektor").change(function () {
+    let elemen = $(this).find("option:selected");
+    let value = elemen.val();
+
+    // Distribusi/Penjualan Domestik Kilang modal
+    if (value.replace(/\s+/g, "").toLowerCase() === "badanusahaniaga") {
+        $(".nama_sektor")
+            .parent()
+            .after(
+                `
+            <div class="mb-3">
+                <label for="nama_bu_niaga" class="form-label">Nama Badan Usaha Niaga</label>
+                <input class="form-control" type="text" id="nama_bu_niaga" name="nama_bu_niaga" required>
+            </div>
+            `
+            );
+    }
+});
 
 function pelabuhan() {
     $(".form-reset").trigger("reset");

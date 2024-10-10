@@ -463,8 +463,8 @@
                               <span>Pilih Kabupaten / Kota</span>
                               <i class="bx bx-chevron-down"></i>
                             </button>
-                            <div class="dd-menu d-none nama_kab">
-                              {{-- <label><input type="checkbox" name="kabupaten_kota[]" value=""/><span>Kabupaten Tangerang</span></label> --}}
+                            <div class="dd-menu d-none nama_kab shadow-lg">
+                              {{-- <label><input type="checkbox" name="kabupaten_kota[]" value=""/><span>Kabupaten / kota</span></label> --}}
                             </div>
                         </div>
                         @error('kabupaten_kota[]')
@@ -801,6 +801,7 @@
                             </div>
                         @enderror
                     </div>
+                    
 
                     <div class="mb-3">
                         <label for="satuan" class="form-label">Satuan</label>
