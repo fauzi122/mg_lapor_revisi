@@ -337,12 +337,7 @@
                                                         </center>  --}}
                                                     </td>
                                                     <td>{{ $ppmb->provinsi }}</td>
-                                                    {{-- <td>{{ $ppmb->kabupaten_kota }}</td> --}}
-                                                    <td>
-                                                        @foreach ($kabKota as $kabKota)
-                                                            <p> {{$loop->iteration.". " . $kabKota }}</p>
-                                                        @endforeach
-                                                    </td>
+                                                    <td>{{ $ppmb->kabupaten_kota }}</td>
                                                     <td>{{ $ppmb->volume }}</td>
                                                     <td>{{ $ppmb->satuan }}</td>
                                                     <td>{{ $ppmb->keterangan }}</td>
@@ -411,6 +406,8 @@
                                                 <th>Kabupaten/Kota</th>
                                                 <th>Aksi</th>
                                                 <th>Sektor</th>
+                                                <th>Nama</th>
+                                                <th>Nama Badan Usaha</th>
                                                 <th>Volume</th>
                                                 <th>Satuan</th>
                                                 <th>Keterangan</th>
@@ -515,6 +512,8 @@
                                                         </center>  --}}
                                                     </td>
                                                     <td>{{ $ppmb->sektor }}</td>
+                                                    <td>{{ $ppmb->nama }}</td>
+                                                    <td>{{ $ppmb->nama_bu_niaga }}</td>
                                                     <td>{{ $ppmb->volume }}</td>
                                                     <td>{{ $ppmb->satuan }}</td>
                                                     <td>{{ $ppmb->keterangan }}</td>

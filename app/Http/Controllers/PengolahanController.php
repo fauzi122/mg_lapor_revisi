@@ -608,22 +608,11 @@ class PengolahanController extends Controller
       }
     }
 
-    $dataPengolahan = new Pengolahan();
-    $dataPengolahan->badan_usaha_id = $validatedData['badan_usaha_id'];
-    $dataPengolahan->bulan = $validatedData['bulan'];
-    $dataPengolahan->kategori_pemasok = $validatedData['kategori_pemasok'];
-    $dataPengolahan->intake_kilang = $validatedData['intake_kilang'];
-    $dataPengolahan->satuan = $validatedData['satuan'];
-    $dataPengolahan->provinsi = $validatedData['provinsi'];
-    $dataPengolahan->kabupaten_kota = json_encode($validatedData['kabupaten_kota']); // Mengonversi array ke JSON
-    $dataPengolahan->volume = $validatedData['volume'];
-    $dataPengolahan->keterangan = $validatedData['keterangan'];
-    $dataPengolahan->jenis = $validatedData['jenis'];
-    $dataPengolahan->tipe = $validatedData['tipe'];
+    foreach ($request->kabupaten_kota as $kota) {
+      $validatedData['kabupaten_kota'] = $kota;
+      Pengolahan::create($validatedData);
+    }
 
-    $dataPengolahan->save();
-
-    // Pengolahan::create($validatedData);
     // $validatedData = PengolahanMinyakBumiPasokan::create(['badan_usaha_id' => '3','izin_id' => '10']);
 
     if ($validatedData) {
@@ -830,6 +819,8 @@ class PengolahanController extends Controller
       'keterangan' => 'required',
       'jenis' => 'required',
       'tipe' => 'required',
+      'nama' => 'nullable',
+      'nama_bu_niaga' => 'nullable',
       // 'status' => 'required',
       // 'catatan' => 'required',
       // 'petugas' => 'required',
