@@ -86,6 +86,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Bulan</th>
+                                                <th>tahun</th>
                                                 <th>Status</th>
                                                 <th>Catatan</th>
                                                 <th>Provinsi</th>
@@ -100,13 +101,16 @@
                                                 <th>Biaya Penyimpanan (USD/MMBTU)</th>
                                                 <th>Biaya Pengangkutan (USD/MMBTU)</th>
                                                 <th>Biaya Niaga (USD/MMBTU)</th>
+                                                <th>Harga Bahan Baku (USD/MMBTU)</th>
+                                                <th>Pajak</th>
                                                 <th>Harga Jual (USD/MMBTU)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($lng as $lng)
                                                 <tr>
-                                                    <td>{{ dateIndonesia($lng->bulan) }}</td>
+                                                    <td>{{ getBulan($lng->bulan) }}</td>
+                                                    <td>{{ getTahun($lng->bulan) }}</td>
                                                     <td>
                                                         @if ($lng->status == 1 && $lng->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -191,11 +195,13 @@
                                                     <td>{{ $lng->sektor }}</td>
                                                     <td>{{ $lng->volume }}</td>
                                                     <td>{{ $lng->satuan }}</td>
-                                                    <td>{{ $lng->biaya_kompresi }}</td>
-                                                    <td>{{ $lng->biaya_penyimpanan }}</td>
-                                                    <td>{{ $lng->biaya_pengangkutan }}</td>
-                                                    <td>{{ $lng->biaya_niaga }}</td>
-                                                    <td>{{ $lng->harga_jual }}</td>
+                                                    <td>{{ $lng->satuan_biaya_kompresi }} {{ $lng->biaya_kompresi }}</td>
+                                                    <td>{{ $lng->satuan_biaya_penyimpanan }} {{ $lng->biaya_penyimpanan }}</td>
+                                                    <td>{{ $lng->satuan_biaya_pengangkutan }} {{ $lng->biaya_pengangkutan }}</td>
+                                                    <td>{{ $lng->satuan_biaya_niaga }} {{ $lng->biaya_niaga }}</td>
+                                                    <td>{{ $lng->satuan_harga_bahan_baku }} {{ $lng->harga_bahan_baku }}</td>
+                                                    <td>{{ $lng->satuan_pajak }} {{ $lng->pajak }}</td>
+                                                    <td>{{ $lng->satuan_harga_jual }} {{ $lng->harga_jual }}</td>
 
                                                 </tr>
                                             @endforeach
@@ -288,6 +294,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Bulan</th>
+                                                <th>Tahun</th>
                                                 <th>Status</th>
                                                 <th>Catatan</th>
                                                 <th>Produk</th>
@@ -303,7 +310,8 @@
                                         <tbody>
                                             @foreach ($pasok_lng as $pasok)
                                                 <tr>
-                                                    <td>{{ dateIndonesia($pasok->bulan) }}</td>
+                                                    <td>{{ getbulan($pasok->bulan) }}</td>
+                                                    <td>{{ getTahun($pasok->bulan) }}</td>
                                                     <td>
                                                         @if ($pasok->status == 1 && $pasok->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -376,7 +384,7 @@
                                                     </td>
                                                     <td>{{ $pasok->volume }}</td>
                                                     <td>{{ $pasok->satuan }}</td>
-                                                    <td>{{ $pasok->harga_gas }}</td>
+                                                    <td>{{ $pasok->satuan_harga_gas }} {{ $pasok->harga_gas }}</td>
 
                                                 </tr>
                                             @endforeach

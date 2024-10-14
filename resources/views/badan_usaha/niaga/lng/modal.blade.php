@@ -14,15 +14,29 @@
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Bulan</label>
                         <input class="form-control" type="hidden" id="" name="badan_usaha_id"
-                            value="{{ Auth::user()->badan_usaha_id }}">
+                        value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="month" id="bulanx" name="bulan"
-                            value="{{ old('bulan') }}">
+                        value="{{ old('bulan') }}">
                         @error('bulan')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
+                        <div class="form-group has-danger mb-0">
+                            <div class="form-control-feedback">{{ $message }}</div>
+                        </div>
                         @enderror
                     </div>
+                    
+                    {{-- <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Coba</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Recipient">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_tarif" id="">
+                                    <option>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div> --}}
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi</label>
@@ -111,51 +125,169 @@
                             </div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Kompresi</label>
-                        <input class="form-control" type="number" id="example-text-input" name="biaya_kompresi"
-                            value="{{ old('biaya_kompresi') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_kompresi" value="{{ old('biaya_kompresi') }}">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_kompresi">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('biaya_kompresi')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
+                        @error('satuan_biaya_kompresi')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Penyimpanan</label>
-                        <input class="form-control" type="number" id="example-text-input" name="biaya_penyimpanan"
-                            value="{{ old('biaya_penyimpanan') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_penyimpanan" value="{{ old('biaya_penyimpanan') }}">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_penyimpanan">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('biaya_penyimpanan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
+                        @error('satuan_biaya_penyimpanan')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Pengangkutan</label>
-                        <input class="form-control" type="number" id="example-text-input" name="biaya_pengangkutan"
-                            value="{{ old('biaya_pengangkutan') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_pengangkutan" value="{{ old('biaya_pengangkutan') }}">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_pengangkutan">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('biaya_pengangkutan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Biaya Niaga</label>
-                        <input class="form-control" type="number" id="example-text-input" name="biaya_niaga"
-                            value="{{ old('biaya_niaga') }}">
-                        @error('biaya_niaga')
+                        @error('satuan_biaya_pengangkutan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Biaya Niaga</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_niaga" value="{{ old('biaya_niaga') }}">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_niaga">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
+                        @error('biaya_niaga')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_biaya_niaga')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Harga Bahan Baku</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="harga_bahan_baku" value="{{ old('harga_bahan_baku') }}">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_harga_bahan_baku">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
+                        @error('harga_bahan_baku')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_harga_bahan_baku')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Pajak</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="pajak" value="{{ old('pajak') }}">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_pajak">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
+                        @error('pajak')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_pajak')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+                    
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Harga Jual</label>
-                        <input class="form-control" type="number" id="example-text-input" name="harga_jual"
-                            value="{{ old('harga_jual') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="harga_jual" value="{{ old('harga_jual') }}">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_harga_jual">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('harga_jual')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_harga_jual')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -282,51 +414,169 @@
                             </div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Kompresi</label>
-                        <input class="form-control" type="number" id="biaya_kompresi_penjualan"
-                            name="biaya_kompresi" value="{{ old('biaya_kompresi') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_kompresi" value="{{ old('biaya_kompresi') }}" id="biaya_kompresi_penjualan">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_kompresi" id="satuan_biaya_kompresi">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('biaya_kompresi')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
+                        @error('satuan_biaya_kompresi')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Penyimpanan</label>
-                        <input class="form-control" type="number" id="biaya_penyimpanan_penjualan"
-                            name="biaya_penyimpanan" value="{{ old('biaya_penyimpanan') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_penyimpanan" value="{{ old('biaya_penyimpanan') }}" id="biaya_penyimpanan_penjualan">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_penyimpanan" id="satuan_biaya_penyimpanan">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('biaya_penyimpanan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
+                        @error('satuan_biaya_penyimpanan')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Pengangkutan</label>
-                        <input class="form-control" type="number" id="biaya_pengangkutan_penjualan"
-                            name="biaya_pengangkutan" value="{{ old('biaya_pengangkutan') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_pengangkutan" value="{{ old('biaya_pengangkutan') }}" id="biaya_pengangkutan_penjualan">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_pengangkutan" id="satuan_biaya_pengangkutan">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('biaya_pengangkutan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Biaya Niaga</label>
-                        <input class="form-control" type="number" id="biaya_niaga_penjualan" name="biaya_niaga"
-                            value="{{ old('biaya_niaga') }}">
-                        @error('biaya_niaga')
+                        @error('satuan_biaya_pengangkutan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Biaya Niaga</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_niaga" value="{{ old('biaya_niaga') }}" id="biaya_niaga_penjualan">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_niaga" id="satuan_biaya_niaga">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
+                        @error('biaya_niaga')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_biaya_niaga')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Harga Bahan Baku</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="harga_bahan_baku" value="{{ old('harga_bahan_baku') }}" id="harga_bahan_baku">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_harga_bahan_baku" id="satuan_harga_bahan_baku">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
+                        @error('harga_bahan_baku')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_harga_bahan_baku')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Pajak</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="pajak" value="{{ old('pajak') }}" id="pajak">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_pajak" id="satuan_pajak">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
+                        @error('pajak')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_pajak')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+                    
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Harga Jual</label>
-                        <input class="form-control" type="number" id="harga_jual_penjualan" name="harga_jual"
-                            value="{{ old('harga_jual') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="harga_jual" value="{{ old('harga_jual') }}" id="harga_jual">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_harga_jual" id="satuan_harga_jual">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('harga_jual')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_harga_jual')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -446,56 +696,105 @@
                             </div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Kompresi</label>
-                        <input class="form-control" type="text" id="lihat_biaya_kompresi_penjualan"
-                            name="biaya_kompresi" value="{{ old('biaya_kompresi') }}" readonly>
-                        @error('biaya_kompresi')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_kompresi" value="{{ old('biaya_kompresi') }}" id="lihat_biaya_kompresi_penjualan" readonly>
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_kompresi" id="lihat_satuan_biaya_kompresi" disabled>
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
                             </div>
-                        @enderror
+                        </div>
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Penyimpanan</label>
-                        <input class="form-control" type="text" id="lihat_biaya_penyimpanan_penjualan"
-                            name="biaya_penyimpanan" value="{{ old('biaya_penyimpanan') }}" readonly>
-                        @error('biaya_penyimpanan')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_penyimpanan" value="{{ old('biaya_penyimpanan') }}" id="lihat_biaya_penyimpanan_penjualan" readonly>
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_penyimpanan" id="lihat_satuan_biaya_penyimpanan" disabled>
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
                             </div>
-                        @enderror
+                        </div>
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Pengangkutan</label>
-                        <input class="form-control" type="text" id="lihat_biaya_pengangkutan_penjualan"
-                            name="biaya_pengangkutan" value="{{ old('biaya_pengangkutan') }}" readonly>
-                        @error('biaya_pengangkutan')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_pengangkutan" value="{{ old('biaya_pengangkutan') }}" id="lihat_biaya_pengangkutan_penjualan" readonly>
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_pengangkutan" id="lihat_satuan_biaya_pengangkutan" disabled>
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
                             </div>
-                        @enderror
+                        </div>
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Biaya Niaga</label>
-                        <input class="form-control" type="text" id="lihat_biaya_niaga_penjualan"
-                            name="biaya_niaga" value="{{ old('biaya_niaga') }}" readonly>
-                        @error('biaya_niaga')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="biaya_niaga" value="{{ old('biaya_niaga') }}" id="lihat_biaya_niaga_penjualan" readonly>
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_biaya_niaga"  disabled id="lihat_satuan_biaya_niaga">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
                             </div>
-                        @enderror
+                        </div>
                     </div>
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Harga Bahan Baku</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="harga_bahan_baku" value="{{ old('harga_bahan_baku') }}" id="lihat_harga_bahan_baku" readonly>
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_harga_bahan_baku"  disabled id="lihat_satuan_harga_bahan_baku">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Pajak</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="pajak" value="{{ old('pajak') }}" id="lihat_pajak" readonly>
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_pajak"  disabled id="lihat_satuan_pajak">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Harga Jual</label>
-                        <input class="form-control" type="text" id="lihat_harga_jual_penjualan" name="harga_jual"
-                            value="{{ old('harga_jual') }}" readonly>
-                        @error('harga_jual')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="harga_jual" value="{{ old('harga_jual') }}" id="lihat_harga_jual" readonly>
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_harga_jual"  disabled id="lihat_satuan_harga_jual">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
                             </div>
-                        @enderror
+                        </div>
                     </div>
+
 
                 </div>
                 <div class="modal-footer">
@@ -596,12 +895,24 @@
                         @enderror
                     </div>
 
-
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Harga Gas</label>
-                        <input class="form-control" type="number" id="example-text-input" name="harga_gas"
-                            value="{{ old('harga_gas') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="harga_gas" value="{{ old('harga_gas') }}">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_harga_gas">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('harga_gas')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_harga_gas')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -714,9 +1025,22 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Harga Gas</label>
-                        <input class="form-control" type="number" id="harga_gas_pasok" name="harga_gas"
-                            value="{{ old('harga_gas') }}">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="harga_gas" value="{{ old('harga_gas') }}" id="harga_gas_pasok">
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_harga_gas" id="satuan_harga_gas">
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('harga_gas')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_harga_gas')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -817,9 +1141,22 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Harga Gas</label>
-                        <input class="form-control" type="text" id="lihat_harga_gas_pasok" name="harga_gas"
-                            value="{{ old('harga_gas') }}" readonly>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="harga_gas" value="{{ old('harga_gas') }}" id="lihat_harga_gas_pasok" readonly>
+                            <div class="input-group-append">
+                                <select class="form-select" name="satuan_harga_gas" id="lihat_satuan_harga_gas" disabled>
+                                    <option disabled selected>Pilih Satuan Tarif</option>
+                                    <option value="USD">USD</option>
+                                    <option value="IDR">IDR</option>
+                                </select>
+                            </div>
+                        </div>
                         @error('harga_gas')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                        @error('satuan_harga_gas')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
