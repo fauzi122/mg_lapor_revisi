@@ -42,7 +42,7 @@ class LngController extends Controller
             'pasoklng'
         ));
     }
-    public function show_lngx($id, $lng)
+    public function show_lngx($id, $lng, $filter = null)
     {
         $lngx = $lng;
 
@@ -70,13 +70,19 @@ class LngController extends Controller
         $bulan_ambil_pasok_lngx = $bulan_ambil_pasok_lng ? substr($bulan_ambil_pasok_lng->bulan, 0, 7) : '';
         $statuspasok_lngx = $bulan_ambil_pasok_lng->status ?? '';
 
+        if ($filter && $filter === "tahun") {
+            $filterBy = substr($pecah[0], 0, 4);
+        } else {
+            $filterBy = $pecah[0];
+        }
+
         $lng = Penjualan_lng::where([
-            'bulan' => $pecah[0],
+            ['bulan', 'like', "%". $filterBy ."%"],
             'badan_usaha_id' => $pecah[1]
         ])->orderBy('status', 'desc')->get();
 
         $pasok_lng = Pasokanlng::where([
-            'bulan' => $pecah[0],
+            ['bulan', 'like', "%". $filterBy ."%"],
             'badan_usaha_id' => $pecah[1]
         ])->orderBy('status', 'desc')->get();
 
@@ -97,17 +103,26 @@ class LngController extends Controller
             'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'provinsi.required' => 'provinsi masih kosong',
-            'kabupaten_kota.required' => 'kabupaten_kota masih kosong',
+            'kabupaten_kota.required' => 'kabupaten / kota masih kosong',
             'produk.required' => 'produk masih kosong',
             'konsumen.required' => 'konsumen masih kosong',
             'sektor.required' => 'sektor masih kosong',
             'volume.required' => 'volume masih kosong',
             'satuan.required' => 'satuan masih kosong',
-            'biaya_kompresi.required' => 'biaya_kompresi masih kosong',
-            'biaya_penyimpanan.required' => 'biaya_penyimpanan masih kosong',
-            'biaya_pengangkutan.required' => 'biaya_pengangkutan masih kosong',
-            'harga_jual.required' => 'harga_jual masih kosong',
-            'biaya_niaga.required' => 'biaya_niaga masih kosong',
+            'biaya_kompresi.required' => 'biaya kompresi masih kosong',
+            'satuan_biaya_kompresi.required' => 'satuan biaya kompresi masih kosong',
+            'biaya_penyimpanan.required' => 'biaya penyimpanan masih kosong',
+            'satuan_biaya_penyimpanan.required' => 'satuan biaya penyimpanan masih kosong',
+            'biaya_pengangkutan.required' => 'biaya pengangkutan masih kosong',
+            'satuan_biaya_pengangkutan.required' => 'satuan biaya pengangkutan masih kosong',
+            'biaya_niaga.required' => 'biaya niaga masih kosong',
+            'satuan_biaya_niaga.required' => 'satuan biaya niaga masih kosong',
+            'harga_bahan_baku' => 'Harga bahan baku masih kosong',
+            'satuan_harga_bahan_baku.required' => 'satuan harga bahan baku masih kosong',
+            'pajak.required' => 'pajak masih kosong',
+            'satuan_pajak.required' => 'satuan pajak masih kosong',
+            'harga_jual.required' => 'harga jual masih kosong',
+            'satuan_harga_jual.required' => 'satuan harga jual masih kosong',
         ];
 
         $validatedData = $request->validate([
@@ -122,10 +137,19 @@ class LngController extends Controller
             'volume' => 'required',
             'satuan' => 'required',
             'biaya_kompresi' => 'required',
+            'satuan_biaya_kompresi' => 'required',
             'biaya_penyimpanan' => 'required',
+            'satuan_biaya_penyimpanan' => 'required',
             'biaya_pengangkutan' => 'required',
-            'harga_jual' => 'required',
+            'satuan_biaya_pengangkutan' => 'required',
             'biaya_niaga' => 'required',
+            'satuan_biaya_niaga' => 'required',
+            'harga_bahan_baku' => 'required',
+            'satuan_harga_bahan_baku' => 'required',
+            'pajak' => 'required',
+            'satuan_pajak' => 'required',
+            'harga_jual' => 'required',
+            'satuan_harga_jual' => 'required',
         ], $pesan);
 
         $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -153,10 +177,19 @@ class LngController extends Controller
             'volume' => $request->volume,
             'satuan' => $request->satuan,
             'biaya_kompresi' => $request->biaya_kompresi,
+            'satuan_biaya_kompresi' => $request->satuan_biaya_kompresi,
             'biaya_penyimpanan' => $request->biaya_penyimpanan,
+            'satuan_biaya_penyimpanan' => $request->satuan_biaya_penyimpanan,
             'biaya_pengangkutan' => $request->biaya_pengangkutan,
-            'harga_jual' => $request->harga_jual,
+            'satuan_biaya_pengangkutan' => $request->satuan_biaya_pengangkutan,
             'biaya_niaga' => $request->biaya_niaga,
+            'satuan_biaya_niaga' => $request->satuan_biaya_niaga,
+            'harga_bahan_baku' => $request->harga_bahan_baku,
+            'satuan_harga_bahan_baku' => $request->satuan_harga_bahan_baku,
+            'pajak' => $request->pajak,
+            'satuan_pajak' => $request->satuan_pajak,
+            'harga_jual' => $request->harga_jual,
+            'satuan_harga_jual' => $request->satuan_harga_jual,
 
         ]);
 
@@ -209,17 +242,26 @@ class LngController extends Controller
             // 'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
             // 'bulan.required' => 'bulan masih kosong',
             'provinsi.required' => 'provinsi masih kosong',
-            'kabupaten_kota.required' => 'kabupaten_kota masih kosong',
+            'kabupaten_kota.required' => 'kabupaten / kota masih kosong',
             'produk.required' => 'produk masih kosong',
             'konsumen.required' => 'konsumen masih kosong',
             'sektor.required' => 'sektor masih kosong',
             'volume.required' => 'volume masih kosong',
             'satuan.required' => 'satuan masih kosong',
-            'biaya_kompresi.required' => 'biaya_kompresi masih kosong',
-            'biaya_penyimpanan.required' => 'biaya_penyimpanan masih kosong',
-            'biaya_pengangkutan.required' => 'biaya_pengangkutan masih kosong',
-            'harga_jual.required' => 'harga_jual masih kosong',
-            'biaya_niaga.required' => 'biaya_niaga masih kosong',
+            'biaya_kompresi.required' => 'biaya kompresi masih kosong',
+            'satuan_biaya_kompresi.required' => 'satuan biaya kompresi masih kosong',
+            'biaya_penyimpanan.required' => 'biaya penyimpanan masih kosong',
+            'satuan_biaya_penyimpanan.required' => 'satuan biaya penyimpanan masih kosong',
+            'biaya_pengangkutan.required' => 'biaya pengangkutan masih kosong',
+            'satuan_biaya_pengangkutan.required' => 'satuan biaya pengangkutan masih kosong',
+            'biaya_niaga.required' => 'biaya niaga masih kosong',
+            'satuan_biaya_niaga.required' => 'satuan biaya niaga masih kosong',
+            'harga_bahan_baku' => 'Harga bahan baku masih kosong',
+            'satuan_harga_bahan_baku.required' => 'satuan harga bahan baku masih kosong',
+            'pajak.required' => 'pajak masih kosong',
+            'satuan_pajak.required' => 'satuan pajak masih kosong',
+            'harga_jual.required' => 'harga jual masih kosong',
+            'satuan_harga_jual.required' => 'satuan harga jual masih kosong',
         ];
 
         $rules = [
@@ -233,10 +275,19 @@ class LngController extends Controller
             'volume' => 'required',
             'satuan' => 'required',
             'biaya_kompresi' => 'required',
+            'satuan_biaya_kompresi' => 'required',
             'biaya_penyimpanan' => 'required',
+            'satuan_biaya_penyimpanan' => 'required',
             'biaya_pengangkutan' => 'required',
-            'harga_jual' => 'required',
+            'satuan_biaya_pengangkutan' => 'required',
             'biaya_niaga' => 'required',
+            'satuan_biaya_niaga' => 'required',
+            'harga_bahan_baku' => 'required',
+            'satuan_harga_bahan_baku' => 'required',
+            'pajak' => 'required',
+            'satuan_pajak' => 'required',
+            'harga_jual' => 'required',
+            'satuan_harga_jual' => 'required',
         ];
 
         $validatedData = $request->validate($rules, $pesan);
@@ -267,6 +318,7 @@ class LngController extends Controller
             'volume.required' => 'volume masih kosong',
             'satuan.required' => 'satuan masih kosong',
             'harga_gas.required' => 'harga_gas masih kosong',
+            'satuan_harga_gas.required' => 'Satuan harga gas masih kosong',
         ];
 
         $validatedData = $request->validate([
@@ -278,6 +330,7 @@ class LngController extends Controller
             'volume' => 'required',
             'satuan' => 'required',
             'harga_gas' => 'required',
+            'satuan_harga_gas' => 'required',
         ], $pesan);
 
         $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -307,6 +360,7 @@ class LngController extends Controller
             'volume' => $request->volume,
             'satuan' => $request->satuan,
             'harga_gas' => $request->harga_gas,
+            'satuan_harga_gas' => $request->satuan_harga_gas,
 
         ]);
 
@@ -352,6 +406,7 @@ class LngController extends Controller
             'volume.required' => 'volume masih kosong',
             'satuan.required' => 'satuan masih kosong',
             'harga_gas.required' => 'harga_gas masih kosong',
+            'satuan_harga_gas.required' => 'Satuan harga gas masih kosong',
         ];
 
         $rules = [
@@ -363,6 +418,7 @@ class LngController extends Controller
             'volume' => 'required',
             'satuan' => 'required',
             'harga_gas' => 'required',
+            'satuan_harga_gas' => 'required',
         ];
 
         $validatedData = $request->validate($rules, $pesan);

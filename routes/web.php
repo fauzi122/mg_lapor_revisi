@@ -133,7 +133,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 	// LNG/CNG
 	Route::controller(LngController::class)->group(function () {
 		route::get('/lng/cng', 'index');
-		route::get('/lng/cng/show/{id}/{lng}', 'show_lngx');
+		route::get('/lng/cng/show/{id}/{lng}/{filter?}', 'show_lngx');
 		Route::post('/simpan_lng', 'simpan_lngx');
 		Route::put('/update_lng/{id}', 'update_lngx');
 		Route::delete('/hapus_lng/{id}', 'hapus_lngx');
