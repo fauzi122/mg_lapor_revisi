@@ -31,7 +31,7 @@ class EksportImportController extends Controller
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
       ->groupBy('bulan_pib')
       ->get();
-
+    // dd($impor);
     return view('badan_usaha.ekspor_impor.index', compact(
       'ekspor',
       'impor'
@@ -67,18 +67,18 @@ class EksportImportController extends Controller
       $filterBy = $pecah[0];
     }
     $expor = Ekspor::where([
-      ['bulan_peb', 'like', "%". $filterBy ."%"],
-      'badan_usaha_id' => $pecah[1]
-      ])->orderBy('status', 'desc')->get();
-      
-    $impor = Impor::where([
-      ['bulan_pib', 'like', "%". $filterBy ."%"],
+      ['bulan_peb', 'like', "%" . $filterBy . "%"],
       'badan_usaha_id' => $pecah[1]
     ])->orderBy('status', 'desc')->get();
 
+    $imporx = Impor::where([
+      ['bulan_pib', 'like', "%" . $filterBy . "%"],
+      'badan_usaha_id' => $pecah[1]
+    ])->orderBy('status', 'desc')->get();
+    // dd($impor);
     return view('badan_usaha.ekspor_impor.show', compact(
       'expor',
-      'impor',
+      'imporx',
       'bulan_ambil_eksporsx',
       'bulan_ambil_imporsx',
       'statusbulan_ambil_eksporsx',
