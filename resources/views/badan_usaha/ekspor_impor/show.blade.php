@@ -230,7 +230,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($impor as $impor)
+                                    @foreach ($imporx as $impor)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ dateIndonesia($impor->bulan_pib) }}</td>
@@ -396,7 +396,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($impor as $impor)
+                                    @foreach ($imporx as $impor)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ dateIndonesia($impor->bulan_pib) }}</td>
