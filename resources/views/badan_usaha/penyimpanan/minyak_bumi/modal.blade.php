@@ -187,9 +187,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilasi Tangki</label>
-                        <input class="form-control" type="text" id="" name="utilasi_tangki">
-                        @error('utilasi_tangki')
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(Persentase)</font></label>
+                        <input class="form-control" type="text" id="" name="utilisasi_tangki">
+                        @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -456,9 +456,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilasi Tangki</label>
-                        <input class="form-control" type="text" id="utilasi_tangki_pmb" name="utilasi_tangki">
-                        @error('utilasi_tangki')
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki</label>
+                        <input class="form-control" type="text" id="utilisasi_tangki_pmb" name="utilisasi_tangki">
+                        @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -712,10 +712,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilasi Tangki</label>
-                        <input class="form-control" type="text" id="utilasi_tangki_pmb_lihat"
-                            name="utilasi_tangki" readonly>
-                        @error('utilasi_tangki')
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki</label>
+                        <input class="form-control" type="text" id="utilisasi_tangki_pmb_lihat"
+                            name="utilisasi_tangki" readonly>
+                        @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>

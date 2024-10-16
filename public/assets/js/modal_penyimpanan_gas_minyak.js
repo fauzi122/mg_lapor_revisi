@@ -53,7 +53,7 @@ function editPMB(id, kab_kota, produk) {
                 response.data.find.volume_stok_akhir
             );
             $("#satuan_pmb").val(response.data.find.satuan);
-            $("#utilasi_tangki_pmb").val(response.data.find.utilasi_tangki);
+            $("#utilisasi_tangki_pmb").val(response.data.find.utilisasi_tangki);
             $("#pengguna_pmb").val(response.data.find.pengguna);
             $("#jangka_waktu_penggunaan_pmb").val(
                 response.data.find.jangka_waktu_penggunaan
@@ -234,8 +234,8 @@ function lihat_pmb(id, produk, kabupaten_kota) {
                 response.data.find.volume_stok_akhir
             );
             $("#satuan_pmb_lihat").val(response.data.find.satuan);
-            $("#utilasi_tangki_pmb_lihat").val(
-                response.data.find.utilasi_tangki
+            $("#utilisasi_tangki_pmb_lihat").val(
+                response.data.find.utilisasi_tangki
             );
             $("#pengguna_pmb_lihat").val(response.data.find.pengguna);
             $("#jangka_waktu_penggunaan_pmb_lihat").val(
@@ -296,10 +296,13 @@ function editpggb(id, kab_kota, produk) {
                 response.data.find.volume_stok_akhir
             );
             $("#satuan_pggb").val(response.data.find.satuan);
-            $("#utilasi_tangki_pggb").val(response.data.find.utilasi_tangki);
+            $("#utilisasi_tangki_pggb").val(
+                response.data.find.utilisasi_tangki
+            );
             $("#pengguna_pggb").val(response.data.find.pengguna);
-            $("#jangka_waktu_penggunaan_pggb").val(
-                response.data.find.jangka_waktu_penggunaan
+            $("#tanggal_awal_pggb").val(response.data.find.tanggal_awal);
+            $("#tanggal_berakhir_pggb").val(
+                response.data.find.tanggal_berakhir
             );
             $("#tarif_penyimpanan_pggb").val(
                 response.data.find.tarif_penyimpanan
@@ -446,12 +449,13 @@ function lihat_pggb(id, produk, kabupaten_kota) {
                 response.data.find.volume_stok_akhir
             );
             $("#satuan_pggb_lihat").val(response.data.find.satuan);
-            $("#utilasi_tangki_pggb_lihat").val(
-                response.data.find.utilasi_tangki
+            $("#utilisasi_tangki_pggb_lihat").val(
+                response.data.find.utilisasi_tangki
             );
             $("#pengguna_pggb_lihat").val(response.data.find.pengguna);
-            $("#jangka_waktu_penggunaan_pggb_lihat").val(
-                response.data.find.jangka_waktu_penggunaan
+            $("#lihat_tanggal_awal_pggb").val(response.data.find.tanggal_awal);
+            $("#lihat_tanggal_berakhir_pggb").val(
+                response.data.find.tanggal_berakhir
             );
             $("#tarif_penyimpanan_pggb_lihat").val(
                 response.data.find.tarif_penyimpanan

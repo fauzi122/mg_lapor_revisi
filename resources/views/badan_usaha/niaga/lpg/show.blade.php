@@ -49,6 +49,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Catatan</th>
                                             <th>Produk</th>
@@ -66,7 +67,8 @@
                                         @foreach ($lpgs as $lpg)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ dateIndonesia($lpg->bulan) }}</td>
+                                                <td>{{ getBulan($lpg->bulan) }}</td>
+                                                <td>{{ getTahun($lpg->bulan) }}</td>
                                                 <td>
                                                     @if ($lpg->status == 1 && $lpg->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -206,6 +208,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Catatan</th>
                                             <th>Nama Pemasok</th>
@@ -220,7 +223,8 @@
                                         @foreach ($pasokan as $pasokan)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ dateIndonesia($pasokan->bulan) }}</td>
+                                                <td>{{ getBulan($pasokan->bulan) }}</td>
+                                                <td>{{ getTahun($pasokan->bulan) }}</td>
                                                 <td>
                                                     @if ($pasokan->status == 1 && $pasokan->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>

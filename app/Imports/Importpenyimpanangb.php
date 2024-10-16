@@ -57,7 +57,7 @@ class Importpenyimpanangb implements ToModel, WithStartRow, WithMultipleSheets
             'volume_output' => $row[5],
             'volume_stok_akhir' => $row[6],
             'satuan' => $row[7],
-            'utilasi_tangki' => $row[8],
+            'utilisasi_tangki' => $row[8],
             'pengguna' => $row[9],
             'jangka_waktu_penggunaan' => substr($tanggal, 0, 10),
             'tarif_penyimpanan' => $row[11],

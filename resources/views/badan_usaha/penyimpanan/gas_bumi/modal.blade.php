@@ -117,9 +117,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilasi Tangki</label>
-                        <input class="form-control" type="text" id="example-text-input" name="utilasi_tangki">
-                        @error('utilasi_tangki')
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(Persentase)</font></label>
+                        <input class="form-control" type="text" id="example-text-input" name="utilisasi_tangki">
+                        @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -127,7 +127,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Pengguna</label>
+                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki
+)</font></label>
                         <input class="form-control" type="text" id="example-text-input" name="pengguna">
                         @error('pengguna')
                             <div class="form-group has-danger mb-0">
@@ -137,13 +138,30 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Jangka Waktu Penggunaan</label>
-                        <input class="form-control" type="date" id="example-text-input"
-                            name="jangka_waktu_penggunaan">
-                        @error('jangka_waktu_penggunaan')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
+
+                        <div class="ps-3 mt-2">
+                            <div>
+                                <label for="example-text-input" class="form-label">Tanggal Awal</label>
+                                <input class="form-control" type="date"
+                                    name="tanggal_awal">
+                                @error('tanggal_awal')
+                                    <div class="form-group has-danger mb-0">
+                                        <div class="form-control-feedback">{{ $message }}</div>
+                                    </div>
+                                @enderror
                             </div>
-                        @enderror
+                            <div>
+                                <label for="example-text-input" class="form-label">Tanggal Berakhir</label>
+                                <input class="form-control" type="date"
+                                    name="tanggal_berakhir">
+                                @error('tanggal_berakhir')
+                                    <div class="form-group has-danger mb-0">
+                                        <div class="form-control-feedback">{{ $message }}</div>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>
@@ -305,9 +323,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilasi Tangki</label>
-                        <input class="form-control" type="text" id="utilasi_tangki_pggb" name="utilasi_tangki">
-                        @error('utilasi_tangki')
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(Persentase)</font></label>
+                        <input class="form-control" type="text" id="utilisasi_tangki_pggb" name="utilisasi_tangki">
+                        @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -315,7 +333,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Pengguna</label>
+                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki
+)</font></label>
                         <input class="form-control" type="text" id="pengguna_pggb" name="pengguna">
                         @error('pengguna')
                             <div class="form-group has-danger mb-0">
@@ -325,13 +344,30 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Jangka Waktu Penggunaan</label>
-                        <input class="form-control" type="date" id="jangka_waktu_penggunaan_pggb"
-                            name="jangka_waktu_penggunaan">
-                        @error('jangka_waktu_penggunaan')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
+
+                        <div class="ps-3 mt-2">
+                            <div>
+                                <label for="example-text-input" class="form-label">Tanggal Awal</label>
+                                <input class="form-control" type="date"
+                                    name="tanggal_awal" id="tanggal_awal_pggb">
+                                @error('tanggal_awal')
+                                    <div class="form-group has-danger mb-0">
+                                        <div class="form-control-feedback">{{ $message }}</div>
+                                    </div>
+                                @enderror
                             </div>
-                        @enderror
+                            <div>
+                                <label for="example-text-input" class="form-label">Tanggal Berakhir</label>
+                                <input class="form-control" type="date"
+                                    name="tanggal_berakhir" id="tanggal_berakhir_pggb">
+                                @error('tanggal_berakhir')
+                                    <div class="form-group has-danger mb-0">
+                                        <div class="form-control-feedback">{{ $message }}</div>
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>
@@ -497,10 +533,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="example-text-input" class="form-label">Utilasi Tangki</label>
-                    <input class="form-control" type="text" id="utilasi_tangki_pggb_lihat" name="utilasi_tangki"
+                    <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(Persentase)</font></label>
+                    <input class="form-control" type="text" id="utilisasi_tangki_pggb_lihat" name="utilisasi_tangki"
                         readonly>
-                    @error('utilasi_tangki')
+                    @error('utilisasi_tangki')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
                         </div>
@@ -508,7 +544,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="example-text-input" class="form-label">Pengguna</label>
+                    <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki
+)</font></label>
                     <input class="form-control" type="text" id="pengguna_pggb_lihat" name="pengguna" readonly>
                     @error('pengguna')
                         <div class="form-group has-danger mb-0">
@@ -518,13 +555,30 @@
                 </div>
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Jangka Waktu Penggunaan</label>
-                    <input class="form-control" type="date" id="jangka_waktu_penggunaan_pggb_lihat"
-                        name="jangka_waktu_penggunaan" readonly>
-                    @error('jangka_waktu_penggunaan')
-                        <div class="form-group has-danger mb-0">
-                            <div class="form-control-feedback">{{ $message }}</div>
+
+                    <div class="ps-3 mt-2">
+                        <div>
+                            <label for="example-text-input" class="form-label">Tanggal Awal</label>
+                            <input class="form-control" type="date"
+                                name="tanggal_awal" id="lihat_tanggal_awal_pggb" readonly>
+                            @error('tanggal_awal')
+                                <div class="form-group has-danger mb-0">
+                                    <div class="form-control-feedback">{{ $message }}</div>
+                                </div>
+                            @enderror
                         </div>
-                    @enderror
+                        <div>
+                            <label for="example-text-input" class="form-label">Tanggal Berakhir</label>
+                            <input class="form-control" type="date"
+                                name="tanggal_berakhir" id="lihat_tanggal_berakhir_pggb" readonly>
+                            @error('tanggal_berakhir')
+                                <div class="form-group has-danger mb-0">
+                                    <div class="form-control-feedback">{{ $message }}</div>
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+
                 </div>
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>

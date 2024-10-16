@@ -129,7 +129,7 @@ class PenyMinyakbumiController extends Controller
             'volume_output.required' => 'volume output masih kosong',
             'volume_stok_akhir.required' => 'volume stok akhir masih kosong',
             'satuan.required' => 'satuan masih kosong',
-            'utilasi_tangki.required' => 'utilasi tangki masih kosong',
+            'utilisasi_tangki.required' => 'utilasi tangki masih kosong',
             'pengguna.required' => 'pengguna masih kosong',
             'jangka_waktu_penggunaan.required' => 'jangka waktu penggunaan masih kosong',
             'tarif_penyimpanan.required' => 'tarif_penyimpanan masih kosong',
@@ -152,7 +152,7 @@ class PenyMinyakbumiController extends Controller
             'volume_output' => 'required',
             'volume_stok_akhir' => 'required',
             'satuan' => 'required',
-            'utilasi_tangki' => 'required',
+            'utilisasi_tangki' => 'required',
             'pengguna' => 'required',
             'jangka_waktu_penggunaan' => 'required',
             'tarif_penyimpanan' => 'required',
@@ -191,7 +191,7 @@ class PenyMinyakbumiController extends Controller
             'volume_output' => $request->volume_output,
             'volume_stok_akhir' => $request->volume_stok_akhir,
             'satuan' => $request->satuan,
-            'utilasi_tangki' => $request->utilasi_tangki,
+            'utilisasi_tangki' => $request->utilisasi_tangki,
             'pengguna' => $request->pengguna,
             'jangka_waktu_penggunaan' => $request->jangka_waktu_penggunaan,
             'tarif_penyimpanan' => $request->tarif_penyimpanan,
@@ -224,9 +224,10 @@ class PenyMinyakbumiController extends Controller
             'volume_output.required' => 'volume output masih kosong',
             'volume_stok_akhir.required' => 'volume stok akhir masih kosong',
             'satuan.required' => 'satuan masih kosong',
-            'utilasi_tangki.required' => 'utilasi tangki masih kosong',
+            'utilisasi_tangki.required' => 'utilisasi tangki masih kosong',
             'pengguna.required' => 'pengguna masih kosong',
-            'jangka_waktu_penggunaan.required' => 'jangka waktu penggunaan masih kosong',
+            'tanggal_awal.required' => 'tanggal awal masih kosong',
+            'tanggal_berakhir.required' => 'tanggal berakhir masih kosong',
             'tarif_penyimpanan.required' => 'tarif_penyimpanan masih kosong',
             'satuan_tarif.required' => 'satuan tarif masih kosong',
         ];
@@ -242,9 +243,10 @@ class PenyMinyakbumiController extends Controller
             'volume_output' => 'required',
             'volume_stok_akhir' => 'required',
             'satuan' => 'required',
-            'utilasi_tangki' => 'required',
+            'utilisasi_tangki' => 'required',
             'pengguna' => 'required',
-            'jangka_waktu_penggunaan' => 'required',
+            'tanggal_awal' => 'required',
+            'tanggal_berakhir' => 'required',
             'tarif_penyimpanan' => 'required',
             'satuan_tarif' => 'required',
         ], $pesan);
@@ -278,9 +280,10 @@ class PenyMinyakbumiController extends Controller
             'volume_output' => $request->volume_output,
             'volume_stok_akhir' => $request->volume_stok_akhir,
             'satuan' => $request->satuan,
-            'utilasi_tangki' => $request->utilasi_tangki,
+            'utilisasi_tangki' => $request->utilisasi_tangki,
             'pengguna' => $request->pengguna,
-            'jangka_waktu_penggunaan' => $request->jangka_waktu_penggunaan,
+            'tanggal_awal' => $request->tanggal_awal,
+            'tanggal_berakhir' => $request->tanggal_berakhir,
             'tarif_penyimpanan' => $request->tarif_penyimpanan,
             'satuan_tarif' => $request->satuan_tarif,
 
@@ -380,7 +383,7 @@ class PenyMinyakbumiController extends Controller
             'volume_output.required' => 'volume output masih kosong',
             'volume_stok_akhir.required' => 'volume stok akhir masih kosong',
             'satuan.required' => 'satuan masih kosong',
-            'utilasi_tangki.required' => 'utilasi tangki masih kosong',
+            'utilisasi_tangki.required' => 'utilasi tangki masih kosong',
             'pengguna.required' => 'pengguna masih kosong',
             'jangka_waktu_penggunaan.required' => 'jangka waktu penggunaan masih kosong',
             'tarif_penyimpanan.required' => 'tarif_penyimpanan masih kosong',
@@ -400,7 +403,7 @@ class PenyMinyakbumiController extends Controller
             'volume_output' => 'required',
             'volume_stok_akhir' => 'required',
             'satuan' => 'required',
-            'utilasi_tangki' => 'required',
+            'utilisasi_tangki' => 'required',
             'pengguna' => 'required',
             'jangka_waktu_penggunaan' => 'required',
             'tarif_penyimpanan' => 'required',
@@ -437,7 +440,7 @@ class PenyMinyakbumiController extends Controller
             'volume_output.required' => 'volume output masih kosong',
             'volume_stok_akhir.required' => 'volume stok akhir masih kosong',
             'satuan.required' => 'satuan masih kosong',
-            'utilasi_tangki.required' => 'utilasi tangki masih kosong',
+            'utilisasi_tangki.required' => 'utilasi tangki masih kosong',
             'pengguna.required' => 'pengguna masih kosong',
             'jangka_waktu_penggunaan.required' => 'jangka waktu penggunaan masih kosong',
             'tarif_penyimpanan.required' => 'tarif_penyimpanan masih kosong',
@@ -453,7 +456,7 @@ class PenyMinyakbumiController extends Controller
             'volume_output' => 'required',
             'volume_stok_akhir' => 'required',
             'satuan' => 'required',
-            'utilasi_tangki' => 'required',
+            'utilisasi_tangki' => 'required',
             'pengguna' => 'required',
             'jangka_waktu_penggunaan' => 'required',
             'tarif_penyimpanan' => 'required',
@@ -615,8 +618,9 @@ class PenyMinyakbumiController extends Controller
     {
         $bulanx = $bulan;
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("update penygasbumis set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
+        $validatedData = DB::update("update penygasbumis set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id' and (status='0' or status='1' or status='2')");
+        
         if ($validatedData) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil dikirim');

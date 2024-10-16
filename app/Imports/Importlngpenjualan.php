@@ -49,10 +49,19 @@ class Importlngpenjualan implements ToModel, WithStartRow, WithMultipleSheets
             'volume' => $row[5],
             'satuan' => $row[6],
             'biaya_kompresi' => $row[7],
-            'biaya_penyimpanan' => $row[8],
-            'biaya_pengangkutan' => $row[9],
-            'biaya_niaga' => $row[10],
-            'harga_jual' => $row[11],
+            'satuan_biaya_kompresi' => $row[8],
+            'biaya_penyimpanan' => $row[9],
+            'satuan_biaya_penyimpanan' => $row[10],
+            'biaya_pengangkutan' => $row[11],
+            'satuan_biaya_pengangkutan' => $row[12],
+            'biaya_niaga' => $row[13],
+            'satuan_biaya_niaga' => $row[14],
+            'harga_bahan_baku' => $row[15],
+            'satuan_harga_bahan_baku' => $row[16],
+            'pajak' => $row[17],
+            'satuan_pajak' => $row[18],
+            'harga_jual' => $row[19],
+            'satuan_harga_jual' => $row[20],
         ]);
     }
 }

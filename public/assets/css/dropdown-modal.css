@@ -19,7 +19,7 @@
 }
 .dd-menu {
     box-sizing: border-box;
-    width: inherit;
+    width: 92%;
     background-color: white;
     padding: 8px;
     border-radius: 5px;
@@ -28,6 +28,10 @@
     position: absolute;
     bottom: 1;
     z-index: 100;
+    display: none;
+}
+.dd-menu.active {
+    display: block;
 }
 .dd-menu label {
     margin-bottom: 6px;

@@ -66,12 +66,6 @@ use Illuminate\Http\Request;
 
 // Route::get('/redirect-laporan/{q}', [AuthController::class, 'postloginIzin'])->name('post.izin'); //Redirect from izin
 //auth BU
-Route::get('/test', function(){
-	return view('test');
-});
-Route::post('/test', function(Request $r){
-	dd($r);
-});
 
 Route::get('/real-time-data', [RealTimeDataController::class, 'getData']);
 Route::get('/real-time-data-view', [RealTimeDataController::class, 'index']);
@@ -157,7 +151,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 
 	Route::controller(LpgController::class)->group(function () {
 		Route::get('/niaga/lpg', 'index');
-		Route::get('/niaga/lpg/show/{id}/{lpg}', 'show_lpg');
+		Route::get('/niaga/lpg/show/{id}/{lpg}/{filter?}', 'show_lpg');
 		Route::post('/simpan_lpg', 'simpan_lpg');
 		Route::put('/update_lpg/{id}', 'update_lpg');
 		Route::delete('/hapus_lpg/{id}', 'hapus_lpg');

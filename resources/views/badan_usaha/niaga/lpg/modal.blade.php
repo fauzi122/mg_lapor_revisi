@@ -43,6 +43,18 @@
                             </div>
                         @enderror
                     </div>
+
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Volume</label>
+                        <input class="form-control" type="number" id="example-text-input" name="volume"
+                            value="{{ old('volume') }}" required>
+                        @error('volume')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Satuan</label>
                         <select class="form-select produk satuan" name="satuan" id="satuan" required>
@@ -112,17 +124,6 @@
                             <option value="HAP">HAP</option>
                         </select>
                         @error('kemasan')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" id="example-text-input" name="volume"
-                            value="{{ old('volume') }}" required>
-                        @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -227,6 +228,16 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Volume</label>
+                        <input class="form-control" type="number" name="volume" id="volume_penjualan">
+                        @error('volume')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
                         <label for="example-text-input" class="form-label">Satuan</label>
                         <select class="form-select produk satuan" name="satuan" id="satuan_penjualan">
                             <option>Pilih Satuan</option>
@@ -295,16 +306,6 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" name="volume" id="volume_penjualan">
-                        @error('volume')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
                         <input class="form-control" type="hidden" name="status" id="status_penjualan">
                         <input class="form-control" type="hidden" name="catatan" id="catatan_penjualan">
                         <input class="form-control" type="hidden" name="petugas" id="petugas_penjualan">
@@ -345,7 +346,12 @@
                     <label for="lihat_produk_penjualan" class="form-label">Produk</label>
                     <input class="form-control" type="text" name="" id="lihat_produk_penjualan" readonly>
                 </div>
-                
+
+                <div class="mb-3">
+                    <label for="lihat_volume_penjualan" class="form-label">Volume</label>
+                    <input class="form-control" type="number" name="" id="lihat_volume_penjualan" readonly>
+                </div>
+
                 <div class="mb-3">
                     <label for="lihat_satuan_penjualan" class="form-label">Satuan</label>
                     <input class="form-control" type="text" name="" id="lihat_satuan_penjualan" readonly>
@@ -369,11 +375,6 @@
                 <div class="mb-3">
                     <label for="lihat_kemasan_penjualan" class="form-label">Kemasan</label>
                     <input class="form-control" type="text" name="" id="lihat_kemasan_penjualan" readonly>
-                </div>
-
-                <div class="mb-3">
-                    <label for="lihat_volume_penjualan" class="form-label">Volume</label>
-                    <input class="form-control" type="number" name="" id="lihat_volume_penjualan" readonly>
                 </div>
             </div>
             <div class="modal-footer">

@@ -123,7 +123,7 @@
                                             <th>Volume Output</th>
                                             <th>Volume Stok Akhir</th>
                                             <th>Satuan</th>
-                                            <th>Utilasi Tangki</th>
+                                            <th>Utilisasi Tangki</th>
 
 
 
@@ -211,7 +211,7 @@
                                                 <td>{{ $pgb->volume_output }}</td>
                                                 <td>{{ $pgb->volume_stok_akhir }}</td>
                                                 <td>{{ $pgb->satuan }}</td>
-                                                <td>{{ $pgb->utilasi_tangki }}</td>
+                                                <td>{{ $pgb->utilisasi_tangki }}</td>
 
 
 

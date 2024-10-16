@@ -48,6 +48,7 @@ class Importlngpasok implements ToModel, WithStartRow, WithMultipleSheets
             'volume' => $row[3],
             'satuan' => $row[4],
             'harga_gas' => $row[5],
+            'satuan_harga_gas' => $row[6],
         ]);
     }
 }
