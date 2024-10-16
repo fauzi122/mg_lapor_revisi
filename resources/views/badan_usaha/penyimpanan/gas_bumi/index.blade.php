@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18"> Penyimpanan Gas Bumi</h4>
+                        <h4 class="mb-sm-0 font-size-18"> Penyimpanan Gas Bumi LNG/LPG Bulk/CNG/BBG/LPG Bottling Plant</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
@@ -69,9 +69,11 @@
                                                         <span class="badge bg-danger">Revisi</span>
                                                     @elseif ($data->status_tertinggi == 0)
                                                         <span class="badge bg-info">draf</span>
+                                                    @elseif($data->status_tertinggi ==3)
+                                                        <span class="badge bg-primary">Selesai</span>
                                                     @endif
                                                 </td>
-                                                @if ($data->status_tertinggi == 1)
+                                                @if ($data->status_tertinggi == 1 || $data->status_tertinggi == 3)
                                                     <td>
                                                         <form action="/hapus_bulan_pggb/{{ $data->bulan }}" method="post"
                                                             class="d-inline">

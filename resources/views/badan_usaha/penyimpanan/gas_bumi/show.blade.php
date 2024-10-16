@@ -106,6 +106,8 @@
                                                 <span class="badge bg-danger">Revisi</span>
                                             @elseif ($pggb->status == 0)
                                                 <span class="badge bg-info">draf</span>
+                                            @elseif($pggb->status ==3)
+                                                    <span class="badge bg-primary">Selesai</span>
                                         @endif
                                         </td>
                                         <td>{{ $pggb->catatan }}</td>

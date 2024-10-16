@@ -954,7 +954,7 @@ $(".name_produk").change(function () {
                 value.replace(/\s+/g, "").toLowerCase() ===
                 "bahanbakarspesifikasitertentu"
             ) {
-                $(".name_produk")
+                $(".produk_pengolahan")
                     .parent()
                     .after(
                         `
@@ -1022,6 +1022,8 @@ $(".name_provinsi").change(function () {
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".nama_kota").empty();
             $(".nama_kota").append(` <option>Pilih Kabupaten / Kota</option>`);
+            $(".nama_kab").empty();
+            $(".nama_kab").append(` <p>Pilih Kabupaten / Kota</p>`);
             $.each(response.data, function (i, value) {
                 $(".nama_kota").append(
                     `<option value="` +
@@ -1309,7 +1311,7 @@ $(".nama_sektor").change(function () {
 
     // Distribusi/Penjualan Domestik Kilang modal
     if (value.replace(/\s+/g, "").toLowerCase() === "badanusahaniaga") {
-        $(".nama_sektor")
+        $(".sektor_pengolahan")
             .parent()
             .after(
                 `
@@ -1380,8 +1382,24 @@ function incoterms() {
     });
 }
 
-function ddShow() {
-    const ddMenu = document.querySelector(".dd-menu");
+// dropdown multiselect pasokan
+// function ddShow() {
+//     const ddMenu = document.querySelector(".dd-menu");
 
-    ddMenu.classList.toggle("d-none");
-}
+//     ddMenu.classList.remove("d-none");
+// }
+
+let toggle = document.querySelector("#toggleButton");
+let dropdown = document.querySelector(".dd-menu");
+
+toggle.addEventListener("click", (event) => {
+    dropdown.classList.toggle("active");
+    event.stopPropagation();
+});
+
+document.addEventListener("click", (event) => {
+    // Tutup dropdown jika klik di luar elemen
+    if (!dropdown.contains(event.target)) {
+        dropdown.classList.remove("active");
+    }
+});

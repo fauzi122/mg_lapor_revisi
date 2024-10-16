@@ -40,6 +40,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <!-- <th>Catatan</th> -->
                                           
@@ -54,7 +55,8 @@
                                     @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td><b><a href="/niaga/lpg/show/{{$id}}/penjualan">{{dateIndonesia($data->bulan)}}<i class="bx bx-check" title="lihat data laporan"></i></a><b></td>
+                                        <td><b><a href="/niaga/lpg/show/{{$id}}/penjualan">{{getBulan($data->bulan)}}<i class="bx bx-check" title="lihat data laporan"></i></a><b></td>
+                                        <td><b><a href="/niaga/lpg/show/{{$id}}/penjualan/tahun">{{getTahun($data->bulan)}}<i class="bx bx-check" title="lihat data laporan"></i></a><b></td>
                                         <td>		
                                         @if ($data->status_tertinggi == 1 && $data->catatanx)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -136,6 +138,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <!-- <th>Catatan</th> -->
                                           
@@ -150,7 +153,8 @@
                                     @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td><b><a href="/niaga/lpg/show/{{$id}}/pasok">{{dateIndonesia($data->bulan)}}<i class="bx bx-check" title="lihat data laporan"></i></a><b></td>
+                                        <td><b><a href="/niaga/lpg/show/{{$id}}/pasok">{{getBulan($data->bulan)}}<i class="bx bx-check" title="lihat data laporan"></i></a><b></td>
+                                        <td><b><a href="/niaga/lpg/show/{{$id}}/pasok/tahun">{{getTahun($data->bulan)}}<i class="bx bx-check" title="lihat data laporan"></i></a><b></td>
                                         <td>		
                                         @if ($data->status_tertinggi == 1 && $data->catatanx)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>

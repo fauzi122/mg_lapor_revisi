@@ -44,7 +44,7 @@ class LpgController extends Controller
     // Implementasi fungsi simpan_Penjualan_Ho()
   }
 
-  public function show_lpg($id, $lpg)
+  public function show_lpg($id, $lpg, $filter = null)
   {
     $lpgx = $lpg;
     $pecah = explode(',', Crypt::decryptString($id));
@@ -67,13 +67,19 @@ class LpgController extends Controller
     $bulan_ambil_pasok_lpgx = $bulan_ambil_pasok_lpg ? substr($bulan_ambil_pasok_lpg->bulan, 0, 7) : '';
     $statuspasok_lpgx = $bulan_ambil_pasok_lpg->status ?? '';
 
+    if ($filter && $filter === "tahun") {
+      $filterBy = substr($pecah[0], 0, 4);
+    } else {
+        $filterBy = $pecah[0];
+    }
+    
     $lpgs = Penjualan_lpg::where([
-      'bulan' => $pecah[0],
+      ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1]
     ])->orderBy('status', 'desc')->get();
 
     $pasokan = PasokanLPG::where([
-      'bulan' => $pecah[0],
+      ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1]
     ])->orderBy('status', 'desc')->get();
 
