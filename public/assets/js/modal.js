@@ -1022,8 +1022,8 @@ $(".name_provinsi").change(function () {
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".nama_kota").empty();
             $(".nama_kota").append(` <option>Pilih Kabupaten / Kota</option>`);
-            $(".nama_kab").empty();
-            $(".nama_kab").append(` <p>Pilih Kabupaten / Kota</p>`);
+            // $(".nama_kab").empty();
+            // $(".nama_kab").append(` <p>Pilih Kabupaten / Kota</p>`);
             $.each(response.data, function (i, value) {
                 $(".nama_kota").append(
                     `<option value="` +
@@ -1032,9 +1032,9 @@ $(".name_provinsi").change(function () {
                         value.nama_kota +
                         `</option>`
                 );
-                $(".nama_kab").append(
-                    `<label><input type="checkbox" name="kabupaten_kota[]" value="${value.nama_kota}"/><span>${value.nama_kota}</span></label>`
-                );
+                // $(".nama_kab").append(
+                //     `<label><input type="checkbox" name="kabupaten_kota[]" value="${value.nama_kota}"/><span>${value.nama_kota}</span></label>`
+                // );
             });
         },
         error: function (xhr, status, error) {
@@ -1043,6 +1043,45 @@ $(".name_provinsi").change(function () {
         },
     });
     // alert(value)
+});
+
+// Choices js pengolahan minyak => pasokan modal
+$(document).ready(function () {
+    const choices = new Choices("#kabupaten_kota", { removeItemButton: true });
+
+    // Event listener untuk menangani perubahan pada elemen trigger
+    $(".name_provinsi").change(function () {
+        let elemen = $(this).find("option:selected");
+        let value = elemen.attr("data-id");
+
+        // Hapus opsi yang ada sebelumnya
+        $("#kabupaten_kota").empty();
+        choices.clearStore(); // Clear Choices.js store
+
+        $.ajax({
+            url: "/get_kota/" + value,
+            method: "GET",
+            data: {},
+            success: function (response) {
+                // Tambahkan opsi baru berdasarkan kategori yang dipilih
+                $.each(response.data, function (i, item) {
+                    $("#kabupaten_kota").append(
+                        new Option(item.nama_kota, item.nama_kota)
+                    );
+
+                    choices.setValue([item.nama_kota]);
+                });
+
+                // Update Choices.js untuk mencerminkan perubahan
+                choices.passedElement.value = $("#kabupaten_kota").val();
+                choices.init(); // Inisialisasi ulang Choices.js
+            },
+            error: function (xhr, status, error) {
+                // Tangkap pesan error jika ada
+                alert("Terjadi kesalahan saat mengirim data.");
+            },
+        });
+    });
 });
 
 function intake_kilang() {

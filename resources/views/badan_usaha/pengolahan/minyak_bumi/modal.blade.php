@@ -444,30 +444,12 @@
                         @enderror
                     </div>
 
-                    {{-- <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Kabupaten / Kota</label>
-                        <select class="form-select nama_kota" name="kabupaten_kota" id="nama_kota" required>
-                            <option value="">Pilih Kabupaten / Kota</option>
+                    <div class="mb-3">
+                        <label for="kabupaten_kota" class="form-label">Kabupaten / Kota</label>
+                        <select class="form-control nama_kota" name="kabupaten_kota[]" id="kabupaten_kota"
+                            placeholder="This is a placeholder" multiple>
                         </select>
                         @error('kabupaten_kota')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div> --}}
-
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Kabupaten / Kota</label>
-                        <div class="dd-wrapper">
-                            <button class="dd-toggle" type="button" onclick="ddShow()" id="toggleButton">
-                              <span>Pilih Kabupaten / Kota</span>
-                              <i class="bx bx-chevron-down"></i>
-                            </button>
-                            <div class="dd-menu nama_kab shadow-lg" id="myElement">
-                              {{-- <label><input type="checkbox" name="kabupaten_kota[]" value=""/><span>Kabupaten / kota</span></label> --}}
-                            </div>
-                        </div>
-                        @error('kabupaten_kota[]')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -792,7 +774,7 @@
 
                     <div class="mb-3">
                         <label for="produk" class="form-label">Produk</label>
-                        <select class="form-select produk name_produk produk_pengolahan" name="produk" id="produk" required>
+                        <select class="form-select produk name_produk" name="produk" id="produk" required>
                             <option value="">Pilih Produk</option>
                         </select>
                         @error('produk')
@@ -849,7 +831,7 @@
 
                     <div class="mb-3">
                         <label for="sektor" class="form-label">Sektor</label>
-                        <select class="form-select nama_sektor sektor_pengolahan" name="sektor" value="{{ old('sektor') }}" required>
+                        <select class="form-select nama_sektor" name="sektor" value="{{ old('sektor') }}" required>
                             <option>Pilih Sektor</option>
                         </select>
                         @error('sektor')

@@ -19,8 +19,7 @@
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
     <!-- choices css -->
-    {{-- <link href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet"
-        type="text/css" /> --}}
+    <link href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet" type="text/css" />
 
     <!-- Sweet Alert-->
 
@@ -52,7 +51,7 @@
 
     <!-- preloader css -->
 
-    {{--  <link rel="stylesheet" href="{{ asset('assets/css/preloader.min.css')}}" type="text/css" />  --}}
+     {{-- <link rel="stylesheet" href="{{ asset('assets/css/preloader.min.css')}}" type="text/css" />  --}}
 
 
 
@@ -243,9 +242,6 @@
 
     <script src="{{ asset('assets/js/pages/sweetalert.init.js') }}"></script>
 
-    <!-- choices js -->
-    {{-- <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script> --}}
-
 
     <!-- Modal -->
 
@@ -338,7 +334,11 @@
         });
     </script>
 
+    <!-- choices js -->
+    <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
+
 </body>
+
 
 <script src="{{ asset('assets/js/modal.js') }}"></script>
 {{-- <script src="{{ asset('assets/js/modal_lng.js') }}"></script> --}}
