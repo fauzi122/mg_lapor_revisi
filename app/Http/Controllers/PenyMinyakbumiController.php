@@ -114,13 +114,17 @@ class PenyMinyakbumiController extends Controller
     }
     public function simpan_pmbx(Request $request)
     {
+        dd($request->all());
         $pesan = [
             'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
             'bulan.required' => 'bulan masih kosong',
-            'jenis_fasilitas.required' => 'jenis_fasilitas masih kosong',
             'no_tangki.required' => 'no_tangki masih kosong',
+            'kapasitas_tangki.required' => 'kapasitas_tangki masih kosong',
+            'pengguna.required' => 'pengguna masih kosong',
+            'jenis_fasilitas.required' => 'jenis_fasilitas masih kosong',
             'jenis_komoditas.required' => 'jenis komoditas masih kosong',
             'produk.required' => 'produk masih kosong',
+            'satuan.required' => 'satuan masih kosong',
             'provinsi.required' => 'provinsi masih kosong',
             'kab_kota.required' => 'kab kota masih kosong',
             'kategori_supplai.required' => 'kategori supplai masih kosong',
@@ -128,13 +132,17 @@ class PenyMinyakbumiController extends Controller
             'volume_supply.required' => 'volume supply masih kosong',
             'volume_output.required' => 'volume output masih kosong',
             'volume_stok_akhir.required' => 'volume stok akhir masih kosong',
-            'satuan.required' => 'satuan masih kosong',
             'utilisasi_tangki.required' => 'utilasi tangki masih kosong',
-            'pengguna.required' => 'pengguna masih kosong',
-            'jangka_waktu_penggunaan.required' => 'jangka waktu penggunaan masih kosong',
+            'tanggal_awal.required' => 'tanggal awal penggunaan masih kosong',
+            'tanggal_akhir.required' => 'tanggal akhir penggunaan masih kosong',
             'tarif_penyimpanan.required' => 'tarif_penyimpanan masih kosong',
             'satuan_tarif.required' => 'satuan tarif masih kosong',
             'keterangan.required' => 'keterangan masih kosong',
+            'commingle.required' => 'commingle masih kosong',
+            'jumlah_bu.required' => 'jumlah_bu masih kosong',
+            'nama_penyewa.required' => 'nama_penyewa masih kosong',
+            'kapasitas_penyewaan.required' => 'kapasitas_penyewaan masih kosong',
+            'kontrak_sewa.required' => 'kontrak_sewa masih kosong',
         ];
 
         $validatedData = $request->validate([
@@ -142,6 +150,7 @@ class PenyMinyakbumiController extends Controller
             'bulan' => 'required',
             'jenis_fasilitas' => 'required',
             'no_tangki' => 'required',
+            'kapasitas_tangki' => 'required',
             'jenis_komoditas' => 'required',
             'produk' => 'required',
             'provinsi' => 'required',
@@ -152,13 +161,18 @@ class PenyMinyakbumiController extends Controller
             'volume_output' => 'required',
             'volume_stok_akhir' => 'required',
             'satuan' => 'required',
-            'utilisasi_tangki' => 'required',
+            'utilisasi_tangki' => 'required|numeric|lte:100|gte:0',
             'pengguna' => 'required',
-            'jangka_waktu_penggunaan' => 'required',
             'tarif_penyimpanan' => 'required',
             'satuan_tarif' => 'required',
             'keterangan' => 'required',
-            'jangka_waktu_penggunaan' => 'required',
+            'tanggal_awal' => 'required',
+            'tanggal_akhir' => 'required',
+            'commingle' => 'required',
+            'jumlah_bu' => 'required_if:commingle,ya',
+            'nama_penyewa' => 'required_if:commingle,ya',
+            'kapasitas_penyewaan' => 'required',
+            // 'kontrak_sewa' => 'required',
         ], $pesan);
 
         $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -175,6 +189,7 @@ class PenyMinyakbumiController extends Controller
                 return back();
             }
         }
+
 
         $validatedData = Penyminyakbumi::create([
             'badan_usaha_id' => $request->badan_usaha_id,
@@ -193,12 +208,16 @@ class PenyMinyakbumiController extends Controller
             'satuan' => $request->satuan,
             'utilisasi_tangki' => $request->utilisasi_tangki,
             'pengguna' => $request->pengguna,
-            'jangka_waktu_penggunaan' => $request->jangka_waktu_penggunaan,
             'tarif_penyimpanan' => $request->tarif_penyimpanan,
             'satuan_tarif' => $request->satuan_tarif,
             'keterangan' => $request->keterangan,
-            'jangka_waktu_penggunaan' => $request->jangka_waktu_penggunaan,
-
+            'tanggal_awal' => $request->tanggal_awal,
+            'tanggal_akhir' => $request->tanggal_akhir,
+            'commingle' => $request->commingle,
+            'jumlah_bu' => $request->jumlah_bu,
+            'nama_penyewa' => $request->nama_penyewa,
+            'kapasitas_penyewaan' => $request->kapasitas_penyewaan,
+            'kontrak_sewa' => $request->kontrak_sewa,
         ]);
 
         if ($validatedData) {
@@ -372,30 +391,40 @@ class PenyMinyakbumiController extends Controller
     {
         $pmb = $id;
         $pesan = [
-            'jenis_fasilitas.required' => 'jenis_fasilitas masih kosong',
             'no_tangki.required' => 'no_tangki masih kosong',
+            'kapasitas_tangki.required' => 'kapasitas_tangki masih kosong',
+            'pengguna.required' => 'pengguna masih kosong',
+            'jenis_fasilitas.required' => 'jenis_fasilitas masih kosong',
             'jenis_komoditas.required' => 'jenis komoditas masih kosong',
             'produk.required' => 'produk masih kosong',
+            'satuan.required' => 'satuan masih kosong',
+            'provinsi.required' => 'provinsi masih kosong',
             'kab_kota.required' => 'kab kota masih kosong',
             'kategori_supplai.required' => 'kategori supplai masih kosong',
             'volume_stok_awal.required' => 'volume stok_awal masih kosong',
             'volume_supply.required' => 'volume supply masih kosong',
             'volume_output.required' => 'volume output masih kosong',
             'volume_stok_akhir.required' => 'volume stok akhir masih kosong',
-            'satuan.required' => 'satuan masih kosong',
             'utilisasi_tangki.required' => 'utilasi tangki masih kosong',
-            'pengguna.required' => 'pengguna masih kosong',
-            'jangka_waktu_penggunaan.required' => 'jangka waktu penggunaan masih kosong',
+            'tanggal_awal.required' => 'tanggal awal penggunaan masih kosong',
+            'tanggal_akhir.required' => 'tanggal akhir penggunaan masih kosong',
             'tarif_penyimpanan.required' => 'tarif_penyimpanan masih kosong',
             'satuan_tarif.required' => 'satuan tarif masih kosong',
             'keterangan.required' => 'keterangan masih kosong',
+            'commingle.required' => 'commingle masih kosong',
+            'jumlah_bu.required' => 'jumlah_bu masih kosong',
+            'nama_penyewa.required' => 'nama_penyewa masih kosong',
+            'kapasitas_penyewaan.required' => 'kapasitas_penyewaan masih kosong',
+            'kontrak_sewa.required' => 'kontrak_sewa masih kosong',
         ];
 
         $rules = [
             'jenis_fasilitas' => 'required',
             'no_tangki' => 'required',
+            'kapasitas_tangki' => 'required',
             'jenis_komoditas' => 'required',
             'produk' => 'required',
+            'provinsi' => 'required',
             'kab_kota' => 'required',
             'kategori_supplai' => 'required',
             'volume_stok_awal' => 'required',
@@ -403,17 +432,26 @@ class PenyMinyakbumiController extends Controller
             'volume_output' => 'required',
             'volume_stok_akhir' => 'required',
             'satuan' => 'required',
-            'utilisasi_tangki' => 'required',
+            'utilisasi_tangki' => 'required|numeric|lte:100|gte:0',
             'pengguna' => 'required',
-            'jangka_waktu_penggunaan' => 'required',
             'tarif_penyimpanan' => 'required',
             'satuan_tarif' => 'required',
             'keterangan' => 'required',
-            'jangka_waktu_penggunaan' => 'required',
-            'status' => 'required',
+            'tanggal_awal' => 'required',
+            'tanggal_akhir' => 'required',
+            'commingle' => 'required',
+            'jumlah_bu' => 'required_if:commingle,ya',
+            'nama_penyewa' => 'required_if:commingle,ya',
+            'kapasitas_penyewaan' => 'required',
         ];
 
+        
         $validatedData = $request->validate($rules, $pesan);
+
+        if ($request->commingle == "tidak") {
+            $validatedData["jumlah_bu"] = null;
+            $validatedData["nama_penyewa"] = null;
+        }
 
         Penyminyakbumi::where('id', $pmb)
             ->update($validatedData);

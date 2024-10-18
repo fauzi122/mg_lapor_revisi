@@ -1421,24 +1421,39 @@ function incoterms() {
     });
 }
 
-// dropdown multiselect pasokan
-// function ddShow() {
-//     const ddMenu = document.querySelector(".dd-menu");
-
-//     ddMenu.classList.remove("d-none");
-// }
-
-let toggle = document.querySelector("#toggleButton");
-let dropdown = document.querySelector(".dd-menu");
-
-toggle.addEventListener("click", (event) => {
-    dropdown.classList.toggle("active");
-    event.stopPropagation();
-});
-
-document.addEventListener("click", (event) => {
-    // Tutup dropdown jika klik di luar elemen
-    if (!dropdown.contains(event.target)) {
-        dropdown.classList.remove("active");
+function getCommingle(target, option, jumlah_bu = " ", nama_penyewa = " ") {
+    let commingle = $(target).val();
+    if (nama_penyewa == null) {
+        nama_penyewa = " ";
     }
+    const comElement = `<div class="my-3">
+                    <label for="example-text-input" class="form-label">Jumlah Badan Usaha</label>
+                    <input class="form-control" type="number" name="jumlah_bu" id="jumlah_bu" value="${jumlah_bu}" ${option}>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Nama Penyewa</label>
+                    <input class="form-control" type="text" name="nama_penyewa" id="nama_penyewa" value="${nama_penyewa}" ${option}>
+                    
+                </div>`;
+
+    if (commingle == "ya") {
+        $(target).parent().append(comElement);
+    }
+
+    $(target).change(function () {
+        let elemen = $(this).find("option:selected");
+        let value = elemen.val();
+
+        if (value == "ya") {
+            $(target).parent().append(comElement);
+        } else {
+            $("#jumlah_bu").parent().remove();
+            $("#nama_penyewa").parent().remove();
+        }
+    });
+}
+
+$(document).ready(function () {
+    getCommingle("#commingle", "required");
 });

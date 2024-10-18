@@ -97,8 +97,10 @@
                                             <th>Status</th>
                                             <th>Catatan</th>
                                             <th>Produk</th>
-                                            <th>Jenis Fasilitas</th>
                                             <th>No Tangki</th>
+                                            <th>Kapasitas Tangki</th>
+                                            <th>Pengguna</th>
+                                            <th>Jenis Fasilitas</th>
                                             <th>Aksi</th>
                                             <th>Jenis Komoditas</th>
                                             <th>Provinsi</th>
@@ -108,13 +110,16 @@
                                             <th>Volume Supply</th>
                                             <th>Volume Output</th>
                                             <th>Volume Stok Akhir</th>
+                                            <th>Kapasitas Penyewaan</th>
+                                            <th>Utilisasi Tangki</th>
                                             <th>Satuan</th>
-                                            <th>Utilasi Tangki</th>
-                                            <th>Pengguna</th>
                                             <th>Jangka Waktu Penggunaan</th>
                                             <th>Tarif Penyimpanan</th>
                                             <th>Satuan Tarif</th>
-                                            <th>Keterangan </th>
+                                            <th>Keterangan</th>
+                                            <th>Commingle</th>
+                                            <th>Jumlah Badan Usaha</th>
+                                            <th>Nama Penyewa</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -136,8 +141,10 @@
                                                 </td>
                                                 <td>{{ $pmb->catatan }}</td>
                                                 <td>{{ $pmb->produk }}</td>
-                                                <td>{{ $pmb->jenis_fasilitas }}</td>
                                                 <td>{{ $pmb->no_tangki }}</td>
+                                                <td>{{ $pmb->kapasitas_tangki }}</td>
+                                                <td>{{ $pmb->pengguna }}</td>
+                                                <td>{{ $pmb->jenis_fasilitas }}</td>
                                                 <td>
 
                                                     <?php
@@ -193,10 +200,13 @@
                                                     <?php 
                                             } ?>
                                                 </td>
+                                                {{-- @dd($pmb->jenis_komoditas) --}}
                                                 <td>
-                                                    @foreach (explode('"', json_encode($pmb->jenis_komoditas)) as $jenis)
-                                                        {{ $jenis }}
-                                                    @endforeach
+                                                    <ol>
+                                                        @foreach ($pmb->jenis_komoditas as $jenis)
+                                                            <li> {{ $jenis }}</li>
+                                                        @endforeach
+                                                    </ol>
                                                 </td>
                                                 <td>{{ $pmb->provinsi }}</td>
                                                 <td>{{ $pmb->kab_kota }}</td>
@@ -205,13 +215,25 @@
                                                 <td>{{ $pmb->volume_supply }}</td>
                                                 <td>{{ $pmb->volume_output }}</td>
                                                 <td>{{ $pmb->volume_stok_akhir }}</td>
+                                                <td>{{ $pmb->kapasitas_penyewaan }}</td>
+                                                <td>{{ $pmb->utilisasi_tangki }}%</td>
                                                 <td>{{ $pmb->satuan }}</td>
-                                                <td>{{ $pmb->utilasi_tangki }}</td>
-                                                <td>{{ $pmb->pengguna }}</td>
-                                                <td>{{ $pmb->jangka_waktu_penggunaan }}</td>
+                                                <td>
+                                                    <ul>
+                                                        <li>
+                                                            Tanggal Awal : {{ \Carbon\Carbon::parse($pmb->tanggal_awal)->format('d-M-Y') }}
+                                                        </li>
+                                                        <li>
+                                                            Tanggal Akhir : {{ \Carbon\Carbon::parse($pmb->tanggal_akhir)->format('d-M-Y') }}
+                                                        </li>
+                                                    </ul>
+                                                </td>
                                                 <td>{{ $pmb->tarif_penyimpanan }}</td>
                                                 <td>{{ $pmb->satuan_tarif }}</td>
                                                 <td>{{ $pmb->keterangan }}</td>
+                                                <td>{{ $pmb->commingle }}</td>
+                                                <td>{{ $pmb->jumlah_bu }}</td>
+                                                <td>{{ $pmb->nama_penyewa }}</td>
 
                                             </tr>
                                         @endforeach

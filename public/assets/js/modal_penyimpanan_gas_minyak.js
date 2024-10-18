@@ -41,6 +41,7 @@ function editPMB(id, kab_kota, produk) {
             $("#bulan_pmb").val(bulanx);
             $("#jenis_fasilitas_pmb").val(response.data.find.jenis_fasilitas);
             $("#no_tangki_pmb").val(response.data.find.no_tangki);
+            $("#kapasitas_tangki_pmb").val(response.data.find.kapasitas_tangki);
             // $('#jenis_komoditas_pmb').val(response.data.find.jenis_komoditas)
             $("#produk_pmb").val(response.data.find.produk);
             $("#provinsi_pmb").val(response.data.find.provinsi);
@@ -52,17 +53,44 @@ function editPMB(id, kab_kota, produk) {
             $("#volume_stok_akhir_pmb").val(
                 response.data.find.volume_stok_akhir
             );
+            $("#kapasitas_penyewaan_pmb").val(
+                response.data.find.kapasitas_penyewaan
+            );
             $("#satuan_pmb").val(response.data.find.satuan);
             $("#utilisasi_tangki_pmb").val(response.data.find.utilisasi_tangki);
             $("#pengguna_pmb").val(response.data.find.pengguna);
-            $("#jangka_waktu_penggunaan_pmb").val(
-                response.data.find.jangka_waktu_penggunaan
-            );
+            $("#tanggal_awal_pmb").val(response.data.find.tanggal_awal);
+            $("#tanggal_akhir_pmb").val(response.data.find.tanggal_akhir);
             $("#tarif_penyimpanan_pmb").val(
                 response.data.find.tarif_penyimpanan
             );
             $("#satuan_tarif_pmb").val(response.data.find.satuan_tarif);
             $("#keterangan_pmb").val(response.data.find.keterangan);
+            $("#commingle_pmb").val(response.data.find.commingle);
+
+            getCommingle(
+                "#commingle_pmb",
+                "required",
+                response.data.find.jumlah_bu,
+                response.data.find.nama_penyewa
+            );
+
+            $("#volume_stok_akhir_pmb").keyup(function () {
+                $("#utilisasi_tangki_pmb").val(
+                    getUtilisasiTangki(
+                        "#volume_stok_akhir_pmb",
+                        "#kapasitas_penyewaan_pmb"
+                    )
+                );
+            });
+            $("#kapasitas_penyewaan_pmb").keyup(function () {
+                $("#utilisasi_tangki_pmb").val(
+                    getUtilisasiTangki(
+                        "#volume_stok_akhir_pmb",
+                        "#kapasitas_penyewaan_pmb"
+                    )
+                );
+            });
 
             let produkSelect = response.data.find.produk;
             let satuanSelect = response.data.find.satuan;
@@ -216,6 +244,9 @@ function lihat_pmb(id, produk, kabupaten_kota) {
                 response.data.find.jenis_fasilitas
             );
             $("#no_tangki_pmb_lihat").val(response.data.find.no_tangki);
+            $("#kapasitas_tangki_pmb_lihat").val(
+                response.data.find.kapasitas_tangki
+            );
             $("#jenis_komoditas_pmb_lihat").val(
                 response.data.find.jenis_komoditas
             );
@@ -233,19 +264,29 @@ function lihat_pmb(id, produk, kabupaten_kota) {
             $("#volume_stok_akhir_pmb_lihat").val(
                 response.data.find.volume_stok_akhir
             );
+            $("#kapasitas_penyewaan_pmb_lihat").val(
+                response.data.find.kapasitas_penyewaan
+            );
             $("#satuan_pmb_lihat").val(response.data.find.satuan);
             $("#utilisasi_tangki_pmb_lihat").val(
                 response.data.find.utilisasi_tangki
             );
             $("#pengguna_pmb_lihat").val(response.data.find.pengguna);
-            $("#jangka_waktu_penggunaan_pmb_lihat").val(
-                response.data.find.jangka_waktu_penggunaan
-            );
+            $("#tanggal_awal_pmb_lihat").val(response.data.find.tanggal_awal);
+            $("#tanggal_akhir_pmb_lihat").val(response.data.find.tanggal_akhir);
             $("#tarif_penyimpanan_pmb_lihat").val(
                 response.data.find.tarif_penyimpanan
             );
             $("#satuan_tarif_pmb_lihat").val(response.data.find.satuan_tarif);
             $("#keterangan_pmb_lihat").val(response.data.find.keterangan);
+            $("#commingle_pmb_lihat").val(response.data.find.commingle);
+
+            getCommingle(
+                "#commingle_pmb_lihat",
+                "readonly",
+                response.data.find.jumlah_bu,
+                response.data.find.nama_penyewa
+            );
 
             // Contoh: Lakukan tindakan selanjutnya setelah data berhasil dikirim
             // window.location.href = '/success-page';
@@ -519,3 +560,29 @@ function tambahPMB(bulan) {
 
     // Anda dapat melakukan operasi lain dengan elemen atau nilai bulan
 }
+
+function getUtilisasiTangki(volakhir, kapasitas) {
+    let volStokAkhir = $(volakhir).val();
+    let kapasitasPenyewaan = $(kapasitas).val();
+
+    let utilisasi = (volStokAkhir / kapasitasPenyewaan) * 100;
+    return utilisasi;
+}
+
+$(document).ready(function () {
+    $("#utilisasi_tangki").val(
+        getUtilisasiTangki("#volume_stok_akhir", "#kapasitas_penyewaan")
+    );
+});
+
+$("#volume_stok_akhir").keyup(function () {
+    $("#utilisasi_tangki").val(
+        getUtilisasiTangki("#volume_stok_akhir", "#kapasitas_penyewaan")
+    );
+});
+
+$("#kapasitas_penyewaan").keyup(function () {
+    $("#utilisasi_tangki").val(
+        getUtilisasiTangki("#volume_stok_akhir", "#kapasitas_penyewaan")
+    );
+});
