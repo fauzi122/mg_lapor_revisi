@@ -117,8 +117,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(Persentase)</font></label>
-                        <input class="form-control" type="text" id="example-text-input" name="utilisasi_tangki">
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)</font></label>
+                        <input class="form-control" type="number" min="0" max="100" id="example-text-input" name="utilisasi_tangki" required>
                         @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -323,8 +323,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(Persentase)</font></label>
-                        <input class="form-control" type="text" id="utilisasi_tangki_pggb" name="utilisasi_tangki">
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)</font></label>
+                        <input class="form-control" type="number" min="0" max="100" id="utilisasi_tangki_pggb" name="utilisasi_tangki" required>
                         @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -533,8 +533,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(Persentase)</font></label>
-                    <input class="form-control" type="text" id="utilisasi_tangki_pggb_lihat" name="utilisasi_tangki"
+                    <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)</font></label>
+                    <input class="form-control" type="number" min="0" max="100" id="utilisasi_tangki_pggb_lihat" name="utilisasi_tangki"
                         readonly>
                     @error('utilisasi_tangki')
                         <div class="form-group has-danger mb-0">
