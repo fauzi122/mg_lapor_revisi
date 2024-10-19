@@ -36,6 +36,9 @@
                                 <button type="button" class="btn btn-primary  btn-rounded waves-effect waves-light"
                                         data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl"><i class="bx bx-plus"></i> Tambah Data
                                 </button>
+                                <button type="button" class="btn btn-success   btn-rounded waves-effect waves-light"
+                                        data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl"><i class="bx bx-import"></i> Import Excel
+                                </button>
                                 <div class=" modal fade modal-select bs-example-modal-xl" tabindex="-1" role="dialog"
                                      aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
@@ -110,6 +113,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Bulan</th>
+                                                <th>Tahun</th>
                                                 <th>Provinsi</th>
                                                 <th>Volume</th>
                                                 <th>Aksi</th>
@@ -119,7 +123,8 @@
                                             @foreach ($lpg_subsidi as $data)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ dateIndonesia($data->bulan) }}</td>
+                                                   <td>{{ \Carbon\Carbon::parse($data->bulan)->format('F') }}</td> <!-- Bulan -->
+                                                    <td>{{ \Carbon\Carbon::parse($data->bulan)->format('Y') }}</td> <!-- Tahun -->
                                                     <td>{{ $data->name }}</td>
                                                     <td>{{ $data->volume }}</td>
                                                     <td>

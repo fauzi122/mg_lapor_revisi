@@ -223,11 +223,11 @@
                         <span data-key="t-components">User Managemen</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="/data-user/bu" data-key="t-alerts">Akun Badan Usaha</a></li>
-                        <li><a href="/data-user/adm" data-key="t-buttons">Akun Staff</a></li>
-                        <li><a href="ui-cards.html" data-key="t-cards">Izin</a></li>
-                        <li><a href="ui-carousel.html" data-key="t-carousel">Pengaturan Akun</a></li>
-                        <li><a href="ui-dropdowns.html" data-key="t-dropdowns">Intake Kilang</a></li>
+                        <li><a href="/user-badan-usaha" data-key="t-alerts">User Badan Usaha</a></li>
+                        <li><a href="/user" data-key="t-buttons">User Evaluator</a></li>
+                        <li><a href="/role" data-key="t-cards">Role</a></li>
+                        <li><a href="/permission" data-key="t-carousel">Permission</a></li>
+                      
 
                     </ul>
                 </li>

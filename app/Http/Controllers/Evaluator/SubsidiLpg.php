@@ -22,8 +22,6 @@ class SubsidiLpg extends Controller
             ->select('a.*', 'b.name')
             ->orderBy('a.id','desc')
             ->get();
-
-
         return view('evaluator.subsidi_lpg.lpg_subsidi.index', compact('lpg_subsidi','provinsi'));
 
     }
