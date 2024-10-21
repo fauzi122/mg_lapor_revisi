@@ -56,7 +56,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">HS Code</label>
-                    <input class="form-control" type="text" id="example-text-input" name="hs_code">
+                    <input class="form-control hsCode" type="text" id="example-text-input" name="hs_code">
                     <input class="form-control" type="hidden" id="example-text-input" name="status" value="0">
                     <input class="form-control" type="hidden" id="example-text-input" name="catatan" value="-">
                     <input class="form-control" type="hidden" id="example-text-input" name="petugas" value="jjp">
@@ -69,7 +69,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume PEB</label>
-                    <input class="form-control" type="text" id="example-text-input" name="volume_peb">
+                    <input class="form-control number-separator" type="text" id="example-text-input" name="volume_peb">
                     @error('volume_peb')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -79,7 +79,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Invoice Amount Nilai Pabean</label>
-                    <input class="form-control" type="text" id="example-text-input" name="invoice_amount_nilai_pabean">
+                    <input class="form-control number-separator" type="text" id="example-text-input" name="invoice_amount_nilai_pabean">
                     @error('invoice_amount_nilai_pabean')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -89,7 +89,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Invoice Amount Final</label>
-                    <input class="form-control" type="text" id="example-text-input" name="invoice_amount_final">
+                    <input class="form-control number-separator" type="text" id="example-text-input" name="invoice_amount_final">
                     @error('invoice_amount_final')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -258,7 +258,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">HS Code</label>
-                    <input class="form-control" type="text" id="hs_code_ekpor" name="hs_code">
+                    <input class="form-control hsCode" type="text" id="hs_code_ekpor" name="hs_code">
                     <input class="form-control" type="hidden" id="example-text-input" name="status" value="0">
                     <input class="form-control" type="hidden" id="example-text-input" name="catatan" value="-">
                     <input class="form-control" type="hidden" id="example-text-input" name="petugas" value="jjp">
@@ -271,7 +271,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume PEB</label>
-                    <input class="form-control" type="text" id="volume_peb_ekpor" name="volume_peb">
+                    <input class="form-control number-separator" type="text" id="volume_peb_ekpor" name="volume_peb">
                     @error('volume_peb')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -281,7 +281,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Invoice Amount Nilai Pabean</label>
-                    <input class="form-control" type="text" id="invoice_amount_nilai_pabean_ekpor" name="invoice_amount_nilai_pabean">
+                    <input class="form-control number-separator" type="text" id="invoice_amount_nilai_pabean_ekpor" name="invoice_amount_nilai_pabean">
                     @error('invoice_amount_nilai_pabean')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -291,7 +291,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Invoice Amount Final</label>
-                    <input class="form-control" type="text" id="invoice_amount_final_ekpor" name="invoice_amount_final">
+                    <input class="form-control number-separator" type="text" id="invoice_amount_final_ekpor" name="invoice_amount_final">
                     @error('invoice_amount_final')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -310,7 +310,10 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">pelabuhan Muat</label>
-                    <input class="form-control" type="text" id="pelabuhan_muat_ekpor" name="pelabuhan_muat">
+                    {{-- <input class="form-control" type="text" id="pelabuhan_muat_ekpor" name="pelabuhan_muat"> --}}
+                    <select class="form-select pelabuhan" name="pelabuhan_muat" id="pelabuhan_muat_ekpor">
+                        <option>Pilih Pelabuhan Muat</option>
+                    </select>
                     @error('pelabuhan_muat')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -646,7 +649,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">HS Code</label>
-                    <input class="form-control" type="text" id="" name="hs_code">
+                    <input class="form-control hsCode" type="text" id="" name="hs_code">
                     <input class="form-control" type="hidden" id="" name="status" value="0">
                     <input class="form-control" type="hidden" id="" name="catatan" value="-">
                     <input class="form-control" type="hidden" id="" name="petugas" value="jjp">
@@ -659,7 +662,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume PIB</label>
-                    <input class="form-control" type="text" id="example-text-input" name="volume_pib">
+                    <input class="form-control number-separator" type="text" id="example-text-input" name="volume_pib">
                     @error('volume_pib')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -669,7 +672,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Invoice Amount Nilai Pabean</label>
-                    <input class="form-control" type="text" id="example-text-input" name="invoice_amount_nilai_pabean">
+                    <input class="form-control number-separator" type="text" id="example-text-input" name="invoice_amount_nilai_pabean">
                     @error('invoice_amount_nilai_pabean')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -679,7 +682,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Invoice Amount Final</label>
-                    <input class="form-control" type="text" id="example-text-input" name="invoice_amount_final">
+                    <input class="form-control number-separator" type="text" id="example-text-input" name="invoice_amount_final">
                     @error('invoice_amount_final')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -710,7 +713,9 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Pelabuhan Muat</label>
-                    <input class="form-control" type="text" id="example-text-input" name="pelabuhan_muat">
+                    <select class="form-select pelabuhan" name="pelabuhan_muat" id="example-text-input">
+                        <option>Pilih Pelabuhan</option>
+                    </select>
                     @error('pelabuhan_muat')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -872,7 +877,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">HS Code</label>
-                    <input class="form-control" type="text" id="hs_code_impor" name="hs_code">
+                    <input class="form-control hsCode" type="text" id="hs_code_impor" name="hs_code">
                     <input class="form-control" type="hidden" id="example-text-input" name="status" value="0">
                     <input class="form-control" type="hidden" id="example-text-input" name="catatan" value="-">
                     <input class="form-control" type="hidden" id="example-text-input" name="petugas" value="jjp">
@@ -885,7 +890,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume PIB</label>
-                    <input class="form-control" type="text" id="volume_pib_impor" name="volume_pib">
+                    <input class="form-control number-separator" type="text" id="volume_pib_impor" name="volume_pib">
                     @error('volume_pib')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -895,7 +900,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Invoice Amount Nilai Pabean</label>
-                    <input class="form-control" type="text" id="invoice_amount_nilai_pabean_impor" name="invoice_amount_nilai_pabean">
+                    <input class="form-control number-separator" type="text" id="invoice_amount_nilai_pabean_impor" name="invoice_amount_nilai_pabean">
                     @error('invoice_amount_nilai_pabean')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -905,7 +910,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Invoice Amount Final</label>
-                    <input class="form-control" type="text" id="invoice_amount_final_impor" name="invoice_amount_final">
+                    <input class="form-control number-separator" type="text" id="invoice_amount_final_impor" name="invoice_amount_final">
                     @error('invoice_amount_final')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -935,8 +940,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="example-text-input" class="form-label">pelabuhan Muat</label>
-                    <input class="form-control" type="text" id="pelabuhan_muat_impor" name="pelabuhan_muat">
+                    <label for="example-text-input" class="form-label">Pelabuhan Muat</label>
+                    {{-- <input class="form-control" type="text" id="pelabuhan_muat_impor" name="pelabuhan_muat"> --}}
+                    <select class="form-select pelabuhan" name="pelabuhan_muat" id="pelabuhan_muat_impor" required>
+                        <option>Pilih Pelabuhan</option>
+                    </select>
+                    
                     @error('pelabuhan_muat')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -946,7 +955,10 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Pelabuhan Bongkar</label>
-                    <input class="form-control" type="text" id="pelabuhan_bongkar_impor" name="pelabuhan_bongkar">
+                    {{-- <input class="form-control" type="text" id="pelabuhan_bongkar_impor" name="pelabuhan_bongkar"> --}}
+                    <select class="form-select pelabuhan" name="pelabuhan_bongkar" id="pelabuhan_bongkar_impor">
+                        <option>Pilih Pelabuhan</option>
+                    </select>
                     @error('pelabuhan_bongkar')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>

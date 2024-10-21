@@ -908,7 +908,9 @@ function produk(jenis_komuditas = "") {
             // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".name_produk").empty();
-            $(".name_produk").append(` <option>Pilih Produk</option>`);
+            $(".name_produk").append(
+                ` <option selected disabled>Pilih Produk</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".name_produk").append(
                     `<option value="` +
@@ -938,7 +940,9 @@ $(".name_produk").change(function () {
             // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".satuan").empty();
-            $(".satuan").append(` <option>Pilih Satuan</option>`);
+            $(".satuan").append(
+                ` <option selected disabled>Pilih Satuan</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".satuan").append(
                     `<option value="` +
@@ -988,7 +992,9 @@ function provinsi() {
             // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".name_provinsi").empty();
-            $(".name_provinsi").append(` <option>Pilih Provinsi</option>`);
+            $(".name_provinsi").append(
+                ` <option selected disabled >Pilih Provinsi</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".name_provinsi").append(
                     `<option data-id="` +
@@ -1021,7 +1027,9 @@ $(".name_provinsi").change(function () {
             // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".nama_kota").empty();
-            $(".nama_kota").append(` <option>Pilih Kabupaten / Kota</option>`);
+            $(".nama_kota").append(
+                ` <option selected disabled>Pilih Kabupaten / Kota</option>`
+            );
             // $(".nama_kab").empty();
             // $(".nama_kab").append(` <p>Pilih Kabupaten / Kota</p>`);
             $.each(response.data, function (i, value) {
@@ -1094,7 +1102,9 @@ function intake_kilang() {
         success: function (response) {
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".intake_kilang").empty();
-            $(".intake_kilang").append(` <option>Pilih Intake Kilang</option>`);
+            $(".intake_kilang").append(
+                ` <option selected disabled>Pilih Intake Kilang</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".intake_kilang").append(
                     `<option value="` +
@@ -1124,7 +1134,9 @@ $(".intake_kilang").change(function () {
             // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".satuan").empty();
-            $(".satuan").append(` <option>Pilih Satuan</option>`);
+            $(".satuan").append(
+                ` <option selected disabled>Pilih Satuan</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".satuan").append(
                     `<option value="` +
@@ -1259,10 +1271,12 @@ function negara() {
         method: "GET",
         data: {},
         success: function (response) {
-            // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
+
             $(".nm_negara").empty();
-            $(".nm_negara").append(` <option>Pilih Negara</option>`);
+            $(".nm_negara").append(
+                ` <option selected disabled>Pilih Negara</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".nm_negara").append(
                     `<option value="` +
@@ -1294,7 +1308,9 @@ function kab_kota() {
             // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".nama_kota").empty();
-            $(".nama_kota").append(` <option>Pilih Kab / Kota</option>`);
+            $(".nama_kota").append(
+                ` <option selected disabled>Pilih Kab / Kota</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".nama_kota").append(
                     `<option value="` +
@@ -1326,7 +1342,9 @@ function sektor() {
             // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".nama_sektor").empty();
-            $(".nama_sektor").append(` <option>Pilih Sektor</option>`);
+            $(".nama_sektor").append(
+                ` <option selected disabled>Pilih Sektor</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".nama_sektor").append(
                     `<option value="` +
@@ -1374,11 +1392,15 @@ function pelabuhan() {
             // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".pelabuhan").empty();
-            $(".pelabuhan").append(` <option>Pilih Pelabuhan</option>`);
+            $(".pelabuhan").append(
+                ` <option selected disabled>Pilih Pelabuhan</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".pelabuhan").append(
                     `<option value="` +
-                        value.nm_oorts +
+                        value.nm_port +
+                        ` - ` +
+                        value.lokasi +
                         `">` +
                         value.lokasi +
                         `</option>`
@@ -1403,7 +1425,9 @@ function incoterms() {
             // console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".incoterms").empty();
-            $(".incoterms").append(` <option>Pilih Incoterms</option>`);
+            $(".incoterms").append(
+                ` <option selected disabled>Pilih Incoterms</option>`
+            );
             $.each(response.data, function (i, value) {
                 $(".incoterms").append(
                     `<option value="` +
@@ -1456,4 +1480,36 @@ function getCommingle(target, option, jumlah_bu = " ", nama_penyewa = " ") {
 
 $(document).ready(function () {
     getCommingle("#commingle", "required");
+});
+
+easyNumberSeparator({
+    selector: ".number-separator",
+    separator: ".",
+});
+
+function formatHSCode(input) {
+    // Menghapus semua karakter yang bukan angka
+    const cleanedInput = input.replace(/\D/g, "");
+    let formattedCode = "";
+
+    // Memformat sesuai pola XXXX.XX.XX
+    for (let i = 0; i < cleanedInput.length; i++) {
+        if (i === 4 || i === 6) {
+            formattedCode += "."; // Menambahkan titik di posisi yang tepat
+        }
+        formattedCode += cleanedInput[i];
+    }
+
+    return formattedCode;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const inputFields = document.querySelectorAll(".hsCode"); // Mengambil semua elemen dengan kelas hsCode
+
+    inputFields.forEach((inputField) => {
+        inputField.addEventListener("input", function () {
+            const formatted = formatHSCode(inputField.value);
+            inputField.value = formatted; // Mengembalikan hasil format ke input
+        });
+    });
 });
