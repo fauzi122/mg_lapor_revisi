@@ -13,6 +13,7 @@ use App\Models\Impor;
 use App\Models\Izin;
 use App\Imports\Importekspor;
 use App\Imports\Importimport;
+use App\Models\Negara;
 use Illuminate\Support\Facades\Crypt;
 // s
 
@@ -66,6 +67,7 @@ class EksportImportController extends Controller
     } else {
       $filterBy = $pecah[0];
     }
+    
     $expor = Ekspor::where([
       ['bulan_peb', 'like', "%" . $filterBy . "%"],
       'badan_usaha_id' => $pecah[1]
@@ -328,6 +330,7 @@ class EksportImportController extends Controller
   {
     $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
     $data['negara_tujuan'] = DB::select("SELECT negaras.nm_negara FROM negaras");
+    $data['pelabuhan'] = DB::select("SELECT ports.nm_port, ports.lokasi FROM ports");
     $data['find'] = Ekspor::find($id);
     return response()->json(['data' => $data]);
   }
@@ -376,6 +379,8 @@ class EksportImportController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
+    $validatedData['bulan_peb'] = $request->bulan_peb . '-01';
+
     Ekspor::where('id', $ekport)
       ->update($validatedData);
 
@@ -393,6 +398,7 @@ class EksportImportController extends Controller
   {
     $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
     $data['negara_asal'] = DB::select("SELECT negaras.nm_negara FROM negaras");
+    $data['pelabuhan'] = DB::select("SELECT ports.nm_port, ports.lokasi FROM ports");
     $data['find'] = Impor::find($id);
     return response()->json(['data' => $data]);
   }
@@ -442,8 +448,11 @@ class EksportImportController extends Controller
       'incoterms' => 'required',
       'status' => 'required',
     ];
+    
 
     $validatedData = $request->validate($rules, $pesan);
+
+    $validatedData['bulan_pib'] = $request->bulan_pib . '-01';
 
     Impor::where('id', $import)
       ->update($validatedData);
@@ -461,7 +470,8 @@ class EksportImportController extends Controller
   public function get_negara()
   {
 
-    $data = DB::select("SELECT negaras.nm_negara FROM negaras");
+    // $data = DB::select("SELECT negaras.nm_negara FROM negaras");
+    $data = Negara::select('nm_negara')->orderBy('nm_negara')->get();
     // $data = Produk::get();
     return response()->json(['data' => $data]);
   }
@@ -513,7 +523,7 @@ class EksportImportController extends Controller
   }
   public function import_importx(Request $request)
   {
-    $bulan = $request->bulan_pib . "-01";
+    $bulan = $request->bulan . "-01";
     $badan_usaha_id = Auth::user()->badan_usaha_id;
 
     $cekdb = DB::table('impors')

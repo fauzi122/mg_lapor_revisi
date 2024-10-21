@@ -154,7 +154,7 @@
     <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
 
     <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
-
+    
     <!-- pace js -->
 
     <script src="{{ asset('assets/libs/pace-js/pace.min.js') }}"></script>
@@ -209,6 +209,10 @@
 
     <script src="{{ asset('assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js') }}">
     </script>
+
+    {{-- easy number separator js --}}
+    <script src="{{ asset('assets/libs/easy-number-separator/easy-number-separator.js') }}"></script>
+    
 
     <!-- dashboard init -->
 

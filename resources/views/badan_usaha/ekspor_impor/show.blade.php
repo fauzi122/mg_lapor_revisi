@@ -52,6 +52,7 @@
                                 <button type="button" class="btn btn-primary waves-effect waves-light" onclick="produk(); provinsi(); negara();" data-bs-toggle="modal" data-bs-target="#myModal">Buat Laporan {{ dateIndonesia($bulan_ambil_eksporsx) }}</button>
                                 <button type="button" class="btn btn-success waves-effect waves-light" onclick="tambahPMB('{{ $bulan_ambil_eksporsx }}');" data-bs-toggle="modal" data-bs-target="#excelexpor">Import Excel</button>
                                 @endif
+                                @include('badan_usaha.ekspor_impor.modal')
                             </div>
                         </div>
                     </div>
