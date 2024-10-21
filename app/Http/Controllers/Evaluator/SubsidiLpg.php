@@ -10,6 +10,10 @@ use App\Models\lpg_subsidi_verified;
 use App\Models\kuota_lpg_subsidi;
 use Illuminate\Support\Facades\DB;
 use Random\CryptoSafeEngine;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\Importsubsidi;
+use App\Imports\Importsubsidikuota;
 
 
 class SubsidiLpg extends Controller
@@ -18,12 +22,10 @@ class SubsidiLpg extends Controller
 
         $provinsi=province::get();
         $lpg_subsidi= DB::table('lpg_subsidi_verifieds as a')
-            ->leftJoin('provinces as b', 'a.provinsi', '=', 'b.id')
+            ->leftJoin('provinces as b', 'a.provinsi', '=', 'b.name')
             ->select('a.*', 'b.name')
             ->orderBy('a.id','desc')
             ->get();
-
-
         return view('evaluator.subsidi_lpg.lpg_subsidi.index', compact('lpg_subsidi','provinsi'));
 
     }
@@ -172,6 +174,60 @@ class SubsidiLpg extends Controller
         return response()->json($kabkot);
     }
 
+    public function storeSubsidi_excel(Request $request)
+    {
+        // Validate the uploaded file type
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+    
+        // Check if the file was uploaded
+        if ($request->hasFile('file')) {
+            $set = [
+                'bulan' => $request->input('bulan'),
+                'petugas' => auth()->user()->email,
+            ];
+            $file = $request->file('file'); // Retrieve the uploaded file
+    
+            // Create an instance of the import with settings
+            $import = new Importsubsidi($set);
+            Excel::import($import, $file); // Import the file
+    
+            // If import is successful, send a notification
+            return redirect()->back()->with('success', 'Upload Soal Pilihan Ganda Berhasil.');
+        }
+    
+        // If no file was selected
+        return redirect()->back()->with('error', 'Mohon pilih file terlebih dahulu.');
+    }
 
+    public function storekuota_excel(Request $request)
+    {
+        // Validate the uploaded file type
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+    
+        // Check if the file was uploaded
+        if ($request->hasFile('file')) {
+            $set = [
+                'tahun' => $request->input('tahun'),
+                'petugas' => auth()->user()->email,
+            ];
+            $file = $request->file('file'); // Retrieve the uploaded file
+    
+            // Create an instance of the import with settings
+            $import = new Importsubsidikuota($set);
+            Excel::import($import, $file); // Import the file
+    
+            // If import is successful, send a notification
+            return redirect()->back()->with('success', 'Upload Soal Pilihan Ganda Berhasil.');
+        }
+    
+        // If no file was selected
+        return redirect()->back()->with('error', 'Mohon pilih file terlebih dahulu.');
+    }
+    
+    
 
 }

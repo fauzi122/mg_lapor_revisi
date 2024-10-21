@@ -63,7 +63,7 @@
                                     tabindex="-1" aria-hidden="true">
                                     <option value="">--Pilih Provinsi--</option>
                                     @foreach ($provinsi as $prov)
-                                        <option value="{{ $prov['id'] }}">{{ $prov['name'] }}</option>
+                                        <option value="{{ $prov['name'] }}">{{ $prov['name'] }}</option>
                                     @endforeach
                                 </select>
     </div>

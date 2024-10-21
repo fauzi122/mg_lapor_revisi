@@ -51,6 +51,9 @@ use App\Http\Controllers\Evaluator\{
 	DataUserController,
 	SubsidiLpg
 };
+use App\Http\Controllers\user\PermissionController;
+use App\Http\Controllers\user\RoleController;
+use App\Http\Controllers\user\UserController;
 use Illuminate\Http\Request;
 
 /*
@@ -427,22 +430,20 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	Route::controller(SubsidiLpg::class)->group(function () {
 		Route::get('/data-subsidi-lpg/verified', 'index');
 		Route::post('/lpg/subsidi/store', 'store')->name('lpg.store');
+		Route::post('/lpg/storeSubsidi_excel', 'storeSubsidi_excel')->name('lpg.storeSubsidi_excel');
 		Route::post('/lpg/subsidi/update', 'update');
 		Route::post('/lpg/subsidi/delete/{id}', 'delete');
 
 
 		Route::get('/data-kuota-subsidi-lpg', 'index_kuota');
 		Route::post('/lpg/kuota/store', 'storekuota')->name('lpg.store');
+		Route::post('/lpg/storekuota_excel', 'storekuota_excel')->name('lpg.storekuota_excel');
 		Route::post('/lpg/kuota/update', 'updatekuota');
 		Route::get('/lpg/kuota/kabkot/{id}', 'getKabkot');
 		Route::post('/lpg/kuota/delete/{id}', 'deletekuota');
 	});
 
-	// Data User
-	Route::controller(DataUserController::class)->group(function () {
-		Route::get('/data-user/bu', 'index_bu');
-		Route::get('/data-user/adm', 'index_adm');
-	});
+
 	Route::controller(IndukizinController::class)->group(function () {
 		Route::get('/master', 'index_evaluator');
 		// Route::get('/master/izin/create', 'create');
@@ -785,6 +786,32 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 
 	});
 
+	
+    // Permissions route group
+    Route::controller(PermissionController::class)->group(function () {
+        Route::get('/permission', 'index')->name('permission.index');
+        Route::get('/permission/json', 'jsonpermission')->name('permission.json');
+        Route::get('/permission/create', 'create')->name('permission.create');
+        Route::post('/permission', 'store')->name('permission.store');
+    });
+
+    // Role access management route group
+    Route::controller(RoleController::class)->group(function () {
+        Route::get('/role', 'index')->name('role.index');
+        Route::get('/role/create', 'create')->name('role.create');
+        Route::post('/role', 'store')->name('role.store');
+        Route::get('/role/edit/{role}', 'edit')->name('role.edit');
+        Route::patch('/role/update/{role}', 'update')->name('role.update');
+    });
+
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/user', 'index')->name('user.index');
+        Route::get('/user-badan-usaha', 'index_bu')->name('user.index_bu');
+        Route::get('/user-admin', 'create')->name('user.create');
+        Route::get('/user/edit/admin/{user}', 'edit')->name('user.edit');
+        Route::patch('/user/update/admin/{user}', 'update');
+        Route::delete('/hapus-user/admin/{user}', 'destroy');
+    });
 	//pengangkutan Gas bumi
 	Route::controller(EvPengangkutanGasBumiController::class)->group(function () {
 		Route::get('/laporan/pengangkutan/gb', 'index');
