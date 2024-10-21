@@ -17,9 +17,6 @@
                     </div>
                 </div>
             </div>
-
-
-
             <!-- Success message -->
             @if(session('success'))
                 <div class="alert alert-success">
@@ -36,9 +33,40 @@
                                 <button type="button" class="btn btn-primary  btn-rounded waves-effect waves-light"
                                         data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl"><i class="bx bx-plus"></i> Tambah Data
                                 </button>
-                                <button type="button" class="btn btn-success   btn-rounded waves-effect waves-light"
-                                        data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl"><i class="bx bx-import"></i> Import Excel
-                                </button>
+
+                                <button type="button" class="btn btn-success btn-rounded waves-effect waves-light" data-bs-toggle="modal"
+                                                    data-bs-target=".bs-example-modal-lg"><i class="bx bx-import"></i>Import Excel</button>
+                                            
+                                                <!--  Large modal example -->
+                                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="myLargeModalLabel">Import Excel Data LPG Subsidi Verified</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <form action="/lpg/storeSubsidi_excel" method="post" id="myform" enctype="multipart/form-data">
+                                                                @csrf
+                                                                <div class="modal-body">
+                                                                    <div class="mb-3">
+                                                                        <label for="bulan">Bulan*</label>
+                                                                        <input class="form-control mb-2" type="month" id="bulan" name="bulan" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="file">File *</label>
+                                                                        <input class="form-control mb-2" type="file" id="file" name="file" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary btn-rounded">Simpan</button>
+                                                                    <button type="button" class="btn btn-success btn-rounded">Download Templet Excel</button>
+                                                                </div>
+                                                            </form>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div><!-- /.modal -->                                                
+
+
                                 <div class=" modal fade modal-select bs-example-modal-xl" tabindex="-1" role="dialog"
                                      aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
@@ -50,51 +78,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <!-- Form yang diambil dari form sebelumnya -->
-                                                <form action="/lpg/subsidi/store" method="post" id="myform"
-                                                      enctype="multipart/form-data">
-
-                                                    @csrf
-                                                    <div class="mb-3">
-                                                        <label for="bulan">Bulan*</label>
-                                                        <select class="form-control select20 select2-hidden-accessible mb-2"
-                                                                style="width: 100%;" tabindex="-1" aria-hidden="true"
-                                                                name="bulan">
-                                                            <option value="">--Pilih Bulan--</option>
-                                                            @php
-                                                                $currentMonth = now();
-                                                                $months = [];
-                                                                for ($i = 0; $i < 15; $i++) {
-                                                                $formattedMonth = $currentMonth->format('Y-m-01');
-                                                                $months[$formattedMonth] = dateIndonesia($currentMonth->format('Y-m-01'));
-                                                                $currentMonth->subMonth();
-                                                                }
-                                                            @endphp
-
-                                                            @foreach ($months as $value => $label)
-                                                                <option value="{{ $value }}">{{ $label }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="provinsi">Provinsi*</label>
-                                                        <select name="provinsi" id="provinsi"
-                                                                class="form-control select20 select2-hidden-accessible mb-2"
-                                                                style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                                            <option value="">--Pilih Provinsi--</option>
-                                                            @foreach ($provinsi as $prov)
-                                                                <option value="{{ $prov['id'] }}">{{ $prov['name'] }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="volume">Volume*</label>
-                                                        <input class="form-control mb-2" type="number" min=0 id="volume"
-                                                               name="volume" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <button type="submit" class="btn btn-primary btn-rounded"> Simpan</button>
-                                                    </div>
-                                                </form>
+                                                @include('evaluator.subsidi_lpg.lpg_subsidi.modalstor')
 
                                             </div>
 
@@ -125,7 +109,7 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                    <td>{{ \Carbon\Carbon::parse($data->bulan)->format('F') }}</td> <!-- Bulan -->
                                                     <td>{{ \Carbon\Carbon::parse($data->bulan)->format('Y') }}</td> <!-- Tahun -->
-                                                    <td>{{ $data->name }}</td>
+                                                    <td>{{ $data->provinsi }}</td>
                                                     <td>{{ $data->volume }}</td>
                                                     <td>
                                                         <a href="" class="btn btn-warning btn-sm btn-rounded edit-btn" data-bs-toggle="modal" data-bs-target="#editModal{{ $data->id }}">
@@ -142,54 +126,8 @@
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <!-- Form yang diambil dari form sebelumnya -->
-                                                                        <form action="/lpg/subsidi/update" method="post" id="myform"
-                                                                              enctype="multipart/form-data">
 
-                                                                            @csrf
-                                                                            <input type="hidden" name="id" value="{{$data->id}}">
-                                                                            <div class="mb-3">
-                                                                                <label for="bulan">Bulan*</label> <br>
-                                                                                <select class="form-control select20 select2-hidden-accessible mb-2"
-                                                                                        style="width: 100%;" tabindex="-1" aria-hidden="true"
-                                                                                        name="bulan">
-                                                                                    <option value="{{$data->bulan}}">{{dateIndonesia($data->bulan)}}</option>
-                                                                                    <option value="">--Pilih Bulan--</option>
-                                                                                    @php
-                                                                                        $currentMonth = now();
-                                                                                        $months = [];
-                                                                                        for ($i = 0; $i < 15; $i++) {
-                                                                                        $formattedMonth = $currentMonth->format('Y-m-01');
-                                                                                        $months[$formattedMonth] = dateIndonesia($currentMonth->format('Y-m-01'));
-                                                                                        $currentMonth->subMonth();
-                                                                                        }
-                                                                                    @endphp
-
-                                                                                    @foreach ($months as $value => $label)
-                                                                                        <option value="{{ $value }}">{{ $label }}</option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="mb-3">
-                                                                                <label for="provinsi">Provinsi*</label> <br>
-                                                                                <select name="provinsi" id="provinsi"
-                                                                                        class="form-control select20 select2-hidden-accessible mb-2"
-                                                                                        style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                                                                    <option value="{{$data->provinsi}}">{{$data->name}}</option>
-                                                                                    <option value="">--Pilih Provinsi--</option>
-                                                                                    @foreach ($provinsi as $prov)
-                                                                                        <option value="{{ $prov['id'] }}">{{ $prov['name'] }}</option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="mb-3">
-                                                                                <label for="volume">Volume*</label>
-                                                                                <input class="form-control mb-2" type="number" id="volume"
-                                                                                       name="volume" min=0 value="{{$data->volume}}" required>
-                                                                            </div>
-                                                                            <div class="mb-3">
-                                                                                <button type="submit" class="btn btn-warning btn-rounded"> Update</button>
-                                                                            </div>
-                                                                        </form>
+                                                                        @include('evaluator.subsidi_lpg.lpg_subsidi.modalstor')
 
                                                                     </div>
 
@@ -215,8 +153,6 @@
             </div>
         </div>
     </div>
-
-
 
 
 @endsection

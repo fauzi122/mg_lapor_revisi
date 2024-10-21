@@ -46,7 +46,7 @@
                                 <select name="provinsi" id="provinsi" class="form-control mb-2">
                                     <option value="">--Pilih Provinsi--</option>
                                     @foreach ($provinsi as $prov)
-                                        <option value="{{ $prov['id'] }}">{{ $prov['name'] }}</option>
+                                        <option value="{{ $prov['name'] }}">{{ $prov['name'] }}</option>
                                     @endforeach
                                 </select>
 
