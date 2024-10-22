@@ -73,7 +73,7 @@
                                                     @if ($lpg->status == 1 && $lpg->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                     @elseif ($lpg->status == 1)
-                                                        <span class="badge bg-success">Kirim</span>
+                                                        <span class="badge bg-success">Diterima</span>
                                                     @elseif ($lpg->status == 2)
                                                         <span class="badge bg-danger">Revisi</span>
                                                     @elseif ($lpg->status == 0)
@@ -142,7 +142,7 @@
                                                         @if ($lpg->status == 1 && $lpg->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($lpg->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($lpg->status == 2)
                                                             <span class="badge bg-danger" data-bs-toggle="modal"
                                                                 data-bs-target="#modal-updateStatus-{{ $lpg->id }}">
@@ -229,7 +229,7 @@
                                                     @if ($pasokan->status == 1 && $pasokan->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                     @elseif ($pasokan->status == 1)
-                                                        <span class="badge bg-success">Kirim</span>
+                                                        <span class="badge bg-success">Diterima</span>
                                                     @elseif ($pasokan->status == 2)
                                                         <span class="badge bg-danger">Revisi</span>
                                                     @elseif ($pasokan->status == 0)
@@ -301,7 +301,7 @@
                                                         @if ($pasokan->status == 1 && $pasokan->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($pasokan->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($pasokan->status == 2)
                                                             <span class="badge bg-danger" data-bs-toggle="modal"
                                                                 data-bs-target="#modal-updateStatus-{{ $pasokan->id }}">

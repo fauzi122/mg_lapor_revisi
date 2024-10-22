@@ -32,29 +32,36 @@ class EvJualLpgController extends Controller
         $perusahaan = $request->input('perusahaan');
         $t_awal = $request->input('t_awal');
         $t_akhir = $request->input('t_akhir');
-
-        $result = DB::table('penjualan_lpgs as a')
+    
+        // Query dasar untuk mendapatkan data penjualan
+        $query = DB::table('penjualan_lpgs as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('badan_usaha_id', $perusahaan)
-            ->whereBetween('bulan', [$t_awal, $t_akhir])
-            ->get();
-
+            ->whereBetween('bulan', [$t_awal, $t_akhir]);
+    
+        // Jika perusahaan bukan 'all', tambahkan kondisi filter untuk badan usaha
+        if ($perusahaan !== 'all') {
+            $query->where('badan_usaha_id', $perusahaan);
+        }
+    
+        $result = $query->get();
+    
         if ($result->isEmpty()) {
             return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
         } else {
             $data = [
-                'title'=>'Laporan Penjualan LPG',
+                'title' => 'Laporan Penjualan LPG',
                 'result' => $result
             ];
-
+    
             $view = view('evaluator.laporan_bu.lpg.penjualan.cetak', $data);
-
+    
             $view->with('reload', true);
-
+    
             return response($view);
         }
     }
+    
 
     public function periode($kode = '')
     {

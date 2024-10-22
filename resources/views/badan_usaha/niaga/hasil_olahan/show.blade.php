@@ -117,7 +117,7 @@
                                                         @if ($show_jholbx->status == 1 && $show_jholbx->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($show_jholbx->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($show_jholbx->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($show_jholbx->status == 0)
@@ -196,7 +196,7 @@
                                                             @if ($show_jholbx->status == 1 && $show_jholbx->catatan)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($show_jholbx->status == 1)
-                                                                <span class="badge bg-success">Kirim</span>
+                                                                <span class="badge bg-success">Diterima</span>
                                                             @elseif ($show_jholbx->status == 2)
                                                                 <span class="badge bg-danger" data-bs-toggle="modal"
                                                                     data-bs-target="#modal-updateStatus-{{ $show_jholbx->id }}">
@@ -369,7 +369,7 @@
                                                         @if ($pasokan->status == 1 && $pasokan->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($pasokan->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($pasokan->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($pasokan->status == 0)
@@ -438,7 +438,7 @@
                                                             @if ($pasokan->status == 1 && $pasokan->catatan)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($pasokan->status == 1)
-                                                                <span class="badge bg-success">Kirim</span>
+                                                                <span class="badge bg-success">Diterima</span>
                                                             @elseif ($pasokan->status == 2)
                                                                 <span class="badge bg-danger" data-bs-toggle="modal"
                                                                     data-bs-target="#modal-updateStatus-{{ $pasokan->id }}">

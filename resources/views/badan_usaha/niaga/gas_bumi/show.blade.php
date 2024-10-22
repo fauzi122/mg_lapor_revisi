@@ -96,7 +96,7 @@
                                             @if ($gbp->status == 1 && $gbp->catatan)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                             @elseif ($gbp->status == 1)
-                                                <span class="badge bg-success">Kirim</span>
+                                                <span class="badge bg-success">Diterima</span>
                                             @elseif ($gbp->status == 2)
                                                 <span class="badge bg-danger">Revisi</span>
                                             @elseif ($gbp->status == 0)
@@ -243,7 +243,7 @@
                                             @if ($pasokan->status == 1 && $pasokan->catatan)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                             @elseif ($pasokan->status == 1)
-                                                <span class="badge bg-success">Kirim</span>
+                                                <span class="badge bg-success">Diterima</span>
                                             @elseif ($pasokan->status == 2)
                                                 <span class="badge bg-danger">Revisi</span>
                                             @elseif ($pasokan->status == 0)

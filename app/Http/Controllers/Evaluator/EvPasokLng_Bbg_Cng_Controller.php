@@ -32,14 +32,20 @@ class EvPasokLng_Bbg_Cng_Controller extends Controller
         $perusahaan = $request->input('perusahaan');
         $t_awal = $request->input('t_awal');
         $t_akhir = $request->input('t_akhir');
-
-        $result = DB::table('pasokanlngs as a')
+    
+        // Query dasar untuk mendapatkan data pasokan
+        $query = DB::table('pasokanlngs as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('badan_usaha_id', $perusahaan)
-            ->whereBetween('bulan', [$t_awal, $t_akhir])
-            ->get();
-
+            ->whereBetween('bulan', [$t_awal, $t_akhir]);
+    
+        // Jika perusahaan bukan 'all', tambahkan kondisi filter untuk perusahaan
+        if ($perusahaan !== 'all') {
+            $query->where('badan_usaha_id', $perusahaan);
+        }
+    
+        $result = $query->get();
+    
         if ($result->isEmpty()) {
             return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
         } else {
@@ -47,15 +53,16 @@ class EvPasokLng_Bbg_Cng_Controller extends Controller
                 'title' => 'Laporan Pasokan LNG/CNG/BBG',
                 'result' => $result
             ];
-
+    
             $view = view('evaluator.laporan_bu.lng_cng_bbg.pasokan.cetak', $data);
-
+    
             // Menambahkan script JavaScript untuk reload halaman
             $view->with('reload', true);
-
+    
             return response($view);
         }
     }
+    
 
     public function periode($kode = '')
     {

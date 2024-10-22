@@ -138,7 +138,7 @@
                                                     @if ($pgb->status == 1 && $pgb->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                     @elseif ($pgb->status == 1)
-                                                        <span class="badge bg-success">Kirim</span>
+                                                        <span class="badge bg-success">Diterima</span>
                                                     @elseif ($pgb->status == 2)
                                                         <span class="badge bg-danger">Revisi</span>
                                                     @elseif ($pgb->status == 3)
@@ -211,7 +211,7 @@
                                                 <td>{{ $pgb->volume_output }}</td>
                                                 <td>{{ $pgb->volume_stok_akhir }}</td>
                                                 <td>{{ $pgb->satuan }}</td>
-                                                <td>{{ $pgb->utilasi_tangki }}</td>
+                                                <td>{{ $pgb->utilisasi_tangki }}</td>
 
 
 
