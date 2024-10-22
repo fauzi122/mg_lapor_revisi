@@ -65,7 +65,7 @@
                                 @if ($hargabbmjbu->status == 1 && $hargabbmjbu->catatan)
                                     <span class="badge bg-warning">Sudah Diperbaiki</span>
                                 @elseif ($hargabbmjbu->status == 1)
-                                    <span class="badge bg-success">Kirim</span>
+                                    <span class="badge bg-success">Diterima</span>
                                 @elseif ($hargabbmjbu->status == 2)
                                     <span class="badge bg-danger" data-bs-toggle="modal" data-bs-target="#modal-updateStatus-{{ $hargabbmjbu->id }}">
                                         Cek Revisi

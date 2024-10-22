@@ -94,7 +94,7 @@
                                                         @if ($hargabbmjbu->status == 1 && $hargabbmjbu->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($hargabbmjbu->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($hargabbmjbu->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($hargabbmjbu->status == 0)
@@ -166,7 +166,7 @@
                                                             @if ($hargabbmjbu->status == 1 && $hargabbmjbu->catatan)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($hargabbmjbu->status == 1)
-                                                                <span class="badge bg-success">Kirim</span>
+                                                                <span class="badge bg-success">Diterima</span>
                                                             @elseif ($hargabbmjbu->status == 2)
                                                                 <span class="badge bg-danger" data-bs-toggle="modal"
                                                                     data-bs-target="#modal-updateStatus-{{ $hargabbmjbu->id }}">
@@ -275,7 +275,7 @@
                                                         @if ($hargaLPG->status == 1 && $hargaLPG->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($hargaLPG->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($hargaLPG->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($hargaLPG->status == 0)
@@ -351,7 +351,7 @@
                                                             @if ($hargaLPG->status == 1 && $hargaLPG->catatan)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($hargaLPG->status == 1)
-                                                                <span class="badge bg-success">Kirim</span>
+                                                                <span class="badge bg-success">Diterima</span>
                                                             @elseif ($hargaLPG->status == 2)
                                                                 <span class="badge bg-danger" data-bs-toggle="modal"
                                                                     data-bs-target="#modal-updateStatus-{{ $hargaLPG->id }}">

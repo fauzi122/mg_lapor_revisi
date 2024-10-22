@@ -211,14 +211,20 @@ class EvHasilOlahController extends Controller
         $perusahaan = $request->input('perusahaan');
         $t_awal = $request->input('t_awal');
         $t_akhir = $request->input('t_akhir');
-
-        $result = DB::table('jual_hasil_olah_bbms as a')
+    
+        // Query untuk mendapatkan data penjualan berdasarkan perusahaan dan tanggal
+        $query = DB::table('jual_hasil_olah_bbms as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('badan_usaha_id', $perusahaan)
-            ->whereBetween('bulan', [$t_awal, $t_akhir])
-            ->get();
-
+            ->whereBetween('bulan', [$t_awal, $t_akhir]);
+    
+        // Jika yang dipilih adalah 'all', maka tidak ada filter berdasarkan perusahaan
+        if ($perusahaan !== 'all') {
+            $query->where('badan_usaha_id', $perusahaan);
+        }
+    
+        $result = $query->get();
+    
         if ($result->isEmpty()) {
             return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
         } else {
@@ -226,15 +232,16 @@ class EvHasilOlahController extends Controller
                 'title' => 'Laporan Penjualan Hasil Olahan/Minyak Bumi',
                 'result' => $result
             ];
-
+    
             $view = view('evaluator.laporan_bu.hasil_olah_mb.jual_hasil.cetak', $data);
-
+    
             // Menambahkan script JavaScript untuk reload halaman
             $view->with('reload', true);
-
+    
             return response($view);
         }
     }
+    
 
 
 }

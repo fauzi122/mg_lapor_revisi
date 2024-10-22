@@ -32,6 +32,7 @@ class PengolahanController extends Controller
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
       ->groupBy('bulan')
       ->get();
+      // dd($pengolahanProduksiMB);
 
     $pengolahanPasokanMB = DB::table('pengolahans')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))

@@ -77,11 +77,13 @@
                                                         @if ($ppmb->status == 1 && $ppmb->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($ppmb->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($ppmb->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($ppmb->status == 0)
                                                             <span class="badge bg-info">draf</span>
+                                                            @elseif($ppmb->status ==3)
+                                                            <span class="badge bg-primary">Selesai</span>
                                                         @endif
                                                     </td>
                                                     <td>{{ $ppmb->catatan }}</td>
@@ -154,7 +156,7 @@
                                                             @if ($ppmb->status == 1 && $ppmb->catatan)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($ppmb->status == 1)
-                                                                <span class="badge bg-success">Kirim</span>
+                                                                <span class="badge bg-success">Diterima</span>
                                                             @elseif ($ppmb->status == 2)
                                                                 <span class="badge bg-danger" data-bs-toggle="modal"
                                                                     data-bs-target="#modal-updateStatus-{{ $ppmb->id }}">
@@ -249,7 +251,7 @@
                                                         @if ($ppmb->status == 1 && $ppmb->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($ppmb->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($ppmb->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($ppmb->status == 0)
@@ -327,7 +329,7 @@
                                                             @if ($ppmb->status == 1 && $ppmb->catatan)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($ppmb->status == 1)
-                                                                <span class="badge bg-success">Kirim</span>
+                                                                <span class="badge bg-success">Diterima</span>
                                                             @elseif ($ppmb->status == 2)
                                                                 <span class="badge bg-danger" data-bs-toggle="modal"
                                                                     data-bs-target="#modal-updateStatus-{{ $ppmb->id }}">
@@ -423,7 +425,7 @@
                                                         @if ($ppmb->status == 1 && $ppmb->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($ppmb->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($ppmb->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($ppmb->status == 0)
@@ -502,7 +504,7 @@
                                                             @if ($ppmb->status == 1 && $ppmb->catatan)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($ppmb->status == 1)
-                                                                <span class="badge bg-success">Kirim</span>
+                                                                <span class="badge bg-success">Diterima</span>
                                                             @elseif ($ppmb->status == 2)
                                                                 <span class="badge bg-danger" data-bs-toggle="modal"
                                                                     data-bs-target="#modal-updateStatus-{{ $ppmb->id }}">

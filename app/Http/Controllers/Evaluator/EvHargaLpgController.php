@@ -185,14 +185,20 @@ class EvHargaLpgController extends Controller
         $perusahaan = $request->input('perusahaan');
         $t_awal = $request->input('t_awal');
         $t_akhir = $request->input('t_akhir');
-
-        $result = DB::table('harga_l_p_g_s as a')
+    
+        // Query dasar untuk mendapatkan data harga LPG
+        $query = DB::table('harga_l_p_g_s as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('badan_usaha_id', $perusahaan)
-            ->whereBetween('bulan', [$t_awal, $t_akhir])
-            ->get();
-
+            ->whereBetween('bulan', [$t_awal, $t_akhir]);
+    
+        // Jika perusahaan bukan 'all', tambahkan kondisi filter untuk badan usaha
+        if ($perusahaan !== 'all') {
+            $query->where('badan_usaha_id', $perusahaan);
+        }
+    
+        $result = $query->get();
+    
         if ($result->isEmpty()) {
             return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
         } else {
@@ -200,13 +206,14 @@ class EvHargaLpgController extends Controller
                 'title' => 'Laporan Harga LPG',
                 'result' => $result
             ];
-
+    
             $view = view('evaluator.laporan_bu.harga.lpg.cetak', $data);
-
+    
             // Menambahkan script JavaScript untuk reload halaman
             $view->with('reload', true);
-
+    
             return response($view);
         }
     }
+    
 }

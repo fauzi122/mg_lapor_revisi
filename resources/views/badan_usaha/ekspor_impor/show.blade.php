@@ -95,7 +95,7 @@
                                             @if ($expor->status == 1 && $expor->catatan)
                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                             @elseif ($expor->status == 1)
-                                            <span class="badge bg-success">Kirim</span>
+                                            <span class="badge bg-success">Diterima</span>
                                             @elseif ($expor->status == 2)
                                             <span class="badge bg-danger">Revisi</span>
                                             @elseif ($expor->status == 0)
@@ -239,7 +239,7 @@
                                             @if ($impor->status == 1 && $impor->catatan)
                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                             @elseif ($impor->status == 1)
-                                            <span class="badge bg-success">Kirim</span>
+                                            <span class="badge bg-success">Diterima</span>
                                             @elseif ($impor->status == 2)
                                             <span class="badge bg-danger">Revisi</span>
                                             @elseif ($impor->status == 0)
@@ -405,7 +405,7 @@
                                             @if ($impor->status == 1 && $impor->catatan)
                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                             @elseif ($impor->status == 1)
-                                            <span class="badge bg-success">Kirim</span>
+                                            <span class="badge bg-success">Diterima</span>
                                             @elseif ($impor->status == 2)
                                             <span class="badge bg-danger">Revisi</span>
                                             @elseif ($impor->status == 0)
