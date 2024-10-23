@@ -566,7 +566,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Dokumen Kontrak Sewa</label>
-                        <input class="form-control" type="file" name="kontrak_sewa" value="{{ old('kontrak_sewa') }}">
+                        <input class="form-control" type="file" name="kontrak_sewa" required>
                         @error('kontrak_sewa')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>

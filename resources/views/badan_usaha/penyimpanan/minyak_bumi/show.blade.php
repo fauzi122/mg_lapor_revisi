@@ -120,6 +120,7 @@
                                             <th>Commingle</th>
                                             <th>Jumlah Badan Usaha</th>
                                             <th>Nama Penyewa</th>
+                                            <th>Dokumen Kontrak Penyewa</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -234,6 +235,9 @@
                                                 <td>{{ $pmb->commingle }}</td>
                                                 <td>{{ $pmb->jumlah_bu }}</td>
                                                 <td>{{ $pmb->nama_penyewa }}</td>
+                                                <td>
+                                                    <a href="{{ asset('storage/'. $pmb->kontrak_sewa) }}" class="btn btn-success waves-effect waves-light ms-3 p-2" download><i class="bx bxs-download me-1"></i>Unduh Dokumen</a>
+                                                </td>
 
                                             </tr>
                                         @endforeach

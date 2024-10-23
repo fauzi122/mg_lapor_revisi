@@ -114,7 +114,7 @@ class PenyMinyakbumiController extends Controller
     }
     public function simpan_pmbx(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $pesan = [
             'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
             'bulan.required' => 'bulan masih kosong',
@@ -172,7 +172,7 @@ class PenyMinyakbumiController extends Controller
             'jumlah_bu' => 'required_if:commingle,ya',
             'nama_penyewa' => 'required_if:commingle,ya',
             'kapasitas_penyewaan' => 'required',
-            // 'kontrak_sewa' => 'required',
+            'kontrak_sewa' => 'required|file|mimes:pdf',
         ], $pesan);
 
         $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -217,7 +217,7 @@ class PenyMinyakbumiController extends Controller
             'jumlah_bu' => $request->jumlah_bu,
             'nama_penyewa' => $request->nama_penyewa,
             'kapasitas_penyewaan' => $request->kapasitas_penyewaan,
-            'kontrak_sewa' => $request->kontrak_sewa,
+            'kontrak_sewa' => $request->file('kontrak_sewa')->store('dok-kontrak-sewa', 'public')
         ]);
 
         if ($validatedData) {
