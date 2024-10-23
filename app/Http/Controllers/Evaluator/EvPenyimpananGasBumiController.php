@@ -63,7 +63,6 @@ class EvPenyimpananGasBumiController extends Controller
     public function periode($kode = '')
     {
 
-
         $p = !empty($kode) ? Crypt::decrypt($kode) : null;
         if ($p) {
             $query = DB::table('penygasbumis as a')
@@ -91,11 +90,18 @@ class EvPenyimpananGasBumiController extends Controller
     {
 
         $pecah = explode(',', Crypt::decryptString($kode));
+
+        if (count($pecah) == 3) {
+            $filterBy = substr($pecah[0], 0, 4);
+        } else {
+        $filterBy = $pecah[0];
+        }
+
         $query = DB::table('penygasbumis as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN')
             ->where('a.badan_usaha_id', $pecah[1])
-            ->where('a.bulan', $pecah[0])
+            ->where('a.bulan', 'like', "%". $filterBy ."%")
             ->whereIn('a.status', [1, 2,3])
             ->get();
 

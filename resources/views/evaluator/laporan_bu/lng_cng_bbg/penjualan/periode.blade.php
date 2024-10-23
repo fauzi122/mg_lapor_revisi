@@ -42,6 +42,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Bulan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <!-- <th>Catatan</th> -->
                                                     <th>Aksi</th>
@@ -51,13 +52,20 @@
                                                 @foreach ($query as $data)
                                                     @php
                                                         $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id);
+                                                        $idTahun = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id . ', tahun');
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
-                                                            <b><a href="/laporan/jual/lng-cng-bbg/{{ $id }}">{{ dateIndonesia($data->bulan) }}
+                                                            <b><a href="/laporan/jual/lng-cng-bbg/{{ $id }}">{{ getBulan($data->bulan) }}
                                                                     <i
-                                                                            class="bx bx-check"
+                                                                            {{-- class="bx bx-check" --}}
+                                                                            title="lihat data laporan"></i></a><b>
+                                                        </td>
+                                                        <td>
+                                                            <b><a href="/laporan/jual/lng-cng-bbg/{{ $idTahun }}">{{ getTahun($data->bulan) }}
+                                                                    <i
+                                                                            {{-- class="bx bx-check" --}}
                                                                             title="lihat data laporan"></i></a><b>
                                                         </td>
                                                         <td>

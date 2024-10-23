@@ -106,6 +106,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Catatan</th>
                                             <th>No Tangki</th>
@@ -133,7 +134,8 @@
                                         @foreach ($query as $pgb)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ dateIndonesia($pgb->bulan) }}</td>
+                                                <td>{{ getBulan($pgb->bulan) }}</td>
+                                                <td>{{ getTahun($pgb->bulan) }}</td>
                                                 <td>
                                                     @if ($pgb->status == 1 && $pgb->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -211,7 +213,7 @@
                                                 <td>{{ $pgb->volume_output }}</td>
                                                 <td>{{ $pgb->volume_stok_akhir }}</td>
                                                 <td>{{ $pgb->satuan }}</td>
-                                                <td>{{ $pgb->utilasi_tangki }}</td>
+                                                <td>{{ $pgb->utilisasi_tangki }}</td>
 
 
 

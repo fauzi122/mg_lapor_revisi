@@ -106,6 +106,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Catatan</th>
                                             <th>Produk</th>
@@ -138,7 +139,8 @@
                                         @foreach ($query as $pgb)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ dateIndonesia($pgb->bulan_pib) }}</td>
+                                                <td>{{ getBulan($pgb->bulan_pib) }}</td>
+                                                <td>{{ getTahun($pgb->bulan_pib) }}</td>
                                                 <td>
                                                     @if ($pgb->status == 1 && $pgb->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>
