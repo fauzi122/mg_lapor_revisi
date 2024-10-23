@@ -101,7 +101,7 @@
                                         @if ($pggb->status == 1 && $pggb->catatan)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                             @elseif ($pggb->status == 1)
-                                                 <span class="badge bg-success">Kirim</span> 
+                                                 <span class="badge bg-success">Diterima</span> 
                                             @elseif ($pggb->status == 2)
                                                 <span class="badge bg-danger">Revisi</span>
                                             @elseif ($pggb->status == 0)

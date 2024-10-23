@@ -115,7 +115,7 @@
                                                         @if ($lng->status == 1 && $lng->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($lng->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($lng->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($lng->status == 0)
@@ -316,7 +316,7 @@
                                                         @if ($pasok->status == 1 && $pasok->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($pasok->status == 1)
-                                                            <span class="badge bg-success">Kirim</span>
+                                                            <span class="badge bg-success">Diterima</span>
                                                         @elseif ($pasok->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($pasok->status == 0)

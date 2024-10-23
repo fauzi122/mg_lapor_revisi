@@ -47,7 +47,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0">Produksi Kilang [Minyak Bumi/Hasil Olahan]</h5>
+                                        <h5 class="mb-0">Produksi Kilang [Minyak Bumi/Hasil Olahan]...</h5>
                                         <div>
                                             <button type="button" class="btn btn-primary waves-effect waves-light"
                                                 onclick="produk(); provinsi();" data-bs-toggle="modal"
@@ -95,14 +95,17 @@
                                                         </td>
                                                         <td>
                                                             @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
-                                                                <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($ppmb->status_tertinggi == 1)
-                                                                <span class="badge bg-success">Kirim</span>
-                                                            @elseif ($ppmb->status_tertinggi == 2)
-                                                                <span class="badge bg-danger">Revisi</span>
-                                                            @elseif ($ppmb->status_tertinggi == 0)
-                                                                <span class="badge bg-info">draf</span>
-                                                            @endif
+                                                            <span class="badge bg-warning">Sudah Diperbaiki</span>
+                                                        @elseif ($ppmb->status_tertinggi == 1)
+                                                            <span class="badge bg-success">Diterima</span>
+                                                        @elseif ($ppmb->status_tertinggi == 2)
+                                                            <span class="badge bg-danger">Revisi</span>
+                                                        @elseif ($ppmb->status_tertinggi == 0)
+                                                            <span class="badge bg-info">draf</span>
+                                                         @elseif($ppmb->status ==3)
+                                                            <span class="badge bg-primary">Selesai</span>
+                                                        @endif
+                                                        
                                                         </td>
                                                         <td>
                                                             <form
@@ -203,11 +206,13 @@
                                                             @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($ppmb->status_tertinggi == 1)
-                                                                <span class="badge bg-success">Kirim</span>
+                                                                <span class="badge bg-success">Diterima</span>
                                                             @elseif ($ppmb->status_tertinggi == 2)
                                                                 <span class="badge bg-danger">Revisi</span>
                                                             @elseif ($ppmb->status_tertinggi == 0)
                                                                 <span class="badge bg-info">draf</span>
+                                                             @elseif($ppmb->status ==3)
+                                                                <span class="badge bg-primary">Selesai</span>
                                                             @endif
                                                         </td>
                                                         <td>
@@ -310,15 +315,18 @@
                                                             </b>
                                                         </td>
                                                         <td>
+                                           
                                                             @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
-                                                                <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($ppmb->status_tertinggi == 1)
-                                                                <span class="badge bg-success">Kirim</span>
-                                                            @elseif ($ppmb->status_tertinggi == 2)
-                                                                <span class="badge bg-danger">Revisi</span>
-                                                            @elseif ($ppmb->status_tertinggi == 0)
-                                                                <span class="badge bg-info">draf</span>
-                                                            @endif
+                                                            <span class="badge bg-warning">Sudah Diperbaiki</span>
+                                                        @elseif ($ppmb->status_tertinggi == 1)
+                                                            <span class="badge bg-success">Diterima</span>
+                                                        @elseif ($ppmb->status_tertinggi == 2)
+                                                            <span class="badge bg-danger">Revisi</span>
+                                                        @elseif ($ppmb->status_tertinggi == 0)
+                                                            <span class="badge bg-info">draf</span>
+                                                         @elseif($ppmb->status ==3)
+                                                            <span class="badge bg-primary">Selesai</span>
+                                                        @endif
                                                         </td>
                                                         <td>
                                                             <form
@@ -418,14 +426,16 @@
                                                             </b>
                                                         </td>
                                                         <td>
-                                                            @if ($ppgb->status_tertinggi == 1 && $ppgb->catatanx)
+                                                            @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($ppgb->status_tertinggi == 1)
-                                                                <span class="badge bg-success">Kirim</span>
-                                                            @elseif ($ppgb->status_tertinggi == 2)
+                                                            @elseif ($ppmb->status_tertinggi == 1)
+                                                                <span class="badge bg-success">Diterima</span>
+                                                            @elseif ($ppmb->status_tertinggi == 2)
                                                                 <span class="badge bg-danger">Revisi</span>
-                                                            @elseif ($ppgb->status_tertinggi == 0)
+                                                            @elseif ($ppmb->status_tertinggi == 0)
                                                                 <span class="badge bg-info">draf</span>
+                                                             @elseif($ppmb->status ==3)
+                                                                <span class="badge bg-primary">Selesai</span>
                                                             @endif
                                                         </td>
                                                         <td>
@@ -524,14 +534,16 @@
                                                             </b>
                                                         </td>
                                                         <td>
-                                                            @if ($ppgb->status_tertinggi == 1 && $ppgb->catatanx)
+                                                             @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($ppgb->status_tertinggi == 1)
-                                                                <span class="badge bg-success">Kirim</span>
-                                                            @elseif ($ppgb->status_tertinggi == 2)
+                                                            @elseif ($ppmb->status_tertinggi == 1)
+                                                                <span class="badge bg-success">Diterima</span>
+                                                            @elseif ($ppmb->status_tertinggi == 2)
                                                                 <span class="badge bg-danger">Revisi</span>
-                                                            @elseif ($ppgb->status_tertinggi == 0)
+                                                            @elseif ($ppmb->status_tertinggi == 0)
                                                                 <span class="badge bg-info">draf</span>
+                                                             @elseif($ppmb->status ==3)
+                                                                <span class="badge bg-primary">Selesai</span>
                                                             @endif
                                                         </td>
                                                         <td>
@@ -633,14 +645,16 @@
                                                             </b>
                                                         </td>
                                                         <td>
-                                                            @if ($ppgb->status_tertinggi == 1 && $ppgb->catatanx)
+                                                             @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($ppgb->status_tertinggi == 1)
-                                                                <span class="badge bg-success">Kirim</span>
-                                                            @elseif ($ppgb->status_tertinggi == 2)
+                                                            @elseif ($ppmb->status_tertinggi == 1)
+                                                                <span class="badge bg-success">Diterima</span>
+                                                            @elseif ($ppmb->status_tertinggi == 2)
                                                                 <span class="badge bg-danger">Revisi</span>
-                                                            @elseif ($ppgb->status_tertinggi == 0)
+                                                            @elseif ($ppmb->status_tertinggi == 0)
                                                                 <span class="badge bg-info">draf</span>
+                                                             @elseif($ppmb->status ==3)
+                                                                <span class="badge bg-primary">Selesai</span>
                                                             @endif
                                                         </td>
                                                         <td>

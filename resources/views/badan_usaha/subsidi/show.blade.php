@@ -67,7 +67,7 @@
                                             @if ($lgpsub->status == 1 && $lgpsub->catatan)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                             @elseif ($lgpsub->status == 1)
-                                                <span class="badge bg-success">Kirim</span>
+                                                <span class="badge bg-success">Diterima</span>
                                             @elseif ($lgpsub->status == 2)
                                                 <span class="badge bg-danger">Revisi</span>
                                             @elseif ($lgpsub->status == 0)
@@ -180,7 +180,7 @@
                                             @if ($klpg->status == 1 && $klpg->catatan)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                             @elseif ($klpg->status == 1)
-                                                <span class="badge bg-success">Kirim</span>
+                                                <span class="badge bg-success">Diterima</span>
                                             @elseif ($klpg->status == 2)
                                                 <span class="badge bg-danger">Revisi</span>
                                             @elseif ($klpg->status == 0)

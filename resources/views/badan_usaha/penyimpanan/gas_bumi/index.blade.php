@@ -64,7 +64,7 @@
                                                     @if ($data->status_tertinggi == 1 && $data->catatanx)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                     @elseif ($data->status_tertinggi == 1)
-                                                        <span class="badge bg-success">Kirim</span>
+                                                        <span class="badge bg-success">Diterima</span>
                                                     @elseif ($data->status_tertinggi == 2)
                                                         <span class="badge bg-danger">Revisi</span>
                                                     @elseif ($data->status_tertinggi == 0)

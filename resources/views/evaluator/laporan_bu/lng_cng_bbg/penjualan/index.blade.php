@@ -45,7 +45,7 @@
 														aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
-												<form id="cetakForm" action="{{url('laporan/jual/lng-cng-bbg/cetak-periode')}}" method="post" >
+												<form id="cetakForm" action="{{url('laporan/jual/lng-cng-bbg/cetak-periode')}}" method="post">
 													@csrf
 													<div>
 														<div class="mb-3">
@@ -54,29 +54,29 @@
 																	style="width: 100%;" tabindex="-1" aria-hidden="true"
 																	name="perusahaan" required>
 																<option value="">--Pilih Perusahaan--</option>
+																<option value="all"> Semua Perusahaan </option> <!-- Opsi untuk semua perusahaan -->
 																@foreach($perusahaan as $p)
 																	<option value="{{$p->id_perusahaan}}">{{$p->NAMA_PERUSAHAAN}}</option>
 																@endforeach
 															</select>
 														</div>
-
+												
 														<div class="mb-3">
 															<label for="example-text-input" class="form-label">Tanggal Awal</label>
 															<input class="form-control" name="t_awal" type="date" id="example-text-input" required>
 														</div>
-
+												
 														<div class="mb-3">
 															<label for="example-text-input" class="form-label">Tanggal Akhir</label>
-															<input class="form-control" name="t_akhir" type="date" value="Artisanal kale" id="example-text-input" required>
+															<input class="form-control" name="t_akhir" type="date" id="example-text-input" required>
 														</div>
+												
 														<div class="mb-3">
-															<button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Proses</button>
+															<button type="submit" class="btn btn-primary">Proses</button>
 														</div>
-
-
 													</div>
-
 												</form>
+												
 
 
 											</div>
@@ -89,7 +89,7 @@
 							<div class="tab-content">
 								<div class="tab-pane fade show active" id="penjualan">
 									<div class="table-responsive">
-										<table id="datatable-buttons" class="table table-bordered nowrap w-100">
+										<table id="datatable" class="table table-bordered nowrap w-100">
 											<thead>
 
 											<tr>

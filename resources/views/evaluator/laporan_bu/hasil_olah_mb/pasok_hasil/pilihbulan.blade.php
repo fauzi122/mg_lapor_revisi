@@ -113,9 +113,9 @@
 {{--                                            <th>Intake Kilang</th>--}}
                                             <th>Produk</th>
                                             <th>Aksi</th>
-                                            {{-- <th>Provinsi</th>
-                                            <th>Kabupaten/Kota</th>
-                                            <th>Sektor</th> --}}
+                                            <th>Nama Pemasok</th>
+                                            <th>Kategori Pemasok</th>
+                                            {{-- <th>Sektor</th> --}}
                                             <th>Volume</th>
                                             {{-- <th>Satuan</th> --}}
 
@@ -132,7 +132,7 @@
                                                     @if ($pgb->status == 1 && $pgb->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                     @elseif ($pgb->status == 1)
-                                                        <span class="badge bg-success">Kirim</span>
+                                                        <span class="badge bg-success">Diterima</span>
                                                     @elseif ($pgb->status == 2)
                                                         <span class="badge bg-danger">Revisi</span>
                                                     @elseif ($pgb->status == 3)
@@ -202,8 +202,8 @@
                                                 </td>
 
 
-                                                {{-- <td>{{ $pgb->provinsi }}</td> --}}
-                                                {{-- <td>{{ $pgb->kabupaten_kota }}</td> --}}
+                                                <td>{{ $pgb->nama_pemasok }}</td>
+                                                <td>{{ $pgb->kategori_pemasok }}</td>
                                                 {{-- <td>{{ $pgb->sektor }}</td> --}}
                                                 <td>{{ $pgb->volume }}</td>
                                                 {{-- <td>{{ $pgb->satuan }}</td> --}}
