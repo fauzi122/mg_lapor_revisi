@@ -89,11 +89,18 @@ class EvImporController extends Controller
     {
 
         $pecah = explode(',', Crypt::decryptString($kode));
+
+        if (count($pecah) == 3) {
+            $filterBy = substr($pecah[0], 0, 4);
+        } else {
+        $filterBy = $pecah[0];
+        }
+
         $query = DB::table('impors as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN')
             ->where('a.badan_usaha_id', $pecah[1])
-            ->where('a.bulan_pib', $pecah[0])
+            ->where('a.bulan_pib', 'like', "%". $filterBy ."%")
             ->whereIn('a.status', [1, 2,3])
             ->get();
 

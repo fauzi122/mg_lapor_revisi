@@ -106,34 +106,27 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <th>Catatan</th>
                                             <th>No Tangki</th>
-
                                             <th>Produk</th>
                                             <th>Kab/Kota</th>
-
-
-
                                             <th>Aksi</th>
-
-
                                             <th>Volume Awal</th>
                                             <th>Volume Supply</th>
                                             <th>Volume Output</th>
                                             <th>Volume Stok Akhir</th>
                                             <th>Satuan</th>
                                             <th>Utilisasi Tangki</th>
-
-
-
                                         </tr>
                                         </thead>
                                         <tbody>
                                         @foreach ($query as $pgb)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ dateIndonesia($pgb->bulan) }}</td>
+                                                <td>{{ getBulan($pgb->bulan) }}</td>
+                                                <td>{{ getTahun($pgb->bulan) }}</td>
                                                 <td>
                                                     @if ($pgb->status == 1 && $pgb->catatan)
                                                         <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -151,18 +144,15 @@
                                                 <td>{{ $pgb->no_tangki }}</td>
                                                 <td>{{ $pgb->produk }}</td>
                                                 <td>{{ $pgb->kab_kota }}</td>
-
-
-
                                                 <td>
                                                     @if ($pgb->status == 1 )
                                                         <button type="button" class="btn btn-info btn-sm rounded-pill btn-update"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-update" title="Revisi data">
                                                             <i class="bx bxs-edit align-middle"></i>
                                                         </button>
-                                                        <button class="btn btn-primary btn-rounded btn-sm btn-selesai" data-id="{{$pgb->id}}"><i
+                                                        {{-- <button class="btn btn-primary btn-rounded btn-sm btn-selesai" data-id="{{$pgb->id}}"><i
                                                                     class="bx bx-check"
-                                                                    title="Selesai"></i></button>
+                                                                    title="Selesai"></i></button> --}}
 
                                                         <div class="modal fade" id="modal-update" data-bs-backdrop="static"
                                                              data-bs-keyboard="false" aria-labelledby="staticBackdropLabel"
@@ -198,24 +188,14 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
-
                                                     @endif
-
-
                                                 </td>
-
-
                                                 <td>{{ $pgb->volume_stok_awal }}</td>
                                                 <td>{{ $pgb->volume_supply }}</td>
                                                 <td>{{ $pgb->volume_output }}</td>
                                                 <td>{{ $pgb->volume_stok_akhir }}</td>
                                                 <td>{{ $pgb->satuan }}</td>
                                                 <td>{{ $pgb->utilisasi_tangki }}</td>
-
-
-
-
                                             </tr>
                                         @endforeach
                                         <!-- Add more rows as needed -->

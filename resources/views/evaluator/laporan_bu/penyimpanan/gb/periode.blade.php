@@ -42,6 +42,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Bulan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <!-- <th>Catatan</th> -->
                                                     <th>Aksi</th>
@@ -51,13 +52,20 @@
                                                 @foreach ($query as $data)
                                                     @php
                                                         $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id);
+                                                        $idTahun = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id . ', tahun');
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
-                                                            <b><a href="/laporan/penyimpanan/gb/{{ $id }}">{{ dateIndonesia($data->bulan) }}
+                                                            <b><a href="/laporan/penyimpanan/gb/{{ $id }}">{{ getBulan($data->bulan) }}
                                                                     <i
-                                                                            class="bx bx-check"
+                                                                            {{-- class="bx bx-check" --}}
+                                                                            title="lihat data laporan"></i></a><b>
+                                                        </td>
+                                                        <td>
+                                                            <b><a href="/laporan/penyimpanan/gb/{{ $idTahun }}">{{ getTahun($data->bulan) }}
+                                                                    <i
+                                                                            {{-- class="bx bx-check" --}}
                                                                             title="lihat data laporan"></i></a><b>
                                                         </td>
                                                         <td>
@@ -81,9 +89,9 @@
                                                                     <i class="bx bxs-edit align-middle"></i>
                                                                 </button>
 
-                                                                <button class="btn btn-primary btn-rounded btn-sm btn-selesai-status" data-p="{{\Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id)}}" data-b="{{\Illuminate\Support\Facades\Crypt::encrypt($data->bulan)}}"><i
+                                                                {{-- <button class="btn btn-primary btn-rounded btn-sm btn-selesai-status" data-p="{{\Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id)}}" data-b="{{\Illuminate\Support\Facades\Crypt::encrypt($data->bulan)}}"><i
                                                                             class="bx bx-check"
-                                                                            title="Selesai"></i></button>
+                                                                            title="Selesai"></i></button> --}}
 
                                                                 <div class="modal fade" id="modal-update" data-bs-backdrop="static"
                                                                      data-bs-keyboard="false" aria-labelledby="staticBackdropLabel"
