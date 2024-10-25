@@ -60,8 +60,14 @@ class PengangkutanmgController extends Controller
         $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
         $statusx = $bulan_ambil->status;
 
+        if (count($pecah) == 3) {
+            $filterBy = substr($pecah[0], 0, 4);
+        } else {
+        $filterBy = $pecah[0];
+        }
+
         $pgb = pengangkutan_minyakbumi::where([
-            'bulan' => $pecah[0],
+            ['bulan', 'like', "%". $filterBy ."%"],
             'badan_usaha_id' => $pecah[1]
         ])->orderBy('status', 'desc')->get();
 
@@ -277,8 +283,14 @@ class PengangkutanmgController extends Controller
         $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
         $statusx = $bulan_ambil->status;
 
+        if (count($pecah) == 3) {
+            $filterBy = substr($pecah[0], 0, 4);
+        } else {
+        $filterBy = $pecah[0];
+        }
+
         $pgb = pengangkutan_gaskbumi::where([
-            'bulan' => $pecah[0],
+            ['bulan', 'like', "%". $filterBy ."%"],
             'badan_usaha_id' => $pecah[1]
         ])->orderBy('status', 'desc')->get();
 
@@ -291,6 +303,7 @@ class PengangkutanmgController extends Controller
 
     public function simpan_pgbx(Request $request)
     {
+        // dd($request->all());
         $request->merge([
             'bulan' => $request->bulan . '-01',
         ]);
@@ -302,8 +315,8 @@ class PengangkutanmgController extends Controller
             'provinsi_asal.required' => 'provinsi asal masih kosong',
             'node_tujuan.required' => 'node tujuan masih kosong',
             'provinsi_tujuan.required' => 'provinsi tujuan masih kosong',
-            'volume_supply.required' => 'volume supply masih kosong',
-            'satuan_volume_supply.required' => 'satuan volume_supply masih kosong',
+            // 'volume_supply.required' => 'volume supply masih kosong',
+            // 'satuan_volume_supply.required' => 'satuan volume_supply masih kosong',
             'volume_angkut.required' => 'volume angkut masih kosong',
             'satuan_volume_angkut.required' => 'satuan volume angkut masih kosong',
         ];
@@ -316,8 +329,8 @@ class PengangkutanmgController extends Controller
             'provinsi_asal' => 'required',
             'node_tujuan' => 'required',
             'provinsi_tujuan' => 'required',
-            'volume_supply' => 'required',
-            'satuan_volume_supply' => 'required',
+            // 'volume_supply' => 'required',
+            // 'satuan_volume_supply' => 'required',
             'volume_angkut' => 'required',
             'satuan_volume_angkut' => 'required',
 
