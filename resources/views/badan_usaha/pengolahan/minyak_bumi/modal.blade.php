@@ -91,7 +91,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" id="example-text-input" name="volume"
+                        <input class="form-control" type="number" step="0.01" id="example-text-input" name="volume"
                             value="{{ old('volume') }}" required>
                         @error('volume')
                             <div class="form-group has-danger mb-0">
@@ -212,7 +212,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" id="volume_pengolahanProduksi" name="volume">
+                        <input class="form-control" type="number" step="0.01" id="volume_pengolahanProduksi" name="volume">
                         @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -458,7 +458,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" id="example-text-input" name="volume"
+                        <input class="form-control" type="number" step="0.01" id="example-text-input" name="volume"
                             value="{{ old('volume') }}" required>
                         @error('volume')
                             <div class="form-group has-danger mb-0">
@@ -594,7 +594,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" id="volume_pengolahanPasokan" name="volume">
+                        <input class="form-control" type="number" step="0.01" id="volume_pengolahanPasokan" name="volume">
                         @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -843,7 +843,7 @@
 
                     <div class="mb-3">
                         <label for="volume" class="form-label">Volume</label>
-                        <input class="form-control" type="number" id="volume" name="volume"
+                        <input class="form-control" type="number" step="0.01" id="volume" name="volume"
                             value="{{ old('volume') }}" required>
                         @error('volume')
                             <div class="form-group has-danger mb-0">
@@ -977,7 +977,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" id="volume_pengolahanDistribusi" name="volume">
+                        <input class="form-control" type="number" step="0.01" id="volume_pengolahanDistribusi" name="volume">
                         @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>

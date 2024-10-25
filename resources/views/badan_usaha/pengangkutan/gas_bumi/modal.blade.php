@@ -83,19 +83,19 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume Supply</label>
-                    <input class="form-control" type="number" id="" name="volume_supply">
+                    <input class="form-control" type="number" id="" name="volume_supply" step=".01">
                     @error('volume_supply')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
                         </div>
                     @enderror
-                </div>
+                </div> --}}
 
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="example-text-input" class="form-label">Satuan Volume Supply</label>
-                    {{-- <input class="form-control" type="text" id="" name="satuan_volume_supply"> --}}
+                    <input class="form-control" type="text" id="" name="satuan_volume_supply">
                     <select class="form-select satuan" name="satuan_volume_supply" id="">
                         <option>Pilih Satuan</option>
                     </select>
@@ -104,11 +104,11 @@
                             <div class="form-control-feedback">{{ $message }}</div>
                         </div>
                     @enderror
-                </div>
+                </div> --}}
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume Angkut</label>
-                    <input class="form-control" type="number" id="" name="volume_angkut">
+                    <input class="form-control" type="number" id="" name="volume_angkut" step="0.01">
                     @error('volume_angkut')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -231,7 +231,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume Supply</label>
                     <input class="form-control" type="text" id="volume_supply_pgb" name="volume_supply">
                     @error('volume_supply')
@@ -239,11 +239,11 @@
                             <div class="form-control-feedback">{{ $message }}</div>
                         </div>
                     @enderror
-                </div>
+                </div> --}}
 
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="example-text-input" class="form-label">Satuan Volume Supply</label>
-                    {{-- <input class="form-control" type="text" id="satuan_volume_supply_pgb" name="satuan_volume_supply"> --}}
+                    <input class="form-control" type="text" id="satuan_volume_supply_pgb" name="satuan_volume_supply">
                     <select class="form-select satuan" name="satuan_volume_supply" id="satuan_volume_supply_pgb">
                         <option>Pilih Satuan</option>
                     </select>
@@ -252,11 +252,11 @@
                             <div class="form-control-feedback">{{ $message }}</div>
                         </div>
                     @enderror
-                </div>
+                </div> --}}
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume Angkut</label>
-                    <input class="form-control" type="text" id="volume_angkut_pgb" name="volume_angkut">
+                    <input class="form-control" type="number" id="volume_angkut_pgb" name="volume_angkut" step="0.01">
                     @error('volume_angkut')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>

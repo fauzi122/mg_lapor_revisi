@@ -40,6 +40,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
+                                            <th>Tahun</th>
                                             <th>Status</th>
                                             <!-- <th>Catatan</th> -->
                                             <th>Aksi</th>
@@ -49,10 +50,14 @@
                                         @foreach ($pm as $data)
                                             @php
                                                 $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id);
+                                                $idTahun = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id . ', tahun');
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/pengangkutan-gas-bumi/show/{{ $id }}">{{ dateIndonesia($data->bulan) }}<i
+                                                <td><b><a href="/pengangkutan-gas-bumi/show/{{ $id }}">{{ getBulan($data->bulan) }}<i
+                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
+                                                </td>
+                                                <td><b><a href="/pengangkutan-gas-bumi/show/{{ $idTahun }}">{{ getTahun($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
