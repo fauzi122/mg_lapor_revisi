@@ -121,7 +121,7 @@
                                                         data-bs-toggle="modal" data-bs-target="#editKuotaModal">
                                                     <i class="bx bx-edit"></i> Edit
                                                 </button>
-                                                
+                                                 
                                                 <!-- Modal Edit Kuota -->
                                                 <div class="modal fade" id="editKuotaModal" tabindex="-1" role="dialog" aria-labelledby="editKuotaModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">

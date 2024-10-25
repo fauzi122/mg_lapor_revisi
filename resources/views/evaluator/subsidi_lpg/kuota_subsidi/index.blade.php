@@ -84,8 +84,8 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     
-                                                    <td>{{ getBulan($data->bulan) }}</td> 
-                                                    <td>{{ getTahun($data->bulan) }}</td>
+                                                    <td>{{ getBulan($data->tahun) }}</td> 
+                                                    <td>{{ getTahun($data->tahun) }}</td>
                                                     <td>{{ $data->provinsi }}</td>
                                                     <td>{{ $data->kabupaten_kota }}</td>
                                                     <td>{{ $data->volume }}</td>

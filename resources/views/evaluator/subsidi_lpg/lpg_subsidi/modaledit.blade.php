@@ -22,7 +22,7 @@
                                   $formattedMonth = $currentMonth->format('Y-m-01');
                                   $months[$formattedMonth] = dateIndonesia($currentMonth->format('Y-m-01'));
                                   $currentMonth->subMonth();
-                              }
+                              } 
                           @endphp
                           @foreach ($months as $value => $label)
                               <option value="{{ $value }}">{{ $label }}</option>

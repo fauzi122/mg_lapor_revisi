@@ -44,7 +44,7 @@
                         <select name="kabkot" id="editKabkot" class="form-control" required>
                             <option value="">--Pilih Kabupaten/Kota--</option>
                         </select>
-                    </div>
+                    </div> 
                     <div class="mb-3">
                         <label for="editVolume">Volume*</label>
                         <input class="form-control" type="number" min="0" id="editVolume" name="volume" required>

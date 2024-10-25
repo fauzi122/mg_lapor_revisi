@@ -4,7 +4,7 @@ enctype="multipart/form-data">
 @csrf
 <div class="mb-3">
   <label for="bulan">Bulan*</label>
-  <select class="form-control select20 select2-hidden-accessible mb-2"
+  {{-- <select class="form-control select20 select2-hidden-accessible mb-2"
           style="width: 100%;" tabindex="-1" aria-hidden="true"
           name="bulan">
       <option value="">--Pilih Bulan--</option>
@@ -21,7 +21,9 @@ enctype="multipart/form-data">
       @foreach ($months as $value => $label)
           <option value="{{ $value }}">{{ $label }}</option>
       @endforeach
-  </select>
+  </select> --}}
+  <input class="form-control mb-2" type="month" id="editBulan" name="bulan"  required>
+
 </div>
 <div class="mb-3">
   <label for="provinsi">Provinsi*</label>

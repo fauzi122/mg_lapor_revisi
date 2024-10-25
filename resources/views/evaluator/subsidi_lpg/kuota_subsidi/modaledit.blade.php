@@ -15,7 +15,7 @@
                         <label for="editBulan">Bulan*</label>
                         {{-- <select class="form-control" name="bulan" id="editBulan" required>
                             <option value="">--Pilih Bulan--</option>
-                            @php
+                             @php
                                 $currentMonth = now();
                                 $months = [];
                                 for ($i = 0; $i < 15; $i++) {
