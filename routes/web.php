@@ -434,7 +434,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/lpg/storeSubsidi_excel', 'storeSubsidi_excel')->name('lpg.storeSubsidi_excel');
 		Route::put('/lpg/subsidi/update/{id}', 'update');
 		Route::post('/lpg/subsidi/delete/{id}', 'delete');
-		
+		Route::get('/download/kuota-lpg', 'downloadFilekuota')->name('download.kuota-lpg');
+		Route::get('/download/subsidi-lpg', 'downloadFilesubsidi')->name('download.subsidi-lpg');
 
 		Route::get('/data-kuota-subsidi-lpg', 'index_kuota');
 		Route::post('/lpg/kuota/store', 'storekuota')->name('lpg.store');

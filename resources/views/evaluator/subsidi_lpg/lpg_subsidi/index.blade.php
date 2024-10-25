@@ -59,7 +59,7 @@
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="submit" class="btn btn-primary btn-rounded">Simpan</button>
-                                                                    <button type="button" class="btn btn-success btn-rounded">Download Templet Excel</button>
+                                                                    <a href="/storage/template/Subsidi_LPG.xlsx" type="button" class="btn btn-success btn-rounded">Download Templet Excel</a>
                                                                 </div>
                                                             </form>
                                                         </div><!-- /.modal-content -->
