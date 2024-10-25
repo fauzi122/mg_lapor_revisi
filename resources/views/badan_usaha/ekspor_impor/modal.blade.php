@@ -662,7 +662,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume PIB</label>
-                    <input class="form-control number-separator" type="text" id="example-text-input" name="volume_pib">
+                    <input class="form-control number-separator" type="number" step="0.01" id="example-text-input" name="volume_pib">
                     @error('volume_pib')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -890,7 +890,7 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume PIB</label>
-                    <input class="form-control number-separator" type="text" id="volume_pib_impor" name="volume_pib">
+                    <input class="form-control number-separator" type="number" step="0.01" id="volume_pib_impor" name="volume_pib">
                     @error('volume_pib')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>

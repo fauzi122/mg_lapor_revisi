@@ -79,7 +79,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Awal</label>
-                        <input class="form-control" type="number" id="" name="volume_stok_awal">
+                        <input class="form-control" type="number" step="0.01" id="" name="volume_stok_awal">
                         @error('volume_stok_awal')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -89,7 +89,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="number" id="" name="volume_supply">
+                        <input class="form-control" type="number" step="0.01" id="" name="volume_supply">
                         @error('volume_supply')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -98,7 +98,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Output</label>
-                        <input class="form-control" type="number" id="" name="volume_output">
+                        <input class="form-control" type="number" step="0.01" id="" name="volume_output">
                         @error('volume_output')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -108,7 +108,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Akhir</label>
-                        <input class="form-control" type="number" id="" name="volume_stok_akhir">
+                        <input class="form-control" type="number" step="0.01" id="" name="volume_stok_akhir">
                         @error('volume_stok_akhir')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -127,8 +127,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki
-)</font></label>
+                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki)</font></label>
                         <input class="form-control" type="text" id="example-text-input" name="pengguna">
                         @error('pengguna')
                             <div class="form-group has-danger mb-0">
@@ -165,7 +164,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>
-                        <input class="form-control" type="text" id="example-text-input" name="tarif_penyimpanan">
+                        <input class="form-control" type="number" step="0.01" id="example-text-input" name="tarif_penyimpanan">
                         @error('tarif_penyimpanan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -283,7 +282,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Awal</label>
-                        <input class="form-control" type="text" id="volume_stok_awal_pggb"
+                        <input class="form-control" type="number" step="0.01" id="volume_stok_awal_pggb"
                             name="volume_stok_awal">
                         @error('volume_stok_awal')
                             <div class="form-group has-danger mb-0">
@@ -294,7 +293,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="text" id="volume_supply_pggb" name="volume_supply">
+                        <input class="form-control" type="number" step="0.01" id="volume_supply_pggb" name="volume_supply">
                         @error('volume_supply')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -303,7 +302,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Output</label>
-                        <input class="form-control" type="text" id="volume_output_pggb" name="volume_output">
+                        <input class="form-control" type="number" step="0.01" id="volume_output_pggb" name="volume_output">
                         @error('volume_output')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -313,7 +312,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Akhir</label>
-                        <input class="form-control" type="text" id="volume_stok_akhir_pggb"
+                        <input class="form-control" type="number" step="0.01" id="volume_stok_akhir_pggb"
                             name="volume_stok_akhir">
                         @error('volume_stok_akhir')
                             <div class="form-group has-danger mb-0">
@@ -333,8 +332,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki
-)</font></label>
+                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki)</font></label>
                         <input class="form-control" type="text" id="pengguna_pggb" name="pengguna">
                         @error('pengguna')
                             <div class="form-group has-danger mb-0">
@@ -371,7 +369,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>
-                        <input class="form-control" type="text" id="tarif_penyimpanan_pggb"
+                        <input class="form-control" type="number" step="0.01" id="tarif_penyimpanan_pggb"
                             name="tarif_penyimpanan">
                         @error('tarif_penyimpanan')
                             <div class="form-group has-danger mb-0">

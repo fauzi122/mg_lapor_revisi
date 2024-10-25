@@ -45,7 +45,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kapasitas Tangki</label>
-                        <input class="form-control" type="number" id="" name="kapasitas_tangki"
+                        <input class="form-control" type="number" step="0.01" id="" name="kapasitas_tangki"
                             value="{{ old('kapasitas_tangki') }}" required>
                         @error('kapasitas_tangki')
                             <div class="form-group has-danger mb-0">
@@ -169,7 +169,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Awal</label>
-                        <input class="form-control" type="number" id="" name="volume_stok_awal" value="{{ old('volume_stok_awal') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="" name="volume_stok_awal" value="{{ old('volume_stok_awal') }}" required>
                         @error('volume_stok_awal')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -179,7 +179,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="number" id="" name="volume_supply" value="{{ old('volume_supply') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="" name="volume_supply" value="{{ old('volume_supply') }}" required>
                         @error('volume_supply')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -188,7 +188,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Output</label>
-                        <input class="form-control" type="number" id="" name="volume_output" value="{{ old('volume_output') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="" name="volume_output" value="{{ old('volume_output') }}" required>
                         @error('volume_output')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -198,7 +198,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Akhir</label>
-                        <input class="form-control" type="number" id="volume_stok_akhir" name="volume_stok_akhir" value="{{ old('volume_stok_akhir') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="volume_stok_akhir" name="volume_stok_akhir" value="{{ old('volume_stok_akhir') }}" required>
                         @error('volume_stok_akhir')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -208,7 +208,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kapasitas Penyewaan</label>
-                        <input class="form-control" type="number" id="kapasitas_penyewaan" name="kapasitas_penyewaan" value="{{ old('kapasitas_penyewaan') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="kapasitas_penyewaan" name="kapasitas_penyewaan" value="{{ old('kapasitas_penyewaan') }}" required>
                         @error('kapasitas_penyewaan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -274,7 +274,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>
-                        <input class="form-control" type="text" id="" name="tarif_penyimpanan" value="{{ old('tarif_penyimpanan') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="" name="tarif_penyimpanan" value="{{ old('tarif_penyimpanan') }}" required>
                         @error('tarif_penyimpanan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -392,7 +392,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kapasitas Tangki</label>
-                        <input class="form-control" type="number" id="kapasitas_tangki_pmb" name="kapasitas_tangki"
+                        <input class="form-control" type="number" step="0.01" id="kapasitas_tangki_pmb" name="kapasitas_tangki"
                             value="{{ old('kapasitas_tangki') }}" required>
                         @error('kapasitas_tangki')
                             <div class="form-group has-danger mb-0">
@@ -516,7 +516,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Awal</label>
-                        <input class="form-control" type="text" id="volume_stok_awal_pmb"
+                        <input class="form-control" type="number" step="0.01" id="volume_stok_awal_pmb"
                             name="volume_stok_awal" required>
                         @error('volume_stok_awal')
                             <div class="form-group has-danger mb-0">
@@ -527,7 +527,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="text" id="volume_supply_pmb" name="volume_supply" required>
+                        <input class="form-control" type="number" step="0.01" id="volume_supply_pmb" name="volume_supply" required>
                         @error('volume_supply')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -536,7 +536,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Output</label>
-                        <input class="form-control" type="text" id="volume_output_pmb" name="volume_output" required>
+                        <input class="form-control" type="number" step="0.01" id="volume_output_pmb" name="volume_output" required>
                         @error('volume_output')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -546,7 +546,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Akhir</label>
-                        <input class="form-control" type="text" id="volume_stok_akhir_pmb"
+                        <input class="form-control" type="number" step="0.01" id="volume_stok_akhir_pmb"
                             name="volume_stok_akhir" required>
                         @error('volume_stok_akhir')
                             <div class="form-group has-danger mb-0">
@@ -613,7 +613,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>
-                        <input class="form-control" type="text" id="tarif_penyimpanan_pmb"
+                        <input class="form-control" type="number" step="0.01" id="tarif_penyimpanan_pmb"
                             name="tarif_penyimpanan" required>
                         @error('tarif_penyimpanan')
                             <div class="form-group has-danger mb-0">
