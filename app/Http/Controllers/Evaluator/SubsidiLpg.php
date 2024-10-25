@@ -23,7 +23,7 @@ class SubsidiLpg extends Controller
         $provinsi=province::get();
         $lpg_subsidi= lpg_subsidi_verified::get();
         return view('evaluator.subsidi_lpg.lpg_subsidi.index', compact('lpg_subsidi','provinsi'));
-
+ 
     }
 
 
