@@ -18,6 +18,7 @@
                 </div>
             </div>
         </div>
+        
 
         <!-- Success message -->
         @if(session('success'))

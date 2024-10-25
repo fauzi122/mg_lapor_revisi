@@ -27,7 +27,7 @@
                             @foreach ($months as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
-                        </select> --}}
+                        </select> --}}  
                         <input class="form-control mb-2" type="month" id="editBulan" name="bulan" value="{{ substr($data->bulan, 0, 7) }}" required>
                     </div>
                     <div class="mb-3">
