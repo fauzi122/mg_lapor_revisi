@@ -1264,7 +1264,7 @@
                 
             </div>
             <div class="modal-footer">
-                <a href="https://lapor.duniasakha.com/storage/template/templateExpor.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
+                <a href="/storage/template/templateExpor.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                 <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
             </div>
@@ -1301,7 +1301,7 @@
                 
             </div>
             <div class="modal-footer">
-                <a href="https://lapor.duniasakha.com/storage/template/templateImpor.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
+                <a href="/storage/template/templateImpor.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                 <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
             </div>
