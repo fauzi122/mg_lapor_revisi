@@ -107,33 +107,60 @@
                                             @foreach ($lpg_subsidi as $data)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                   <td>{{ \Carbon\Carbon::parse($data->bulan)->format('F') }}</td> <!-- Bulan -->
-                                                    <td>{{ \Carbon\Carbon::parse($data->bulan)->format('Y') }}</td> <!-- Tahun -->
+                                                    <td>{{ getBulan($data->bulan) }}</td> 
+                                                    <td>{{ getTahun($data->bulan) }}</td>
+                                                   
                                                     <td>{{ $data->provinsi }}</td>
                                                     <td>{{ $data->volume }}</td>
                                                     <td>
-                                                        <a href="" class="btn btn-warning btn-sm btn-rounded edit-btn" data-bs-toggle="modal" data-bs-target="#editModal{{ $data->id }}">
-                                                            <i class="bx bx-edit"></i> Edit
-                                                        </a>
-                                                        <div class=" modal fade modal-select bs-example-modal-xl" id="editModal{{$data->id}}" tabindex="-1" role="dialog"
-                                                             aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-lg">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="myExtraLargeModalLabel">Data LPG Subsidi Verified</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                aria-label="Close"></button>
+                                                        <button class="btn btn-sm btn-warning btn-rounded edit-button"
+                                                        data-id="{{ $data->id }}"
+                                                        data-bulan="{{ $data->bulan }}"
+                                                        data-provinsi="{{ $data->provinsi }}"
+                                                        data-volume="{{ $data->volume }}"
+                                                        data-bs-toggle="modal" data-bs-target="#editKuotaModal">
+                                                    <i class="bx bx-edit"></i> Edit
+                                                </button>
+                                                
+                                                <!-- Modal Edit Kuota -->
+                                                <div class="modal fade" id="editKuotaModal" tabindex="-1" role="dialog" aria-labelledby="editKuotaModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <form action="/lpg/subsidi/update/{{ $data->id }}" method="post" id="editKuotaForm">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="editKuotaModalLabel">Edit Data LPG Subsidi </h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="mb-3">
+                                                                        <label for="editBulan">Bulan*</label>
+                                                                        <input class="form-control mb-2" type="month" id="editBulan" name="bulan" value="{{ substr($data->bulan, 0, 7) }}" required>
                                                                     </div>
-                                                                    <div class="modal-body">
-                                                                        <!-- Form yang diambil dari form sebelumnya -->
-
-                                                                        @include('evaluator.subsidi_lpg.lpg_subsidi.modalstor')
-
+                                                                    <div class="mb-3">
+                                                                        <label for="editProvinsi">Provinsi*</label>
+                                                                        <select name="provinsi" id="editProvinsi" class="form-control" required>
+                                                                            <option value="">--Pilih Provinsi--</option>
+                                                                            @foreach ($provinsi as $prov)
+                                                                                <option value="{{ $prov['name'] }}" {{ ($data->provinsi == $prov['name']) ? 'selected' : '' }}>{{ $prov['name'] }}</option>
+                                                                            @endforeach
+                                                                        </select>
                                                                     </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="editVolume">Volume*</label>
+                                                                        <input class="form-control" type="number" min="0" id="editVolume" name="volume" value="{{ $data->volume }}" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
 
-                                                                </div><!-- /.modal-content -->
-                                                            </div><!-- /.modal-dialog -->
-                                                        </div><!-- /.modal -->
                                                         <a href="#" class="btn btn-danger btn-sm btn-rounded delete-btn"
                                                            data-id="{{ $data->id }}" onclick="deleteItem({{ $data->id }})">
                                                             <i class='bx bx-trash'></i> Hapus
@@ -200,6 +227,34 @@
             });
         }
     </script>
+<script>
+<script>
+    $(document).ready(function () {
+    // Ketika tombol edit ditekan
+    $('.edit-button').on('click', function () {
+        var kuotaId = $(this).data('id');
+        var bulan = $(this).data('bulan');  // Ambil data bulan (tahun)
+        var provinsi = $(this).data('provinsi');  // Ambil data provinsi
+       
+        var volume = $(this).data('volume');  // Ambil data volume
+
+        // Isi form edit di modal
+        $('#editBulan').val(bulan);
+        $('#editProvinsi').val(provinsi);
+        $('#editVolume').val(volume);
+
+       
+
+        // Set form action URL sesuai dengan kuota ID
+        // $('#editKuotaForm').attr('action', '/lpg/kuota/updateaaa/' + kuotaId);
+
+        // Tampilkan modal edit
+        $('#editKuotaModal').modal('show');
+    });
+});
+</script>
+
+
 
 @endsection
 

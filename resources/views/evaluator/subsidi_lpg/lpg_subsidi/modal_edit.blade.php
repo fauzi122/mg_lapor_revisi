@@ -28,7 +28,7 @@
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select> --}}
-                        <input class="form-control mb-2" type="month" id="editBulan" name="bulan" value="{{ substr($data->tahun, 0, 7) }}" required>
+                        <input class="form-control mb-2" type="month" id="editBulan" name="bulan" value="{{ substr($data->bulan, 0, 7) }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="editProvinsi">Provinsi*</label>
@@ -39,12 +39,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="editKabkot">Kabupaten/Kota*</label>
-                        <select name="kabkot" id="editKabkot" class="form-control" required>
-                            <option value="">--Pilih Kabupaten/Kota--</option>
-                        </select>
-                    </div>
+                   
                     <div class="mb-3">
                         <label for="editVolume">Volume*</label>
                         <input class="form-control" type="number" min="0" id="editVolume" name="volume" required>

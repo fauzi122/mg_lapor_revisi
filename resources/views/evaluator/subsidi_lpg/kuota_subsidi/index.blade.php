@@ -36,9 +36,11 @@
                                 <button type="button" class="btn btn-primary  btn-rounded waves-effect waves-light"
                                         data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl"><i class="bx bx-plus"></i> Tambah Data
                                 </button>
-                                <button type="button" class="btn btn-success   btn-rounded waves-effect waves-light"
-                                data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl"><i class="bx bx-import"></i> Import Excel
-                        </button>
+                                <button type="button" class="btn btn-success btn-rounded waves-effect waves-light" data-bs-toggle="modal"
+                                data-bs-target=".bs-example-modal-lg"><i class="bx bx-import"></i>Import Excel</button>
+                                
+                                @include('evaluator.subsidi_lpg.kuota_subsidi.modal_import')
+
                                 <div class=" modal fade modal-select bs-example-modal-xl" tabindex="-1" role="dialog"
                                      aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
@@ -51,6 +53,7 @@
                                             <div class="modal-body">
                                                 <!-- Form yang diambil dari form sebelumnya -->
                                                 @include('evaluator.subsidi_lpg.kuota_subsidi.modalstor')
+                                              
 
                                             </div>
 
@@ -81,90 +84,25 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     
-                                                    <td>{{ \Carbon\Carbon::parse($data->tahun)->format('F') }}</td> <!-- Tahun -->
-                                                    <td>{{ \Carbon\Carbon::parse($data->tahun)->format('Y') }}</td> <!-- Tahun -->
-                                                    <td>{{ $data->name }}</td>
-                                                    <td>{{ $data->NAMA_KABKOT }}</td>
+                                                    <td>{{ getBulan($data->bulan) }}</td> 
+                                                    <td>{{ getTahun($data->bulan) }}</td>
+                                                    <td>{{ $data->provinsi }}</td>
+                                                    <td>{{ $data->kabupaten_kota }}</td>
                                                     <td>{{ $data->volume }}</td>
                                                     <td>
-                                                        <a href="" class="btn btn-warning btn-sm btn-rounded edit-btn" data-bs-toggle="modal" data-bs-target="#editModal{{ $data->id }}">
+                                                        <button class="btn btn-sm btn-warning btn-sm btn-rounded edit-button"
+                                                            data-id="{{ $data->id }}"
+                                                            data-bulan="{{ substr($data->tahun, 0, 7) }}"
+                                                            data-provinsi="{{ $data->provinsi }}"
+                                                            data-kabkot="{{ $data->kabupaten_kota }}"
+                                                            data-volume="{{ $data->volume }}">
                                                             <i class="bx bx-edit"></i> Edit
-                                                        </a>
-                                                        <div class=" modal fade modal-select bs-example-modal-xl" id="editModal{{$data->id}}" tabindex="-1" role="dialog"
-                                                             aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-lg">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="myExtraLargeModalLabel">Data LPG Subsidi Verified</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <!-- Form yang diambil dari form sebelumnya -->
-                                                                        <form action="/lpg/kuota/update" method="post" id="myform"
-                                                                              enctype="multipart/form-data">
+                                                    </button>
+                                                    @include('evaluator.subsidi_lpg.kuota_subsidi.modaledit')
+                                                        {{-- <a href="" class="btn btn-warning btn-sm btn-rounded edit-btn" data-bs-toggle="modal" data-bs-target="#editModal{{ $data->id }}">
+                                                            <i class="bx bx-edit"></i> Edit
+                                                        </a> --}}
 
-                                                                            @csrf
-                                                                            <input type="hidden" name="id" value="{{$data->id}}">
-                                                                            <div class="mb-3">
-                                                                                <label for="bulan">Bulan*</label> <br>
-                                                                                <select class="form-control select20 select2-hidden-accessible mb-2"
-                                                                                        style="width: 100%;" tabindex="-1" aria-hidden="true"
-                                                                                        name="bulan">
-                                                                                    <option value="{{$data->tahun}}">{{dateIndonesia($data->tahun)}}</option>
-                                                                                    <option value="">--Pilih Bulan--</option>
-                                                                                    @php
-                                                                                        $currentMonth = now();
-                                                                                        $months = [];
-                                                                                        for ($i = 0; $i < 15; $i++) {
-                                                                                        $formattedMonth = $currentMonth->format('Y-m-01');
-                                                                                        $months[$formattedMonth] = dateIndonesia($currentMonth->format('Y-m-01'));
-                                                                                        $currentMonth->subMonth();
-                                                                                        }
-                                                                                    @endphp
-
-                                                                                    @foreach ($months as $value => $label)
-                                                                                        <option value="{{ $value }}">{{ $label }}</option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="mb-3">
-                                                                                <label for="provinsi">Provinsi*</label> <br>
-                                                                                <select name="provinsi" id="provinsiEdit"
-                                                                                        class="form-control select20 select2-hidden-accessible mb-2"
-                                                                                        style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                                                                    <option value="{{$data->provinsi}}">{{$data->name}}</option>
-                                                                                    <option value="">--Pilih Provinsi--</option>
-                                                                                    @foreach ($provinsi as $prov)
-                                                                                        <option value="{{ $prov['id'] }}">{{ $prov['name'] }}</option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
-
-                                                                            <div class="mb-3">
-                                                                                <label for="kabkot">Kabupaten/Kota*</label><br>
-                                                                                <select name="kabkot" id="kabkotEdit"
-                                                                                        class="form-control select20 select2-hidden-accessible mb-2"
-                                                                                        style="width: 100%; display: none" tabindex="-1" aria-hidden="true" >
-                                                                                    <option value="{{$data->kabupaten_kota}}">{{$data->NAMA_KABKOT}}</option>
-
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="mb-3">
-                                                                                <label for="volume">Volume*</label>
-                                                                                <input class="form-control mb-2" type="number" id="volume"
-                                                                                       name="volume" min=0 value="{{$data->volume}}" required>
-                                                                            </div>
-                                                                            <div class="mb-3">
-                                                                                <button type="submit" class="btn btn-warning btn-rounded"> Update</button>
-                                                                            </div>
-                                                                        </form>
-
-                                                                    </div>
-
-                                                                </div><!-- /.modal-content -->
-                                                            </div><!-- /.modal-dialog -->
-                                                        </div><!-- /.modal -->
                                                         <a href="#" class="btn btn-danger btn-sm btn-rounded delete-btn"
                                                            data-id="{{ $data->id }}" onclick="deleteItem({{ $data->id }})">
                                                             <i class='bx bx-trash'></i> Hapus
@@ -233,10 +171,81 @@
             });
         }
     </script>
+<script>
+    $(document).ready(function () {
+        // When the province is selected
+        $('#provinsiTambah').on('change', function () {
+            var selectedProvince = $(this).val();
+
+            if (selectedProvince !== '') {
+                $.ajax({
+                    url: '/get-kabkot/' + selectedProvince, // Fetch kabkot data based on province
+                    type: 'GET',
+                    success: function (data) {
+                        var kabkotSelect = $('#kabkotTambah');
+                        kabkotSelect.empty().append('<option value="">--Pilih Kabupaten--</option>');
+                        $.each(data, function (index, kabkot) {
+                            kabkotSelect.append('<option value="' + kabkot.NAMA_KABKOT + '">' + kabkot.NAMA_KABKOT + '</option>');
+                        });
+                        kabkotSelect.show();
+                    },
+                    error: function () {
+                        alert('Error retrieving Kabupaten/Kota.');
+                    }
+                });
+            } else {
+                $('#kabkotTambah').hide();
+            }
+        });
+    });
+</script>
+<script>
+$(document).ready(function () {
+    // Ketika tombol edit ditekan
+    $('.edit-button').on('click', function () {
+        var kuotaId = $(this).data('id');
+        var bulan = $(this).data('bulan');  // Ambil data bulan (tahun)
+        var provinsi = $(this).data('provinsi');  // Ambil data provinsi
+        var kabkotSelected = $(this).data('kabkot');  // Ambil data kabupaten/kota yang tersimpan sebelumnya
+        var volume = $(this).data('volume');  // Ambil data volume
+
+        // Isi form edit di modal
+        $('#editBulan').val(bulan);
+        $('#editProvinsi').val(provinsi);
+        $('#editVolume').val(volume);
+
+        // Fetch kabupaten/kota berdasarkan provinsi
+        $.ajax({
+            url: '/get-kabkot/' + provinsi,  // Pastikan endpoint ini benar
+            type: 'GET',
+            success: function (data) {
+                var kabkotSelect = $('#editKabkot');
+                kabkotSelect.empty().append('<option value="">--Pilih Kabupaten--</option>'); // Kosongkan dropdown dan tambahkan placeholder
+                $.each(data, function (index, kabkot) {
+                    // Tambahkan setiap kabupaten/kota ke dropdown, dan set sebagai selected jika sama dengan kabkot yang sudah tersimpan
+                    kabkotSelect.append('<option value="' + kabkot.NAMA_KABKOT + '" ' + (kabkot.NAMA_KABKOT == kabkotSelected ? 'selected' : '') + '>' + kabkot.NAMA_KABKOT + '</option>');
+                });
+                kabkotSelect.show();
+            },
+            error: function () {
+                alert('Error retrieving Kabupaten/Kota.');
+            }
+        });
+
+        // Set form action URL sesuai dengan kuota ID
+        $('#editKuotaForm').attr('action', '/lpg/kuota/update/' + kuotaId);
+
+        // Tampilkan modal edit
+        $('#editKuotaModal').modal('show');
+    });
+});
+
+
+</script>
 
     <!-- Pastikan jQuery sudah di-include sebelum script ini -->
 
-    <script>
+    {{-- <script>
         $(document).ready(function () {
             // Fungsi untuk menangani perubahan pada elemen provinsi dan kabkot
             function handleProvinsiChange(provinsiSelect, kabkotSelect, defaultKabkot) {
@@ -302,7 +311,7 @@
                 provinsiSelectEdit.trigger('change');
             });
         });
-    </script>
+    </script> --}}
 
 
 @endsection

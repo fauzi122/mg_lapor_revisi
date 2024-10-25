@@ -11,6 +11,8 @@
 
     <meta content="Themesbrand" name="author"/>
     <!-- App favicon -->
+    <!-- Include Choices.js from CDN for demonstration -->
+
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico')}}">
     <!-- DataTables -->
     <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet"

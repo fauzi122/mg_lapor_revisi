@@ -42,7 +42,7 @@ class Importsubsidikuota implements ToModel, WithStartRow, SkipsOnError, WithHea
         return kuota_lpg_subsidi::create([
             'tahun'    => $defaultTanggal,
             'provinsi'       => $row['provinsi'],
-            'kabupaten_kota' => $row['kabupatenkota'],
+            'kabupaten_kota' => ucwords(strtolower($row['kabupatenkota'])),
             'volume'         => $row['volume'],
             'petugas'        => $this->petugas,
         ]);
