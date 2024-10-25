@@ -428,17 +428,18 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	// Subsidi lpg dan kuota subsidi
 
 	Route::controller(SubsidiLpg::class)->group(function () {
+		Route::get('/get-kabkot/{provinceName}', 'getKabkot');
 		Route::get('/data-subsidi-lpg/verified', 'index');
 		Route::post('/lpg/subsidi/store', 'store')->name('lpg.store');
 		Route::post('/lpg/storeSubsidi_excel', 'storeSubsidi_excel')->name('lpg.storeSubsidi_excel');
-		Route::post('/lpg/subsidi/update', 'update');
+		Route::put('/lpg/subsidi/update/{id}', 'update');
 		Route::post('/lpg/subsidi/delete/{id}', 'delete');
-
+		
 
 		Route::get('/data-kuota-subsidi-lpg', 'index_kuota');
 		Route::post('/lpg/kuota/store', 'storekuota')->name('lpg.store');
 		Route::post('/lpg/storekuota_excel', 'storekuota_excel')->name('lpg.storekuota_excel');
-		Route::post('/lpg/kuota/update', 'updatekuota');
+		Route::put('/lpg/kuota/update/{id}', 'updatekuota');
 		Route::get('/lpg/kuota/kabkot/{id}', 'getKabkot');
 		Route::post('/lpg/kuota/delete/{id}', 'deletekuota');
 	});

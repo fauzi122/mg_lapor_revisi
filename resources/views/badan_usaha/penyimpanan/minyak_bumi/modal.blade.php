@@ -1026,7 +1026,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/penyimpananMinyakBumi.xlsx" id="tombol"
+                    <a href="/storage/template/penyimpananMinyakBumi.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -1037,3 +1037,4 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
