@@ -63,7 +63,7 @@
                                             </div>
                                         @enderror
                                     </div>
-
+ 
                                     <div class="form-group mb-3">
                                         <label for="name">Name</label>
                                         <input type="text" name="name" value="{{ old('name') }}" placeholder="Enter user name"

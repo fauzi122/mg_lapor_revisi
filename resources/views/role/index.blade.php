@@ -57,7 +57,7 @@
                         <tr>
                             <td style="text-align: center">{{ $loop->iteration }}</td>
                             <td>{{ $role->name }}</td>
-                            
+                             
                             <td>
                                 @foreach($role->getPermissionNames() as $permission)
                                 @if(Str::contains($permission, '_ujian'))

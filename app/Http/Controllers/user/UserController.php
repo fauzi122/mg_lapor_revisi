@@ -29,7 +29,7 @@ class UserController extends Controller
         $user_bu=User::where('role','BU')->get();
         return view('user.index_user_bu',compact('user_bu'));
     }
-
+ 
 
     /**
      * Show the form for creating a new resource.
