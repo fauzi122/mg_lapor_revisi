@@ -15,11 +15,11 @@ class EvPenyimpananMinyakBumiController extends Controller
 
         $perusahaan = DB::table('penyminyakbumis  as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+            ->leftJoin('r_permohonan_izin as c', 'a.badan_usaha_id', '=', 'c.ID_PERUSAHAAN')
+            ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN', 'c.NOMOR_IZIN')
             ->groupBy('a.badan_usaha_id')
             ->whereIn('a.status', [1, 2,3])
             ->get();
-
 
 
         $data = [
