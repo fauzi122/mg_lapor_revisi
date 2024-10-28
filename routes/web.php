@@ -17,7 +17,8 @@ use App\Http\Controllers\{
 	IntakeController,
 	ProdukController,
 	DashboardController,
-	PenyMinyakbumiController,
+    JabatanController,
+    PenyMinyakbumiController,
 	PengangkutanmgController,
 	PengolahanController,
 	SubsidilpgController,
@@ -461,6 +462,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	Route::resource('/master/negara', NegaraController::class);
 	Route::resource('/master/intake_kilangs', IntakeController::class);
 	Route::resource('/master/produk', ProdukController::class);
+	Route::resource('/master/jabatan', JabatanController::class);
 	//Evaluator hasil olahan bbm
 
 	Route::controller(EvHasilOlahController::class)->group(function () {

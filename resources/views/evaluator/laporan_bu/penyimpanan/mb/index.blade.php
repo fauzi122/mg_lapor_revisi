@@ -95,6 +95,7 @@
 											<tr>
 												<th>No</th>
 												<th>Nama Perusahaan</th>
+												<th>Nomor Izin Usaha</th>
 												<th>Aksi</th>
 											</tr>
 											</thead>
@@ -103,6 +104,7 @@
 												<tr>
 													<td>{{$loop->iteration}}</td>
 													<td>{{$per->NAMA_PERUSAHAAN}}</td>
+													<td>{{$per->NOMOR_IZIN}}</td>
 													<td><a href="{{url('laporan/penyimpanan/mb/periode').'/'. \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}" class="btn btn-primary btn-rounded btn-sm"><i class="bx bx-show"></i> Lihat </a></td>
 
 												</tr>
