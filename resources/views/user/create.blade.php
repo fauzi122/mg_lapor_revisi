@@ -78,7 +78,7 @@
                                     <div class="form-group mb-3">
                                         <label for="jabatan">Jabatan Struktural</label>
                                         <select class="form-control @error('id_jabatan') is-invalid @enderror" name="id_jabatan" id="jabatan">
-                                            <option value="ADM">Staff/Dosen</option>
+                                            <option value="ADM">Evaluator</option>
                                             <option value="MHS">Mahasiswa</option>
                                             <option value="BSI3">Administrasi</option>
                                             <option value="BSI6">Dosen Honorer</option> 

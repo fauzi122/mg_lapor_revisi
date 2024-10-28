@@ -31,8 +31,8 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">List of Users</h5>
-                        <a href="{{ url('/master') }}" class="btn btn-primary waves-effect waves-light">
-                            <i class="mdi mdi-arrow-left"></i> Back to Dashboard
+                        <a href="{{ url('/user-admin') }}" class="btn btn-primary waves-effect waves-light">
+                            <i class="mdi mdi-plus"></i> Tambah Data
                         </a>
                     </div>
 

@@ -14,7 +14,9 @@
                         <span data-key="t-dashboard">Dashboard</span>
                     </a>
                 </li>
+                @can('Master Data')
                 <li>
+                   
                     <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="folder"></i>
                         <span data-key="t-authentication">Master Data</span>
@@ -28,7 +30,7 @@
                         <li><a href="/master/meping" data-key="t-logout">Meping</a></li>
                     </ul>
                 </li>
-
+                @endcan
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="grid"></i>
@@ -42,6 +44,7 @@
                                 <span data-key="t-chat">BBM</span>
                             </a>
                         </li> --}}
+                        @can('Minyak Bumi')
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <span data-key="t-invoices">Hsl Olahan/Minyak Bumi</span>
@@ -52,15 +55,22 @@
                             </ul>
                         </li>
                         <li>
+                            @endcan
                             <a href="javascript: void(0);" class="has-arrow">
                                 <span data-key="t-contacts">Harga</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
+                                @can('Minyak Bumi')
                                 <li><a href="/laporan/harga-bbm" data-key="t-user-grid">Harga BBM JBU</a></li>
+                                @endcan
+                                @can('LPG/GAS')
                                 <li><a href="/laporan/harga-lpg" data-key="t-user-list">Harga LPG</a></li>
+                                @endcan
                             </ul>
                         </li>
+                        @can('LPG/GAS')
                         <li>
+                            
                             <a href="javascript: void(0);" class="has-arrow">
                                 <span data-key="t-blog">LNG/CNG/BBG</span>
                                 {{--  <span class="badge rounded-pill badge-soft-danger float-end" key="t-new">New</span>  --}}
@@ -70,6 +80,7 @@
                                 <li><a href="/laporan/pasok/lng-cng-bbg" data-key="t-blog-list">Pasokan LNG/CNG/BBG</a></li>
                             </ul>
                         </li>
+                        
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <span data-key="t-blog">LPG</span>
@@ -79,6 +90,7 @@
                                 <li><a href="/laporan/pasok/lpg" data-key="t-blog-list">Pasokan LPG</a></li>
                             </ul>
                         </li>
+                        
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <span data-key="t-blog">Gas Bumi Melalui Pipa</span>
@@ -88,6 +100,8 @@
                                 <li><a href="/laporan/pasok/gbmp" data-key="t-blog-list">Pasokan Gas Bumi</a></li>
                             </ul>
                         </li>
+                        @endcan
+                        @can('Minyak Bumi')
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <span data-key="t-blog">Pengolahan Minyak Bumi</span>
@@ -98,7 +112,10 @@
                                 <li><a href="/laporan/distribusi/mb" data-key="t-blog-list">Distribusi/Penjualan Domestik Kilang </a></li>
                             </ul>
                         </li>
-                                                <li>
+                        @endcan
+
+                        @can('LPG/GAS')
+                        <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <span data-key="t-blog">Pengolahan Gas Bumi</span>
                             </a>
@@ -108,13 +125,18 @@
                                 <li><a href="/laporan/distribusi/gb" data-key="t-blog-list">Distribusi/Penjualan Domestik Kilang </a></li>
                             </ul>
                         </li>
-                                                <li>
+                        @endcan
+                        <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <span data-key="t-blog">Ekspor - Impor</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
+                                @can('Minyak Bumi')
                                 <li><a href="/laporan/expor/exim" data-key="t-blog-grid">Ekspor</a></li>
+                                @endcan
+                                @can('LPG/GAS')
                                 <li><a href="/laporan/impor/exim" data-key="t-blog-list">Impor</a></li>
+                                @endcan
                             </ul>
                         </li>
                         
@@ -123,9 +145,12 @@
                                 <span data-key="t-blog">Penyimpanan</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-
+                                @can('Minyak Bumi')
                                 <li><a href="/laporan/penyimpanan/mb" data-key="t-blog-list">Minyak Bumi</a></li>
+                                @endcan
+                                @can('LPG/GAS')
                                 <li><a href="/laporan/penyimpanan/gb" data-key="t-blog-list">Gas Bumi</a></li>
+                                @endcan
                             </ul>
                         </li>
 
@@ -134,8 +159,12 @@
                                 <span data-key="t-blog">Pengangkutan</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
+                                @can('Minyak Bumi')
                                 <li><a href="/laporan/pengangkutan/mb" data-key="t-blog-list">Minyak Bumi</a></li>
+                                @endcan
+                                @can('LPG/GAS')
                                 <li><a href="/laporan/pengangkutan/gb" data-key="t-blog-list">Gas Bumi</a></li>
+                                @endcan
                             </ul>
                         </li>
 
@@ -149,23 +178,24 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
 
-                       
+                        @can('Minyak Bumi')
                         <li>
                             <a href="/data-izin/badan-usaha/minyak-bumi">
                                 <span data-key="t-chat">Minyak Bumi</span>
                             </a>
                         </li>
-
+                        @endcan
+                        @can('LPG/GAS')
                         <li>
                             <a href="/data-izin/badan-usaha/gas">
                                 <span data-key="t-chat">Gas Bumi</span>
                             </a>
                         </li>
-                        
+                        @endcan
                         
                     </ul>
                 </li>
-
+                @can('Minyak Bumi')
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="file-text"></i>
@@ -177,7 +207,8 @@
 
                     </ul>
                 </li>
-
+                @endcan
+                @can('LPG/GAS')
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="file-text"></i>
@@ -189,16 +220,21 @@
 
                     </ul>
                 </li>
+                @endcan
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="file-text"></i>
                         <span data-key="t-pages">Fasilitas Pengangkutan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
+                        @can('Minyak Bumi')
                         <li><a href="pages-starter.html" data-key="t-starter-page">Minyak Bumi</a></li>
+                        @endcan
+                        
+                        @can('LPG/GAS')
                         <li><a href="pages-maintenance.html" data-key="t-maintenance">Gas Bumi</a></li>
                         <li><a href="pages-maintenance.html" data-key="t-maintenance">Gas Bumi melalui Pipa</a></li>
-
+                        @endcan
                     </ul>
                 </li>
 
@@ -208,13 +244,16 @@
                         <span data-key="t-pages">Investasi</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
+                        @can('Minyak Bumi')
                         <li><a href="pages-starter.html" data-key="t-starter-page">Minyak Bumi</a></li>
+                        @endcan
+                        @can('LPG/GAS')
                         <li><a href="pages-maintenance.html" data-key="t-maintenance">Gas Bumi</a></li>
-
+                        @endcan
                     </ul>
                 </li>
 
-
+                @can('Master Data')
                 <li class="menu-title mt-2" data-key="t-components">Administrasi</li>
 
                 <li>
@@ -224,14 +263,20 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="/user-badan-usaha" data-key="t-alerts">User Badan Usaha</a></li>
+                        @can('user')
                         <li><a href="/user" data-key="t-buttons">User Evaluator</a></li>
+                        @endcan
+                        {{-- @can('role')  --}}
                         <li><a href="/role" data-key="t-cards">Role</a></li>
+                        {{-- @endcan  --}}
+                        @can('permission') 
                         <li><a href="/permission" data-key="t-carousel">Permission</a></li>
+                        @endcan 
                       
 
                     </ul>
                 </li>
-
+                @endcan 
                 
             </ul>
 

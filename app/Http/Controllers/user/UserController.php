@@ -110,10 +110,10 @@ class UserController extends Controller
 
         if ($user) {
             //redirect dengan pesan sukses
-            return redirect('/data-user/adm')->with('sweet_success','Data Berhasil Ditambah');
+            return redirect('/user')->with('sweet_success','Data Berhasil Ditambah');
         }
             else{
-                return redirect('/data-user/adm')->with('sweet_error','Gagal Ditambah');
+                return redirect('/user')->with('sweet_error','Gagal Ditambah');
             }
     }
     /**
@@ -128,7 +128,7 @@ class UserController extends Controller
             'id'       =>$user->id
             ])->first();
         User::destroy($user->id);
-        return redirect('/data-user/adm')->with('sweet_success','Data Berhasil Dihapus');
+        return redirect('/user')->with('sweet_success','Data Berhasil Dihapus');
   
     }
 }
