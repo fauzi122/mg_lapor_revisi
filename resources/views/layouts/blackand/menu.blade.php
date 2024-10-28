@@ -26,6 +26,7 @@
                         <li><a href="/master/negara" data-key="t-lock-screen">Negara</a></li>
                         <li><a href="/master/intake_kilangs" data-key="t-logout">Intake Kilang</a></li>
                         <li><a href="/master/meping" data-key="t-logout">Meping</a></li>
+                        <li><a href="/master/jabatan" data-key="t-logout">Jabatan</a></li>
                     </ul>
                 </li>
 
