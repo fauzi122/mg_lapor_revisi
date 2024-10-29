@@ -51,7 +51,7 @@
                                 </div>
                                 @enderror
                             </div>
-
+ 
                             <div class="form-group">
                                 <br>
                                 <br>
@@ -61,7 +61,7 @@
                                     <div class="col-md-6">
                                         <h5>BBM dan Minyak Bumi</h5>
                                         @foreach ($permissions as $permission)
-                                            @if (in_array($permission->name, ['Laporan Badan Usaha Minyak', 'Investasi Minyak Bumi', 'Fasilitas Pengangkutan Minyak Bumi', 'Subsidi BBM', 'Master Data']))
+                                            @if (in_array($permission->name, ['Laporan Badan Usaha Minyak', 'Investasi Minyak Bumi', 'Fasilitas Pengangkutan Minyak Bumi', 'Subsidi BBM','Minyak Bumi']))
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" name="permissions[]" id="check-{{ $permission->id }}" value="{{ $permission->name }}"
                                                         @if($role->permissions->contains($permission)) checked @endif>
@@ -75,7 +75,23 @@
                                     <div class="col-md-6">
                                         <h5>Gas dan LPG</h5>
                                         @foreach ($permissions as $permission)
-                                            @if (in_array($permission->name, ['Investasi Minyak Gas', 'Fasilitas Pengangkutan Gas Bumi', 'Subsidi LPG']))
+                                            @if (in_array($permission->name, ['Investasi Minyak Gas', 'Fasilitas Pengangkutan Gas Bumi', 'Subsidi LPG','LPG/GAS']))
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="permissions[]" id="check-{{ $permission->id }}" value="{{ $permission->name }}"
+                                                        @if($role->permissions->contains($permission)) checked @endif>
+                                                    <label class="form-check-label" for="check-{{ $permission->id }}">
+                                                        {{ $permission->name }}
+                                                    </label>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <br>
+                                        <h5>Administrator</h5>
+                                        @foreach ($permissions as $permission)
+                                            @if (in_array($permission->name, ['user', 'permission', 'role', 'Master Data']))
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" name="permissions[]" id="check-{{ $permission->id }}" value="{{ $permission->name }}"
                                                         @if($role->permissions->contains($permission)) checked @endif>

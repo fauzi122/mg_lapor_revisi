@@ -25,14 +25,14 @@
                 </div>
             </div>
         </div>
-
+ 
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">List of Users</h5>
-                        <a href="{{ url('/master') }}" class="btn btn-primary waves-effect waves-light">
-                            <i class="mdi mdi-arrow-left"></i> Back to Dashboard
+                        <a href="{{ url('/user-admin') }}" class="btn btn-primary waves-effect waves-light">
+                            <i class="mdi mdi-plus"></i> Tambah Data
                         </a>
                     </div>
 
@@ -51,6 +51,7 @@
                                 <tbody>
                                     @foreach ($users as $no => $user)
                                         <tr>
+                                            
                                             <td>{{ ++$no }}</td>
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
@@ -64,11 +65,17 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="/user/edit/admin/{{ $user->id }}" class="btn btn-sm btn-info">
+                                                @php
+                                                    $id =Crypt::encryptString($user->id . ',' . optional($user->profilAdmin)->id)
+
+                                                @endphp
+                                                {{-- {{ $id }} --}}
+
+                                                <a href="/user/edit/admin/{{$id}}" class="btn btn-sm btn-info">
                                                     <i class="mdi mdi-pencil"></i> Edit
                                                 </a>
 
-                                                <form name="form1" id="form1" action="/hapus-user/admin/{{$user->id}}" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                                <form name="form1" id="form1" action="/hapus-user/admin/{{$id}}" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="btn btn-sm btn-danger">

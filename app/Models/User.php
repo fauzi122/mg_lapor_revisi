@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
+use App\Models\Profil_admin;
 
 
 class User extends Authenticatable
@@ -26,7 +27,8 @@ class User extends Authenticatable
 		'role',
 		'npwp',
         'badan_usaha_id',
-        'remember_token'
+        'remember_token',
+        'profil_adm'
     ];
 
     /**
@@ -52,4 +54,11 @@ class User extends Authenticatable
     {
         return $this->roles->pluck('name');
     }
+
+// Di dalam model User
+public function profilAdmin()
+{
+    return $this->belongsTo('App\Models\Profil_admin', 'profil_adm', 'id');
+}
+
 }
