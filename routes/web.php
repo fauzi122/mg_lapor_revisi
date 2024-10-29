@@ -812,9 +812,10 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
         Route::get('/user', 'index')->name('user.index');
         Route::get('/user-badan-usaha', 'index_bu')->name('user.index_bu');
         Route::get('/user-admin', 'create')->name('user.create');
+		Route::post('/user-admin-store', 'store')->name('user.store');
         Route::get('/user/edit/admin/{user}', 'edit')->name('user.edit');
-        Route::patch('/user/update/admin/{user}', 'update');
-        Route::delete('/hapus-user/admin/{user}', 'destroy');
+        Route::put('/user/update/admin', 'update');
+        Route::delete('/hapus-user/admin/{id}', 'destroy');
     });
 	//pengangkutan Gas bumi
 	Route::controller(EvPengangkutanGasBumiController::class)->group(function () {
