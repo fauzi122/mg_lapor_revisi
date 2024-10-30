@@ -123,7 +123,7 @@
                             </div><!-- end col -->    
                         </div><!-- end row-->
 
-                        <div class="row justify-content-center">
+                        {{-- <div class="row justify-content-center">
                             <div class="col-xl-5">
                                 <!-- card -->
                                 <div class="card card-h-100">
@@ -241,7 +241,7 @@
                                 <!-- end row -->
                             </div>
                             <!-- end col -->
-                        </div> 
+                        </div>  --}}
                         
                         <!-- end row-->
 

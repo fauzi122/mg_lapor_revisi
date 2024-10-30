@@ -32,34 +32,45 @@ class EvDistribusiGasBumiController extends Controller
     }
     public function cetakperiode(Request $request)
     {
+        $request->validate([
+            'perusahaan' => 'required',
+            't_awal' => 'required|date',
+            't_akhir' => 'required|date|after_or_equal:t_awal',
+        ]);
+    
         $perusahaan = $request->input('perusahaan');
         $t_awal = $request->input('t_awal');
         $t_akhir = $request->input('t_akhir');
-
-        $result = DB::table('pengolahans as a')
+    
+        $query = DB::table('pengolahans as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('badan_usaha_id', $perusahaan)
             ->where('a.tipe', 'Distribusi')
             ->whereIn('a.status', [1, 2, 3])
-            ->whereBetween('bulan', [$t_awal, $t_akhir])
-            ->get();
-
+            ->whereBetween('bulan', [$t_awal, $t_akhir]);
+    
+        // Penanganan untuk semua perusahaan
+        if ($perusahaan != 'all') {
+            $query->where('a.badan_usaha_id', $perusahaan);
+        }
+    
+        $result = $query->get();
+    
         if ($result->isEmpty()) {
-            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
+            return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
         } else {
             $data = [
-                'title'=>'Laporan Gas Bumi Distribusi Kilang',
+                'title' => 'Laporan Gas Bumi Distribusi Kilang',
                 'result' => $result
             ];
-
+    
             $view = view('evaluator.laporan_bu.gb.distribusi.cetak', $data);
-
             $view->with('reload', true);
-
+    
             return response($view);
         }
     }
+    
 
     public function periode($kode = '')
     {

@@ -28,35 +28,45 @@ class EvImporController extends Controller
         return view('evaluator.laporan_bu.exim.impor.index',$data);
     }
 
-    public function cetakperiode(Request $request)
-    {
-        $perusahaan = $request->input('perusahaan');
-        $t_awal = $request->input('t_awal');
-        $t_akhir = $request->input('t_akhir');
+public function cetakperiode(Request $request)
+{
+    $request->validate([
+        'perusahaan' => 'required',
+        't_awal' => 'required|date',
+        't_akhir' => 'required|date|after_or_equal:t_awal',
+    ]);
 
-        $result = DB::table('impors as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('badan_usaha_id', $perusahaan)
-            ->whereIn('a.status', [1, 2, 3])
-            ->whereBetween('bulan_pib', [$t_awal, $t_akhir])
-            ->get();
+    $perusahaan = $request->input('perusahaan');
+    $t_awal = $request->input('t_awal');
+    $t_akhir = $request->input('t_akhir');
 
-        if ($result->isEmpty()) {
-            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
-        } else {
-            $data = [
-                'title'=>'Laporan Impor',
-                'result' => $result
-            ];
+    $query = DB::table('impors as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->whereBetween('bulan_pib', [$t_awal, $t_akhir]);
 
-            $view = view('evaluator.laporan_bu.exim.impor.cetak', $data);
-
-            $view->with('reload', true);
-
-            return response($view);
-        }
+    if ($perusahaan != 'all') {
+        $query->where('a.badan_usaha_id', $perusahaan);
     }
+
+    $result = $query->get();
+
+    if ($result->isEmpty()) {
+        return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
+    } else {
+        $data = [
+            'title' => 'Laporan Impor',
+            'result' => $result
+        ];
+
+        $view = view('evaluator.laporan_bu.exim.impor.cetak', $data);
+        $view->with('reload', true);
+
+        return response($view);
+    }
+}
+
 
     public function periode($kode = '')
     {
