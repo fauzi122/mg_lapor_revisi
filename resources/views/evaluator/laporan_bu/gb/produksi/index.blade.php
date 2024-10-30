@@ -54,6 +54,7 @@
 																	style="width: 100%;" tabindex="-1" aria-hidden="true"
 																	name="perusahaan" required>
 																<option value="">--Pilih Perusahaan--</option>
+																<option value="all"> Semua Perusahaan </option>
 																@foreach($perusahaan as $p)
 																	<option value="{{$p->id_perusahaan}}">{{$p->NAMA_PERUSAHAAN}}</option>
 																@endforeach

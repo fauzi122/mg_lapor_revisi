@@ -57,72 +57,71 @@ header("Pragma: no-cache");
 	</h5>
 </div>
 <table class="table table-light" style="font-size: 12px; border-collapse: collapse; border: 1px solid black;">
-	<thead style="background-color: #f2f2f2;">
-	<tr>
-		<th style="border: 1px solid black;">NO</th>
-		<th style="border: 1px solid black;">NAMA PERUSAHAAN</th>
-		<th style="border: 1px solid black;">BULAN</th>
-		<th style="border: 1px solid black;">NO TANGKI</th>
-		<th style="border: 1px solid black;">PRODUK</th>
-		<th style="border: 1px solid black;">KABUPATEN/KOTA</th>
-		<th style="border: 1px solid black;">VOLUME STOK AWAL</th>
-		<th style="border: 1px solid black;">VOLUME SUPPLY</th>
-		<th style="border: 1px solid black;">VOLUME OUTPUT</th>
-		<th style="border: 1px solid black;">VOLUME STOK AKHIR</th>
-		<th style="border: 1px solid black;">SATUAN</th>
-		<th style="border: 1px solid black;">UTILASI TANGKI</th>
-		<th style="border: 1px solid black;">PENGGUNA</th>
-		<th style="border: 1px solid black;">JANGKA WAKTU PENGGUNAAN</th>
-		<th style="border: 1px solid black;">TARIF PENYIMPANAN</th>
-		<th style="border: 1px solid black;">SATUAN TARIF</th>
+    <thead style="background-color: #f2f2f2;">
+        <tr>
+            <th style="border: 1px solid black;">NO</th>
+            <th style="border: 1px solid black;">NAMA PERUSAHAAN</th>
+            <th style="border: 1px solid black;">BULAN</th>
+            <th style="border: 1px solid black;">TAHUN</th>
+            <th style="border: 1px solid black;">NO TANGKI</th>
+            <th style="border: 1px solid black;">PRODUK</th>
+            <th style="border: 1px solid black;">KABUPATEN/KOTA</th>
+            <th style="border: 1px solid black;">VOLUME STOK AWAL</th>
+            <th style="border: 1px solid black;">VOLUME SUPPLY</th>
+            <th style="border: 1px solid black;">VOLUME OUTPUT</th>
+            <th style="border: 1px solid black;">VOLUME STOK AKHIR</th>
+            <th style="border: 1px solid black;">SATUAN</th>
+            <th style="border: 1px solid black;">UTILISASI TANGKI</th>
+            <th style="border: 1px solid black;">PENGGUNA</th>
+            {{-- <th style="border: 1px solid black;">TANGGAL AWAL</th>
+            <th style="border: 1px solid black;">TANGGAL AKHIR</th> --}}
+            <th style="border: 1px solid black;">TARIF PENYIMPANAN</th>
+            <th style="border: 1px solid black;">SATUAN TARIF</th>
+            <th style="border: 1px solid black;">STATUS</th>
+            <th style="border: 1px solid black;">CATATAN</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($result as $pgb)
+            <tr>
+                <td style="border: 1px solid black;">{{ $loop->iteration }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->NAMA_PERUSAHAAN }}</td>
+                <td style="border: 1px solid black;">{{ getBulan($pgb->bulan) }}</td>
+                <td style="border: 1px solid black;">{{ getTahun($pgb->bulan) }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->no_tangki }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->produk }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->kab_kota }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->volume_stok_awal }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->volume_supply }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->volume_output }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->volume_stok_akhir }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->satuan }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->utilisasi_tangki }}</td>
 
-		<th style="border: 1px solid black;">STATUS</th>
-		<th style="border: 1px solid black;">CATATAN</th>
-	</tr>
-	</thead>
-	<tbody>
-	@foreach($result as $pgb)
-		<tr>
-			<td style="border: 1px solid black;">{{ $loop->iteration }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->NAMA_PERUSAHAAN }}</td>
-			<td style="border: 1px solid black;">{{ dateIndonesia($pgb->bulan) }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->no_tangki }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->produk }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->kab_kota }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->volume_stok_awal }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->volume_supply }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->volume_output }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->volume_stok_akhir }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->satuan }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->utilasi_tangki }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->pengguna }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->jangka_waktu_penggunaan }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->tarif_penyimpanan }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->satuan_tarif }}</td>
-
-
-
-
-			<td  style="border: 1px solid black;">
-				@if ($pgb->status == 1 && $pgb->catatan)
-					Sudah Diperbaiki
-				@elseif ($pgb->status == 1)
-					Kirim
-				@elseif ($pgb->status == 2)
-					Revisi
-				@elseif ($pgb->status == 3)
-					Selesa
-				@elseif ($pgb->status == 0)
-					draf
-				@endif
-
-
-			</td>
-			<td style="border: 1px solid black;">{{ $pgb->catatan }}</td>
-		</tr>
-	@endforeach
-	</tbody>
+                <td style="border: 1px solid black;">{{ $pgb->pengguna }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->tanggal_awal }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->tanggal_berakhir }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->tarif_penyimpanan }}</td>
+                <td style="border: 1px solid black;">{{ $pgb->satuan_tarif }}</td>
+                <td style="border: 1px solid black;">
+                    @if ($pgb->status == 1 && $pgb->catatan)
+                        Sudah Diperbaiki
+                    @elseif ($pgb->status == 1)
+                        Kirim
+                    @elseif ($pgb->status == 2)
+                        Revisi
+                    @elseif ($pgb->status == 3)
+                        Selesai
+                    @elseif ($pgb->status == 0)
+                        Draf
+                    @endif
+                </td>
+                <td style="border: 1px solid black;">{{ $pgb->catatan }}</td>
+            </tr>
+        @endforeach
+    </tbody>
 </table>
+
 
 
 <br>
