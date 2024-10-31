@@ -18,19 +18,6 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-
-                            <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
             @if ($query)
                 <div class="row">
                     <div class="col-12">
@@ -38,61 +25,82 @@
 
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4>Periode Bulan {{ dateIndonesia($per->bulan) }}</h4>
+                                    <h4>Periode {{ $periode }}</h4>
 
                                     <div>
-                                        <a href="{{ url('laporan/jual-hasil-olahan/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}"
-                                            class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
-                                            Kembali</a>
-                                        <button type="button" class="btn btn-info btn-sm rounded-pill btn-update-status"
-                                            data-bs-toggle="modal" data-bs-target="#modal-update-status">
-                                            <i class="bx bxs-edit align-middle"></i> Update Status
+                                        <a href="{{ url('laporan/jual-hasil-olahan') }}"
+                                            class="btn btn-danger waves-effect waves-light">
+                                            <i class='bx bx-arrow-back'></i>
+                                            Kembali
+                                        </a>
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">
+                                            <i class='bx bx-filter-alt'></i>
+                                            Filter
                                         </button>
 
-
-
-                                        <button type="button"
-                                            class="btn btn-primary btn-sm rounded-pill btn-selesai-status">
-                                            <i class="bx bx-check"></i> Selesai
-                                        </button>
-
-
-                                        <div class="modal fade" id="modal-update-status" data-bs-backdrop="static"
-                                            data-bs-keyboard="false" aria-labelledby="staticBackdropLabel"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog modal-lg">
+                                        {{-- Modal cetak --}}
+                                        <div class="modal fade modal-select bs-example-modal-center" tabindex="-1"
+                                            role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="staticBackdropLabel">Update
-                                                            Status</h5>
+                                                        <h5 class="modal-title">Cetak</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form
-                                                        action="{{ url('/laporan/jual-hasil-olahan/update-revision-all') }}"
-                                                        method="post" id="updateStatusForm" enctype="multipart/form-data">
-                                                        @csrf
-                                                        <input type="hidden" name="p"
-                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}">
-                                                        <input type="hidden" name="b"
-                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}">
-                                                        <div class="modal-body">
-                                                            <label for="catatan">Notes</label>
-                                                            <textarea name="catatan" id="catatan" cols="5" rows="5" class="form-control"></textarea>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close
-                                                            </button>
-                                                            <button type="submit" class="btn btn-primary">Update
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                    <div class="modal-body">
+                                                        <form
+                                                            action="{{ url('laporan/jual-hasil-olahan-lihat-semua-data') }}"
+                                                            method="post">
+                                                            @csrf
+                                                            <div>
+                                                                <div class="mb-3">
+                                                                    <label for="example-text-input" class="form-label">Nama
+                                                                        Perusahaan</label>
+                                                                    <select
+                                                                        class="form-control select20 select2-hidden-accessible mb-2"
+                                                                        style="width: 100%;" tabindex="-1"
+                                                                        aria-hidden="true" name="perusahaan" required>
+                                                                        <option value="all" selected>--Pilih Perusahaan--
+                                                                        </option>
+                                                                        <option value="all">Semua Perusahaan</option>
+                                                                        <!-- Tambahkan opsi untuk semua perusahaan -->
+                                                                        @foreach ($perusahaan as $p)
+                                                                            <option value="{{ $p->id_perusahaan }}">
+                                                                                {{ $p->NAMA_PERUSAHAAN }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
 
+                                                                <div class="mb-3">
+                                                                    <label for="example-text-input"
+                                                                        class="form-label">Tanggal
+                                                                        Awal</label>
+                                                                    <input class="form-control" name="t_awal"
+                                                                        type="date" id="example-text-input" required>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label for="example-text-input"
+                                                                        class="form-label">Tanggal
+                                                                        Akhir</label>
+                                                                    <input class="form-control" name="t_akhir"
+                                                                        type="date" id="example-text-input" required>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <button type="submit" data-bs-dismiss="modal"
+                                                                        class="btn btn-primary">Proses</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+
+                                    </div>
 
                                 </div>
                             </div>
@@ -102,6 +110,8 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Nama Perusahaan</th>
+                                                <th>Tanggal Dibuat</th>
                                                 <th>Bulan</th>
                                                 <th>Tahun</th>
                                                 <th>Status</th>
@@ -121,6 +131,8 @@
                                             @foreach ($query as $pgb)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $pgb->NAMA_PERUSAHAAN }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
                                                     <td>{{ getBulan($pgb->bulan) }}</td>
                                                     <td>{{ getTahun($pgb->bulan) }}</td>
                                                     <td>
@@ -140,6 +152,9 @@
 
                                                     <td>{{ $pgb->produk }}</td>
 
+
+
+
                                                     <td>
                                                         @if ($pgb->status == 1)
                                                             <button type="button"
@@ -149,10 +164,10 @@
                                                                 <i class="bx bxs-edit align-middle"></i>
                                                             </button>
 
-                                                            <button class="btn btn-primary btn-rounded btn-sm btn-selesai"
+                                                            {{-- <button class="btn btn-primary btn-rounded btn-sm btn-selesai"
                                                                 data-id="{{ $pgb->id }}">
                                                                 <i class="bx bx-check" title="Selesai"></i>
-                                                            </button>
+                                                            </button> --}}
 
                                                             <div class="modal fade" id="modal-update"
                                                                 data-bs-backdrop="static" data-bs-keyboard="false"
@@ -220,10 +235,9 @@
             @endif
         </div>
     </div>
-
 @endsection
 
-@section('script')
+{{-- @section('script')
     <script>
         $(document).ready(function() {
             $('.btn-selesai-status').on('click', function() {
@@ -315,4 +329,4 @@
             });
         });
     </script>
-@endsection
+@endsection --}}

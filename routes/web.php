@@ -471,6 +471,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/jual-hasil-olahan/periode/{kode}', 'periode');
 		Route::get('/laporan/jual-hasil-olahan/{kode}', 'show');
 		Route::get('/laporan/jual-hasil-olahan-cek/', 'test');
+		Route::get('/laporan/jual-hasil-olahan-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/jual-hasil-olahan-lihat-semua-data', 'filterData');
 		Route::post('/laporan/jual-hasil-olahan/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/jual-hasil-olahan/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/jual-hasil-olahan/selesai-periode-all', 'selesaiPeriodeAll');
