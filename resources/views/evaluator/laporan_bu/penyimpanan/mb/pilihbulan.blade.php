@@ -6,12 +6,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">{{$title}}</h4>
+                        <h4 class="mb-sm-0 font-size-18">{{ $title }}</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Tabel</a></li>
-                                <li class="breadcrumb-item active">{{$title}}</li>
+                                <li class="breadcrumb-item active">{{ $title }}</li>
                             </ol>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
                     <div class="card">
                         <div class="card-header">
 
-                            <h4>{{$per->NAMA_PERUSAHAAN}}</h4>
+                            <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
 
                         </div>
 
@@ -31,62 +31,59 @@
                 </div>
             </div>
 
-            @if($query)
+            @if ($query)
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
 
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4>Periode Bulan {{ dateIndonesia($per->bulan)}}</h4>
+                                    <h4>Periode Bulan {{ dateIndonesia($per->bulan) }}</h4>
 
                                     <div>
-                                        <a href="{{url('laporan/penyimpanan/mb/periode').'/'.\Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id)}}"
-                                           class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
+                                        <a href="{{ url('laporan/penyimpanan/mb/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}"
+                                            class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
                                             Kembali</a>
                                         <button type="button" class="btn btn-info btn-sm rounded-pill btn-update-status"
-                                                data-bs-toggle="modal" data-bs-target="#modal-update-status">
+                                            data-bs-toggle="modal" data-bs-target="#modal-update-status">
                                             <i class="bx bxs-edit align-middle"></i> Update Status
                                         </button>
 
 
 
                                         <button type="button"
-                                                class="btn btn-primary btn-sm rounded-pill btn-selesai-status">
+                                            class="btn btn-primary btn-sm rounded-pill btn-selesai-status">
                                             <i class="bx bx-check"></i> Selesai
                                         </button>
 
 
                                         <div class="modal fade" id="modal-update-status" data-bs-backdrop="static"
-                                             data-bs-keyboard="false" aria-labelledby="staticBackdropLabel"
-                                             aria-hidden="true">
+                                            data-bs-keyboard="false" aria-labelledby="staticBackdropLabel"
+                                            aria-hidden="true">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="staticBackdropLabel">Update
                                                             Status</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                            aria-label="Close"></button>
                                                     </div>
                                                     <form action="{{ url('/laporan/penyimpanan/mb/update-revision-all') }}"
-                                                          method="post" id="updateStatusForm"
-                                                          enctype="multipart/form-data">
+                                                        method="post" id="updateStatusForm" enctype="multipart/form-data">
                                                         @csrf
                                                         <input type="hidden" name="p"
-                                                               value="{{\Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id)}}">
+                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}">
                                                         <input type="hidden" name="b"
-                                                               value="{{\Illuminate\Support\Facades\Crypt::encrypt($per->bulan)}}">
+                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}">
                                                         <div class="modal-body">
                                                             <label for="catatan">Notes</label>
-                                                            <textarea name="catatan" id="catatan" cols="5" rows="5"
-                                                                      class="form-control"></textarea>
+                                                            <textarea name="catatan" id="catatan" cols="5" rows="5" class="form-control"></textarea>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Close
+                                                                data-bs-dismiss="modal">Close
                                                             </button>
-                                                            <button type="submit" class="btn btn-primary"
-                                                            >Update
+                                                            <button type="submit" class="btn btn-primary">Update
                                                             </button>
                                                         </div>
                                                     </form>
@@ -100,7 +97,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    
+
                                     <div style="overflow-x: auto;">
                                         <table id="datatable-buttons" class="table w-100">
                                             <thead>
@@ -158,7 +155,8 @@
                                                         <td>{{ $pgb->no_tangki }}</td>
                                                         <td>{{ $pgb->produk }}</td>
                                                         <td>{{ $pgb->kab_kota }}</td>
-                                                        <td>{{ is_array(json_decode($pgb->jenis_komoditas, true)) ? implode(', ', json_decode($pgb->jenis_komoditas, true)) : $pgb->jenis_komoditas }}</td>
+                                                        <td>{{ is_array(json_decode($pgb->jenis_komoditas, true)) ? implode(', ', json_decode($pgb->jenis_komoditas, true)) : $pgb->jenis_komoditas }}
+                                                        </td>
                                                         <td>{{ $pgb->kapasitas_tangki }}</td>
                                                         <td>{{ $pgb->volume_stok_awal }}</td>
                                                         <td>{{ $pgb->volume_supply }}</td>
@@ -168,12 +166,20 @@
                                                         <td>{{ $pgb->utilisasi_tangki }}</td>
                                                         <td>
                                                             @if ($pgb->status == 1)
-                                                                <button type="button" class="btn btn-info btn-sm rounded-pill btn-update" data-bs-toggle="modal" data-bs-target="#modal-update" title="Revisi data">
+                                                                <button type="button"
+                                                                    class="btn btn-info btn-sm rounded-pill btn-update"
+                                                                    data-bs-toggle="modal" data-bs-target="#modal-update"
+                                                                    title="Revisi data">
                                                                     <i class="bx bxs-edit align-middle"></i>
                                                                 </button>
-                                                                <button class="btn btn-primary btn-rounded btn-sm btn-selesai" data-id="{{ $pgb->id }}">
-                                                                    <i class="bx bx-check" title="Selesai"></i>
-                                                                </button>
+
+                                                                @if ($data->status == 1 && $data->catatan)
+                                                                    <button
+                                                                        class="btn btn-primary btn-rounded btn-sm btn-selesai"
+                                                                        data-id="{{ $pgb->id }}">
+                                                                        <i class="bx bx-check" title="Selesai"></i>
+                                                                    </button>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                         <td>{{ $pgb->pengguna }}</td>
@@ -192,15 +198,14 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
-                                    
-                                    
+
+
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             @endif
         </div>
     </div>
@@ -208,10 +213,9 @@
 @endsection
 
 @section('script')
-
     <script>
-        $(document).ready(function () {
-            $('.btn-selesai-status').on('click', function () {
+        $(document).ready(function() {
+            $('.btn-selesai-status').on('click', function() {
                 Swal.fire({
                     title: 'Apakah Anda yakin ingin menyelesaikan periode ini?',
                     icon: 'warning',
@@ -230,14 +234,17 @@
                                 b: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}',
                                 p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}'
                             },
-                            success: function (response) {
-                                Swal.fire('Status diperbarui!', 'Periode telah diselesaikan.', 'success')
-                                    .then(function () {
+                            success: function(response) {
+                                Swal.fire('Status diperbarui!',
+                                        'Periode telah diselesaikan.', 'success')
+                                    .then(function() {
                                         location.reload();
                                     });
                             },
-                            error: function (error) {
-                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui status.', 'error');
+                            error: function(error) {
+                                Swal.fire('Gagal',
+                                    'Terjadi kesalahan saat memperbarui status.',
+                                    'error');
                             }
                         });
                     }
@@ -248,11 +255,9 @@
 
 
     <script>
-
-
         document.querySelectorAll('.btn-selesai').forEach(function(button) {
             // Menambahkan event listener ke setiap elemen button
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 // Mengambil nilai id dari atribut data-id
                 var id = this.getAttribute('data-id');
 
@@ -277,25 +282,26 @@
                                 _token: '{{ csrf_token() }}',
                                 id: id, // Menggunakan nilai id yang diambil dari atribut data-id
                             },
-                            success: function (response) {
+                            success: function(response) {
                                 // Handle the response from the server
                                 // For example, show a success message
-                                Swal.fire('Status diperbarui!', 'Periode telah diselesaikan.', 'success')
-                                    .then(function () {
+                                Swal.fire('Status diperbarui!',
+                                        'Periode telah diselesaikan.', 'success')
+                                    .then(function() {
                                         // Reload the page after the SweetAlert is closed
                                         location.reload();
                                     });
                             },
-                            error: function (error) {
+                            error: function(error) {
                                 // Handle errors, show an error message, etc.
-                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui status.', 'error');
+                                Swal.fire('Gagal',
+                                    'Terjadi kesalahan saat memperbarui status.',
+                                    'error');
                             }
                         });
                     }
                 });
             });
         });
-
     </script>
-
 @endsection
