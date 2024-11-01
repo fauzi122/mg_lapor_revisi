@@ -106,7 +106,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="penjualan">
                                     <div class="table-responsive">
-                                        <table id="datatable" class="table table-bordered nowrap w-100">
+                                        <table id="datatable" class="table table-hover nowrap w-100">
                                             <thead>
 
                                                 <tr>

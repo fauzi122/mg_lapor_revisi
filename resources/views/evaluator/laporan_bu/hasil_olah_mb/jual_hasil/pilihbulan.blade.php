@@ -98,7 +98,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                                    <table id="datatable-buttons" class="table table-bordered table-striped dt nowrap w-100">
                                         <thead>
                                             <tr>
                                                 <th>No</th>

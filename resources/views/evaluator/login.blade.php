@@ -1,29 +1,19 @@
-
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
-    <!-- swiper css -->
-
-    <link rel="stylesheet" href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}">
-    <!-- preloader css -->
-
-    <link rel="stylesheet" href="{{ asset('assets/css/preloader.min.css') }}" type="text/css" />
-    <!-- Bootstrap Css -->
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
-
-    <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-
-    <!-- App Css-->
-
-    <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
-    <!-- choices css -->
-
-    <link href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet"
-        type="text/css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
+<!-- swiper css -->
+<link rel="stylesheet" href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}">
+<!-- preloader css -->
+<link rel="stylesheet" href="{{ asset('assets/css/preloader.min.css') }}" type="text/css" />
+<!-- Bootstrap Css -->
+<link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+<!-- Icons Css -->
+<link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+<!-- App Css-->
+<link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+<!-- choices css -->
+<link href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet" type="text/css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 
 </head>
   <title>Login Evaluator</title>
@@ -61,14 +51,16 @@
                                                     </div>
                                                     <div class="flex-shrink-0">
                                                         <div class="">
-                                                            <a href="auth-recoverpw.html" class="text-muted">Forgot password?</a>
+                                                            {{-- <a href="auth-recoverpw.html" class="text-muted">Forgot password?</a> --}}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="input-group auth-pass-inputgroup">
-                                                    <input type="password" class="form-control" name="password" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon">
-                                                    <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
+                                                    <input type="password" class="form-control" name="password" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon" id="password-input">
+                                                    <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon">
+                                                        <i class="mdi mdi-eye-outline" id="toggle-password-icon"></i>
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="row mb-4">
@@ -217,49 +209,38 @@
             </div>
             <!-- end container fluid -->
         </div>
-
 <!-- swiper js -->
+<script src="{{ asset('assets/libs/swiper/swiper-bundle.min.js') }}"></script>
+<!-- Countdown js -->
+<script src="{{ asset('assets/js/pages/coming-soon.init.js') }}"></script>
+<!-- choices js -->
+<script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
+<!-- init js -->
+<script src="{{ asset('assets/js/pages/form-advanced.init.js') }}"></script>
 
-    <script src="{{ asset('assets/libs/swiper/swiper-bundle.min.js') }}"></script>
-
-
-
-    <!-- Countdown js -->
-
-    <script src="{{ asset('assets/js/pages/coming-soon.init.js') }}"></script>
-
-
-
-    <!-- choices js -->
-
-    <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
-
-
-
-    <!-- init js -->
-
-    <script src="{{ asset('assets/js/pages/form-advanced.init.js') }}"></script>
-
-
-
-    {{-- <script src="{{ asset('assets/js/app.js') }}"></script> --}}
-
-</body>
-
+<!-- Password visibility toggle and Select2 initialization -->
 <script>
-
     $(document).ready(function() {
-
+        // Initialize Select2
         $('.select2').select2({
-
             closeOnSelect: false
-
         });
 
+        // Toggle password visibility
+        $('#password-addon').on('click', function() {
+            const passwordInput = $('#password-input');
+            const icon = $('#toggle-password-icon');
+            
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                icon.removeClass('mdi-eye-outline').addClass('mdi-eye-off-outline');
+            } else {
+                passwordInput.attr('type', 'password');
+                icon.removeClass('mdi-eye-off-outline').addClass('mdi-eye-outline');
+            }
+        });
     });
-
 </script>
 
-    </body>
-
+</body>
 </html>
