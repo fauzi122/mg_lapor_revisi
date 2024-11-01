@@ -251,8 +251,7 @@ class EvHasilOlahController extends Controller
 
     public function lihatSemuaData()
     {
-        $tgl = Carbon::parse('2024-01-01');
-        // $tgl = Carbon::now();
+        $tgl = Carbon::now();
 
         $query = DB::table('jual_hasil_olah_bbms as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
@@ -279,10 +278,8 @@ class EvHasilOlahController extends Controller
 
     public function filterData(Request $request)
     {
-        // dd($request->all());
         $t_awal = Carbon::parse($request->t_awal);
         $t_akhir = Carbon::parse($request->t_akhir);
-        $bu = " ";
 
         $perusahaan = DB::table('jual_hasil_olah_bbms as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')

@@ -149,10 +149,13 @@
                                                                 <i class="bx bxs-edit align-middle"></i>
                                                             </button>
 
-                                                            <button class="btn btn-primary btn-rounded btn-sm btn-selesai"
-                                                                data-id="{{ $pgb->id }}">
-                                                                <i class="bx bx-check" title="Selesai"></i>
-                                                            </button>
+                                                            @if ($pgb->status == 1 && $pgb->catatan)
+                                                                <button
+                                                                    class="btn btn-primary btn-rounded btn-sm btn-selesai"
+                                                                    data-id="{{ $pgb->id }}">
+                                                                    <i class="bx bx-check" title="Selesai"></i>
+                                                                </button>
+                                                            @endif
 
                                                             <div class="modal fade" id="modal-update"
                                                                 data-bs-backdrop="static" data-bs-keyboard="false"

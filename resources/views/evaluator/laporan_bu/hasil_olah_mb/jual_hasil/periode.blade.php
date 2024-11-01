@@ -95,12 +95,14 @@
                                                                         <i class="bx bxs-edit align-middle"></i>
                                                                     </button>
 
-                                                                    {{-- <button
-                                                                        class="btn btn-primary btn-rounded btn-sm btn-selesai-status"
-                                                                        data-p="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}"
-                                                                        data-b="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}">
-                                                                        <i class="bx bx-check" title="Selesai"></i>
-                                                                    </button> --}}
+                                                                    @if ($data->status == 1 && $data->catatan)
+                                                                        <button
+                                                                            class="btn btn-primary btn-rounded btn-sm btn-selesai-status"
+                                                                            data-p="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}"
+                                                                            data-b="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}">
+                                                                            <i class="bx bx-check" title="Selesai"></i>
+                                                                        </button>
+                                                                    @endif
 
                                                                     <div class="modal fade" id="modal-update"
                                                                         data-bs-backdrop="static" data-bs-keyboard="false"
