@@ -23,7 +23,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div style="display:flex; margin:10px; justify-content:space-between">
-
+ 
                             <div class="card-header">
                                 <h3>{{ $title }}</h3>
                             </div>
@@ -106,7 +106,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="penjualan">
                                     <div class="table-responsive">
-                                        <table id="datatable" class="table table-bordered nowrap w-100">
+                                        <table id="datatable" class="table table-hover nowrap w-100">
                                             <thead>
 
                                                 <tr>

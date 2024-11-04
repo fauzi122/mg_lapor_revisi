@@ -52,42 +52,44 @@ class AuthEvaluatorController extends Controller
 	// 	}
 	// }
 
-    public function postLogin(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
+	public function postLogin(Request $request)
+	{
+		// Validasi data permintaan
+		$request->validate([
+			'email' => 'required|string|email',
+			'password' => 'required|string',
+		]);
+	
+		// Kode yang dikomentari disimpan untuk referensi, tetapi tidak digunakan saat ini.
 		// $url = "https://apicdev.esdm.go.id/development/dev-sandbox/sipeg/sso-info?nip=".$request->email;
-        // $client_id = "39dc606335d8c4e22ea2c444bf58cecd";
-        // $client_secret = "9ec10a07e01bb24b9beba125c28cbff1";
-        // $request = Http::get($url,[
-        //     'headers' => [
-		// 		'client-id' => $client_id,
-		// 		'client-secret' => $client_secret,
-		// 		'APIKey' => 'SIPEG',
-		// 	]
-        // ]);
-
-        // $jsonResponse = $request->json();
-		// dd($url,$client_id,$client_secret,$jsonResponse);
-        // $code = $jsonResponse['code'];
-
-        $credentials = $request->only('email', 'password');
-
-        // Attempt to login
-        if (Auth::attempt($credentials, $request->has('remember-check'))) {
-            // Successful login
-            return redirect()->intended('master');  // Redirect to a dashboard or any intended URL
-        }
-
-        // If unauthenticated, redirect back with an error
-        return back()->withErrors([
-            'login_error' => 'Username Atau password salah.',
-        ]);
-    }
+		// $client_id = "39dc606335d8c4e22ea2c444bf58cecd";
+		// $client_secret = "9ec10a07e01bb24b9beba125c28cbff1";
+		// $request = Http::get($url,[
+		//     'headers' => [
+		//         'client-id' => $client_id,
+		//         'client-secret' => $client_secret,
+		//         'APIKey' => 'SIPEG',
+		//     ]
+		// ]);
+	
+		// $jsonResponse = $request->json();
+		// dd($url, $client_id, $client_secret, $jsonResponse);
+		// $code = $jsonResponse['code'];
+	
+		$credentials = $request->only('email', 'password');
+	
+		// Mencoba untuk login dengan kredensial yang diberikan
+		if (Auth::attempt($credentials, $request->boolean('remember-check'))) {
+			// Redirect ke halaman yang diinginkan jika login berhasil
+			return redirect()->intended('master');
+		}
+	
+		// Redirect kembali dengan pesan kesalahan jika login gagal
+		return back()->withErrors([
+			'login_error' => 'Username atau password salah.',
+		])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
+	}
+	
 
 
 

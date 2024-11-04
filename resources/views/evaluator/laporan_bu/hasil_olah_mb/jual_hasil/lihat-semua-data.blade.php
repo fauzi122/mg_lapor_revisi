@@ -7,7 +7,6 @@
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-size-18">{{ $title }}</h4>
-
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Tabel</a></li>
@@ -19,99 +18,77 @@
             </div>
 
             @if ($query)
+               
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-
                             <div class="card-header">
+                                <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-0" role="alert">
+                                    <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                                    <strong>Informasi:</strong> Data yang ditampilkan di halaman ini adalah data untuk bulan berjalan.
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <br>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h4>Periode {{ $periode }}</h4>
-
                                     <div>
-                                        <a href="{{ url('laporan/jual-hasil-olahan') }}"
-                                            class="btn btn-danger waves-effect waves-light">
-                                            <i class='bx bx-arrow-back'></i>
-                                            Kembali
+                                        <a href="{{ url('laporan/jual-hasil-olahan') }}" class="btn btn-danger waves-effect waves-light">
+                                            <i class='bx bx-arrow-back'></i> Kembali
                                         </a>
-                                        <button type="button" class="btn btn-primary waves-effect waves-light"
-                                            data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">
-                                            <i class='bx bx-filter-alt'></i>
-                                            Filter
+                                        <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">
+                                            <i class='bx bx-filter-alt'></i> Filter
                                         </button>
+                                        
 
                                         {{-- Modal cetak --}}
-                                        <div class="modal fade modal-select bs-example-modal-center" tabindex="-1"
-                                            role="dialog" aria-hidden="true">
+                                        <div class="modal fade modal-select bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title">Cetak</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
+                                                        <h5 class="modal-title">Filter</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form
-                                                            action="{{ url('laporan/jual-hasil-olahan-lihat-semua-data') }}"
-                                                            method="post">
+                                                        <form action="{{ url('laporan/jual-hasil-olahan-lihat-semua-data') }}" method="post">
                                                             @csrf
-                                                            <div>
-                                                                <div class="mb-3">
-                                                                    <label for="example-text-input" class="form-label">Nama
-                                                                        Perusahaan</label>
-                                                                    <select
-                                                                        class="form-control select20 select2-hidden-accessible mb-2"
-                                                                        style="width: 100%;" tabindex="-1"
-                                                                        aria-hidden="true" name="perusahaan" required>
-                                                                        <option value="all" selected>--Pilih Perusahaan--
-                                                                        </option>
-                                                                        <option value="all">Semua Perusahaan</option>
-                                                                        <!-- Tambahkan opsi untuk semua perusahaan -->
-                                                                        @foreach ($perusahaan as $p)
-                                                                            <option value="{{ $p->id_perusahaan }}">
-                                                                                {{ $p->NAMA_PERUSAHAAN }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-
-                                                                <div class="mb-3">
-                                                                    <label for="example-text-input"
-                                                                        class="form-label">Tanggal
-                                                                        Awal</label>
-                                                                    <input class="form-control" name="t_awal"
-                                                                        type="date" id="example-text-input" required>
-                                                                </div>
-
-                                                                <div class="mb-3">
-                                                                    <label for="example-text-input"
-                                                                        class="form-label">Tanggal
-                                                                        Akhir</label>
-                                                                    <input class="form-control" name="t_akhir"
-                                                                        type="date" id="example-text-input" required>
-                                                                </div>
-
-                                                                <div class="mb-3">
-                                                                    <button type="submit" data-bs-dismiss="modal"
-                                                                        class="btn btn-primary">Proses</button>
-                                                                </div>
+                                                            <div class="mb-3">
+                                                                <label for="example-text-input" class="form-label">Nama Perusahaan</label>
+                                                                <select class="form-control select20 select2-hidden-accessible mb-2" style="width: 100%;" name="perusahaan" required>
+                                                                    <option value="all" selected>--Pilih Perusahaan--</option>
+                                                                    <option value="all">Semua Perusahaan</option>
+                                                                    @foreach ($perusahaan as $p)
+                                                                        <option value="{{ $p->id_perusahaan }}">{{ $p->NAMA_PERUSAHAAN }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="example-text-input" class="form-label">Tanggal Awal</label>
+                                                                <input class="form-control" name="t_awal" type="date" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="example-text-input" class="form-label">Tanggal Akhir</label>
+                                                                <input class="form-control" name="t_akhir" type="date" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Proses</button>
                                                             </div>
                                                         </form>
                                                     </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </div>
-
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                                    <table id="datatable-buttons" class="table table-bordered table-striped dt nowrap w-100">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Perusahaan</th>
-                                                <th>Tanggal Dibuat</th>
+                                                
                                                 <th>Bulan</th>
                                                 <th>Tahun</th>
                                                 <th>Status</th>
@@ -123,8 +100,7 @@
                                                 <th>Sektor</th>
                                                 <th>Volume</th>
                                                 <th>Satuan</th>
-
-
+                                                <th>Tanggal Dibuat</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -132,7 +108,7 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $pgb->NAMA_PERUSAHAAN }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
+                                                   
                                                     <td>{{ getBulan($pgb->bulan) }}</td>
                                                     <td>{{ getTahun($pgb->bulan) }}</td>
                                                     <td>
@@ -145,24 +121,19 @@
                                                         @elseif ($pgb->status == 3)
                                                             <span class="badge bg-primary">Selesai</span>
                                                         @elseif ($pgb->status == 0)
-                                                            <span class="badge bg-info">draf</span>
+                                                            <span class="badge bg-info">Draf</span>
                                                         @endif
                                                     </td>
                                                     <td>{{ $pgb->catatan }}</td>
-
                                                     <td>{{ $pgb->produk }}</td>
-
-
-
-
                                                     <td>
                                                         @if ($pgb->status == 1)
-                                                            <button type="button"
-                                                                class="btn btn-info btn-sm rounded-pill btn-update"
-                                                                data-bs-toggle="modal" data-bs-target="#modal-update"
-                                                                title="Revisi data">
+                                                            <button type="button" class="btn btn-info btn-sm rounded-pill btn-update" data-bs-toggle="modal" data-bs-target="#modal-update" title="Revisi data">
                                                                 <i class="bx bxs-edit align-middle"></i>
                                                             </button>
+
+                                                            <div class="modal fade" id="modal-update" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
 
                                                             @if ($pgb->status == 1 && $pgb->catatan)
                                                                 <button
@@ -175,59 +146,38 @@
                                                             <div class="modal fade" id="modal-update"
                                                                 data-bs-backdrop="static" data-bs-keyboard="false"
                                                                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+ 
                                                                 <div class="modal-dialog modal-lg">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
-                                                                            <h5 class="modal-title"
-                                                                                id="staticBackdropLabel">Update
-                                                                                Status</h5>
-                                                                            <button type="button" class="btn-close"
-                                                                                data-bs-dismiss="modal"
-                                                                                aria-label="Close"></button>
+                                                                            <h5 class="modal-title" id="staticBackdropLabel">Update Status</h5>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                         </div>
-                                                                        <form
-                                                                            action="{{ url('/laporan/jual-hasil-olahan/update-revision') }}"
-                                                                            method="post" id="updateStatusForm"
-                                                                            enctype="multipart/form-data">
+                                                                        <form action="{{ url('/laporan/jual-hasil-olahan/update-revision') }}" method="post" id="updateStatusForm" enctype="multipart/form-data">
                                                                             @csrf
-                                                                            <input type="hidden" name="id"
-                                                                                value="{{ \Illuminate\Support\Facades\Crypt::encrypt($pgb->id) }}">
+                                                                            <input type="hidden" name="id" value="{{ \Illuminate\Support\Facades\Crypt::encrypt($pgb->id) }}">
                                                                             <div class="modal-body">
                                                                                 <label for="catatan">Notes</label>
                                                                                 <textarea name="catatan" id="catatan" cols="5" rows="5" class="form-control"></textarea>
                                                                             </div>
                                                                             <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                    class="btn btn-secondary"
-                                                                                    data-bs-dismiss="modal">Close
-                                                                                </button>
-                                                                                <button type="submit"
-                                                                                    class="btn btn-primary">Update
-                                                                                </button>
+                                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                <button type="submit" class="btn btn-primary">Update</button>
                                                                             </div>
                                                                         </form>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         @endif
-
-
                                                     </td>
-
-
                                                     <td>{{ $pgb->provinsi }}</td>
                                                     <td>{{ $pgb->kabupaten_kota }}</td>
                                                     <td>{{ $pgb->sektor }}</td>
                                                     <td>{{ $pgb->volume }}</td>
                                                     <td>{{ $pgb->satuan }}</td>
-
-
-
-
-
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
                                                 </tr>
                                             @endforeach
-                                            <!-- Add more rows as needed -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -263,16 +213,12 @@
                                 p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}'
                             },
                             success: function(response) {
-                                Swal.fire('Status diperbarui!',
-                                        'Periode telah diselesaikan.', 'success')
-                                    .then(function() {
-                                        location.reload();
-                                    });
+                                Swal.fire('Status diperbarui!', 'Periode telah diselesaikan.', 'success').then(function() {
+                                    location.reload();
+                                });
                             },
                             error: function(error) {
-                                Swal.fire('Gagal',
-                                    'Terjadi kesalahan saat memperbarui status.',
-                                    'error');
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui status.', 'error');
                             }
                         });
                     }
@@ -281,17 +227,12 @@
         });
     </script>
 
-
     <script>
         document.querySelectorAll('.btn-selesai').forEach(function(button) {
-            // Menambahkan event listener ke setiap elemen button
             button.addEventListener('click', function() {
-                // Mengambil nilai id dari atribut data-id
                 var id = this.getAttribute('data-id');
-
                 console.log('cek id =', id);
 
-                // Show SweetAlert confirmation
                 Swal.fire({
                     title: 'Apakah Anda yakin ingin menyelesaikan periode ini?',
                     icon: 'warning',
@@ -301,30 +242,21 @@
                     confirmButtonText: 'Ya, selesaikan!',
                     cancelButtonText: 'Batal'
                 }).then((result) => {
-                    // If the user clicks 'Yes', trigger your update logic
                     if (result.isConfirmed) {
                         $.ajax({
                             url: '{{ url('/laporan/jual-hasil-olahan/selesai-periode') }}',
                             type: 'POST',
                             data: {
                                 _token: '{{ csrf_token() }}',
-                                id: id, // Menggunakan nilai id yang diambil dari atribut data-id
+                                id: id
                             },
                             success: function(response) {
-                                // Handle the response from the server
-                                // For example, show a success message
-                                Swal.fire('Status diperbarui!',
-                                        'Periode telah diselesaikan.', 'success')
-                                    .then(function() {
-                                        // Reload the page after the SweetAlert is closed
-                                        location.reload();
-                                    });
+                                Swal.fire('Status diperbarui!', 'Periode telah diselesaikan.', 'success').then(function() {
+                                    location.reload();
+                                });
                             },
                             error: function(error) {
-                                // Handle errors, show an error message, etc.
-                                Swal.fire('Gagal',
-                                    'Terjadi kesalahan saat memperbarui status.',
-                                    'error');
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui status.', 'error');
                             }
                         });
                     }
