@@ -131,9 +131,9 @@
                                                             <button type="button" class="btn btn-info btn-sm rounded-pill btn-update" data-bs-toggle="modal" data-bs-target="#modal-update" title="Revisi data">
                                                                 <i class="bx bxs-edit align-middle"></i>
                                                             </button>
-<<<<<<< HEAD
+
                                                             <div class="modal fade" id="modal-update" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-=======
+
 
                                                             @if ($pgb->status == 1 && $pgb->catatan)
                                                                 <button
@@ -146,7 +146,7 @@
                                                             <div class="modal fade" id="modal-update"
                                                                 data-bs-backdrop="static" data-bs-keyboard="false"
                                                                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
->>>>>>> 4104af7acd22b6b6bbf18bee1725678b2f8e8d9f
+ 
                                                                 <div class="modal-dialog modal-lg">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
