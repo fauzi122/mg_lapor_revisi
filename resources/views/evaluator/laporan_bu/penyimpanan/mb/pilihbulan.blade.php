@@ -151,7 +151,7 @@
                                                                 <span class="badge bg-info">Draf</span>
                                                             @endif
                                                         </td>
-                                                        <td>{{ $pgb->catatan }}</td>
+                                                        <td>{{ $pgb->id }}</td>
                                                         <td>{{ $pgb->no_tangki }}</td>
                                                         <td>{{ $pgb->produk }}</td>
                                                         <td>{{ $pgb->kab_kota }}</td>
@@ -173,7 +173,7 @@
                                                                     <i class="bx bxs-edit align-middle"></i>
                                                                 </button>
 
-                                                                @if ($data->status == 1 && $data->catatan)
+                                                                @if ($pgb->status == 1 && $pgb->catatan)
                                                                     <button
                                                                         class="btn btn-primary btn-rounded btn-sm btn-selesai"
                                                                         data-id="{{ $pgb->id }}">

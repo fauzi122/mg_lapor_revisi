@@ -241,4 +241,66 @@ class EvDistribusiMinyakBumiController extends Controller
     }
 
 
+    public function lihatSemuaData()
+    {
+        $tgl = Carbon::now();
+
+        $query = DB::table('pengolahans as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN')
+        ->where('a.jenis', 'Minyak Bumi')
+        ->where('a.tipe', 'Distribusi')
+        ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
+        ->whereIn('a.status', [1, 2, 3])
+        ->get();
+
+
+        $perusahaan = DB::table('pengolahans as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->groupBy('a.badan_usaha_id')
+        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+        ->get();
+
+        // return json_decode($query); exit;
+        return view('evaluator.laporan_bu.mb.distribusi.lihat-semua-data', [
+            'title' => 'Laporan Minyak Bumi Distribusi',
+            'periode' => 'Bulan ' . $tgl->monthName . " " . $tgl->year,
+            'query' => $query,
+            'perusahaan' => $perusahaan,
+        ]);
+    }
+
+    public function filterData(Request $request)
+    {
+        $t_awal = Carbon::parse($request->t_awal);
+        $t_akhir = Carbon::parse($request->t_akhir);
+
+        $perusahaan = DB::table('pengolahans as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->groupBy('a.badan_usaha_id')
+        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+        ->get();
+
+        $query = DB::table('pengolahans as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN')
+        ->where('a.jenis', 'Minyak Bumi')
+        ->where('a.tipe', 'Distribusi');
+        
+        if ($request->perusahaan != 'all') {
+            $query->where('badan_usaha_id', $request->perusahaan);
+        }
+
+        $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+                    ->whereIn('a.status', [1, 2, 3])->get();
+
+        return view('evaluator.laporan_bu.mb.distribusi.lihat-semua-data', [
+            'title' => 'Laporan Minyak Bumi Distribusi',
+            'periode' => 'Tanggal ' . $t_awal->format('d F Y') . " - " . $t_akhir->format('d F Y'),
+            'query' => $result,
+            'perusahaan' => $perusahaan,
+        ]);
+    }
 }

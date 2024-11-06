@@ -34,7 +34,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h4>Periode {{ $periode }}</h4>
                                     <div>
-                                        <a href="{{ url('laporan/jual-hasil-olahan') }}"
+                                        <a href="{{ url('laporan/penyimpanan/mb') }}"
                                             class="btn btn-danger waves-effect waves-light">
                                             <i class='bx bx-arrow-back'></i> Kembali
                                         </a>
@@ -55,8 +55,7 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form
-                                                            action="{{ url('laporan/jual-hasil-olahan-lihat-semua-data') }}"
+                                                        <form action="{{ url('laporan/penyimpanan/mb-lihat-semua-data') }}"
                                                             method="post">
                                                             @csrf
                                                             <div class="mb-3">
@@ -107,18 +106,33 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Perusahaan</th>
-
                                                 <th>Bulan</th>
                                                 <th>Tahun</th>
                                                 <th>Status</th>
                                                 <th>Catatan</th>
+                                                <th>No Tangki</th>
                                                 <th>Produk</th>
-                                                <th>Aksi</th>
-                                                <th>Provinsi</th>
-                                                <th>Kabupaten/Kota</th>
-                                                <th>Sektor</th>
-                                                <th>Volume</th>
+                                                <th>Kab/Kota</th>
+                                                <th>Jenis Komoditas</th>
+                                                <th>Kapasitas Tangki</th>
+                                                <th>Volume Awal</th>
+                                                <th>Volume Supply</th>
+                                                <th>Volume Output</th>
+                                                <th>Volume Stok Akhir</th>
                                                 <th>Satuan</th>
+                                                <th>Utilisasi Tangki</th>
+                                                <th>Aksi</th>
+                                                <th>Pengguna</th>
+                                                <th>Tarif Penyimpanan</th>
+                                                <th>Satuan Tarif</th>
+                                                <th>Keterangan</th>
+                                                <th>Tanggal Awal</th>
+                                                <th>Tanggal Akhir</th>
+                                                <th>Commingle</th>
+                                                <th>Jumlah BU</th>
+                                                <th>Nama Penyewa</th>
+                                                <th>Kapasitas Penyewaan</th>
+                                                <th>Kontrak Sewa</th>
                                                 <th>Tanggal Dibuat</th>
                                             </tr>
                                         </thead>
@@ -127,7 +141,6 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $pgb->NAMA_PERUSAHAAN }}</td>
-
                                                     <td>{{ getBulan($pgb->bulan) }}</td>
                                                     <td>{{ getTahun($pgb->bulan) }}</td>
                                                     <td>
@@ -144,7 +157,18 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $pgb->catatan }}</td>
+                                                    <td>{{ $pgb->no_tangki }}</td>
                                                     <td>{{ $pgb->produk }}</td>
+                                                    <td>{{ $pgb->kab_kota }}</td>
+                                                    <td>{{ is_array(json_decode($pgb->jenis_komoditas, true)) ? implode(', ', json_decode($pgb->jenis_komoditas, true)) : $pgb->jenis_komoditas }}
+                                                    </td>
+                                                    <td>{{ $pgb->kapasitas_tangki }}</td>
+                                                    <td>{{ $pgb->volume_stok_awal }}</td>
+                                                    <td>{{ $pgb->volume_supply }}</td>
+                                                    <td>{{ $pgb->volume_output }}</td>
+                                                    <td>{{ $pgb->volume_stok_akhir }}</td>
+                                                    <td>{{ $pgb->satuan }}</td>
+                                                    <td>{{ $pgb->utilisasi_tangki }}</td>
                                                     <td>
                                                         @if ($pgb->status == 1)
                                                             <button type="button"
@@ -154,63 +178,26 @@
                                                                 <i class="bx bxs-edit align-middle"></i>
                                                             </button>
 
-                                                            <div class="modal fade" id="modal-update"
-                                                                data-bs-backdrop="static" data-bs-keyboard="false"
-                                                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-
-
-                                                                @if ($pgb->status == 1 && $pgb->catatan)
-                                                                    <button
-                                                                        class="btn btn-primary btn-rounded btn-sm btn-selesai"
-                                                                        data-id="{{ $pgb->id }}">
-                                                                        <i class="bx bx-check" title="Selesai"></i>
-                                                                    </button>
-                                                                @endif
-
-                                                                <div class="modal fade" id="modal-update"
-                                                                    data-bs-backdrop="static" data-bs-keyboard="false"
-                                                                    aria-labelledby="staticBackdropLabel"
-                                                                    aria-hidden="true">
-
-                                                                    <div class="modal-dialog modal-lg">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h5 class="modal-title"
-                                                                                    id="staticBackdropLabel">Update Status
-                                                                                </h5>
-                                                                                <button type="button" class="btn-close"
-                                                                                    data-bs-dismiss="modal"
-                                                                                    aria-label="Close"></button>
-                                                                            </div>
-                                                                            <form
-                                                                                action="{{ url('/laporan/jual-hasil-olahan/update-revision') }}"
-                                                                                method="post" id="updateStatusForm"
-                                                                                enctype="multipart/form-data">
-                                                                                @csrf
-                                                                                <input type="hidden" name="id"
-                                                                                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt($pgb->id) }}">
-                                                                                <div class="modal-body">
-                                                                                    <label for="catatan">Notes</label>
-                                                                                    <textarea name="catatan" id="catatan" cols="5" rows="5" class="form-control"></textarea>
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <button type="button"
-                                                                                        class="btn btn-secondary"
-                                                                                        data-bs-dismiss="modal">Close</button>
-                                                                                    <button type="submit"
-                                                                                        class="btn btn-primary">Update</button>
-                                                                                </div>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            @if ($pgb->status == 1 && $pgb->catatan)
+                                                                <button
+                                                                    class="btn btn-primary btn-rounded btn-sm btn-selesai"
+                                                                    data-id="{{ $pgb->id }}">
+                                                                    <i class="bx bx-check" title="Selesai"></i>
+                                                                </button>
+                                                            @endif
                                                         @endif
                                                     </td>
-                                                    <td>{{ $pgb->provinsi }}</td>
-                                                    <td>{{ $pgb->kabupaten_kota }}</td>
-                                                    <td>{{ $pgb->sektor }}</td>
-                                                    <td>{{ $pgb->volume }}</td>
-                                                    <td>{{ $pgb->satuan }}</td>
+                                                    <td>{{ $pgb->pengguna }}</td>
+                                                    <td>{{ $pgb->tarif_penyimpanan }}</td>
+                                                    <td>{{ $pgb->satuan_tarif }}</td>
+                                                    <td>{{ $pgb->keterangan }}</td>
+                                                    <td>{{ $pgb->tanggal_awal }}</td>
+                                                    <td>{{ $pgb->tanggal_akhir }}</td>
+                                                    <td>{{ $pgb->commingle }}</td>
+                                                    <td>{{ $pgb->jumlah_bu }}</td>
+                                                    <td>{{ $pgb->nama_penyewa }}</td>
+                                                    <td>{{ $pgb->kapasitas_penyewaan }}</td>
+                                                    <td>{{ $pgb->kontrak_sewa }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
                                                 </tr>
                                             @endforeach
