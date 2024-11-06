@@ -23,7 +23,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div style="display:flex; margin:10px; justify-content:space-between">
- 
+
                             <div class="card-header">
                                 <h3>{{ $title }}</h3>
                             </div>
