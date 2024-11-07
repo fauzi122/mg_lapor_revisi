@@ -11,67 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class EvPengangkutanGasBumiController extends Controller
 {
-//    public function index(Request $request){
-//		//dd('hai');
-//		//dd($request->all());
-//		$query = pengangkutan_gaskbumi::select('pengangkutan_gaskbumis.*','t_perusahaan.NAMA_PERUSAHAAN')
-//			->leftJoin('t_perusahaan','pengangkutan_gaskbumis.badan_usaha_id','t_perusahaan.ID_PERUSAHAAN')
-//			// ->leftJoin('izins','pengangkutan_gaskbumis.izin_id','izins.id')
-//			->whereIn('status',['2','1']);
-//
-//		$bu = pengangkutan_gaskbumi::select('t_perusahaan.NAMA_PERUSAHAAN')
-//			->leftJoin('t_perusahaan','pengangkutan_gaskbumis.badan_usaha_id','t_perusahaan.ID_PERUSAHAAN')
-//			->groupBy('t_perusahaan.NAMA_PERUSAHAAN')
-//			->orderBy('t_perusahaan.NAMA_PERUSAHAAN','asc')
-//			->get();
-//
-//		$produk = pengangkutan_gaskbumi::select('produk')
-//			->groupBy('produk')
-//			->orderBy('produk','asc')
-//			->get();
-//
-//
-//		if ($request->bulan1 == '' || $request->bulan2 == '') {
-//			// dd('hai');
-//            $bulan1 = Carbon::now()->format('Y-m');
-//            // $bulan2 = Carbon::now()->subMonth(1);
-//            $bulan2 = Carbon::now()->format('Y-m');
-//			// dd($bulan1,$bulan2);
-//			$query = $query->whereBetween(DB::raw("(date_format(created_at,'%Y-%m'))"), [$bulan1, $bulan2]);
-//        } else {
-//            $request->validate([
-//                'bulan1' => 'required|date',
-//                'bulan2' => 'required|date|after_or_equal:date_start'
-//            ]);
-//
-//            $bulan1 = $request->bulan1;
-//            $bulan2 = $request->bulan2;
-//			$query = $query->whereBetween(DB::raw("(date_format(created_at,'%Y-%m'))"), [$bulan1, $bulan2]);
-//        }
-//		// dd($bulan1,$bulan2);
-//
-//		if($request->badan_usaha != ''){
-//			$query = $query->where('t_perusahaan.NAMA_PERUSAHAAN',$request->badan_usaha);
-//		}
-//
-//		if($request->produk != ''){
-//			$query = $query->where('pengangkutan_gaskbumis.produk',$request->produk);
-//		}
-//
-//		if($request->kab_kota != ''){
-//			$query = $query->where('pengangkutan_gaskbumis.kab_kota',$request->kab_kota);
-//		}
-//
-//		$query = $query->orderBy('id','asc')->get();
-//
-//        // $query = [];
-//        // $bu = [];
-//        // $produk = [];
-//        // $kota = [];
-//
-//		return view('evaluator.laporan_bu.pengangkutan.gb.index',compact('query','bu','produk'));
-//
-//	}
+
 
     public function index()
     {
@@ -92,35 +32,43 @@ class EvPengangkutanGasBumiController extends Controller
         return view('evaluator.laporan_bu.pengangkutan.gb.perusahaan', $data);
     }
 
-    public function cetakperiode(Request $request)
-    {
-        $perusahaan = $request->input('perusahaan');
-        $t_awal = $request->input('t_awal');
-        $t_akhir = $request->input('t_akhir');
+public function cetakperiode(Request $request)
+{
+    $perusahaan = $request->input('perusahaan');
+    $t_awal = $request->input('t_awal');
+    $t_akhir = $request->input('t_akhir');
 
-        $result = DB::table('pengangkutan_gaskbumis as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('badan_usaha_id', $perusahaan)
-            ->whereIn('a.status', [1, 2, 3])
-            ->whereBetween('bulan', [$t_awal, $t_akhir])
-            ->get();
+    // Build the base query
+    $query = DB::table('pengangkutan_gaskbumis as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->whereBetween('bulan', [$t_awal, $t_akhir]);
 
-        if ($result->isEmpty()) {
-            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
-        } else {
-            $data = [
-                'title'=>'Laporan Pengangkutan Minyak Bumi',
-                'result' => $result
-            ];
-
-            $view = view('evaluator.laporan_bu.pengangkutan.gb.cetak', $data);
-
-            $view->with('reload', true);
-
-            return response($view);
-        }
+    // Filter by company if not 'all'
+    if ($perusahaan !== 'all') {
+        $query->where('badan_usaha_id', $perusahaan);
     }
+
+    $result = $query->get();
+
+    // Check if the result is empty
+    if ($result->isEmpty()) {
+        return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
+    } else {
+        $data = [
+            'title' => 'Laporan Pengangkutan Gas Bumi', // Updated title to match the context
+            'result' => $result
+        ];
+
+        // Create view with data and a script to trigger reload
+        $view = view('evaluator.laporan_bu.pengangkutan.gb.cetak', $data);
+        $view->with('reload', true);
+
+        return response($view);
+    }
+}
+
     public function periode($kode = '')
     {
 

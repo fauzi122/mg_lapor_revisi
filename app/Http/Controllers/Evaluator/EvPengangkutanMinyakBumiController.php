@@ -33,32 +33,40 @@ class EvPengangkutanMinyakBumiController extends Controller
     public function cetakperiode(Request $request)
     {
         $perusahaan = $request->input('perusahaan');
-        $t_awal = $request->input('t_awal');
-        $t_akhir = $request->input('t_akhir');
-
-        $result = DB::table('pengangkutan_minyakbumis as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('badan_usaha_id', $perusahaan)
-            ->whereIn('a.status', [1, 2, 3])
-            ->whereBetween('bulan', [$t_awal, $t_akhir])
-            ->get();
-
+        $tanggal_awal = $request->input('t_awal');
+        $tanggal_akhir = $request->input('t_akhir');
+    
+        // Membangun query dasar
+        $query = DB::table('pengangkutan_minyakbumis as a')
+                ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+                ->select('a.*', 'b.NAMA_PERUSAHAAN')
+                ->whereIn('a.status', [1, 2, 3])
+                ->whereBetween('bulan', [$tanggal_awal, $tanggal_akhir]);
+    
+        // Menambahkan filter untuk perusahaan jika tidak 'all'
+        if ($perusahaan !== 'all') {
+            $query->where('badan_usaha_id', $perusahaan);
+        }
+    
+        $result = $query->get();
+    
+        // Penanganan jika hasil query kosong
         if ($result->isEmpty()) {
-            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
+            return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
         } else {
             $data = [
-                'title'=>'Laporan Pengangkutan Minyak Bumi',
+                'title' => 'Laporan Pengangkutan Minyak Bumi',
                 'result' => $result
             ];
-
+    
+            // Membuat view dengan data dan skrip reload
             $view = view('evaluator.laporan_bu.pengangkutan.mb.cetak', $data);
-
             $view->with('reload', true);
-
+    
             return response($view);
         }
     }
+    
 
     public function periode($kode = '')
     {
