@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Evaluator;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -122,7 +123,7 @@ class EvPasokanGasBumiController extends Controller
             ->whereIn('a.status', [1, 2,3])
             ->get();
 
-//        var_dump($query);die();
+        // var_dump($query);die();
 
         $data = [
             'title'=>'Laporan Gas Bumi Pasokan Kilang',
@@ -240,5 +241,67 @@ class EvPasokanGasBumiController extends Controller
             // Tangkap dan tangani exception
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);
         }
+    }
+
+    public function lihatSemuaData()
+    {
+        $tgl = Carbon::now();
+
+        $query = DB::table('pengolahans as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN')
+        ->where('a.jenis', 'Gas Bumi')
+        ->where('a.tipe', 'Pasokan')
+        ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
+        ->whereIn('a.status', [1, 2, 3])
+        ->get();
+
+        $perusahaan = DB::table('pengolahans as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->groupBy('a.badan_usaha_id')
+        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+        ->get();
+
+        // return json_decode($query); exit;
+        return view('evaluator.laporan_bu.gb.pasokan.lihat-semua-data', [
+            'title' => 'Laporan Gas Bumi Pasokan Kilang',
+            'periode' => 'Bulan ' . $tgl->monthName . " " . $tgl->year,
+            'query' => $query,
+            'perusahaan' => $perusahaan,
+        ]);
+    }
+
+    public function filterData(Request $request)
+    {
+        $t_awal = Carbon::parse($request->t_awal);
+        $t_akhir = Carbon::parse($request->t_akhir);
+
+        $perusahaan = DB::table('pengolahans as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->groupBy('a.badan_usaha_id')
+        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+        ->get();
+
+        $query = DB::table('pengolahans as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN')
+        ->where('a.jenis', 'Gas Bumi')
+        ->where('a.tipe', 'Pasokan');
+        
+        if ($request->perusahaan != 'all') {
+            $query->where('badan_usaha_id', $request->perusahaan);
+        }
+
+        $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+                    ->whereIn('a.status', [1, 2, 3])->get();
+
+        return view('evaluator.laporan_bu.gb.pasokan.lihat-semua-data', [
+            'title' => 'Laporan Gas Bumi Pasokan Kilang',
+            'periode' => 'Tanggal ' . $t_awal->format('d F Y') . " - " . $t_akhir->format('d F Y'),
+            'query' => $result,
+            'perusahaan' => $perusahaan,
+        ]);
     }
 }

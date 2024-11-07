@@ -7,7 +7,6 @@
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-size-18">{{ $title }}</h4>
-
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Tabel</a></li>
@@ -18,115 +17,110 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-
-                            <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
             @if ($query)
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-
                             <div class="card-header">
+                                <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-0"
+                                    role="alert">
+                                    <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                                    <strong>Informasi:</strong> Data yang ditampilkan di halaman ini adalah data untuk bulan
+                                    berjalan.
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                <br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4>Periode Bulan {{ dateIndonesia($per->bulan_pib) }}</h4>
-
+                                    <h4>Periode {{ $periode }}</h4>
                                     <div>
-                                        <a href="{{ url('laporan/impor/exim/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}"
-                                            class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
-                                            Kembali</a>
-                                        <button type="button" class="btn btn-info btn-sm rounded-pill btn-update-status"
-                                            data-bs-toggle="modal" data-bs-target="#modal-update-status">
-                                            <i class="bx bxs-edit align-middle"></i> Update Status
+                                        <a href="{{ url('laporan/distribusi/gb') }}"
+                                            class="btn btn-danger waves-effect waves-light">
+                                            <i class='bx bx-arrow-back'></i> Kembali
+                                        </a>
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">
+                                            <i class='bx bx-filter-alt'></i> Filter
                                         </button>
 
 
-
-                                        <button type="button"
-                                            class="btn btn-primary btn-sm rounded-pill btn-selesai-status">
-                                            <i class="bx bx-check"></i> Selesai
-                                        </button>
-
-
-                                        <div class="modal fade" id="modal-update-status" data-bs-backdrop="static"
-                                            data-bs-keyboard="false" aria-labelledby="staticBackdropLabel"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog modal-lg">
+                                        {{-- Modal cetak --}}
+                                        <div class="modal fade modal-select bs-example-modal-center" tabindex="-1"
+                                            role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="staticBackdropLabel">Update
-                                                            Status</h5>
+                                                        <h5 class="modal-title">Filter</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ url('/laporan/impor/exim/update-revision-all') }}"
-                                                        method="post" id="updateStatusForm" enctype="multipart/form-data">
-                                                        @csrf
-                                                        <input type="hidden" name="p"
-                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}">
-                                                        <input type="hidden" name="b"
-                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan_pib) }}">
-                                                        <div class="modal-body">
-                                                            <label for="catatan">Notes</label>
-                                                            <textarea name="catatan" id="catatan" cols="5" rows="5" class="form-control"></textarea>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close
-                                                            </button>
-                                                            <button type="submit" class="btn btn-primary">Update
-                                                            </button>
-                                                        </div>
-                                                    </form>
+                                                    <div class="modal-body">
+                                                        <form action="{{ url('laporan/distribusi/gb-lihat-semua-data') }}"
+                                                            method="post">
+                                                            @csrf
+                                                            <div class="mb-3">
+                                                                <label for="example-text-input" class="form-label">Nama
+                                                                    Perusahaan</label>
+                                                                <select
+                                                                    class="form-control select20 select2-hidden-accessible mb-2"
+                                                                    style="width: 100%;" name="perusahaan" required>
+                                                                    <option value="all" selected>--Pilih Perusahaan--
+                                                                    </option>
+                                                                    <option value="all">Semua Perusahaan</option>
+                                                                    @foreach ($perusahaan as $p)
+                                                                        <option value="{{ $p->id_perusahaan }}">
+                                                                            {{ $p->NAMA_PERUSAHAAN }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="example-text-input" class="form-label">Tanggal
+                                                                    Awal</label>
+                                                                <input class="form-control" name="t_awal" type="date"
+                                                                    required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="example-text-input" class="form-label">Tanggal
+                                                                    Akhir</label>
+                                                                <input class="form-control" name="t_akhir" type="date"
+                                                                    required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <button type="submit" data-bs-dismiss="modal"
+                                                                    class="btn btn-primary">Proses</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                                    <table id="datatable-buttons"
+                                        class="table table-bordered table-striped dt nowrap w-100">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Nama Perusahaan</th>
                                                 <th>Bulan</th>
                                                 <th>Tahun</th>
                                                 <th>Status</th>
                                                 <th>Catatan</th>
+                                                {{--                                            <th>Kategori Pemasok</th> --}}
+                                                {{--                                            <th>Intake Kilang</th> --}}
                                                 <th>Produk</th>
-
-
                                                 <th>Aksi</th>
-
-
-                                                <th>HS Code</th>
+                                                <th>Provinsi</th>
+                                                <th>Kabupaten/Kota</th>
+                                                <th>Sektor</th>
                                                 <th>Volume</th>
                                                 <th>Satuan</th>
-                                                <th>Invoice Pabean</th>
-                                                <th>Invoice Final</th>
-                                                <th>Supplier</th>
-                                                <th>Negara Asal</th>
-                                                <th>Pelabuhan Muat</th>
-                                                <th>Pelabuhan Bongkar</th>
-                                                <th>Vessel Name</th>
-                                                <th>Tgl. BL</th>
-                                                <th>No. BL</th>
-                                                <th>No. Pendaftaran</th>
-                                                <th>Tgl. Pendaftaran</th>
-                                                <th>Incoterms</th>
-
+                                                <th>Keterangan</th>
+                                                <th>Tanggal Dibuat</th>
 
 
                                             </tr>
@@ -135,13 +129,14 @@
                                             @foreach ($query as $pgb)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ getBulan($pgb->bulan_pib) }}</td>
-                                                    <td>{{ getTahun($pgb->bulan_pib) }}</td>
+                                                    <td>{{ $pgb->NAMA_PERUSAHAAN }}</td>
+                                                    <td>{{ getBulan($pgb->bulan) }}</td>
+                                                    <td>{{ getTahun($pgb->bulan) }}</td>
                                                     <td>
                                                         @if ($pgb->status == 1 && $pgb->catatan)
                                                             <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                         @elseif ($pgb->status == 1)
-                                                            <span class="badge bg-success">Diterima</span>
+                                                            <span class="badge bg-success">Kirim</span>
                                                         @elseif ($pgb->status == 2)
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($pgb->status == 3)
@@ -151,7 +146,11 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $pgb->catatan }}</td>
+
+                                                    {{--                                                <td>{{ $pgb->kategori_pemasok }}</td> --}}
+                                                    {{--                                                <td>{{ $pgb->intake_kilang }}</td> --}}
                                                     <td>{{ $pgb->produk }}</td>
+
 
 
 
@@ -184,7 +183,7 @@
                                                                                 aria-label="Close"></button>
                                                                         </div>
                                                                         <form
-                                                                            action="{{ url('/laporan/impor/exim/update-revision') }}"
+                                                                            action="{{ url('/laporan/distribusi/gb/update-revision') }}"
                                                                             method="post" id="updateStatusForm"
                                                                             enctype="multipart/form-data">
                                                                             @csrf
@@ -213,21 +212,13 @@
                                                     </td>
 
 
-                                                    <td>{{ $pgb->hs_code }}</td>
-                                                    <td>{{ $pgb->volume_pib }}</td>
+                                                    <td>{{ $pgb->provinsi }}</td>
+                                                    <td>{{ $pgb->kabupaten_kota }}</td>
+                                                    <td>{{ $pgb->sektor }}</td>
+                                                    <td>{{ $pgb->volume }}</td>
                                                     <td>{{ $pgb->satuan }}</td>
-                                                    <td>{{ $pgb->invoice_amount_nilai_pabean }}</td>
-                                                    <td>{{ $pgb->invoice_amount_final }}</td>
-                                                    <td>{{ $pgb->nama_supplier }}</td>
-                                                    <td>{{ $pgb->negara_asal }}</td>
-                                                    <td>{{ $pgb->pelabuhan_muat }}</td>
-                                                    <td>{{ $pgb->pelabuhan_bongkar }}</td>
-                                                    <td>{{ $pgb->vessel_name }}</td>
-                                                    <td>{{ $pgb->tanggal_bl }}</td>
-                                                    <td>{{ $pgb->bl_no }}</td>
-                                                    <td>{{ $pgb->no_pendaf_pib }}</td>
-                                                    <td>{{ $pgb->tanggal_pendaf_pib }}</td>
-                                                    <td>{{ $pgb->incoterms }}</td>
+                                                    <td>{{ $pgb->keterangan }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
 
 
 
@@ -245,10 +236,9 @@
             @endif
         </div>
     </div>
-
 @endsection
 
-@section('script')
+{{-- @section('script')
     <script>
         $(document).ready(function() {
             $('.btn-selesai-status').on('click', function() {
@@ -263,24 +253,20 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '{{ url('/laporan/impor/exim/selesai-periode-all') }}',
+                            url: '{{ url('/laporan/jual-hasil-olahan/selesai-periode-all') }}',
                             type: 'POST',
                             data: {
                                 _token: '{{ csrf_token() }}',
-                                b: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan_pib) }}',
+                                b: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}',
                                 p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}'
                             },
                             success: function(response) {
-                                Swal.fire('Status diperbarui!',
-                                        'Periode telah diselesaikan.', 'success')
-                                    .then(function() {
-                                        location.reload();
-                                    });
+                                Swal.fire('Status diperbarui!', 'Periode telah diselesaikan.', 'success').then(function() {
+                                    location.reload();
+                                });
                             },
                             error: function(error) {
-                                Swal.fire('Gagal',
-                                    'Terjadi kesalahan saat memperbarui status.',
-                                    'error');
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui status.', 'error');
                             }
                         });
                     }
@@ -289,17 +275,12 @@
         });
     </script>
 
-
     <script>
         document.querySelectorAll('.btn-selesai').forEach(function(button) {
-            // Menambahkan event listener ke setiap elemen button
             button.addEventListener('click', function() {
-                // Mengambil nilai id dari atribut data-id
                 var id = this.getAttribute('data-id');
-
                 console.log('cek id =', id);
 
-                // Show SweetAlert confirmation
                 Swal.fire({
                     title: 'Apakah Anda yakin ingin menyelesaikan periode ini?',
                     icon: 'warning',
@@ -309,30 +290,21 @@
                     confirmButtonText: 'Ya, selesaikan!',
                     cancelButtonText: 'Batal'
                 }).then((result) => {
-                    // If the user clicks 'Yes', trigger your update logic
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '{{ url('/laporan/impor/exim/selesai-periode') }}',
+                            url: '{{ url('/laporan/jual-hasil-olahan/selesai-periode') }}',
                             type: 'POST',
                             data: {
                                 _token: '{{ csrf_token() }}',
-                                id: id, // Menggunakan nilai id yang diambil dari atribut data-id
+                                id: id
                             },
                             success: function(response) {
-                                // Handle the response from the server
-                                // For example, show a success message
-                                Swal.fire('Status diperbarui!',
-                                        'Periode telah diselesaikan.', 'success')
-                                    .then(function() {
-                                        // Reload the page after the SweetAlert is closed
-                                        location.reload();
-                                    });
+                                Swal.fire('Status diperbarui!', 'Periode telah diselesaikan.', 'success').then(function() {
+                                    location.reload();
+                                });
                             },
                             error: function(error) {
-                                // Handle errors, show an error message, etc.
-                                Swal.fire('Gagal',
-                                    'Terjadi kesalahan saat memperbarui status.',
-                                    'error');
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui status.', 'error');
                             }
                         });
                     }
@@ -340,4 +312,4 @@
             });
         });
     </script>
-@endsection
+@endsection --}}

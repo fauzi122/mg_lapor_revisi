@@ -28,44 +28,44 @@ class EvImporController extends Controller
         return view('evaluator.laporan_bu.exim.impor.index',$data);
     }
 
-public function cetakperiode(Request $request)
-{
-    $request->validate([
-        'perusahaan' => 'required',
-        't_awal' => 'required|date',
-        't_akhir' => 'required|date|after_or_equal:t_awal',
-    ]);
+    public function cetakperiode(Request $request)
+    {
+        $request->validate([
+            'perusahaan' => 'required',
+            't_awal' => 'required|date',
+            't_akhir' => 'required|date|after_or_equal:t_awal',
+        ]);
 
-    $perusahaan = $request->input('perusahaan');
-    $t_awal = $request->input('t_awal');
-    $t_akhir = $request->input('t_akhir');
+        $perusahaan = $request->input('perusahaan');
+        $t_awal = $request->input('t_awal');
+        $t_akhir = $request->input('t_akhir');
 
-    $query = DB::table('impors as a')
-        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN')
-        ->whereIn('a.status', [1, 2, 3])
-        ->whereBetween('bulan_pib', [$t_awal, $t_akhir]);
+        $query = DB::table('impors as a')
+            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+            ->select('a.*', 'b.NAMA_PERUSAHAAN')
+            ->whereIn('a.status', [1, 2, 3])
+            ->whereBetween('bulan_pib', [$t_awal, $t_akhir]);
 
-    if ($perusahaan != 'all') {
-        $query->where('a.badan_usaha_id', $perusahaan);
+        if ($perusahaan != 'all') {
+            $query->where('a.badan_usaha_id', $perusahaan);
+        }
+
+        $result = $query->get();
+
+        if ($result->isEmpty()) {
+            return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
+        } else {
+            $data = [
+                'title' => 'Laporan Impor',
+                'result' => $result
+            ];
+
+            $view = view('evaluator.laporan_bu.exim.impor.cetak', $data);
+            $view->with('reload', true);
+
+            return response($view);
+        }
     }
-
-    $result = $query->get();
-
-    if ($result->isEmpty()) {
-        return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
-    } else {
-        $data = [
-            'title' => 'Laporan Impor',
-            'result' => $result
-        ];
-
-        $view = view('evaluator.laporan_bu.exim.impor.cetak', $data);
-        $view->with('reload', true);
-
-        return response($view);
-    }
-}
 
 
     public function periode($kode = '')
@@ -114,7 +114,7 @@ public function cetakperiode(Request $request)
             ->whereIn('a.status', [1, 2,3])
             ->get();
 
-//        var_dump($query);die();
+        // var_dump($query);die();
 
         $data = [
             'title'=>'Laporan Impor',
@@ -224,6 +224,64 @@ public function cetakperiode(Request $request)
             // Tangkap dan tangani exception
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);
         }
+    }
+
+    public function lihatSemuaData()
+    {
+        $tgl = Carbon::now();
+
+        $query = DB::table('impors as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN')
+        ->where('a.bulan_pib', $tgl->startOfMonth()->format('Y-m-d'))
+        ->whereIn('a.status', [1, 2, 3])
+        ->get();
+
+        $perusahaan = DB::table('impors as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->groupBy('a.badan_usaha_id')
+        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+        ->get();
+
+        // return json_decode($query); exit;
+        return view('evaluator.laporan_bu.exim.impor.lihat-semua-data', [
+            'title' => 'Laporan Impor',
+            'periode' => 'Bulan ' . $tgl->monthName . " " . $tgl->year,
+            'query' => $query,
+            'perusahaan' => $perusahaan,
+        ]);
+    }
+
+    public function filterData(Request $request)
+    {
+        $t_awal = Carbon::parse($request->t_awal);
+        $t_akhir = Carbon::parse($request->t_akhir);
+
+        $perusahaan = DB::table('impors as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->groupBy('a.badan_usaha_id')
+        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+        ->get();
+
+        $query = DB::table('impors as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN');
+        
+        if ($request->perusahaan != 'all') {
+            $query->where('badan_usaha_id', $request->perusahaan);
+        }
+
+        $result = $query->whereBetween('a.bulan_pib', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+                    ->whereIn('a.status', [1, 2, 3])->get();
+
+        return view('evaluator.laporan_bu.exim.impor.lihat-semua-data', [
+            'title' => 'Laporan Impor',
+            'periode' => 'Tanggal ' . $t_awal->format('d F Y') . " - " . $t_akhir->format('d F Y'),
+            'query' => $result,
+            'perusahaan' => $perusahaan,
+        ]);
     }
 
 //
