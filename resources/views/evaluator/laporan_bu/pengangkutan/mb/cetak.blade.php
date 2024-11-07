@@ -62,6 +62,7 @@ header("Pragma: no-cache");
 		<th style="border: 1px solid black;">NO</th>
 		<th style="border: 1px solid black;">NAMA PERUSAHAAN</th>
 		<th style="border: 1px solid black;">BULAN</th>
+        <th style="border: 1px solid black;">TAHUN</th>
 		<th style="border: 1px solid black;">PRODUK</th>
 		<th style="border: 1px solid black;">JENIS MODA</th>
 		<th style="border: 1px solid black;">NODE ASAL</th>
@@ -83,9 +84,10 @@ header("Pragma: no-cache");
 		<tr>
 			<td style="border: 1px solid black;">{{ $loop->iteration }}</td>
 			<td style="border: 1px solid black;">{{ $pgb->NAMA_PERUSAHAAN }}</td>
-			<td style="border: 1px solid black;">{{ dateIndonesia($pgb->bulan) }}</td>
+			<td style="border: 1px solid black;">{{ getBulan($pgb->bulan) }}</td> 
+			<td style="border: 1px solid black;">{{ getTahun($pgb->bulan) }}</td>
 			<td style="border: 1px solid black;">{{ $pgb->produk }}</td>
-			<td style="border: 1px solid black;">{{ $pgb->jenis_moda }}</td>
+			<td style="border: 1px solid black;">{{ str_replace(['"', '[', ']', '\\'], '', $pgb->jenis_moda) }}</td>
 			<td style="border: 1px solid black;">{{ $pgb->node_asal }}</td>
 			<td style="border: 1px solid black;">{{ $pgb->provinsi_asal }}</td>
 			<td style="border: 1px solid black;">{{ $pgb->node_tujuan }}</td>

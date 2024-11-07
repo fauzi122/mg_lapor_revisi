@@ -28,6 +28,7 @@ class DashboardController extends Controller
 		$sub_page = Meping::groupBy('id_sub_page')->get();
 		$sub_menu = Meping::groupBy('id_sub_menu')->get();
 	
+	
 		$max = 10; // Ini bisa disesuaikan dengan kebutuhan Anda
 
 		$queries = [];
@@ -60,7 +61,7 @@ class DashboardController extends Controller
 				DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(a.LIST_SUB_PAGE, "-", ","), ",", numbers.n), ",", -1) AS SUB_PAGE'),
 				'a.ID_CURR_PROSES'
 			]);
-		
+	
 			$result = DB::table(DB::raw("({$subQuery->toSql()}) as k"))
 			->mergeBindings($subQuery) // penting! agar bindings dapat digunakan dengan benar
 			->join('mepings as d', 'k.SUB_PAGE', '=', 'd.id_sub_page')
@@ -80,7 +81,7 @@ class DashboardController extends Controller
 				'd.nama_opsi'
 			])
 			->get();
-
+			// dd($result);
 		// Menghitung banyaknya munculnya setiap template dari hasil query
 		$template_counts = [];
 		foreach ($result as $row) {

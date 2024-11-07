@@ -66,38 +66,24 @@
                                                
                                                 <th>Tanggal ACC</th>
                                                 <th>Nomer Izin</th>
-                                                 <th>Laporan</th>
+                                                 {{-- <th>Laporan</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php
-                                            $filteredResults = collect($result)
-                                                ->unique('SUB_PAGE')
-                                                ->map(function ($resultItem) use ($sub_page) {
-                                                    $matchedSubPage = collect($sub_page)->firstWhere('id_sub_page', $resultItem->SUB_PAGE);
-                                                    return [
-                                                        'NAMA_TEMPLATE' => $resultItem->NAMA_TEMPLATE,
-                                                        'SUB_PAGE' => $resultItem->SUB_PAGE,
-                                                        'TGL_DISETUJUI' => $resultItem->TGL_DISETUJUI,
-                                                        'NOMOR_IZIN' => $resultItem->NOMOR_IZIN,
-                                                        'nama_opsi' => $matchedSubPage->nama_opsi ?? 'N/A',
-                                                        'url' => $matchedSubPage->url ?? '#'
-                                                    ];
-                                                });
-                                            @endphp
+                                           
 
-                                            @foreach($filteredResults as $item)
-                                                <tr>
-                                                    <td>{{ $item['NAMA_TEMPLATE'] }}</td>
-                                                    {{-- <td>{{ $item['SUB_PAGE'] }}</td> --}}
-                                                    <td>{{ $item['nama_opsi'] }}</td>
-                                                    <td>{{ $item['TGL_DISETUJUI'] }}</td>
-                                                    <td>{{ $item['NOMOR_IZIN'] }}</td>
-                                                    <td>
-                                                        <a href="{{ $item['url'] }}">Lihat Laporan</a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                            @foreach($result as $item)
+                                            <tr>
+                                                <td>{{ $item->NAMA_TEMPLATE }}</td>
+                                                <td>{{ $item->nama_opsi ?? 'N/A' }}</td>
+                                                <td>{{ $item->TGL_DISETUJUI }}</td>
+                                                <td>{{ $item->NOMOR_IZIN }}</td>
+                                                {{-- <td>
+                                                    <a href="{{ $item->url ?? '#' }}">Lihat Laporan</a>
+                                                </td> --}}
+                                            </tr>
+                                        @endforeach
+                                        
 
                                         </tbody>
                                     </table>                                    

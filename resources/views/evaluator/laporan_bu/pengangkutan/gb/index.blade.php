@@ -54,6 +54,8 @@
 										<label for="">Produk</label>
 										<select name="produk" id="produk" class="form-control">
 											<option value="">--Pilih Produk--</option>
+											<option value="all"> Semua Perusahaan </option>
+
 											@foreach ($produk as $data_produk)
 												<option class="text-center" value="{{ $data_produk['produk'] }}">{{ $data_produk['produk'] }}</option>
 											@endforeach
