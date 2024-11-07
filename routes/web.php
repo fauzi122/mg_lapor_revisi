@@ -525,6 +525,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/harga-lpg', 'index');
 		Route::get('/laporan/harga-lpg/periode/{kode}', 'periode');
 		Route::get('/laporan/harga-lpg/{kode}', 'show');
+		Route::get('/laporan/harga-lpg-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/harga-lpg-lihat-semua-data', 'filterData');
 		Route::post('/laporan/harga-lpg/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/harga-lpg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/harga-lpg/selesai-periode-all', 'selesaiPeriodeAll');
@@ -541,6 +543,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/jual/lng-cng-bbg', 'index');
 		Route::get('/laporan/jual/lng-cng-bbg/periode/{kode}', 'periode');
 		Route::get('/laporan/jual/lng-cng-bbg/{kode}', 'show');
+		Route::get('/laporan/jual/lng-cng-bbg-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/jual/lng-cng-bbg-lihat-semua-data', 'filterData');
 		Route::post('/laporan/jual/lng-cng-bbg/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/jual/lng-cng-bbg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/jual/lng-cng-bbg/selesai-periode-all', 'selesaiPeriodeAll');
@@ -557,6 +561,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/pasok/lng-cng-bbg', 'index');
 		Route::get('/laporan/pasok/lng-cng-bbg/periode/{kode}', 'periode');
 		Route::get('/laporan/pasok/lng-cng-bbg/{kode}', 'show');
+		Route::get('/laporan/pasok/lng-cng-bbg-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/pasok/lng-cng-bbg-lihat-semua-data', 'filterData');
 		Route::post('/laporan/pasok/lng-cng-bbg/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/pasok/lng-cng-bbg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasok/lng-cng-bbg/selesai-periode-all', 'selesaiPeriodeAll');
@@ -573,6 +579,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/jual/lpg', 'index');
 		Route::get('/laporan/jual/lpg/periode/{kode}', 'periode');
 		Route::get('/laporan/jual/lpg/{kode}', 'show');
+		Route::get('/laporan/jual/lpg-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/jual/lpg-lihat-semua-data', 'filterData');
 		Route::post('/laporan/jual/lpg/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/jual/lpg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/jual/lpg/selesai-periode-all', 'selesaiPeriodeAll');
@@ -590,6 +598,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/pasok/lpg', 'index');
 		Route::get('/laporan/pasok/lpg/periode/{kode}', 'periode');
 		Route::get('/laporan/pasok/lpg/{kode}', 'show');
+		Route::get('/laporan/pasok/lpg-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/pasok/lpg-lihat-semua-data', 'filterData');
 		Route::post('/laporan/pasok/lpg/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/pasok/lpg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasok/lpg/selesai-periode-all', 'selesaiPeriodeAll');
@@ -606,6 +616,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/jual/gbmp', 'index');
 		Route::get('/laporan/jual/gbmp/periode/{kode}', 'periode');
 		Route::get('/laporan/jual/gbmp/{kode}', 'show');
+		Route::get('/laporan/jual/gbmp-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/jual/gbmp-lihat-semua-data', 'filterData');
 		Route::post('/laporan/jual/gbmp/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/jual/gbmp/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/jual/gbmp/selesai-periode-all', 'selesaiPeriodeAll');
@@ -622,6 +634,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/pasok/gbmp', 'index');
 		Route::get('/laporan/pasok/gbmp/periode/{kode}', 'periode');
 		Route::get('/laporan/pasok/gbmp/{kode}', 'show');
+		Route::get('/laporan/pasok/gbmp-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/pasok/gbmp-lihat-semua-data', 'filterData');
 		Route::post('/laporan/pasok/gbmp/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/pasok/gbmp/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasok/gbmp/selesai-periode-all', 'selesaiPeriodeAll');
@@ -693,6 +707,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/produksi/gb', 'index');
 		Route::get('/laporan/produksi/gb/periode/{kode}', 'periode');
 		Route::get('/laporan/produksi/gb/{kode}/{filter?}', 'show');
+		Route::get('/laporan/produksi/gb-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/produksi/gb-lihat-semua-data', 'filterData');
 		Route::post('/laporan/produksi/gb/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/produksi/gb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/produksi/gb/selesai-periode-all', 'selesaiPeriodeAll');
@@ -708,6 +724,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/pasokan/gb', 'index');
 		Route::get('/laporan/pasokan/gb/periode/{kode}', 'periode');
 		Route::get('/laporan/pasokan/gb/{kode}/{filter?}', 'show');
+		Route::get('/laporan/pasokan/gb-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/pasokan/gb-lihat-semua-data', 'filterData');
 		Route::post('/laporan/pasokan/gb/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/pasokan/gb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasokan/gb/selesai-periode-all', 'selesaiPeriodeAll');
@@ -724,6 +742,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/distribusi/gb', 'index');
 		Route::get('/laporan/distribusi/gb/periode/{kode}', 'periode');
 		Route::get('/laporan/distribusi/gb/{kode}/{filter?}', 'show');
+		Route::get('/laporan/distribusi/gb-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/distribusi/gb-lihat-semua-data', 'filterData');
 		Route::post('/laporan/distribusi/gb/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/distribusi/gb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/distribusi/gb/selesai-periode-all', 'selesaiPeriodeAll');
@@ -758,6 +778,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/impor/exim', 'index');
 		Route::get('/laporan/impor/exim/periode/{kode}', 'periode');
 		Route::get('/laporan/impor/exim/{kode}', 'show');
+		Route::get('/laporan/impor/exim-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/impor/exim-lihat-semua-data', 'filterData');
 		Route::post('/laporan/impor/exim/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/impor/exim/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/impor/exim/selesai-periode-all', 'selesaiPeriodeAll');
@@ -784,6 +806,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	Route::controller(EvPenyimpananGasBumiController::class)->group(function () {
 		Route::get('/laporan/penyimpanan/gb', 'index');
 		Route::get('/laporan/penyimpanan/gb/{kode}', 'show');
+		Route::get('/laporan/penyimpanan/gb-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/penyimpanan/gb-lihat-semua-data', 'filterData');
 		Route::get('/laporan/penyimpanan/gb/periode/{kode}', 'periode');
 		Route::post('/laporan/penyimpanan/gb/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/penyimpanan/gb/update-revision-all', 'updateRevisionNotesAll');
@@ -839,6 +863,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	Route::controller(EvPengangkutanGasBumiController::class)->group(function () {
 		Route::get('/laporan/pengangkutan/gb', 'index');
 		Route::get('/laporan/pengangkutan/gb/{kode}', 'show');
+		Route::get('/laporan/pengangkutan/gb-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/pengangkutan/gb-lihat-semua-data', 'filterData');
 		Route::get('/laporan/pengangkutan/gb/periode/{kode}', 'periode');
 		Route::post('/laporan/pengangkutan/gb/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/pengangkutan/gb/update-revision-all', 'updateRevisionNotesAll');
