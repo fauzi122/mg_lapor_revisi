@@ -10,11 +10,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0 font-size-18">Dashboard</h4>
+                                    <h4 class="mb-sm-0 font-size-18">Detail Grafik</h4>
 
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('master') }}">Dashboard</a></li>
                                             <li class="breadcrumb-item active">Dashboard</li>
                                         </ol>
                                     </div>
@@ -130,7 +130,7 @@
                                     <!-- card body -->
                                     <div class="card-body">
                                         <div class="row align-items-center">
-                                            <div id="mainChart"></div>
+                                            <div id="detailChart"></div>
                                         </div>
                                     </div><!-- end card body -->
                                 </div><!-- end card -->
@@ -285,73 +285,40 @@
         <div class="rightbar-overlay"></div>
 
         <script type="text/javascript">
-            var period      = <?php echo json_encode($period) ?>,
-                date        = <?php echo json_encode($date) ?>,
-                countMB     = <?php echo json_encode($countMB) ?>,
-                countGAS    = <?php echo json_encode($countGAS) ?>;
-
-            // Function to generate the link based on category and series
-            function getCategoryLink(series, category) {
-                // Laravel route with parameters
-                return '{{ route("chart.detail", ["series" => "__series__", "category" => "__category__", "date" => "__date__"]) }}'
-                    .replace('__series__', encodeURIComponent(series))
-                    .replace('__category__', encodeURIComponent(category))
-                    .replace('__date__', encodeURIComponent(date));
-            }
-        
-            Highcharts.chart('mainChart', {
+            Highcharts.chart('detailChart', {
                 chart: {
                     type: 'column'
                 },
                 title: {
-                    text: 'Grafik Pelaporan Minyak Bumi & Gas Periode: ' + period + ' (Berdasarkan Jenis Izin Usaha)',
-                    align: 'center'
+                    text: 'Corn vs wheat estimated production for 2023',
+                    align: 'left'
                 },
                 xAxis: {
-                    categories: ['Niaga', 'Pengolahan', 'Pengangkutan', 'Penyimpanan'],
+                    categories: ['USA', 'China', 'Brazil', 'EU', 'Argentina', 'India'],
                     crosshair: true,
                     accessibility: {
-                        description: 'Jenis Izin Usaha'
+                        description: 'Countries'
                     }
                 },
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Jumlah Laporan'
+                        text: '1000 metric tons (MT)'
                     }
                 },
                 tooltip: {
-                    valueSuffix: ' (Total Laporan)'
+                    valueSuffix: ' (1000 MT)'
                 },
                 plotOptions: {
                     column: {
                         pointPadding: 0.2,
-                        borderWidth: 1
+                        borderWidth: 0
                     }
                 },
                 series: [
                     {
-                        name: 'Minyak Bumi',
-                        data: countMB,
-                        // Add click event to navigate to a new page for Minyak Bumi with category
-                        events: {
-                            click: function(event) {
-                                var category = event.point.category;
-                                // Redirect to the page with series and category as query parameters
-                                window.open(getCategoryLink('Minyak Bumi', category), '_blank');
-                            }
-                        }
-                    },
-                    {
-                        name: 'Gas',
-                        data: countGAS,
-                        events: {
-                            click: function(event) {
-                                var category = event.point.category;
-                                // Redirect to the page with series and category as query parameters
-                                window.open(getCategoryLink('Gas', category), '_blank');
-                            }
-                        }
+                        name: 'Corn',
+                        data: [387749, 280000, 129000, 64300, 54000, 34300]
                     }
                 ]
             });

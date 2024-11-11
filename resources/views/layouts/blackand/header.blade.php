@@ -5,10 +5,10 @@
             <div class="navbar-brand-box">
                 <a href="index.html" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24">
+                        {{-- <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24"> --}}
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24"> <span class="logo-txt">Pelaporan Migas</span>
+                        {{-- <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24"> <span class="logo-txt">Pelaporan Migas</span> --}}
                     </span>
                 </a>
 

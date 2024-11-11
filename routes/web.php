@@ -449,6 +449,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 
 	Route::controller(IndukizinController::class)->group(function () {
 		Route::get('/master', 'index_evaluator');
+		Route::get('/master/chart-detail/{series}/{category}/{date}', 'chartDetail')->name('chart.detail');
 		// Route::get('/master/izin/create', 'create');
 		// Route::post('/master/izin', 'store');
 
