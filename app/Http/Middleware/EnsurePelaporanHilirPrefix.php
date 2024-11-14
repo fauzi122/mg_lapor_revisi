@@ -16,7 +16,7 @@ class EnsurePelaporanHilirPrefix
     public function handle($request, Closure $next)
     {
         // Hanya aktif jika APP_ENV adalah production
-        if (env('APP_ENV') === 'production' && !str_starts_with($request->getPathInfo(), '/pelaporan-hilir')) {
+        if (env('APP_ENV') === 'local' && !str_starts_with($request->getPathInfo(), '/pelaporan-hilir')) {
             // Tambahkan prefix hanya jika belum ada
             return redirect('/pelaporan-hilir' . $request->getPathInfo());
         }
