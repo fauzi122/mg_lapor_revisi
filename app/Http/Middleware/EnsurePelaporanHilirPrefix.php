@@ -15,10 +15,13 @@ class EnsurePelaporanHilirPrefix
      */
     public function handle($request, Closure $next)
     {
-        // Hanya aktif jika APP_ENV adalah production
-        if (env('APP_ENV') === 'production' && !str_starts_with($request->getPathInfo(), '/pelaporan-hilir')) {
-            // Tambahkan prefix hanya jika belum ada
-            return redirect('/pelaporan-hilir' . $request->getPathInfo());
+        if (env('APP_ENV') === 'production') {
+            $path = $request->getPathInfo();
+            
+            // Tambahkan prefix hanya jika belum ada di awal path
+            if (!str_starts_with($path, '/pelaporan-hilir')) {
+                return redirect('/pelaporan-hilir' . $path);
+            }
         }
     
         return $next($request);
