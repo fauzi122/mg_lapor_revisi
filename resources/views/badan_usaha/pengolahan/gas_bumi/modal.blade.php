@@ -14,8 +14,8 @@
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
+                        <input class="form-control" type="text" id="example-text-input" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -333,8 +333,8 @@
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        {{-- <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1"> --}}
+                        <input class="form-control" type="text" id="example-text-input" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -551,8 +551,8 @@
                 <div class="mb-3">
                     <input class="form-control lihat_badan_usaha_id" type="hidden" id=""
                         name="badan_usaha_id" value="{{ Auth::user()->badan_usaha_id }}">
-                    <input class="form-control lihat_izin_id" type="hidden" id="" name="izin_id"
-                        value="">
+                    {{-- <input class="form-control lihat_izin_id" type="hidden" id="" name="izin_id"
+                        value=""> --}}
                 </div>
 
                 <div class="mb-3">
@@ -654,7 +654,7 @@
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="hidden" id="" name="izin_id" value="1">
+                        <input class="form-control" type="text" id="" name="izin_id" value="{{$pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>

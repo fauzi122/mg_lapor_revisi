@@ -23,8 +23,11 @@ use Illuminate\Support\Facades\Crypt;
 
 class PengolahanController extends Controller
 {
-  public function index()
+  public function index($id)
   {
+   
+    $pecah = explode(',', Crypt::decryptString($id));
+  
     $pengolahanProduksiMB = DB::table('pengolahans')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
       ->where('jenis', 'Minyak Bumi')
@@ -82,12 +85,14 @@ class PengolahanController extends Controller
       'pengolahanProduksiGB',
       'pengolahanPasokanGB',
       'pengolahanDistribusiGB',
+      'pecah'
     ));
   }
 
   public function show_mb_ho($id, $jenis, $filter = null)
   {
     $pecah = explode(',', Crypt::decryptString($id));
+    // dd($pecah);
     $badan_usaha_id = Auth::user()->badan_usaha_id;
 
     // Mengambil bulan dari tabel pengolahans sesuai ID badan usaha dan bulan yang ditemukan
@@ -161,6 +166,7 @@ class PengolahanController extends Controller
       'status_produksix',
       'status_pasokanx',
       'status_distribusix',
+      'pecah',
     ));
 
     // $pengolahanProduksiMB = Pengolahan::where("jenis", "=", "Minyak Bumi")
@@ -258,6 +264,7 @@ class PengolahanController extends Controller
       'status_produksix',
       'status_pasokanx',
       'status_distribusix',
+      'pecah',
     ));
   }
 
@@ -332,7 +339,7 @@ class PengolahanController extends Controller
 
     $pesan = [
       'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      // 'izin_id.required' => 'izin_id masih kosong',
+      'izin_id.required' => 'izin_id masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'produk.required' => 'produk masih kosong',
       'satuan.required' => 'satuan masih kosong',
@@ -349,7 +356,7 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate([
       'badan_usaha_id' => 'required',
-      // 'izin_id' => 'required',
+      'izin_id' => 'required',
       'bulan' => 'required',
       'produk' => 'required',
       'satuan' => 'required',
@@ -557,7 +564,7 @@ class PengolahanController extends Controller
 
     $pesan = [
       'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      // 'izin_id.required' => 'izin_id masih kosong',
+      'izin_id.required' => 'izin_id masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'kategori_pemasok.required' => 'kategori_pemasok masih kosong',
       'intake_kilang.required' => 'intake_kilang masih kosong',
@@ -575,7 +582,7 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate([
       'badan_usaha_id' => 'required',
-      // 'izin_id' => 'required',
+      'izin_id' => 'required',
       'bulan' => 'required',
       'kategori_pemasok' => 'required',
       'intake_kilang' => 'required',
@@ -791,7 +798,7 @@ class PengolahanController extends Controller
 
     $pesan = [
       'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      // 'izin_id.required' => 'izin_id masih kosong',
+      'izin_id.required' => 'izin_id masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'produk.required' => 'produk masih kosong',
       'satuan.required' => 'satuan masih kosong',
@@ -809,7 +816,7 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate([
       'badan_usaha_id' => 'required',
-      // 'izin_id' => 'required',
+      'izin_id' => 'required',
       'bulan' => 'required',
       'produk' => 'required',
       'satuan' => 'required',
@@ -1021,7 +1028,7 @@ class PengolahanController extends Controller
 
     $pesan = [
       'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      // 'izin_id.required' => 'izin_id masih kosong',
+      'izin_id.required' => 'izin_id masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'produk.required' => 'produk masih kosong',
       'satuan.required' => 'satuan masih kosong',
@@ -1037,7 +1044,7 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate([
       'badan_usaha_id' => 'required',
-      // 'izin_id' => 'required',
+      'izin_id' => 'required',
       'bulan' => 'required',
       'produk' => 'required',
       'satuan' => 'required',
