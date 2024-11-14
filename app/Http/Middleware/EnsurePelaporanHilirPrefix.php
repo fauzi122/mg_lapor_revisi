@@ -15,15 +15,24 @@ class EnsurePelaporanHilirPrefix
      */
     public function handle($request, Closure $next)
     {
+        // Hanya aktif jika APP_ENV adalah production
         if (env('APP_ENV') === 'production') {
             $path = $request->getPathInfo();
-            
-            // Tambahkan prefix hanya jika belum ada di awal path
-            if (!str_starts_with($path, '/pelaporan-hilir')) {
+    
+            // Daftar route yang dikecualikan
+            $excludedPaths = [
+                '/',                 // Dashboard route
+                '/login',            // Login route
+                '/evaluator/login',  // Evaluator login route
+            ];
+    
+            // Jika path tidak termasuk dalam daftar pengecualian dan tidak diawali dengan prefix, tambahkan prefix
+            if (!in_array($path, $excludedPaths) && !str_starts_with($path, '/pelaporan-hilir')) {
                 return redirect('/pelaporan-hilir' . $path);
             }
         }
     
         return $next($request);
     }
+    
 }
