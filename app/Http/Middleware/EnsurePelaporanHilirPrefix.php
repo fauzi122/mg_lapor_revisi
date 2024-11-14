@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
-
+ 
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +26,9 @@ class EnsurePelaporanHilirPrefix
             '/login/post-login',
             '/evaluator/login',  // Evaluator login route
             '/evaluator/login/post-login',
-            '/login/generate-otp'
+            '/login/generate-otp',
+            '/logoutBU',
+            '/logout'
         ];
 
         // Tambahkan prefix jika path tidak ada dalam daftar pengecualian
