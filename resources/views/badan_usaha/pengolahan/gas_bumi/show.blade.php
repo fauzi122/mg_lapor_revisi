@@ -20,9 +20,8 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Produksi Kilang</h5>
                                     <div>
-                                        <a href="/pengolahan-minyak-bumi-hasil-olah"
-                                            class="btn btn-secondary waves-effect waves-light">Kembali
-                                        </a>
+                                        <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+
                                         <form
                                             action="/submit_bulan_pengolahan_gas_bumi_produksi/{{ $bulan_ambil_produksix . '-01' }}"
                                             method="post" class="d-inline">
@@ -184,9 +183,8 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Pasokan Kilang</h5>
                                     <div>
-                                        <a href="/pengolahan-minyak-bumi-hasil-olah"
-                                            class="btn btn-secondary waves-effect waves-light">Kembali
-                                        </a>
+                                        <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+
                                         <form
                                             action="/submit_bulan_pengolahan_gas_bumi_pasokan/{{ $bulan_ambil_pasokanx . '-01' }}"
                                             method="post" class="d-inline">
@@ -350,8 +348,8 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Distribusi/Penjualan Domestik Kilang</h5>
                                     <div>
-                                        <a href="/pengolahan-minyak-bumi-hasil-olah"
-                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                        <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+
                                         <form
                                             action="/submit_bulan_pengolahan_gas_bumi_distribusi/{{ $bulan_ambil_distribusix . '-01' }}"
                                             method="post" class="d-inline">

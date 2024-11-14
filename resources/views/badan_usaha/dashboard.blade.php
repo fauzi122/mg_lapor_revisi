@@ -61,32 +61,89 @@
                                         <thead>
                                             <tr>
                                                 <th>Izin</th>
-                                                {{-- <th>Jenis Izin</th> --}}
-                                                <th>Jenis Izin</th>
-                                               
+                                                
                                                 <th>Tanggal ACC</th>
-                                                <th>Nomer Izin</th>
-                                                 {{-- <th>Laporan</th> --}}
+                                                <th>Nomor Izin</th>
+                                                <th>Menu Laporan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                           
-
                                             @foreach($result as $item)
                                             <tr>
-                                                <td>{{ $item->NAMA_TEMPLATE }}</td>
-                                                <td>{{ $item->nama_opsi ?? 'N/A' }}</td>
+                                                <td>{{ $item->NAMA_TEMPLATE }}
+                                                    <br>
+                                                    <b>Jenis Izin:</b> {{ $item->nama_opsi ?? 'N/A' }}
+                                                </td>
+                                       
                                                 <td>{{ $item->TGL_DISETUJUI }}</td>
                                                 <td>{{ $item->NOMOR_IZIN }}</td>
-                                                {{-- <td>
-                                                    <a href="{{ $item->url ?? '#' }}">Lihat Laporan</a>
-                                                </td> --}}
+                                                <td>
+                                                    @php    
+                                                        $show = Crypt::encryptString($item->ID_PERMOHONAN);
+                                                        $filteredUrls = collect($sub_page)
+                                                            ->whereIn('id_sub_page', collect($result)->pluck('SUB_PAGE'))
+                                                            ->pluck('url')
+                                                            ->unique()
+                                                            ->toArray();
+                                                    @endphp
+                                                    
+                                                    <ul class="sub-menu" aria-expanded="false">
+                                                        {{-- URL Dinamis --}}
+                                                        @foreach($filteredUrls as $url)
+                                                            @if(!empty($url)) <!-- Pastikan URL tidak kosong -->
+                                                                <li><a href="{{ $url }}/{{ $show }}">{{ $sub_page->firstWhere('url', $url)->nama_menu }}</a></li>
+                                                            @endif
+                                                        @endforeach
+                                                    
+                                                        {{-- Kondisi Khusus --}}
+                                                        @php
+                                                            $matchedSubPage = collect($sub_page)->whereIn('id_sub_page', collect($result)->pluck('SUB_PAGE'))->firstWhere('kategori', 2);
+                                                            $matchedSubPage1 = collect($sub_page)->whereIn('id_sub_page', collect($result)->pluck('SUB_PAGE'))->firstWhere('kategori', 1);
+                                                            $kusus = collect($sub_page)->whereIn('id_sub_page', collect($result)->pluck('SUB_PAGE'))->firstWhere('id_sub_menu', 1);
+                                                        @endphp
+                                                    
+                                                        {{-- Pengolahan --}}
+                                                        @if(Session::get('j_pengolahan') > 0)
+                                                            @if($matchedSubPage)
+                                                                <li><a href="/penyimpananMinyakBumi/{{ $show }}">Penyimpanan Minyak Bumi</a></li>
+                                                                <li><a href="/eksport-import/{{ $show }}">Ekspor-Impor</a></li>
+                                                                <li><a href="/harga-bbm-jbu/{{ $show }}">Harga BBM JBU</a></li>
+                                                            @endif
+                                                            @if($kusus)
+                                                                <li><a href="/penyimpanan-gas-bumi/{{ $show }}">Penyimpanan Gas Bumi</a></li>
+                                                            @endif
+                                                        @endif
+                                                    
+                                                        {{-- Niaga --}}
+                                                        @if(Session::get('j_niaga') > 0)
+                                                            @if($matchedSubPage)
+                                                                <li><a href="/penyimpananMinyakBumi/{{ $show }}">Penyimpanan Minyak Bumi</a></li>
+                                                                <li><a href="/eksport-import/{{ $show }}">Ekspor-Impor</a></li>
+                                                                <li><a href="/harga-bbm-jbu/{{ $show }}">Harga BBM JBU</a></li>
+                                                            @endif
+                                                            @if($matchedSubPage1)
+                                                                <li><a href="/eksport-import/{{ $show }}">Ekspor-Impor</a></li>
+                                                            @endif
+                                                        @endif
+                                                    
+                                                        {{-- Pengangkutan --}}
+                                                        @if(Session::get('j_pengangkutan') > 0 && $kusus)
+                                                            <li><a href="/penyimpanan-gas-bumi/{{ $show }}">Penyimpanan Gas Bumi</a></li>
+                                                        @endif
+                                                    
+                                                        {{-- Niaga S --}}
+                                                        @if(Session::get('j_niaga_s') > 0)
+                                                            <li><a href="/progres-pembangunan/show/{{ $show }}">Progres Pembangunan</a></li>
+                                                        @endif
+                                                    </ul>
+                                                </td>
                                             </tr>
-                                        @endforeach
-                                        
-
+                                            @endforeach
                                         </tbody>
-                                    </table>                                    
+                                    </table>
+                                    
+                                    
+                                                                    
                                 </div>
                             </div>
                         </div>

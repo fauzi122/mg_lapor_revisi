@@ -24,8 +24,8 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Minyak Bumi</h5>
                                 <div>
-                                    <a href="/penyimpananMinyakBumi"
-                                        class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                    <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+
                                 @if ($statusx == 1)
                                     <form action="/submit_bulan_pmb/{{ $bulan_ambilx . '-01' }}" method="post"
                                         class="d-inline">

@@ -16,10 +16,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class PenyMinyakbumiController extends Controller
 {
-    public function index()
+    public function index($id)
     {
         // $pm = Penyminyakbumi::where('badan_usaha_id', Auth::user()->badan_usaha_id)
         //     ->groupBy('bulan')->get();
+        $pecah = explode(',', Crypt::decryptString($id));
 
         $pm = DB::table('penyminyakbumis')
             ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
@@ -27,7 +28,7 @@ class PenyMinyakbumiController extends Controller
             ->groupBy('bulan')
             ->get();
 
-        return view('badan_usaha.penyimpanan.minyak_bumi.index', compact('pm'));
+        return view('badan_usaha.penyimpanan.minyak_bumi.index', compact('pm','pecah'));
     }
     public function index_pggb()
     {
@@ -46,6 +47,7 @@ class PenyMinyakbumiController extends Controller
     public function show_pmbx($id, $filter = null)
     {
         $pecah = explode(',', Crypt::decryptString($id));
+    // dd($pecah);
         $pggb = Penyminyakbumi::get();
         $badan_usaha_id = Auth::user()->badan_usaha_id;
         // Mengambil bulan dari tabel penyminyakbumis sesuai ID badan usaha dan bulan yang ditemukan
@@ -75,7 +77,8 @@ class PenyMinyakbumiController extends Controller
             'pmb',
             'pggb',
             'bulan_ambilx',
-            'statusx'
+            'statusx',
+            'pecah'
         ));
     }
     public function show_pggbx($filter, $id)
@@ -117,6 +120,7 @@ class PenyMinyakbumiController extends Controller
         // dd($request->all());
         $pesan = [
             'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'izin_id.required' => 'izin_id masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'no_tangki.required' => 'no_tangki masih kosong',
             'kapasitas_tangki.required' => 'kapasitas_tangki masih kosong',
@@ -147,6 +151,7 @@ class PenyMinyakbumiController extends Controller
 
         $validatedData = $request->validate([
             'badan_usaha_id' => 'required',
+            'izin_id' => 'required',
             'bulan' => 'required',
             'jenis_fasilitas' => 'required',
             'no_tangki' => 'required',
@@ -193,6 +198,7 @@ class PenyMinyakbumiController extends Controller
 
         $validatedData = Penyminyakbumi::create([
             'badan_usaha_id' => $request->badan_usaha_id,
+            'izin_id' => $request->izin_id,
             'bulan' => $request->bulan . '-01',
             'jenis_fasilitas' => $request->jenis_fasilitas,
             'no_tangki' => $request->no_tangki,

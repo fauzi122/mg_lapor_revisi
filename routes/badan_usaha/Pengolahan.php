@@ -6,7 +6,7 @@ use App\Http\Controllers\PengolahanController;
 // Pengolahan Minyak Bumi/Hasil Olahan dan Gas Bumi
 Route::controller(PengolahanController::class)->group(function () {
   // Pengolahan Minyak Bumi
-  Route::get('/pengolahan-minyak-bumi-hasil-olah', 'index');
+  Route::get('/pengolahan-minyak-bumi-hasil-olah/{id}', 'index');
   route::get('/pengolahan-minyak-bumi-hasil-olah/show/{id}/{pengolahan}/{filter?}', 'show_mb_ho');
   // Route::get('/pengolahan-gas-bumi', 'show_gb');
   route::get('/pengolahan-gas-bumi/show/{id}/{pengolahan}/{filter?}', 'show_gb');

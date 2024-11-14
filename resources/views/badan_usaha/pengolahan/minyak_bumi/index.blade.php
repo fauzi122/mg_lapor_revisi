@@ -47,7 +47,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0">Produksi Kilang [Minyak Bumi/Hasil Olahan]...</h5>
+                                        <h5 class="mb-0">Produksi Kilang [Minyak Bumi/Hasil Olahan]</h5>
                                         <div>
                                             <button type="button" class="btn btn-primary waves-effect waves-light"
                                                 onclick="produk(); provinsi();" data-bs-toggle="modal"

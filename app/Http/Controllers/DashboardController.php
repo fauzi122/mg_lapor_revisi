@@ -58,6 +58,7 @@ class DashboardController extends Controller
 				'a.TGL_DISETUJUI',
 				'a.NOMOR_IZIN',
 				'c.NAMA_TEMPLATE',
+				'a.ID_PERMOHONAN',
 				DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(a.LIST_SUB_PAGE, "-", ","), ",", numbers.n), ",", -1) AS SUB_PAGE'),
 				'a.ID_CURR_PROSES'
 			]);
@@ -76,7 +77,7 @@ class DashboardController extends Controller
 				'k.NAMA_TEMPLATE',
 				'k.SUB_PAGE',
 				'k.TGL_DISETUJUI',
-	
+				'k.ID_PERMOHONAN',
 				'k.NOMOR_IZIN',
 				'd.nama_opsi'
 			])

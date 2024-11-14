@@ -3,7 +3,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Penyimpanan Minyak Bumi</h5>
+                <h5 class="modal-title" id="myModalLabel">Penyimpanan Minyak Bumi..</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post" action="/simpan_pmb" class="form-material m-t-40" enctype="multipart/form-data">
@@ -13,8 +13,8 @@
 
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
+                        <input class="form-control" type="text" id="example-text-input" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -372,6 +372,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Bulan</label>
+
                         <input class="form-control" type="month" id="bulan_pmb" name="bulan"
                             value="{{ old('bulan') }}" readonly>
                         @error('bulan_peb')
@@ -1004,7 +1005,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Penyimpanan Minyak Bumi</h5>
+                <h5 class="modal-title" id="myModalLabel">Penyimpanan Minyak Bumi.</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post" action="/import_pmb" class="form-material m-t-40" enctype="multipart/form-data">
