@@ -23,7 +23,10 @@ class EnsurePelaporanHilirPrefix
         $excludedPaths = [
             '/',                 // Dashboard route
             '/login',            // Login route
+            '/login/post-login',
             '/evaluator/login',  // Evaluator login route
+            '/evaluator/login/post-login',
+            '/login/generate-otp'
         ];
 
         // Tambahkan prefix jika path tidak ada dalam daftar pengecualian
