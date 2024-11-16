@@ -197,7 +197,7 @@
                                                         </td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/pasokan/tahun">{{ getTahun($ppmb->bulan) }}
+                                                                    href="{{url ('/pengolahan-minyak-bumi-hasil-olah/show/') }}{{ $id }}/pasokan/tahun">{{ getTahun($ppmb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>

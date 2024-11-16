@@ -79,7 +79,8 @@
                                                 <td>{{ $item->NOMOR_IZIN }}</td>
                                                 <td>
                                                     @php    
-                                                        $show = Crypt::encryptString($item->ID_PERMOHONAN);
+                                                        
+                                                        $show = Crypt::encryptString($item->ID_PERMOHONAN.','.$item->NOMOR_IZIN);
                                                         $filteredUrls = collect($sub_page)
                                                             ->whereIn('id_sub_page', collect($result)->pluck('SUB_PAGE'))
                                                             ->pluck('url')
@@ -91,7 +92,7 @@
                                                         {{-- URL Dinamis --}}
                                                         @foreach($filteredUrls as $url)
                                                             @if(!empty($url)) <!-- Pastikan URL tidak kosong -->
-                                                                <li><a href="{{ $url }}/{{ $show }}">{{ $sub_page->firstWhere('url', $url)->nama_menu }}</a></li>
+                                                                <li><a href="{{ url($url) }}/{{ $show }}">{{ $sub_page->firstWhere('url', $url)->nama_menu }}</a></li>
                                                             @endif
                                                         @endforeach
                                                     
@@ -105,38 +106,39 @@
                                                         {{-- Pengolahan --}}
                                                         @if(Session::get('j_pengolahan') > 0)
                                                             @if($matchedSubPage)
-                                                                <li><a href="/penyimpananMinyakBumi/{{ $show }}">Penyimpanan Minyak Bumi</a></li>
-                                                                <li><a href="/eksport-import/{{ $show }}">Ekspor-Impor</a></li>
-                                                                <li><a href="/harga-bbm-jbu/{{ $show }}">Harga BBM JBU</a></li>
+                                                                <li><a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak Bumi</a></li>
+                                                                <li><a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a></li>
+                                                                <li><a href="{{ url('/harga-bbm-jbu') }}/{{ $show }}">Harga BBM JBU</a></li>
                                                             @endif
                                                             @if($kusus)
-                                                                <li><a href="/penyimpanan-gas-bumi/{{ $show }}">Penyimpanan Gas Bumi</a></li>
+                                                                <li><a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas Bumi</a></li>
                                                             @endif
                                                         @endif
                                                     
                                                         {{-- Niaga --}}
                                                         @if(Session::get('j_niaga') > 0)
                                                             @if($matchedSubPage)
-                                                                <li><a href="/penyimpananMinyakBumi/{{ $show }}">Penyimpanan Minyak Bumi</a></li>
-                                                                <li><a href="/eksport-import/{{ $show }}">Ekspor-Impor</a></li>
-                                                                <li><a href="/harga-bbm-jbu/{{ $show }}">Harga BBM JBU</a></li>
+                                                                <li><a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak Bumi</a></li>
+                                                                <li><a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a></li>
+                                                                <li><a href="{{ url('/harga-bbm-jbu') }}/{{ $show }}">Harga BBM JBU</a></li>
                                                             @endif
                                                             @if($matchedSubPage1)
-                                                                <li><a href="/eksport-import/{{ $show }}">Ekspor-Impor</a></li>
+                                                                <li><a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a></li>
                                                             @endif
                                                         @endif
                                                     
                                                         {{-- Pengangkutan --}}
                                                         @if(Session::get('j_pengangkutan') > 0 && $kusus)
-                                                            <li><a href="/penyimpanan-gas-bumi/{{ $show }}">Penyimpanan Gas Bumi</a></li>
+                                                            <li><a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas Bumi</a></li>
                                                         @endif
                                                     
                                                         {{-- Niaga S --}}
                                                         @if(Session::get('j_niaga_s') > 0)
-                                                            <li><a href="/progres-pembangunan/show/{{ $show }}">Progres Pembangunan</a></li>
+                                                            <li><a href="{{ url('/progres-pembangunan/show') }}/{{ $show }}">Progres Pembangunan</a></li>
                                                         @endif
                                                     </ul>
                                                 </td>
+                                                
                                             </tr>
                                             @endforeach
                                         </tbody>
