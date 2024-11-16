@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Models\Izin;
 use App\Models\Penyminyakbumi;
 use App\Models\Penygasbumi;
 use Illuminate\Support\Facades\Crypt;

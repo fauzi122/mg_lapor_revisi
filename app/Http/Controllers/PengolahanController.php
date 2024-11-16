@@ -27,7 +27,7 @@ class PengolahanController extends Controller
   {
    
     $pecah = explode(',', Crypt::decryptString($id));
-  
+  // dd($pecah);
     $pengolahanProduksiMB = DB::table('pengolahans')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
       ->where('jenis', 'Minyak Bumi')
