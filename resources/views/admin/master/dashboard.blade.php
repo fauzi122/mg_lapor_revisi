@@ -122,7 +122,17 @@
                                 </div><!-- end card -->
                             </div><!-- end col -->    
                         </div> --}}
-
+                        <form action="{{ url('/master') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row justify-content-center mb-2">
+                            <div class="col-3">
+                                <input type="month" class="form-control" id="period" name="period" value="{{ old('period', request('period', \Carbon\Carbon::now()->format('Y-m'))) }}">
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">Filter Periode</button>
+                            </div>
+                        </div>
+                        </form>
                         <div class="row">
                             <div class="col-xl col-md">
                                 <!-- card -->
