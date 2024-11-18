@@ -285,29 +285,35 @@
         <div class="rightbar-overlay"></div>
 
         <script type="text/javascript">
+            var series      = <?php echo json_encode($series) ?>,
+                category      = <?php echo json_encode($category) ?>,
+                period      = <?php echo json_encode($period) ?>,
+                date        = <?php echo json_encode($date) ?>,
+                categories     = <?php echo json_encode($categories) ?>,
+                data    = <?php echo json_encode($data) ?>;
             Highcharts.chart('detailChart', {
                 chart: {
                     type: 'column'
                 },
                 title: {
-                    text: 'Corn vs wheat estimated production for 2023',
+                    text: 'Grafik Pelaporan ' + category + ' - ' + series + ' Periode: ' + period,
                     align: 'left'
                 },
                 xAxis: {
-                    categories: ['USA', 'China', 'Brazil', 'EU', 'Argentina', 'India'],
+                    categories: categories,
                     crosshair: true,
                     accessibility: {
-                        description: 'Countries'
+                        description: 'Jenis Izin Usaha'
                     }
                 },
                 yAxis: {
                     min: 0,
                     title: {
-                        text: '1000 metric tons (MT)'
+                        text: 'Jumlah Laporan'
                     }
                 },
                 tooltip: {
-                    valueSuffix: ' (1000 MT)'
+                    valueSuffix: ' (Total Laporan)'
                 },
                 plotOptions: {
                     column: {
@@ -317,8 +323,8 @@
                 },
                 series: [
                     {
-                        name: 'Corn',
-                        data: [387749, 280000, 129000, 64300, 54000, 34300]
+                        name: 'Total',
+                        data: data
                     }
                 ]
             });
