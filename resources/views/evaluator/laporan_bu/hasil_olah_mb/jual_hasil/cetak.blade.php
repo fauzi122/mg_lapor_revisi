@@ -61,6 +61,8 @@ header("Pragma: no-cache");
     <tr>
         <th style="border: 1px solid black;">NO</th>
         <th style="border: 1px solid black;">NAMA PERUSAHAAN </th>
+        <th style="border: 1px solid black;">Nomer Izin </th>
+        <th style="border: 1px solid black;">Tanggal Disetujui </th>
         <th style="border: 1px solid black;">BULAN</th>
         <th style="border: 1px solid black;">TAHUN</th>
         <th style="border: 1px solid black;">PRODUK</th>
@@ -80,6 +82,8 @@ header("Pragma: no-cache");
                 <td  style="border: 1px solid black;">{{ $loop->iteration }}</td>
                 
                 <td  style="border: 1px solid black;">{{$pgb->NAMA_PERUSAHAAN}}</td>
+                <td  style="border: 1px solid black;">{{$pgb->TGL_DISETUJUI}}</td>
+                <td  style="border: 1px solid black;">{{$pgb->NOMOR_IZIN}}</td>
                 <td style="border: 1px solid black;">{{ getBulan($pgb->bulan) }}</td> 
                 <td style="border: 1px solid black;">{{ getTahun($pgb->bulan) }}</td>
                 <td  style="border: 1px solid black;">{{ $pgb->produk }}</td>

@@ -56,7 +56,7 @@
 
             <!-- App Search-->
 
-            <form class="app-search d-none d-lg-block">
+            {{-- <form class="app-search d-none d-lg-block">
 
                 <div class="position-relative">
 
@@ -66,7 +66,7 @@
 
                 </div>
 
-            </form>
+            </form> --}}
 
         </div>
 
@@ -300,7 +300,7 @@
 
 
 
-            <div class="dropdown d-inline-block">
+            {{-- <div class="dropdown d-inline-block">
 
                 <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown"
 
@@ -350,7 +350,7 @@
 
                 </div>
 
-            </div>
+            </div> --}}
 
 
 

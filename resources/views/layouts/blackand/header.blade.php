@@ -8,7 +8,7 @@
                         {{-- <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24"> --}}
                     </span>
                     <span class="logo-lg">
-                        {{-- <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24"> <span class="logo-txt">Pelaporan Migas</span> --}}
+                        <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24"> <span class="logo-txt">Pelaporan Migas</span>
                     </span>
                 </a>
 
