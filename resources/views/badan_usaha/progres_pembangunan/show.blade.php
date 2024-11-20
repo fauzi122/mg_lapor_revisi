@@ -8,6 +8,12 @@
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-size-18">Laporan Izin Sementara</h4>
                     </div>
+                    <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-3"
+                        role="alert">
+                        <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                        <strong>Informasi:</strong> Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 </div>
             </div>
             {{-- Izin Sementara --}}
@@ -61,7 +67,8 @@
                                                                 data-id="{{ $ProgresPembangunan->id }}"> <i
                                                                     class="bx bx-edit-alt" title="Edit data"></i>
                                                             </button>
-                                                            <form action="/hapus_lgpsub/{{ $ProgresPembangunan->id }}"
+                                                            <form
+                                                                action="{{ url('/hapus_lgpsub') }}/{{ $ProgresPembangunan->id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -70,7 +77,8 @@
                                                                     <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                                 </button>
                                                             </form>
-                                                            <form action="/submit_lgpsub/{{ $ProgresPembangunan->id }}"
+                                                            <form
+                                                                action="{{ url('/submit_lgpsub') }}/{{ $ProgresPembangunan->id }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ProgresPembangunan->id }}">
                                                                 @method('PUT')
@@ -98,7 +106,8 @@
                                                                 data-id="{{ $ProgresPembangunan->id }}"> <i
                                                                     class="bx bx-edit-alt" title="Edit data"></i>
                                                             </button>
-                                                            <form action="/submit_lgpsub/{{ $ProgresPembangunan->id }}"
+                                                            <form
+                                                                action="{{ url('/submit_lgpsub') }}/{{ $ProgresPembangunan->id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('PUT')
                                                                 @csrf

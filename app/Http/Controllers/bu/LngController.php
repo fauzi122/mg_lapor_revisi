@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\Crypt;
 
 class LngController extends Controller
 {
-    public function index()
+    public function index($id)
     {
         // $pm = Penjualan_lng::where('badan_usaha_id', Auth::user()->badan_usaha_id)
         //     ->groupBy('bulan')->get();
-
+        $pecah = explode(',', Crypt::decryptString($id));
         $pm = DB::table('penjualan_lngs')
             ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
             ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
@@ -39,7 +39,8 @@ class LngController extends Controller
 
         return view('badan_usaha.niaga.lng.index', compact(
             'pm',
-            'pasoklng'
+            'pasoklng',
+            'pecah'
         ));
     }
     public function show_lngx($id, $lng, $filter = null)
@@ -94,13 +95,15 @@ class LngController extends Controller
             'bulan_ambil_pasok_lngx',
             'statuspenjualan_lngx',
             'statuspasok_lngx',
-            'lngx'
+            'lngx',
+            'pecah'
         ));
     }
     public function simpan_lngx(Request $request)
     {
         $pesan = [
             'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'izin_id.required' => 'izin_id masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'provinsi.required' => 'provinsi masih kosong',
             'kabupaten_kota.required' => 'kabupaten / kota masih kosong',
@@ -128,6 +131,7 @@ class LngController extends Controller
         $validatedData = $request->validate([
 
             'badan_usaha_id' => 'required',
+            'izin_id' => 'required',
             'bulan' => 'required',
             'provinsi' => 'required',
             'kabupaten_kota' => 'required',
@@ -168,6 +172,7 @@ class LngController extends Controller
         }
         $validatedData = Penjualan_lng::create([
             'badan_usaha_id' =>  $request->badan_usaha_id,
+            'izin_id' =>  $request->izin_id,
             'bulan' => $request->bulan . '-01',
             'provinsi' => $request->provinsi,
             'kabupaten_kota' => $request->kabupaten_kota,
@@ -311,6 +316,7 @@ class LngController extends Controller
         // echo json_encode($request->all());exit;
         $pesan = [
             'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'izin_id.required' => 'izin_id masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
             'nama_pemasok.required' => 'nama_pemasok masih kosong',
@@ -323,6 +329,7 @@ class LngController extends Controller
 
         $validatedData = $request->validate([
             'badan_usaha_id' => 'required',
+            'izin_id' => 'required',
             'bulan' => 'required',
             'produk' => 'required',
             'nama_pemasok' => 'required',
@@ -353,6 +360,7 @@ class LngController extends Controller
 
         $validatedData = Pasokanlng::create([
             'badan_usaha_id' =>  $request->badan_usaha_id,
+            'izin_id' =>  $request->izin_id,
             'bulan' => $request->bulan . '-01',
             'produk' => $request->produk,
             'nama_pemasok' => $request->nama_pemasok,

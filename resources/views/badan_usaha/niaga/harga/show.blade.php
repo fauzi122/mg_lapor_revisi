@@ -20,9 +20,10 @@
                                     <h5 class="mb-0">Harga BBM JBU/Hasil Olahan/Minyak Bumi
                                     </h5>
                                     <div>
-                                        <a href="/niaga/harga"
+                                        <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                        <form action="/submit_bulan_harga-bbm-jbu/{{ $bulan_ambil_hargabbmjbux . '-01' }}"
+                                        <form
+                                            action="{{ url('/submit_bulan_harga-bbm-jbu') }}/{{ $bulan_ambil_hargabbmjbux . '-01' }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -79,12 +80,21 @@
                                                     <td>{{ $hargabbmjbu->produk }}</td>
                                                     <td>{{ $hargabbmjbu->provinsi }}</td>
                                                     <td>
-                                                        <h6>Biaya Perolehan : <span class="text-info">{{ $hargabbmjbu->biaya_perolehan }}</span></h6>
-                                                        <h6>Biaya Distribusi : <span class="text-info">{{ $hargabbmjbu->biaya_distribusi }}</span></h6>
-                                                        <h6>Biaya Penyimpanan : <span class="text-info">{{ $hargabbmjbu->biaya_penyimpanan }}</span></h6>
-                                                        <h6>Margin : <span class="text-info">{{ $hargabbmjbu->margin }}</span></h6>
-                                                        <h6>PPN : <span class="text-info">{{ $hargabbmjbu->ppn }}</span></h6>
-                                                        <h6>PBBKP : <span class="text-info">{{ $hargabbmjbu->pbbkp }}</span></h6>
+                                                        <h6>Biaya Perolehan : <span
+                                                                class="text-info">{{ $hargabbmjbu->biaya_perolehan }}</span>
+                                                        </h6>
+                                                        <h6>Biaya Distribusi : <span
+                                                                class="text-info">{{ $hargabbmjbu->biaya_distribusi }}</span>
+                                                        </h6>
+                                                        <h6>Biaya Penyimpanan : <span
+                                                                class="text-info">{{ $hargabbmjbu->biaya_penyimpanan }}</span>
+                                                        </h6>
+                                                        <h6>Margin : <span
+                                                                class="text-info">{{ $hargabbmjbu->margin }}</span></h6>
+                                                        <h6>PPN : <span class="text-info">{{ $hargabbmjbu->ppn }}</span>
+                                                        </h6>
+                                                        <h6>PBBKP : <span
+                                                                class="text-info">{{ $hargabbmjbu->pbbkp }}</span></h6>
                                                     </td>
                                                     <td>{{ $hargabbmjbu->volume }}</td>
                                                     <td>{{ $hargabbmjbu->harga_jual }}</td>
@@ -112,7 +122,8 @@
                                                                     data-id="{{ $hargabbmjbu->id }}">
                                                                     <i class="bx bx-edit-alt" title="Edit data"></i>
                                                                 </button>
-                                                                <form action="/harga-bbm-jbu/{{ $hargabbmjbu->id }}"
+                                                                <form
+                                                                    action="{{ url('/harga-bbm-jbu') }}/{{ $hargabbmjbu->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -121,7 +132,8 @@
                                                                         <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                                     </button>
                                                                 </form>
-                                                                <form action="/submit_harga-bbm-jbu/{{ $hargabbmjbu->id }}"
+                                                                <form
+                                                                    action="{{ url('/submit_harga-bbm-jbu') }}/{{ $hargabbmjbu->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -150,7 +162,8 @@
                                                                     data-id="{{ $hargabbmjbu->id }}"> <i
                                                                         class="bx bx-edit-alt" title="Edit data"></i>
                                                                 </button>
-                                                                <form action="/submit_harga-bbm-jbu/{{ $hargabbmjbu->id }}"
+                                                                <form
+                                                                    action="{{ url('/submit_harga-bbm-jbu') }}/{{ $hargabbmjbu->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -200,9 +213,10 @@
                                     <h5 class="mb-0">Harga LPG
                                     </h5>
                                     <div>
-                                        <a href="/niaga/harga"
+                                        <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                        <form action="/submitbulanHargaLPG/{{ $bulan_ambil_hargalpgx . '-01' }}"
+                                        <form
+                                            action="{{ url('/submitbulanHargaLPG') }}/{{ $bulan_ambil_hargalpgx . '-01' }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -260,10 +274,17 @@
                                                     <td>{{ $hargaLPG->sektor }}</td>
                                                     <td>{{ $hargaLPG->provinsi }}</td>
                                                     <td>
-                                                        <h6>Biaya Perolehan : <span class="text-info">{{ $hargaLPG->biaya_perolehan }}</span></h6>
-                                                        <h6>Biaya Distribusi : <span class="text-info">{{ $hargaLPG->biaya_distribusi }}</span></h6>
-                                                        <h6>Biaya Penyimpanan : <span class="text-info">{{ $hargaLPG->biaya_penyimpanan }}</span></h6>
-                                                        <h6>Margin : <span class="text-info">{{ $hargaLPG->margin }}</span></h6>
+                                                        <h6>Biaya Perolehan : <span
+                                                                class="text-info">{{ $hargaLPG->biaya_perolehan }}</span>
+                                                        </h6>
+                                                        <h6>Biaya Distribusi : <span
+                                                                class="text-info">{{ $hargaLPG->biaya_distribusi }}</span>
+                                                        </h6>
+                                                        <h6>Biaya Penyimpanan : <span
+                                                                class="text-info">{{ $hargaLPG->biaya_penyimpanan }}</span>
+                                                        </h6>
+                                                        <h6>Margin : <span
+                                                                class="text-info">{{ $hargaLPG->margin }}</span></h6>
                                                         <h6>PPN : <span class="text-info">{{ $hargaLPG->ppn }}</span></h6>
                                                     </td>
                                                     <td>{{ $hargaLPG->kabupaten_kota }}</td>
@@ -294,7 +315,8 @@
                                                                     data-id="{{ $hargaLPG->id }}">
                                                                     <i class="bx bx-edit-alt" title="Edit data"></i>
                                                                 </button>
-                                                                <form action="/hapusHargaLPG/{{ $hargaLPG->id }}"
+                                                                <form
+                                                                    action="{{ url('/hapusHargaLPG') }}/{{ $hargaLPG->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -303,7 +325,8 @@
                                                                         <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                                     </button>
                                                                 </form>
-                                                                <form action="/submitHargaLPG/{{ $hargaLPG->id }}"
+                                                                <form
+                                                                    action="{{ url('/submitHargaLPG') }}/{{ $hargaLPG->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -334,7 +357,8 @@
                                                                     data-id="{{ $hargaLPG->id }}"> <i
                                                                         class="bx bx-edit-alt" title="Edit data"></i>
                                                                 </button>
-                                                                <form action="/submitHargaLPG/{{ $hargaLPG->id }}"
+                                                                <form
+                                                                    action="{{ url('/submitHargaLPG') }}/{{ $hargaLPG->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf

@@ -19,8 +19,10 @@ use Illuminate\Support\Facades\Crypt;
 
 class EksportImportController extends Controller
 {
-  public function index()
+  public function index($id)
   {
+    $pecah = explode(',', Crypt::decryptString($id));
+
     $ekspor = DB::table('ekspors')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
@@ -35,11 +37,13 @@ class EksportImportController extends Controller
     // dd($impor);
     return view('badan_usaha.ekspor_impor.index', compact(
       'ekspor',
-      'impor'
+      'impor',
+      'pecah'
     ));
   }
   public function show_eix($id, $eix, $filter = null)
   {
+    
     $eixx = $eix;
 
     $pecah = explode(',', Crypt::decryptString($id));
@@ -85,7 +89,8 @@ class EksportImportController extends Controller
       'bulan_ambil_imporsx',
       'statusbulan_ambil_eksporsx',
       'statusbulan_ambil_imporsx',
-      'eixx'
+      'eixx',
+      'pecah'
 
     ));
   }
@@ -93,6 +98,7 @@ class EksportImportController extends Controller
   {
     $pesan = [
       'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+      'izin_id.required' => 'izin_id masih kosong',
       'produk.required' => 'produk masih kosong',
       'hs_code.required' => 'hs code masih kosong',
       'volume_peb.required' => 'volume peb masih kosong',
@@ -112,6 +118,7 @@ class EksportImportController extends Controller
 
     $validatedData = $request->validate([
       'badan_usaha_id' => 'required',
+      'izin_id' => 'required',
       'bulan_peb' => 'required',
       'produk' => 'required',
       'hs_code' => 'required',
@@ -147,6 +154,7 @@ class EksportImportController extends Controller
 
     $validatedData = Ekspor::create([
       'badan_usaha_id' =>  $request->badan_usaha_id,
+      'izin_id' =>  $request->izin_id,
       'bulan_peb' => $request->bulan_peb . '-01',
       'produk' => $request->produk,
       'hs_code' => $request->hs_code,
@@ -180,6 +188,7 @@ class EksportImportController extends Controller
   {
     $pesan = [
       'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+      'izin_id.required' => 'izin_id masih kosong',
       'bulan_pib.required' => 'bulan pib masih kosong',
       'produk.required' => 'produk masih kosong',
       'hs_code.required' => 'hs code masih kosong',
@@ -202,6 +211,7 @@ class EksportImportController extends Controller
 
     $validatedData = $request->validate([
       'badan_usaha_id' => 'required',
+      'izin_id' => 'required',
       'bulan_pib' => 'required',
       'produk' => 'required',
       'hs_code' => 'required',
@@ -239,6 +249,7 @@ class EksportImportController extends Controller
 
     $validatedData = Impor::create([
       'badan_usaha_id' =>  $request->badan_usaha_id,
+      'izin_id' =>  $request->izin_id,
       'bulan_pib' => $request->bulan_pib . '-01',
       'produk' => $request->produk,
       'hs_code' => $request->hs_code,

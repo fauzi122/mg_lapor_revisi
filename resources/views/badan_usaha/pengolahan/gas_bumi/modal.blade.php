@@ -7,14 +7,14 @@
                 <h5 class="modal-title" id="myModalLabel">Tambah Pengolahan Gas Bumi [Produksi Kilang]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpan_pengolahan_gas_bumi_produksi" class="form-material m-t-40"
+            <form method="post" action="{{ '/simpan_pengolahan_gas_bumi_produksi' }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="text" id="example-text-input" name="izin_id"
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
                             value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
@@ -90,8 +90,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" step="0.01" id="example-text-input" name="volume"
-                            value="{{ old('volume') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="example-text-input"
+                            name="volume" value="{{ old('volume') }}" required>
                         @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -118,8 +118,8 @@
                 <h5 class="modal-title" id="myModalLabel">Edit sPengolahan Gas Bumi [Produksi Kilang]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pengolahan_gas_bumi_produksi" class="form-material m-t-40"
-                enctype="multipart/form-data" id="form_updatePengolahanProduksiGB">
+            <form method="post" action="{{ url('/update_pengolahan_gas_bumi_produksi') }}"
+                class="form-material m-t-40" enctype="multipart/form-data" id="form_updatePengolahanProduksiGB">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -199,7 +199,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" step="0.01" id="volume_pengolahanProduksi" name="volume">
+                        <input class="form-control" type="number" step="0.01" id="volume_pengolahanProduksi"
+                            name="volume">
                         @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -292,7 +293,7 @@
                 <h5 class="modal-title" id="myModalLabel">Import Laporan Pengolahan Gas Bumi [Produksi Kilang]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importPengolahanGBProduksi" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importPengolahanGBProduksi') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -303,8 +304,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/pengolahanGasBumi_ProduksiKilang.xlsx"
-                        id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
+                    <a href="/storage/template/pengolahanGasBumi_ProduksiKilang.xlsx" id="tombol"
+                        class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
@@ -326,14 +327,14 @@
                 <h5 class="modal-title" id="myModalLabel">Tambah Pengolahan Gas Bumi [Pasokan Kilang]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpan_pengolahan_gas_bumi_pasokan" class="form-material m-t-40"
-                enctype="multipart/form-data">
+            <form method="post" action="{{ url('/simpan_pengolahan_gas_bumi_pasokan') }}"
+                class="form-material m-t-40" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="text" id="example-text-input" name="izin_id"
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
                             value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
@@ -410,8 +411,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" step="0.01" id="example-text-input" name="volume"
-                            value="{{ old('volume') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="example-text-input"
+                            name="volume" value="{{ old('volume') }}" required>
                         @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -438,8 +439,8 @@
                 <h5 class="modal-title" id="myModalLabel">Edit Pengolahan Gas Bumi [Pasokan Kilang]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pengolahan_gas_bumi_pasokan" class="form-material m-t-40"
-                enctype="multipart/form-data" id="form_updatePengolahanPasokanGB">
+            <form method="post" action="{{ url('/update_pengolahan_gas_bumi_pasokan') }}"
+                class="form-material m-t-40" enctype="multipart/form-data" id="form_updatePengolahanPasokanGB">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -520,7 +521,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" step="0.01" id="volume_pengolahanPasokan" name="volume">
+                        <input class="form-control" type="number" step="0.01" id="volume_pengolahanPasokan"
+                            name="volume">
                         @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -613,7 +615,7 @@
                 <h5 class="modal-title" id="myModalLabel">Import Laporan Pengolahan Gas Bumi [Pasokan Kilang]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importPengolahanGBPasokan" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importPengolahanGBPasokan') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -624,8 +626,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/pengolahanGasBumi_PasokanKilang.xlsx"
-                        id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
+                    <a href="/storage/template/pengolahanGasBumi_PasokanKilang.xlsx" id="tombol"
+                        class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
@@ -647,14 +649,15 @@
                 <h5 class="modal-title" id="myModalLabel">Tambah Pengolahan Gas Bumi [Distribusi Kilang]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpan_pengolahan_gas_bumi_distribusi" class="form-material m-t-40"
-                enctype="multipart/form-data">
+            <form method="post" action="{{ url('/simpan_pengolahan_gas_bumi_distribusi') }}"
+                class="form-material m-t-40" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="text" id="" name="izin_id" value="{{$pecah[0] }}">
+                        <input class="form-control" type="hidden" id="" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -770,8 +773,8 @@
                 <h5 class="modal-title" id="myModalLabel">Edit Pengolahan Gas Bumi [Distribusi Kilang]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pengolahan_gas_bumi_distribusi" class="form-material m-t-40"
-                enctype="multipart/form-data" id="form_updatePengolahanDistribusiGB">
+            <form method="post" action="{{ url('/update_pengolahan_gas_bumi_distribusi') }}"
+                class="form-material m-t-40" enctype="multipart/form-data" id="form_updatePengolahanDistribusiGB">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -851,7 +854,8 @@
 
                     <div class="mb-3">
                         <label for="sektor_pengolahanDistribusi" class="form-label">Sektor</label>
-                        <select class="form-select nama_sektor" name="sektor" value="{{ old('sektor') }}" id="sektor_pengolahanDistribusi" required>
+                        <select class="form-select nama_sektor" name="sektor" value="{{ old('sektor') }}"
+                            id="sektor_pengolahanDistribusi" required>
                             <option>Pilih Sektor</option>
                         </select>
                         @error('sektor')
@@ -863,7 +867,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" step="0.01" id="volume_pengolahanDistribusi" name="volume">
+                        <input class="form-control" type="number" step="0.01" id="volume_pengolahanDistribusi"
+                            name="volume">
                         @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -942,13 +947,11 @@
 
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Volume</label>
-                    <input class="form-control lihat_volume" type="number" id="" name="volume"
-                        readonly>
+                    <input class="form-control lihat_volume" type="number" id="" name="volume" readonly>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect"
-                    data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -964,7 +967,7 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importPengolahanGBDistribusi" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importPengolahanGBDistribusi') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -975,8 +978,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/pengolahanGasBumi_DistribusiKilang.xlsx"
-                        id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
+                    <a href="/storage/template/pengolahanGasBumi_DistribusiKilang.xlsx" id="tombol"
+                        class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>

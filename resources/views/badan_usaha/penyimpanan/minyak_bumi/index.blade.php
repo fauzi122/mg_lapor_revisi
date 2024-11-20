@@ -13,6 +13,12 @@
                             </ol>
                         </div>
                     </div>
+                    <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-3"
+                        role="alert">
+                        <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                        <strong>Informasi:</strong> Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -53,10 +59,12 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/penyimpanan-minyak-bumi/show/{{ $id }}">{{ getBulan($data->bulan) }}<i
+                                                <td><b><a
+                                                            href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}">{{ getBulan($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
-                                                <td><b><a href="/penyimpanan-minyak-bumi/show/{{ $id }}/tahun">{{ getTahun($data->bulan) }}<i
+                                                <td><b><a
+                                                            href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}/tahun">{{ getTahun($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
@@ -73,8 +81,8 @@
                                                 <!-- <td>{{ $data->catatan }}</td> -->
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
-                                                        <form action="/hapus_bulan_pmb/{{ $data->bulan }}" method="post"
-                                                            class="d-inline">
+                                                        <form action="{{ url('/hapus_bulan_pmb') }}/{{ $data->bulan }}"
+                                                            method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-danger"
@@ -82,8 +90,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_pmb/{{ $data->bulan }}" method="post"
-                                                            class="d-inline" data-id="{{ $data->bulan }}">
+                                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $data->bulan }}"
+                                                            method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-success"
@@ -94,8 +102,8 @@
                                                     </td>
                                                 @else
                                                     <td>
-                                                        <form action="/hapus_bulan_pmb/{{ $data->bulan }}" method="post"
-                                                            class="d-inline">
+                                                        <form action="{{ url('/hapus_bulan_pmb') }}/{{ $data->bulan }}"
+                                                            method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-danger"
@@ -103,8 +111,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_pmb/{{ $data->bulan }}" method="post"
-                                                            class="d-inline" data-id="{{ $data->bulan }}">
+                                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $data->bulan }}"
+                                                            method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-success"
@@ -112,7 +120,7 @@
                                                                 <i class="bx bx-paper-plane" title="Kirim data"></i>
                                                             </button></center>
                                                         </form>
-                                                        <a href="/penyimpanan-minyak-bumi/show/{{ $id }}"
+                                                        <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}"
                                                             class="btn btn-sm btn-info"><i class="bx bx-edit"
                                                                 title="Revisi"></i></a>
                                                     </td>

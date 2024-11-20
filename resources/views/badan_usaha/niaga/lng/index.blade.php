@@ -13,6 +13,13 @@
                             </ol>
                         </div>
                     </div>
+                    <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-3"
+                        role="alert">
+                        <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                        <strong>Informasi:</strong> Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
                 </div>
             </div>
             <div class="row">
@@ -52,10 +59,11 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/lng/cng/show/{{ $id }}/penjualan">{{ getBulan($data->bulan) }}<i
+                                                <td><b><a href="{{ url('/lng/cng/show') }}/{{ $id }}/penjualan">{{ getBulan($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
-                                                <td><b><a href="/lng/cng/show/{{ $id }}/penjualan/tahun">{{ getTahun($data->bulan) }}<i
+                                                <td><b><a
+                                                            href="{{ url('/lng/cng/show') }}/{{ $id }}/penjualan/tahun">{{ getTahun($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
@@ -72,8 +80,8 @@
                                                 <!-- <td>{{ $data->catatan }}</td> -->
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
-                                                        <form action="/hapus_bulan_lng/{{ $data->bulan }}" method="post"
-                                                            class="d-inline">
+                                                        <form action="{{ url('/hapus_bulan_lng') }}/{{ $data->bulan }}"
+                                                            method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-danger"
@@ -81,8 +89,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_lng/{{ $data->bulan }}" method="post"
-                                                            class="d-inline" data-id="{{ $data->bulan }}">
+                                                        <form action="{{ url('/submit_bulan_lng') }}/{{ $data->bulan }}"
+                                                            method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-success"
@@ -93,8 +101,8 @@
                                                     </td>
                                                 @else
                                                     <td>
-                                                        <form action="/hapus_bulan_lng/{{ $data->bulan }}" method="post"
-                                                            class="d-inline">
+                                                        <form action="{{ url('/hapus_bulan_lng') }}/{{ $data->bulan }}"
+                                                            method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-danger"
@@ -102,8 +110,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_lng/{{ $data->bulan }}" method="post"
-                                                            class="d-inline" data-id="{{ $data->bulan }}">
+                                                        <form action="{{ url('/submit_bulan_lng') }}/{{ $data->bulan }}"
+                                                            method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-success"
@@ -111,7 +119,7 @@
                                                                 <i class="bx bx-paper-plane" title="Kirim data"></i>
                                                             </button>
                                                         </form>
-                                                        <a href="/lng/cng/show/{{ $id }}/penjualan"
+                                                        <a href="{{ url('/lng/cng/show') }}/{{ $id }}/penjualan"
                                                             class="btn btn-sm btn-info"><i class="bx bx-edit"
                                                                 title="Revisi"></i>
                                                         </a>
@@ -165,10 +173,11 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/lng/cng/show/{{ $id }}/pasok">{{ getBulan($data->bulan) }}<i
+                                                <td><b><a href="{{ url('/lng/cng/show') }}/{{ $id }}/pasok">{{ getBulan($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
-                                                <td><b><a href="/lng/cng/show/{{ $id }}/pasok/tahun">{{ getTahun($data->bulan) }}<i
+                                                <td><b><a
+                                                            href="{{ url('/lng/cng/show') }}/{{ $id }}/pasok/tahun">{{ getTahun($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
@@ -185,7 +194,8 @@
                                                 <!-- <td>{{ $data->catatan }}</td> -->
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
-                                                        <form action="/hapus_bulan_pasok_lng/{{ $data->bulan }}"
+                                                        <form
+                                                            action="{{ url('/hapus_bulan_pasok_lng') }}/{{ $data->bulan }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -194,7 +204,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_pasok_lng/{{ $data->bulan }}"
+                                                        <form
+                                                            action="{{ url('/submit_bulan_pasok_lng') }}/{{ $data->bulan }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan }}">
                                                             @method('PUT')
@@ -207,7 +218,8 @@
                                                     </td>
                                                 @else
                                                     <td>
-                                                        <form action="/hapus_bulan_pasok_lng/{{ $data->bulan }}"
+                                                        <form
+                                                            action="{{ url('/hapus_bulan_pasok_lng') }}/{{ $data->bulan }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -216,7 +228,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_pasok_lng/{{ $data->bulan }}"
+                                                        <form
+                                                            action="{{ url('/submit_bulan_pasok_lng') }}/{{ $data->bulan }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan }}">
                                                             @method('PUT')
@@ -226,7 +239,7 @@
                                                                 <i class="bx bx-paper-plane" title="Kirim data"></i>
                                                             </button>
                                                         </form>
-                                                        <a href="/lng/cng/show/{{ $id }}/pasok"
+                                                        <a href="{{ url('/lng/cng/show') }}/{{ $id }}/pasok"
                                                             class="btn btn-sm btn-info"><i class="bx bx-edit"
                                                                 title="Revisi"></i>
                                                         </a>

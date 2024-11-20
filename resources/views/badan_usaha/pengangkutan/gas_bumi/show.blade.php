@@ -18,9 +18,9 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Gas Bumi</h5>
                                 <div>
-                                    <a href="/pengangkutan-gas-bumi"
+                                    <a href="javascript:history.back()"
                                         class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                    <form action="/submit_bulan_pgb/{{ $bulan_ambilx . '-01' }}" method="post"
+                                    <form action="{{ url('/submit_bulan_pgb') }}/{{ $bulan_ambilx . '-01' }}" method="post"
                                         class="d-inline">
                                         @method('put')
                                         @csrf
@@ -101,8 +101,8 @@
                                                             data-id="{{ $pgb->id }}"> <i class="bx bx-edit-alt"
                                                                 title="Edit"></i>
                                                         </button>
-                                                        <form action="/hapus_pgb/{{ $pgb->id }}" method="post"
-                                                            class="d-inline">
+                                                        <form action="{{ url('/hapus_pgb') }}/{{ $pgb->id }}"
+                                                            method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-danger"

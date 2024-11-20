@@ -119,7 +119,14 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 	});
 
 	// bu hasil olahan harga 
-	Route::resource('/harga-bbm-jbu', HargabbmController::class);
+	// Route::resource('/harga-bbm-jbu', HargabbmController::class);
+	Route::prefix('/harga-bbm-jbu')->group(function () {
+		Route::controller(HargabbmController::class)->group(function () {
+			Route::get('/{id}', 'index');
+			Route::post('/', 'store');
+			Route::delete('/{id}', 'destroy');
+		});
+	});
 	Route::controller(HargabbmController::class)->group(function () {
 		Route::post('/importhargajbu', 'importhargajbux');
 		Route::get('/get-harga-ho/{id}', 'get_harga_ho');
@@ -130,7 +137,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 
 	// LNG/CNG
 	Route::controller(LngController::class)->group(function () {
-		route::get('/lng/cng', 'index');
+		route::get('/lng/cng/{id}', 'index');
 		route::get('/lng/cng/show/{id}/{lng}/{filter?}', 'show_lngx');
 		Route::post('/simpan_lng', 'simpan_lngx');
 		Route::put('/update_lng/{id}', 'update_lngx');
@@ -154,7 +161,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 	// bu hasil olahan penjualan
 
 	Route::controller(LpgController::class)->group(function () {
-		Route::get('/niaga/lpg', 'index');
+		Route::get('/niaga/lpg/{id}', 'index');
 		Route::get('/niaga/lpg/show/{id}/{lpg}/{filter?}', 'show_lpg');
 		Route::post('/simpan_lpg', 'simpan_lpg');
 		Route::put('/update_lpg/{id}', 'update_lpg');
@@ -243,7 +250,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::put('/submit_pmb/{id}', 'submit_pmbx');
 		Route::put('/submit_bulan_pmb/{bulan}', 'submit_bulan_pmbx');
 
-		Route::get('/penyimpanan-gas-bumi', 'index_pggb');
+		Route::get('/penyimpanan-gas-bumi/{id}', 'index_pggb');
 		route::get('/penyimpanan-gas-bumi/show/{filter}/{id}', 'show_pggbx');
 		Route::post('/simpan_pggb', 'simpan_pggbx');
 		Route::put('/update_pggb/{id}', 'update_pggbx');
@@ -309,7 +316,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 
 	// Progress Pembangunan
 	Route::controller(ProgresPembangunanController::class)->group(function () {
-		route::get('/progres-pembangunan/show', 'show_izinSementara');
+		route::get('/progres-pembangunan/show/{id}', 'show_izinSementara');
 		Route::post('/simpan_izinSementara', 'simpan_izinSementara');
 		Route::put('/update_izinSementara/{id}', 'update_izinSementara');
 		Route::delete('/hapus_izinSementara/{id}', 'hapus_izinSementara');
@@ -319,7 +326,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 
 	// Pengangkutan Minyak dan Gas
 	Route::controller(PengangkutanmgController::class)->group(function () {
-		Route::get('/pengangkutan-minyak-bumi', 'index');
+		Route::get('/pengangkutan-minyak-bumi/{id}', 'index');
 		route::get('/pengangkutan-minyak-bumi/show/{id}', 'show_pengmbx');
 		Route::post('/simpan_pengmb', 'simpan_pengmbx');
 		Route::put('/update_pengmb/{id}', 'update_pengmbx');
@@ -330,7 +337,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::put('/submit_bulan_pengmb/{bulan}', 'submit_bulan_pengmbx');
 		Route::post('/importPengangkutanMB', 'importPengangkutanMB');
 
-		Route::get('/pengangkutan-gas-bumi', 'index_pgb');
+		Route::get('/pengangkutan-gas-bumi/{id}', 'index_pgb');
 		route::get('/pengangkutan-gas-bumi/show/{id}', 'show_pgbx');
 		Route::post('/simpan_pgb', 'simpan_pgbx');
 		Route::put('/update_pgb/{id}', 'update_pgbx');

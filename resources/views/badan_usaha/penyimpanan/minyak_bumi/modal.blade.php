@@ -6,14 +6,15 @@
                 <h5 class="modal-title" id="myModalLabel">Penyimpanan Minyak Bumi..</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/simpan_pmb') }}" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/simpan_pmb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
 
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="text" id="example-text-input" name="izin_id"
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
                             value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
@@ -32,7 +33,7 @@
                             </div>
                         @enderror
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">No Tangki</label>
                         <input class="form-control" type="text" id="" name="no_tangki"
@@ -55,7 +56,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Pengguna</label>
-                        <input class="form-control" type="text" id="" name="pengguna" value="{{ old('pengguna') }}" required>
+                        <input class="form-control" type="text" id="" name="pengguna"
+                            value="{{ old('pengguna') }}" required>
                         @error('pengguna')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -169,7 +171,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Awal</label>
-                        <input class="form-control" type="number" step="0.01" id="" name="volume_stok_awal" value="{{ old('volume_stok_awal') }}" required>
+                        <input class="form-control" type="number" step="0.01" id=""
+                            name="volume_stok_awal" value="{{ old('volume_stok_awal') }}" required>
                         @error('volume_stok_awal')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -179,7 +182,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="number" step="0.01" id="" name="volume_supply" value="{{ old('volume_supply') }}" required>
+                        <input class="form-control" type="number" step="0.01" id=""
+                            name="volume_supply" value="{{ old('volume_supply') }}" required>
                         @error('volume_supply')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -188,7 +192,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Output</label>
-                        <input class="form-control" type="number" step="0.01" id="" name="volume_output" value="{{ old('volume_output') }}" required>
+                        <input class="form-control" type="number" step="0.01" id=""
+                            name="volume_output" value="{{ old('volume_output') }}" required>
                         @error('volume_output')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -198,7 +203,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Akhir</label>
-                        <input class="form-control" type="number" step="0.01" id="volume_stok_akhir" name="volume_stok_akhir" value="{{ old('volume_stok_akhir') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="volume_stok_akhir"
+                            name="volume_stok_akhir" value="{{ old('volume_stok_akhir') }}" required>
                         @error('volume_stok_akhir')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -208,7 +214,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kapasitas Penyewaan</label>
-                        <input class="form-control" type="number" step="0.01" id="kapasitas_penyewaan" name="kapasitas_penyewaan" value="{{ old('kapasitas_penyewaan') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="kapasitas_penyewaan"
+                            name="kapasitas_penyewaan" value="{{ old('kapasitas_penyewaan') }}" required>
                         @error('kapasitas_penyewaan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -217,7 +224,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Dokumen Kontrak Sewa</label>
-                        <input class="form-control" type="file" name="kontrak_sewa" value="{{ old('kontrak_sewa') }}" required>
+                        <input class="form-control" type="file" name="kontrak_sewa"
+                            value="{{ old('kontrak_sewa') }}" required>
                         @error('kontrak_sewa')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -226,8 +234,11 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)</font></label>
-                        <input class="form-control" type="number" name="utilisasi_tangki" value="{{ old('utilisasi_tangki') }}" id="utilisasi_tangki" min="0" max="100" required readonly>
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)
+                            </font></label>
+                        <input class="form-control" type="number" name="utilisasi_tangki"
+                            value="{{ old('utilisasi_tangki') }}" id="utilisasi_tangki" min="0"
+                            max="100" required readonly>
                         @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -250,8 +261,8 @@
                         <div class="ps-3 mt-2">
                             <div>
                                 <label for="example-text-input" class="form-label">Tanggal Awal</label>
-                                <input class="form-control" type="date"
-                                    name="tanggal_awal" value="{{ old('tanggal_awal') }}">
+                                <input class="form-control" type="date" name="tanggal_awal"
+                                    value="{{ old('tanggal_awal') }}">
                                 @error('tanggal_awal')
                                     <div class="form-group has-danger mb-0">
                                         <div class="form-control-feedback">{{ $message }}</div>
@@ -274,7 +285,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>
-                        <input class="form-control" type="number" step="0.01" id="" name="tarif_penyimpanan" value="{{ old('tarif_penyimpanan') }}" required>
+                        <input class="form-control" type="number" step="0.01" id=""
+                            name="tarif_penyimpanan" value="{{ old('tarif_penyimpanan') }}" required>
                         @error('tarif_penyimpanan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -296,7 +308,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">keterangan</label>
-                        <input class="form-control" type="text" id="" name="keterangan" value="{{ old('keterangan') }}" required>
+                        <input class="form-control" type="text" id="" name="keterangan"
+                            value="{{ old('keterangan') }}" required>
                         @error('keterangan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -351,8 +364,8 @@
                 <h5 class="modal-title" id="myModalLabel">Edit Penyimpanan Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pmb" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_pmb">
+            <form method="post" action="{{ url('/update_pmb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_pmb">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -381,7 +394,7 @@
                             </div>
                         @enderror
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">No Tangki</label>
                         <input class="form-control" type="text" id="no_tangki_pmb" name="no_tangki" required>
@@ -393,8 +406,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kapasitas Tangki</label>
-                        <input class="form-control" type="number" step="0.01" id="kapasitas_tangki_pmb" name="kapasitas_tangki"
-                            value="{{ old('kapasitas_tangki') }}" required>
+                        <input class="form-control" type="number" step="0.01" id="kapasitas_tangki_pmb"
+                            name="kapasitas_tangki" value="{{ old('kapasitas_tangki') }}" required>
                         @error('kapasitas_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -478,7 +491,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi</label>
-                        <select class="form-select provinsi name_provinsi" name="provinsi" id="provinsi_pmb" required>
+                        <select class="form-select provinsi name_provinsi" name="provinsi" id="provinsi_pmb"
+                            required>
                             <option>Pilih Provinsi</option>
                         </select>
                         @error('provinsi')
@@ -528,7 +542,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="number" step="0.01" id="volume_supply_pmb" name="volume_supply" required>
+                        <input class="form-control" type="number" step="0.01" id="volume_supply_pmb"
+                            name="volume_supply" required>
                         @error('volume_supply')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -537,7 +552,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Output</label>
-                        <input class="form-control" type="number" step="0.01" id="volume_output_pmb" name="volume_output" required>
+                        <input class="form-control" type="number" step="0.01" id="volume_output_pmb"
+                            name="volume_output" required>
                         @error('volume_output')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -558,7 +574,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kapasitas Penyewaan</label>
-                        <input class="form-control" type="number" id="kapasitas_penyewaan_pmb" name="kapasitas_penyewaan" value="{{ old('kapasitas_penyewaan') }}" required>
+                        <input class="form-control" type="number" id="kapasitas_penyewaan_pmb"
+                            name="kapasitas_penyewaan" value="{{ old('kapasitas_penyewaan') }}" required>
                         @error('kapasitas_penyewaan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -576,8 +593,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)</font></label>
-                        <input class="form-control" type="number" name="utilisasi_tangki" id="utilisasi_tangki_pmb" min="0" max="100" readonly>
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)
+                            </font></label>
+                        <input class="form-control" type="number" name="utilisasi_tangki" id="utilisasi_tangki_pmb"
+                            min="0" max="100" readonly>
                         @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -591,8 +610,8 @@
                         <div class="ps-3 mt-2">
                             <div>
                                 <label for="example-text-input" class="form-label">Tanggal Awal</label>
-                                <input class="form-control" type="date"
-                                    name="tanggal_awal" value="{{ old('tanggal_awal') }}" id="tanggal_awal_pmb">
+                                <input class="form-control" type="date" name="tanggal_awal"
+                                    value="{{ old('tanggal_awal') }}" id="tanggal_awal_pmb">
                                 @error('tanggal_awal')
                                     <div class="form-group has-danger mb-0">
                                         <div class="form-control-feedback">{{ $message }}</div>
@@ -695,8 +714,8 @@
                 <h5 class="modal-title" id="myModalLabel">Lihat Penyimpanan Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pmb" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_pmb">
+            <form method="post" action="{{ url('/update_pmb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_pmb">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -736,8 +755,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kapasitas Tangki</label>
-                        <input class="form-control" type="number" id="kapasitas_tangki_pmb_lihat" name="kapasitas_tangki"
-                            value="{{ old('kapasitas_tangki') }}" readonly>
+                        <input class="form-control" type="number" id="kapasitas_tangki_pmb_lihat"
+                            name="kapasitas_tangki" value="{{ old('kapasitas_tangki') }}" readonly>
                         @error('kapasitas_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -885,7 +904,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kapasitas Penyewaan</label>
-                        <input class="form-control" type="number" id="kapasitas_penyewaan_pmb_lihat" name="kapasitas_penyewaan" value="{{ old('kapasitas_penyewaan') }}" readonly>
+                        <input class="form-control" type="number" id="kapasitas_penyewaan_pmb_lihat"
+                            name="kapasitas_penyewaan" value="{{ old('kapasitas_penyewaan') }}" readonly>
                         @error('kapasitas_penyewaan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -895,7 +915,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Dokumen Kontrak Sewa</label>
-                        <input class="form-control" type="file" name="kontrak_sewa" value="{{ old('kontrak_sewa') }}" readonly>
+                        <input class="form-control" type="file" name="kontrak_sewa"
+                            value="{{ old('kontrak_sewa') }}" readonly>
                         @error('kontrak_sewa')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -904,8 +925,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)</font></label>
-                        <input class="form-control" type="number" name="utilisasi_tangki" id="utilisasi_tangki_pmb_lihat" min="0" max="100" readonly>
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)
+                            </font></label>
+                        <input class="form-control" type="number" name="utilisasi_tangki"
+                            id="utilisasi_tangki_pmb_lihat" min="0" max="100" readonly>
                         @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -929,8 +952,8 @@
                             </div>
                             <div>
                                 <label for="example-text-input" class="form-label">Tanggal Berakhir</label>
-                                <input class="form-control" type="date" id="tanggal_akhir_pmb_lihat" value="{{ old('tanggal_akhir') }}"
-                                    name="tanggal_akhir">
+                                <input class="form-control" type="date" id="tanggal_akhir_pmb_lihat"
+                                    value="{{ old('tanggal_akhir') }}" name="tanggal_akhir">
                                 @error('tanggal_akhir')
                                     <div class="form-group has-danger mb-0">
                                         <div class="form-control-feedback">{{ $message }}</div>
@@ -940,7 +963,7 @@
                         </div>
 
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>
                         <input class="form-control" type="text" id="tarif_penyimpanan_pmb_lihat"
@@ -987,15 +1010,14 @@
                     </div>
                 </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect"
-                        data-bs-dismiss="modal">Close</button>
-                </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+        </div>
 
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+        </form>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 
@@ -1008,7 +1030,8 @@
                 <h5 class="modal-title" id="myModalLabel">Penyimpanan Minyak Bumi.</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/import_pmb" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/import_pmb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -1038,4 +1061,3 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-

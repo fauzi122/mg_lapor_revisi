@@ -24,63 +24,64 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Minyak Bumi</h5>
                                 <div>
-                                    <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                    <a href="javascript:history.back()"
+                                        class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
-                                @if ($statusx == 1)
-                                    <form action="/submit_bulan_pmb/{{ $bulan_ambilx . '-01' }}" method="post"
-                                        class="d-inline">
-                                        @method('put')
-                                        @csrf
-                                        <button type="button" class="btn btn-info"
-                                            onclick="kirimData($(this).closest('form'))" disabled>
-                                            <span title="Kirim semua data">Kirim Semua</span>
-                                        </button>
-                                    </form>
+                                    @if ($statusx == 1)
+                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $bulan_ambilx . '-01' }}"
+                                            method="post" class="d-inline">
+                                            @method('put')
+                                            @csrf
+                                            <button type="button" class="btn btn-info"
+                                                onclick="kirimData($(this).closest('form'))" disabled>
+                                                <span title="Kirim semua data">Kirim Semua</span>
+                                            </button>
+                                        </form>
 
-                                    <button type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambilx }}' )"
-                                        data-bs-toggle="modal" data-bs-target="#myModal" disabled>Buat Laporan
-                                        {{ dateIndonesia($bulan_ambilx) }}</button>
-                                    <button type="button" class="btn btn-success waves-effect waves-light"
-                                        onclick="tambahPMB('{{ $bulan_ambilx }}' )" data-bs-toggle="modal"
-                                        data-bs-target="#excelpmb" disabled>Import Excel</button>
-                                @elseif ($statusx == 2)
-                                    <form action="/submit_bulan_pmb/{{ $bulan_ambilx . '-01' }}" method="post"
-                                        class="d-inline">
-                                        @method('put')
-                                        @csrf
-                                        <button type="button" class="btn btn-info"
-                                            onclick="kirimData($(this).closest('form'))">
-                                            <span title="Kirim semua data">Kirim Semua</span>
-                                        </button>
-                                    </form>
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambilx }}' )"
+                                            data-bs-toggle="modal" data-bs-target="#myModal" disabled>Buat Laporan
+                                            {{ dateIndonesia($bulan_ambilx) }}</button>
+                                        <button type="button" class="btn btn-success waves-effect waves-light"
+                                            onclick="tambahPMB('{{ $bulan_ambilx }}' )" data-bs-toggle="modal"
+                                            data-bs-target="#excelpmb" disabled>Import Excel</button>
+                                    @elseif ($statusx == 2)
+                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $bulan_ambilx . '-01' }}"
+                                            method="post" class="d-inline">
+                                            @method('put')
+                                            @csrf
+                                            <button type="button" class="btn btn-info"
+                                                onclick="kirimData($(this).closest('form'))">
+                                                <span title="Kirim semua data">Kirim Semua</span>
+                                            </button>
+                                        </form>
 
-                                    <button type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambilx }}' )"
-                                        data-bs-toggle="modal" data-bs-target="#myModal" disabled>Buat Laporan
-                                        {{ dateIndonesia($bulan_ambilx) }}</button>
-                                    <button type="button" class="btn btn-success waves-effect waves-light"
-                                        onclick="tambahPMB('{{ $bulan_ambilx }}' )" data-bs-toggle="modal"
-                                        data-bs-target="#excelpmb" disabled>Import Excel</button>
-                                @else
-                                    <form action="/submit_bulan_pmb/{{ $bulan_ambilx . '-01' }}" method="post"
-                                        class="d-inline">
-                                        @method('put')
-                                        @csrf
-                                        <button type="button" class="btn btn-info"
-                                            onclick="kirimData($(this).closest('form'))">
-                                            <span title="Kirim semua data">Kirim Semua</span>
-                                        </button>
-                                    </form>
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambilx }}' )"
+                                            data-bs-toggle="modal" data-bs-target="#myModal" disabled>Buat Laporan
+                                            {{ dateIndonesia($bulan_ambilx) }}</button>
+                                        <button type="button" class="btn btn-success waves-effect waves-light"
+                                            onclick="tambahPMB('{{ $bulan_ambilx }}' )" data-bs-toggle="modal"
+                                            data-bs-target="#excelpmb" disabled>Import Excel</button>
+                                    @else
+                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $bulan_ambilx . '-01' }}"
+                                            method="post" class="d-inline">
+                                            @method('put')
+                                            @csrf
+                                            <button type="button" class="btn btn-info"
+                                                onclick="kirimData($(this).closest('form'))">
+                                                <span title="Kirim semua data">Kirim Semua</span>
+                                            </button>
+                                        </form>
 
-                                    <button type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambilx }}' )"
-                                        data-bs-toggle="modal" data-bs-target="#myModal">Buat Laporan
-                                        {{ dateIndonesia($bulan_ambilx) }}</button>
-                                    <button type="button" class="btn btn-success waves-effect waves-light"
-                                        onclick="tambahPMB('{{ $bulan_ambilx }}' )" data-bs-toggle="modal"
-                                        data-bs-target="#excelpmb">Import Excel</button>
-                                @endif
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambilx }}' )"
+                                            data-bs-toggle="modal" data-bs-target="#myModal">Buat Laporan
+                                            {{ dateIndonesia($bulan_ambilx) }}</button>
+                                        <button type="button" class="btn btn-success waves-effect waves-light"
+                                            onclick="tambahPMB('{{ $bulan_ambilx }}' )" data-bs-toggle="modal"
+                                            data-bs-target="#excelpmb">Import Excel</button>
+                                    @endif
                                     <!-- Include modal content -->
                                     @include('badan_usaha.penyimpanan.minyak_bumi.modal')
                                 </div>
@@ -157,8 +158,8 @@
                                                             data-bs-toggle="modal" data-bs-target="#edit-pmb"
                                                             data-id="{{ $pmb->id }}"> <i class="bx bx-edit-alt"
                                                                 title="Edit Data"></i></button>
-                                                        <form action="/hapus_pmb/{{ $pmb->id }}" method="post"
-                                                            class="d-inline">
+                                                        <form action="{{ url('/hapus_pmb') }}/{{ $pmb->id }}"
+                                                            method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-danger"
@@ -166,12 +167,12 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <button type="button" class="btn btn-sm btn-info "
-                                                                    id="" data-bs-toggle="modal"
-                                                                    onclick="lihat_pmb('{{ $pmb->id }}')"
-                                                                    data-bs-target="#lihat-pmb" data-id="{{ $pmb->id }}">
-                                                                    <i class="bx bx-show-alt" title="Lihat data"></i></button>
-                                                        </center>
+                                                        <button type="button" class="btn btn-sm btn-info " id=""
+                                                            data-bs-toggle="modal"
+                                                            onclick="lihat_pmb('{{ $pmb->id }}')"
+                                                            data-bs-target="#lihat-pmb" data-id="{{ $pmb->id }}">
+                                                            <i class="bx bx-show-alt" title="Lihat data"></i></button>
+                                                    </center>
 
                                                     <?php 
                                             }elseif ($status=="1"){ ?>
@@ -191,12 +192,11 @@
                                                             data-bs-toggle="modal" data-bs-target="#edit-pmb"
                                                             data-id="{{ $pmb->id }}"> <i class="bx bx-edit-alt"
                                                                 title="Edit Data"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-info "
-                                                                id="" data-bs-toggle="modal"
-                                                                onclick="lihat_pmb('{{ $pmb->id }}')"
-                                                                data-bs-target="#lihat-pmb"
-                                                                data-id="{{ $pmb->id }}"> <i class="bx bx-show-alt"
-                                                                    title="Lihat data"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-info "
+                                                            id="" data-bs-toggle="modal"
+                                                            onclick="lihat_pmb('{{ $pmb->id }}')"
+                                                            data-bs-target="#lihat-pmb" data-id="{{ $pmb->id }}"> <i
+                                                                class="bx bx-show-alt" title="Lihat data"></i></button>
                                                     </center>
                                                     <?php 
                                             } ?>
@@ -222,10 +222,12 @@
                                                 <td>
                                                     <ul>
                                                         <li>
-                                                            Tanggal Awal : {{ \Carbon\Carbon::parse($pmb->tanggal_awal)->format('d-M-Y') }}
+                                                            Tanggal Awal :
+                                                            {{ \Carbon\Carbon::parse($pmb->tanggal_awal)->format('d-M-Y') }}
                                                         </li>
                                                         <li>
-                                                            Tanggal Akhir : {{ \Carbon\Carbon::parse($pmb->tanggal_akhir)->format('d-M-Y') }}
+                                                            Tanggal Akhir :
+                                                            {{ \Carbon\Carbon::parse($pmb->tanggal_akhir)->format('d-M-Y') }}
                                                         </li>
                                                     </ul>
                                                 </td>
@@ -236,7 +238,9 @@
                                                 <td>{{ $pmb->jumlah_bu }}</td>
                                                 <td>{{ $pmb->nama_penyewa }}</td>
                                                 <td>
-                                                    <a href="{{ asset('storage/'. $pmb->kontrak_sewa) }}" class="btn btn-success waves-effect waves-light ms-3 p-2" download><i class="bx bxs-download me-1"></i>Unduh Dokumen</a>
+                                                    <a href="{{ asset('storage/' . $pmb->kontrak_sewa) }}"
+                                                        class="btn btn-success waves-effect waves-light ms-3 p-2"
+                                                        download><i class="bx bxs-download me-1"></i>Unduh Dokumen</a>
                                                 </td>
 
                                             </tr>

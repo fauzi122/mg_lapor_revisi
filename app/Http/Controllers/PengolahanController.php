@@ -1248,7 +1248,7 @@ class PengolahanController extends Controller
 
     $pesan = [
       'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      // 'izin_id.required' => 'izin_id masih kosong',
+      'izin_id.required' => 'izin_id masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'intake_kilang.required' => 'intake_kilang masih kosong',
       'satuan.required' => 'satuan masih kosong',
@@ -1264,7 +1264,7 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate([
       'badan_usaha_id' => 'required',
-      // 'izin_id' => 'required',
+      'izin_id' => 'required',
       'bulan' => 'required',
       'intake_kilang' => 'required',
       'satuan' => 'required',
@@ -1469,7 +1469,7 @@ class PengolahanController extends Controller
 
     $pesan = [
       'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      // 'izin_id.required' => 'izin_id masih kosong',
+      'izin_id.required' => 'izin_id masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'produk.required' => 'produk masih kosong',
       'satuan.required' => 'satuan masih kosong',
@@ -1486,7 +1486,7 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate([
       'badan_usaha_id' => 'required',
-      // 'izin_id' => 'required',
+      'izin_id' => 'required',
       'bulan' => 'required',
       'produk' => 'required',
       'satuan' => 'required',

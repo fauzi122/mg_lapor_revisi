@@ -6,14 +6,15 @@
                 <h5 class="modal-title" id="myModalLabel">Penjualan LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpan_lpg" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/simpan_lpg') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
+                            value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -150,7 +151,8 @@
                 <h5 class="modal-title" id="myModalLabel">Penjualan LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importLPG" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/importLPG') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -188,7 +190,7 @@
                 <h5 class="modal-title" id="editjholbxLabel">Edit Penjualan LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_lpg/" id="form_lpg" class="form-material m-t-40"
+            <form method="post" action="{{ url('/update_lpg') }}/" id="form_lpg" class="form-material m-t-40"
                 enctype="multipart/form-data" id="form_penjualan">`
                 @method('PUT')
                 @csrf
@@ -229,7 +231,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" step="0.01" name="volume" id="volume_penjualan">
+                        <input class="form-control" type="number" step="0.01" name="volume"
+                            id="volume_penjualan">
                         @error('volume')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -341,7 +344,7 @@
                     <label for="lihat_bulan_penjualan" class="form-label">Bulan</label>
                     <input class="form-control" type="month" name="" id="lihat_bulan_penjualan" readonly>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="lihat_produk_penjualan" class="form-label">Produk</label>
                     <input class="form-control" type="text" name="" id="lihat_produk_penjualan" readonly>
@@ -356,12 +359,13 @@
                     <label for="lihat_satuan_penjualan" class="form-label">Satuan</label>
                     <input class="form-control" type="text" name="" id="lihat_satuan_penjualan" readonly>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="lihat_provinsi_penjualan" class="form-label">Provinsi</label>
-                    <input class="form-control" type="text" name="" id="lihat_provinsi_penjualan" readonly>
+                    <input class="form-control" type="text" name="" id="lihat_provinsi_penjualan"
+                        readonly>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="lihat_kab_penjualan" class="form-label">Kabupaten / Kota</label>
                     <input class="form-control" type="text" name="" id="lihat_kab_penjualan" readonly>
@@ -371,7 +375,7 @@
                     <label for="lihat_sektor_penjualan" class="form-label">Sektor</label>
                     <input class="form-control" type="text" name="" id="lihat_sektor_penjualan" readonly>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="lihat_kemasan_penjualan" class="form-label">Kemasan</label>
                     <input class="form-control" type="text" name="" id="lihat_kemasan_penjualan" readonly>
@@ -393,7 +397,7 @@
                 <h5 class="modal-title" id="myModalLabel">Pasokan LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpan_pasokanLPG" class="form-material m-t-40"
+            <form method="post" action="{{ url('/simpan_pasokanLPG') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -401,7 +405,7 @@
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
+                            value="{{ $pecah[0] }}">
                     </div>
 
                     <div class="mb-3">
@@ -491,7 +495,7 @@
                 <h5 class="modal-title" id="myModalLabel">Import Pasokan LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importpasokanLPG" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importpasokanLPG') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -511,7 +515,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/niagaLPG_Pasokan.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download
+                    <a href="https://lapor.duniasakha.com/storage/template/niagaLPG_Pasokan.xlsx" id="tombol"
+                        class="btn btn-success waves-effect waves-light">Download
                         Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -532,7 +537,7 @@
                 <h5 class="modal-title" id="editjholbxLabel">Edit Pasokan LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pasokanLPG/" class="form-material m-t-40"
+            <form method="post" action="{{ url('/update_pasokanLPG/') }}" class="form-material m-t-40"
                 enctype="multipart/form-data" id="form_pasokan">
                 @method('PUT')
                 @csrf

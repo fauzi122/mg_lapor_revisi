@@ -21,9 +21,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Penjualan LNG/CNG/BBG</h5>
                                     <div>
-                                        <a href="/lng/cng" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                        <a href="javascript:history.back()"
+                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
                                         @if ($statuspenjualan_lngx == 1)
-                                            <form action="/submit_bulan_lng/{{ $bulan_ambil_penjualan_lngx . '-01' }}"
+                                            <form
+                                                action="{{ url('/submit_bulan_lng') }}/{{ $bulan_ambil_penjualan_lngx . '-01' }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
@@ -41,7 +43,8 @@
                                                 data-bs-toggle="modal" data-bs-target="#excellng" disabled>Import
                                                 Excel</button>
                                         @elseif ($statuspenjualan_lngx == 2)
-                                            <form action="/submit_bulan_lng/{{ $bulan_ambil_penjualan_lngx . '-01' }}"
+                                            <form
+                                                action="{{ url('/submit_bulan_lng') }}/{{ $bulan_ambil_penjualan_lngx . '-01' }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
@@ -59,7 +62,8 @@
                                                 data-bs-toggle="modal" data-bs-target="#excellng" disabled>Import
                                                 Excel</button>
                                         @else
-                                            <form action="/submit_bulan_lng/{{ $bulan_ambil_penjualan_lngx . '-01' }}"
+                                            <form
+                                                action="{{ url('/submit_bulan_lng') }}/{{ $bulan_ambil_penjualan_lngx . '-01' }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
@@ -137,8 +141,8 @@
                                                                 data-id="{{ $lng->id }}"> <i class="bx bx-edit-alt"
                                                                     title="Edit data"></i>
                                                             </button>
-                                                            <form action="/hapus_lng/{{ $lng->id }}" method="post"
-                                                                class="d-inline">
+                                                            <form action="{{ url('/hapus_lng') }}/{{ $lng->id }}"
+                                                                method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
                                                                 <button type="button" class="btn btn-sm btn-danger"
@@ -196,10 +200,13 @@
                                                     <td>{{ $lng->volume }}</td>
                                                     <td>{{ $lng->satuan }}</td>
                                                     <td>{{ $lng->satuan_biaya_kompresi }} {{ $lng->biaya_kompresi }}</td>
-                                                    <td>{{ $lng->satuan_biaya_penyimpanan }} {{ $lng->biaya_penyimpanan }}</td>
-                                                    <td>{{ $lng->satuan_biaya_pengangkutan }} {{ $lng->biaya_pengangkutan }}</td>
+                                                    <td>{{ $lng->satuan_biaya_penyimpanan }} {{ $lng->biaya_penyimpanan }}
+                                                    </td>
+                                                    <td>{{ $lng->satuan_biaya_pengangkutan }}
+                                                        {{ $lng->biaya_pengangkutan }}</td>
                                                     <td>{{ $lng->satuan_biaya_niaga }} {{ $lng->biaya_niaga }}</td>
-                                                    <td>{{ $lng->satuan_harga_bahan_baku }} {{ $lng->harga_bahan_baku }}</td>
+                                                    <td>{{ $lng->satuan_harga_bahan_baku }} {{ $lng->harga_bahan_baku }}
+                                                    </td>
                                                     <td>{{ $lng->satuan_pajak }} {{ $lng->pajak }}</td>
                                                     <td>{{ $lng->satuan_harga_jual }} {{ $lng->harga_jual }}</td>
 
@@ -225,9 +232,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Pasokan LNG/CNG/BBG</h5>
                                     <div>
-                                        <a href="/lng/cng" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                        <a href="javascript:history.back()"
+                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
                                         @if ($statuspasok_lngx == 1)
-                                            <form action="/submit_bulan_pasok_lng/{{ $bulan_ambil_pasok_lngx . '-01' }}"
+                                            <form
+                                                action="{{ url('/submit_bulan_pasok_lng') }}/{{ $bulan_ambil_pasok_lngx . '-01' }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
@@ -247,7 +256,8 @@
                                                 Excel
                                             </button>
                                         @elseif ($statuspasok_lngx == 2)
-                                            <form action="/submit_bulan_pasok_lng/{{ $bulan_ambil_pasok_lngx . '-01' }}"
+                                            <form
+                                                action="{{ url('/submit_bulan_pasok_lng') }}/{{ $bulan_ambil_pasok_lngx . '-01' }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
@@ -265,7 +275,8 @@
                                                 data-bs-toggle="modal" data-bs-target="#excellng_pasok" disabled>Import
                                                 Excel</button>
                                         @else
-                                            <form action="/submit_bulan_pasok_lng/{{ $bulan_ambil_pasok_lngx . '-01' }}"
+                                            <form
+                                                action="{{ url('/submit_bulan_pasok_lng') }}/{{ $bulan_ambil_pasok_lngx . '-01' }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
@@ -337,7 +348,8 @@
                                                                 data-bs-toggle="modal" data-bs-target="#modal-edit-pasok"
                                                                 data-id="{{ $pasok->id }}"> <i class="bx bx-edit-alt"
                                                                     title="Edit data"></i></button>
-                                                            <form action="/hapus_pasok_lng/{{ $pasok->id }}"
+                                                            <form
+                                                                action="{{ url('/hapus_pasok_lng') }}/{{ $pasok->id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf

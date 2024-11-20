@@ -8,14 +8,18 @@ use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Izin;
 use App\Models\ProgresPembangunan;
+use Illuminate\Support\Facades\Crypt;
 
 class ProgresPembangunanController extends Controller
 {
-  public function show_izinSementara()
+  public function show_izinSementara($id)
   {
+    $pecah = explode(',', Crypt::decryptString($id));
+
     $ProgresPembangunan = ProgresPembangunan::get();
     return view('badan_usaha.progres_pembangunan.show', compact(
       'ProgresPembangunan',
+      'pecah'
     ));
   }
 
