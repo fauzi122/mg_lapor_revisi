@@ -120,7 +120,18 @@
                                 </div><!-- end card -->
                             </div><!-- end col -->    
                         </div> --}}
-
+            <form action="{{ url('/master') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="row justify-content-center mb-2">
+                    <div class="col-3">
+                        <input type="month" class="form-control" id="period" name="period"
+                            value="{{ old('period', request('period', \Carbon\Carbon::now()->format('Y-m'))) }}">
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Filter Periode</button>
+                    </div>
+                </div>
+            </form>
             <div class="row">
                 <div class="col-xl col-md">
                     <!-- card -->
@@ -202,8 +213,9 @@
                     <label class="form-check-label" for="layout-position-fixed">Fixed</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="layout-position" id="layout-position-scrollable"
-                        value="scrollable" onchange="document.body.setAttribute('data-layout-scrollable', 'true')">
+                    <input class="form-check-input" type="radio" name="layout-position"
+                        id="layout-position-scrollable" value="scrollable"
+                        onchange="document.body.setAttribute('data-layout-scrollable', 'true')">
                     <label class="form-check-label" for="layout-position-scrollable">Scrollable</label>
                 </div>
 
