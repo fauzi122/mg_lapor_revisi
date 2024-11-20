@@ -20,10 +20,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Produksi Kilang</h5>
                                     <div>
-                                        <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                        <a href="javascript:history.back()"
+                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="/submit_bulan_pengolahan_gas_bumi_produksi/{{ $bulan_ambil_produksix . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_gas_bumi_produksi') }}/{{ $bulan_ambil_produksix . '-01' }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -96,7 +97,7 @@
                                                                         class="bx bx-edit-alt" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="/hapus_pengolahan_gas_bumi_produksi/{{ $ppgb->id }}"
+                                                                    action="{{ url('/hapus_pengolahan_gas_bumi_produksi') }}/{{ $ppgb->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -183,10 +184,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Pasokan Kilang</h5>
                                     <div>
-                                        <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                        <a href="javascript:history.back()"
+                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="/submit_bulan_pengolahan_gas_bumi_pasokan/{{ $bulan_ambil_pasokanx . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $bulan_ambil_pasokanx . '-01' }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -259,7 +261,7 @@
                                                                         class="bx bx-edit-alt" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="/hapus_pengolahan_gas_bumi_pasokan/{{ $ppgb->id }}"
+                                                                    action="{{ url('/hapus_pengolahan_gas_bumi_pasokan') }}/{{ $ppgb->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -348,10 +350,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Distribusi/Penjualan Domestik Kilang</h5>
                                     <div>
-                                        <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                        <a href="javascript:history.back()"
+                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="/submit_bulan_pengolahan_gas_bumi_distribusi/{{ $bulan_ambil_distribusix . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $bulan_ambil_distribusix . '-01' }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -426,7 +429,7 @@
                                                                         class="bx bx-edit-alt" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="/hapus_pengolahan_gas_bumi_distribusi/{{ $ppgb->id }}"
+                                                                    action="{{ url('/hapus_pengolahan_gas_bumi_distribusi') }}/{{ $ppgb->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf

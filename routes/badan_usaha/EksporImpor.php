@@ -4,7 +4,7 @@
 use App\Http\Controllers\bu\EksportImportController;
 
 Route::controller(EksportImportController::class)->group(function () {
-  Route::get('/eksport-import', 'index');
+  Route::get('/eksport-import/{id}', 'index');
   route::get('/eksport-import/show/{id}/{eix}/{filter?}', 'show_eix');
   Route::post('/simpan_export', 'simpan_exportx');
   Route::put('/update_export/{id}', 'update_exportx');

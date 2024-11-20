@@ -1,7 +1,7 @@
 @extends('layouts.frontand.app')
 @section('content')
-{{-- tes --}}
-{{-- @dd($impor) --}}
+    {{-- tes --}}
+    {{-- @dd($impor) --}}
 
     <div class="page-content">
         <div class="container-fluid">
@@ -16,6 +16,12 @@
                             </ol>
                         </div>
                     </div>
+                    <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-3"
+                        role="alert">
+                        <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                        <strong>Informasi:</strong> Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -26,8 +32,8 @@
                                 <h5 class="mb-0">Ekspor</h5>
                                 <div>
                                     <button type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms();" data-bs-toggle="modal"
-                                        data-bs-target="#myModal">Buat Laporan</button>
+                                        onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms();"
+                                        data-bs-toggle="modal" data-bs-target="#myModal">Buat Laporan</button>
                                     <button type="button" class="btn btn-success waves-effect waves-light"
                                         data-bs-toggle="modal" data-bs-target="#excelexpor">Import Excel</button>
                                     <!-- Include modal content -->
@@ -51,14 +57,18 @@
                                     <tbody>
                                         @foreach ($ekspor as $data)
                                             @php
-                                                $id = Crypt::encryptString($data->bulan_peb . ',' . $data->badan_usaha_id);
+                                                $id = Crypt::encryptString(
+                                                    $data->bulan_peb . ',' . $data->badan_usaha_id,
+                                                );
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/ekspor">{{ getBulan($data->bulan_peb) }}<i
+                                                <td><b><a
+                                                            href="{{ url('/eksport-import/show') }}/{{ $id }}/ekspor">{{ getBulan($data->bulan_peb) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/ekspor/tahun">{{ getTahun($data->bulan_peb) }}<i
+                                                <td><b><a
+                                                            href="{{ url('/eksport-import/show') }}/{{ $id }}/ekspor/tahun">{{ getTahun($data->bulan_peb) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
@@ -75,7 +85,8 @@
                                                 <!-- <td>{{ $data->catatan }}</td> -->
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
-                                                        <form action="/hapus_bulan_export/{{ $data->bulan_peb }}"
+                                                        <form
+                                                            action="{{ url('/hapus_bulan_export') }}/{{ $data->bulan_peb }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -84,7 +95,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_export/{{ $data->bulan_peb }}"
+                                                        <form
+                                                            action="{{ url('/submit_bulan_export') }}/{{ $data->bulan_peb }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan_peb }}">
                                                             @method('PUT')
@@ -97,7 +109,8 @@
                                                     </td>
                                                 @else
                                                     <td>
-                                                        <form action="/hapus_bulan_export/{{ $data->bulan_peb }}"
+                                                        <form
+                                                            action="{{ url('/hapus_bulan_export') }}/{{ $data->bulan_peb }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -106,7 +119,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_export/{{ $data->bulan_peb }}"
+                                                        <form
+                                                            action="{{ url('/submit_bulan_export') }}/{{ $data->bulan_peb }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan_peb }}">
                                                             @method('PUT')
@@ -116,7 +130,7 @@
                                                                 <i class="bx bx-paper-plane" title="Kirim data"></i>
                                                             </button></center>
                                                         </form>
-                                                        <a href="/eksport-import/show/{{ $id }}/ekspor"
+                                                        <a href="{{ url('/eksport-import/show') }}/{{ $id }}/ekspor"
                                                             class="btn btn-sm btn-info"><i class="bx bx-edit"
                                                                 title="Revisi"></i></a>
                                                     </td>
@@ -139,8 +153,8 @@
                                 <h5 class="mb-0">Impor</h5>
                                 <div>
                                     <button type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms();" data-bs-toggle="modal"
-                                        data-bs-target="#inputimpor">Buat Laporan</button>
+                                        onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms();"
+                                        data-bs-toggle="modal" data-bs-target="#inputimpor">Buat Laporan</button>
                                     <button type="button" class="btn btn-success waves-effect waves-light"
                                         data-bs-toggle="modal" data-bs-target="#excelimport">Import Excel</button>
                                     <!-- Include modal content -->
@@ -163,14 +177,18 @@
                                     <tbody>
                                         @foreach ($impor as $data)
                                             @php
-                                                $id = Crypt::encryptString($data->bulan_pib . ',' . $data->badan_usaha_id);
+                                                $id = Crypt::encryptString(
+                                                    $data->bulan_pib . ',' . $data->badan_usaha_id,
+                                                );
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/impor">{{ getBulan($data->bulan_pib) }}<i
+                                                <td><b><a
+                                                            href="{{ url('/eksport-import/show') }}/{{ $id }}/impor">{{ getBulan($data->bulan_pib) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
-                                                <td><b><a href="/eksport-import/show/{{ $id }}/impor/tahun">{{ getTahun($data->bulan_pib) }}<i
+                                                <td><b><a
+                                                            href="{{ url('/eksport-import/show') }}/{{ $id }}/impor/tahun">{{ getTahun($data->bulan_pib) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
@@ -187,7 +205,8 @@
                                                 <!-- <td>{{ $data->catatan }}</td> -->
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
-                                                        <form action="/hapus_bulan_import/{{ $data->bulan_pib }}"
+                                                        <form
+                                                            action="{{ url('/hapus_bulan_import') }}/{{ $data->bulan_pib }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -196,7 +215,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_import/{{ $data->bulan_pib }}"
+                                                        <form
+                                                            action="{{ url('/submit_bulan_import') }}/{{ $data->bulan_pib }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan_pib }}">
                                                             @method('PUT')
@@ -209,7 +229,8 @@
                                                     </td>
                                                 @else
                                                     <td>
-                                                        <form action="/hapus_bulan_import/{{ $data->bulan_pib }}"
+                                                        <form
+                                                            action="{{ url('/hapus_bulan_import') }}/{{ $data->bulan_pib }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -218,7 +239,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_import/{{ $data->bulan_pib }}"
+                                                        <form
+                                                            action="{{ url('/submit_bulan_import') }}/{{ $data->bulan_pib }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan_pib }}">
                                                             @method('PUT')
@@ -228,7 +250,7 @@
                                                                 <i class="bx bx-paper-plane" title="Kirim data"></i>
                                                             </button></center>
                                                         </form>
-                                                        <a href="/eksport-import/show/{{ $id }}/impor"
+                                                        <a href="{{ url('/eksport-import/show') }}/{{ $id }}/impor"
                                                             class="btn btn-sm btn-info"><i class="bx bx-edit"
                                                                 title="Revisi"></i></a>
                                                     </td>

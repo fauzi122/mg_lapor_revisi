@@ -13,6 +13,12 @@
                             </ol>
                         </div>
                     </div>
+                    <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-3"
+                        role="alert">
+                        <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                        <strong>Informasi:</strong> Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -50,17 +56,17 @@
                                         @foreach ($pm as $data)
                                             @php
                                                 $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id);
-                                                $idTahun = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id . ', tahun');
+                                                $idTahun = Crypt::encryptString(
+                                                    $data->bulan . ',' . $data->badan_usaha_id . ', tahun',
+                                                );
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td><b><a href="/pengangkutan-minyak-bumi/show/{{ $id }}">{{ getBulan($data->bulan) }}<i
-                                                                class="bx bx-check" 
-                                                                title="lihat data laporan"></i></a><b>
+                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td><b><a href="/pengangkutan-minyak-bumi/show/{{ $idTahun }}">{{ getTahun($data->bulan) }}<i
-                                                                class="bx bx-check" 
-                                                                title="lihat data laporan"></i></a><b>
+                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
                                                     @if ($data->status_tertinggi == 1 && $data->catatanx)

@@ -20,10 +20,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Produksi Kilang</h5>
                                     <div>
-                                        <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                        <a href="javascript:history.back()"
+                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="/submit_bulan_pengolahan_minyak_bumi_produksi/{{ $bulan_ambil_produksix . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $bulan_ambil_produksix . '-01' }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -81,7 +82,7 @@
                                                             <span class="badge bg-danger">Revisi</span>
                                                         @elseif ($ppmb->status == 0)
                                                             <span class="badge bg-info">draf</span>
-                                                            @elseif($ppmb->status ==3)
+                                                        @elseif($ppmb->status == 3)
                                                             <span class="badge bg-primary">Selesai</span>
                                                         @endif
                                                     </td>
@@ -101,7 +102,7 @@
                                                                         class="bx bx-edit-alt" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="/hapus_pengolahan_minyak_bumi_produksi/{{ $ppmb->id }}"
+                                                                    action="{{ url('/hapus_pengolahan_minyak_bumi_produksi') }}/{{ $ppmb->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -189,10 +190,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Pasokan Kilang</h5>
                                     <div>
-                                        <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                        <a href="javascript:history.back()"
+                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="/submit_bulan_pengolahan_minyak_bumi_pasokan/{{ $bulan_ambil_pasokanx . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $bulan_ambil_pasokanx . '-01' }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -272,7 +274,7 @@
                                                                         class="bx bx-edit-alt" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="/hapus_pengolahan_minyak_bumi_pasokan/{{ $ppmb->id }}"
+                                                                    action="{{ url('/hapus_pengolahan_minyak_bumi_pasokan') }}/{{ $ppmb->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -364,10 +366,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Distribusi/Penjualan Domestik Kilang</h5>
                                     <div>
-                                        <a href="javascript:history.back()" class="btn btn-secondary waves-effect waves-light">Kembali</a>
+                                        <a href="javascript:history.back()"
+                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="/submit_bulan_pengolahan_minyak_bumi_distribusi/{{ $bulan_ambil_distribusix . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $bulan_ambil_distribusix . '-01' }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -447,7 +450,7 @@
                                                                         class="bx bx-edit-alt" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="/hapus_pengolahan_minyak_bumi_distribusi/{{ $ppmb->id }}"
+                                                                    action="{{ url('/hapus_pengolahan_minyak_bumi_distribusi') }}/{{ $ppmb->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf

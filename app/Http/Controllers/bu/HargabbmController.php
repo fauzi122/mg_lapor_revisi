@@ -19,8 +19,10 @@ class HargabbmController extends Controller
   /**
    * Display a listing of the resource.
    */
-  public function index()
+  public function index($id)
   {
+    // dd($id);
+    $pecah = explode(',', Crypt::decryptString($id));
     
     $hargabbmjbu = DB::table('harga_bbm_jbus')
     ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
@@ -36,7 +38,8 @@ class HargabbmController extends Controller
 
     return view('badan_usaha.niaga.harga.index', compact(
       'hargabbmjbu',
-      'hargaLPG'
+      'hargaLPG',
+      'pecah'
     ));
   }
 
@@ -101,7 +104,8 @@ class HargabbmController extends Controller
         'bulan_ambil_hargalpgx',
         'statushargabbmjbux',
         'statushargalpgx',
-        'hargax'
+        'hargax',
+        'pecah'
     ));
   }
   public function create()
@@ -121,7 +125,7 @@ class HargabbmController extends Controller
 
     $pesan = [
       'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      // 'izin_id.required' => 'izin_id masih kosong',
+      'izin_id.required' => 'izin_id masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'produk.required' => 'produk masih kosong',
       'sektor.required' => 'sektor masih kosong',
@@ -141,7 +145,7 @@ class HargabbmController extends Controller
 
     $validatedData = $request->validate([
       'badan_usaha_id' => 'required',
-      // 'izin_id' => 'required',
+      'izin_id' => 'required',
       'bulan' => 'required',
       'produk' => 'required',
       'sektor' => 'required',

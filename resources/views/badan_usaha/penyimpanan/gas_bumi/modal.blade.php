@@ -6,7 +6,8 @@
                 <h5 class="modal-title" id="myModalLabel">Penyimpanan Gas Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpan_pggb" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/simpan_pggb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -14,7 +15,7 @@
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
+                            value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -79,7 +80,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Awal</label>
-                        <input class="form-control" type="number" step="0.01" id="" name="volume_stok_awal">
+                        <input class="form-control" type="number" step="0.01" id=""
+                            name="volume_stok_awal">
                         @error('volume_stok_awal')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -98,7 +100,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Output</label>
-                        <input class="form-control" type="number" step="0.01" id="" name="volume_output">
+                        <input class="form-control" type="number" step="0.01" id=""
+                            name="volume_output">
                         @error('volume_output')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -108,7 +111,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Stok Akhir</label>
-                        <input class="form-control" type="number" step="0.01" id="" name="volume_stok_akhir">
+                        <input class="form-control" type="number" step="0.01" id=""
+                            name="volume_stok_akhir">
                         @error('volume_stok_akhir')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -117,8 +121,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)</font></label>
-                        <input class="form-control" type="number" min="0" max="100" id="example-text-input" name="utilisasi_tangki" required>
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)
+                            </font></label>
+                        <input class="form-control" type="number" min="0" max="100"
+                            id="example-text-input" name="utilisasi_tangki" required>
                         @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -127,7 +133,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki)</font></label>
+                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha
+                                yang menyewa fasilitas tangki)</font></label>
                         <input class="form-control" type="text" id="example-text-input" name="pengguna">
                         @error('pengguna')
                             <div class="form-group has-danger mb-0">
@@ -141,8 +148,7 @@
                         <div class="ps-3 mt-2">
                             <div>
                                 <label for="example-text-input" class="form-label">Tanggal Awal</label>
-                                <input class="form-control" type="date"
-                                    name="tanggal_awal">
+                                <input class="form-control" type="date" name="tanggal_awal">
                                 @error('tanggal_awal')
                                     <div class="form-group has-danger mb-0">
                                         <div class="form-control-feedback">{{ $message }}</div>
@@ -151,8 +157,7 @@
                             </div>
                             <div>
                                 <label for="example-text-input" class="form-label">Tanggal Berakhir</label>
-                                <input class="form-control" type="date"
-                                    name="tanggal_berakhir">
+                                <input class="form-control" type="date" name="tanggal_berakhir">
                                 @error('tanggal_berakhir')
                                     <div class="form-group has-danger mb-0">
                                         <div class="form-control-feedback">{{ $message }}</div>
@@ -164,7 +169,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Tarif Penyimpanan</label>
-                        <input class="form-control" type="number" step="0.01" id="example-text-input" name="tarif_penyimpanan">
+                        <input class="form-control" type="number" step="0.01" id="example-text-input"
+                            name="tarif_penyimpanan">
                         @error('tarif_penyimpanan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -207,8 +213,8 @@
                 <h5 class="modal-title" id="myModalLabel">Edit Penyimpanan Gas Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pggb" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_pggb">
+            <form method="post" action="{{ url('/update_pggb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_pggb">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -293,7 +299,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="number" step="0.01" id="volume_supply_pggb" name="volume_supply">
+                        <input class="form-control" type="number" step="0.01" id="volume_supply_pggb"
+                            name="volume_supply">
                         @error('volume_supply')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -302,7 +309,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Output</label>
-                        <input class="form-control" type="number" step="0.01" id="volume_output_pggb" name="volume_output">
+                        <input class="form-control" type="number" step="0.01" id="volume_output_pggb"
+                            name="volume_output">
                         @error('volume_output')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -322,8 +330,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)</font></label>
-                        <input class="form-control" type="number" min="0" max="100" id="utilisasi_tangki_pggb" name="utilisasi_tangki" required>
+                        <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)
+                            </font></label>
+                        <input class="form-control" type="number" min="0" max="100"
+                            id="utilisasi_tangki_pggb" name="utilisasi_tangki" required>
                         @error('utilisasi_tangki')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -332,7 +342,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki)</font></label>
+                        <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha
+                                yang menyewa fasilitas tangki)</font></label>
                         <input class="form-control" type="text" id="pengguna_pggb" name="pengguna">
                         @error('pengguna')
                             <div class="form-group has-danger mb-0">
@@ -346,8 +357,8 @@
                         <div class="ps-3 mt-2">
                             <div>
                                 <label for="example-text-input" class="form-label">Tanggal Awal</label>
-                                <input class="form-control" type="date"
-                                    name="tanggal_awal" id="tanggal_awal_pggb">
+                                <input class="form-control" type="date" name="tanggal_awal"
+                                    id="tanggal_awal_pggb">
                                 @error('tanggal_awal')
                                     <div class="form-group has-danger mb-0">
                                         <div class="form-control-feedback">{{ $message }}</div>
@@ -356,8 +367,8 @@
                             </div>
                             <div>
                                 <label for="example-text-input" class="form-label">Tanggal Berakhir</label>
-                                <input class="form-control" type="date"
-                                    name="tanggal_berakhir" id="tanggal_berakhir_pggb">
+                                <input class="form-control" type="date" name="tanggal_berakhir"
+                                    id="tanggal_berakhir_pggb">
                                 @error('tanggal_berakhir')
                                     <div class="form-group has-danger mb-0">
                                         <div class="form-control-feedback">{{ $message }}</div>
@@ -531,9 +542,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)</font></label>
-                    <input class="form-control" type="number" min="0" max="100" id="utilisasi_tangki_pggb_lihat" name="utilisasi_tangki"
-                        readonly>
+                    <label for="example-text-input" class="form-label">Utilisasi Tangki <font color="red">(%)
+                        </font></label>
+                    <input class="form-control" type="number" min="0" max="100"
+                        id="utilisasi_tangki_pggb_lihat" name="utilisasi_tangki" readonly>
                     @error('utilisasi_tangki')
                         <div class="form-group has-danger mb-0">
                             <div class="form-control-feedback">{{ $message }}</div>
@@ -542,8 +554,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha yang menyewa fasilitas tangki
-)</font></label>
+                    <label for="example-text-input" class="form-label">Pengguna <font color="red">(Badan usaha
+                            yang menyewa fasilitas tangki
+                            )</font></label>
                     <input class="form-control" type="text" id="pengguna_pggb_lihat" name="pengguna" readonly>
                     @error('pengguna')
                         <div class="form-group has-danger mb-0">
@@ -557,8 +570,8 @@
                     <div class="ps-3 mt-2">
                         <div>
                             <label for="example-text-input" class="form-label">Tanggal Awal</label>
-                            <input class="form-control" type="date"
-                                name="tanggal_awal" id="lihat_tanggal_awal_pggb" readonly>
+                            <input class="form-control" type="date" name="tanggal_awal"
+                                id="lihat_tanggal_awal_pggb" readonly>
                             @error('tanggal_awal')
                                 <div class="form-group has-danger mb-0">
                                     <div class="form-control-feedback">{{ $message }}</div>
@@ -567,8 +580,8 @@
                         </div>
                         <div>
                             <label for="example-text-input" class="form-label">Tanggal Berakhir</label>
-                            <input class="form-control" type="date"
-                                name="tanggal_berakhir" id="lihat_tanggal_berakhir_pggb" readonly>
+                            <input class="form-control" type="date" name="tanggal_berakhir"
+                                id="lihat_tanggal_berakhir_pggb" readonly>
                             @error('tanggal_berakhir')
                                 <div class="form-group has-danger mb-0">
                                     <div class="form-control-feedback">{{ $message }}</div>
@@ -618,7 +631,8 @@
                 <h5 class="modal-title" id="myModalLabel">Penyimpanan Gas Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/import_pggb" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/import_pggb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">

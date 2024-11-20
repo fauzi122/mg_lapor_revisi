@@ -17,10 +17,11 @@ use Illuminate\Support\Facades\Crypt;
 
 class PengangkutanmgController extends Controller
 {
-    public function index()
+    public function index($id)
     {
         // $pm = pengangkutan_minyakbumi::where('badan_usaha_id', Auth::user()->badan_usaha_id)
         //     ->groupBy('bulan')->get();
+        $pecah = explode(',', Crypt::decryptString($id));
 
         $pm = DB::table('pengangkutan_minyakbumis')
             ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
@@ -29,12 +30,14 @@ class PengangkutanmgController extends Controller
             ->get();
 
         // return view('badan_usaha.pengangkutan.minyak_bumi.coba', compact('pm'));
-        return view('badan_usaha.pengangkutan.minyak_bumi.index', compact('pm'));
+        return view('badan_usaha.pengangkutan.minyak_bumi.index', compact('pm', 'pecah'));
     }
-    public function index_pgb()
+    public function index_pgb($id)
     {
         // $pm = pengangkutan_gaskbumi::where('badan_usaha_id', Auth::user()->badan_usaha_id)
         //     ->groupBy('bulan')->get();
+
+        $pecah = explode(',', Crypt::decryptString($id));
 
         $pm = DB::table('pengangkutan_gaskbumis')
             ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
@@ -42,7 +45,7 @@ class PengangkutanmgController extends Controller
             ->groupBy('bulan')
             ->get();
 
-        return view('badan_usaha.pengangkutan.gas_bumi.index', compact('pm'));
+        return view('badan_usaha.pengangkutan.gas_bumi.index', compact('pm', 'pecah'));
     }
 
     public function show_pengmbx($id)
@@ -76,7 +79,8 @@ class PengangkutanmgController extends Controller
         return view('badan_usaha.pengangkutan.minyak_bumi.show', compact(
             'pgb',
             'bulan_ambilx',
-            'statusx'
+            'statusx',
+            'pecah'
         ));
     }
 
@@ -89,6 +93,7 @@ class PengangkutanmgController extends Controller
         $pesan = [
             'bulan.required' => 'bulan masih kosong',
             'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'izin_id.required' => 'izin_id masih kosong',
             'produk.required' => 'produk masih kosong',
             'jenis_moda.required' => 'jenis moda masih kosong',
             'node_asal.required' => 'node asal masih kosong',
@@ -104,6 +109,7 @@ class PengangkutanmgController extends Controller
         $validatedData = $request->validate([
             'bulan' => 'required',
             'badan_usaha_id' => 'required',
+            'izin_id' => 'required',
             'produk' => 'required',
             'jenis_moda' => 'required',
             'node_asal' => 'required',
@@ -298,6 +304,7 @@ class PengangkutanmgController extends Controller
             'pgb',
             'bulan_ambilx',
             'statusx',
+            'pecah'
         ));
     }
 
@@ -309,6 +316,7 @@ class PengangkutanmgController extends Controller
         ]);
         $pesan = [
             'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'izin_id.required' => 'izin_id masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
             'node_asal.required' => 'node asal masih kosong',
@@ -323,6 +331,7 @@ class PengangkutanmgController extends Controller
 
         $validatedData = $request->validate([
             'badan_usaha_id' => 'required',
+            'izin_id' => 'required',
             'bulan' => 'required',
             'produk' => 'required',
             'node_asal' => 'required',

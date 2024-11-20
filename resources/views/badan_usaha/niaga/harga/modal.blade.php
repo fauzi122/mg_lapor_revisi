@@ -8,13 +8,15 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/harga-bbm-jbu" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/harga-bbm-jbu') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="hidden" id="" name="izin_id" value="1">
+                        <input class="form-control" type="hidden" id="" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -218,7 +220,7 @@
                 <h5 class="modal-title" id="myModalLabel">Import Harga BBM JBU</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importhargajbu" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importhargajbu') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -260,8 +262,8 @@
                 <h5 class="modal-title" id="editjholbxLabel">Edit Harga BBM JBU/Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/harga-bbm-jbu/" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_hargabbm">
+            <form method="post" action="{{ url('/harga-bbm-jbu/') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_hargabbm">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -556,7 +558,7 @@
                 <h5 class="modal-title" id="myModalLabel">Input Harga LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpanHargaLPG" class="form-material m-t-40"
+            <form method="post" action="{{ url('/simpanHargaLPG') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -564,7 +566,7 @@
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
+                            value="{{ $pecah[0] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -760,7 +762,7 @@
                 <h5 class="modal-title" id="myModalLabel">Import Harga LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importHargaLPG" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importHargaLPG') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -794,7 +796,7 @@
                 <h5 class="modal-title" id="editjholbxLabel">Edit Harga LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/updateHargaLPG/" class="form-material m-t-40"
+            <form method="post" action="{{ url('/updateHargaLPG/') }}" class="form-material m-t-40"
                 enctype="multipart/form-data" id="form_hargaLPG">
                 @method('PUT')
                 @csrf
@@ -1043,7 +1045,8 @@
                 <div class="mb-3">
                     <label for="example-text-input" class="form-label">Margin <font color="red">(Satuan
                             RP / Mton)</font></label>
-                    <input class="form-control" type="number" name="margin" id="lihat_margin_hargaLPG" readonly>
+                    <input class="form-control" type="number" name="margin" id="lihat_margin_hargaLPG"
+                        readonly>
                 </div>
 
                 <div class="mb-3">
@@ -1071,7 +1074,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary waves-effect"
+                    data-bs-dismiss="modal">Close</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

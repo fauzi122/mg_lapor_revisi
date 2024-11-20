@@ -13,6 +13,12 @@
                             </ol>
                         </div>
                     </div>
+                    <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-3"
+                        role="alert">
+                        <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                        <strong>Informasi:</strong> Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 </div>
             </div>
 
@@ -75,41 +81,43 @@
                                             <tbody>
                                                 @foreach ($pengolahanProduksiMB as $ppmb)
                                                     @php
-                                                        $id = Crypt::encryptString($ppmb->bulan . ',' . $ppmb->badan_usaha_id);
+                                                        $id = Crypt::encryptString(
+                                                            $ppmb->bulan . ',' . $ppmb->badan_usaha_id,
+                                                        );
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi">{{ getBulan($ppmb->bulan) }}
+                                                                    href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/produksi">{{ getBulan($ppmb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
                                                         </td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi/tahun">{{ getTahun($ppmb->bulan) }}
+                                                                    href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/produksi/tahun">{{ getTahun($ppmb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
                                                         </td>
                                                         <td>
                                                             @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
-                                                            <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                        @elseif ($ppmb->status_tertinggi == 1)
-                                                            <span class="badge bg-success">Diterima</span>
-                                                        @elseif ($ppmb->status_tertinggi == 2)
-                                                            <span class="badge bg-danger">Revisi</span>
-                                                        @elseif ($ppmb->status_tertinggi == 0)
-                                                            <span class="badge bg-info">draf</span>
-                                                         @elseif($ppmb->status ==3)
-                                                            <span class="badge bg-primary">Selesai</span>
-                                                        @endif
-                                                        
+                                                                <span class="badge bg-warning">Sudah Diperbaiki</span>
+                                                            @elseif ($ppmb->status_tertinggi == 1)
+                                                                <span class="badge bg-success">Diterima</span>
+                                                            @elseif ($ppmb->status_tertinggi == 2)
+                                                                <span class="badge bg-danger">Revisi</span>
+                                                            @elseif ($ppmb->status_tertinggi == 0)
+                                                                <span class="badge bg-info">draf</span>
+                                                            @elseif($ppmb->status == 3)
+                                                                <span class="badge bg-primary">Selesai</span>
+                                                            @endif
+
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="/hapus_bulan_pengolahan_minyak_bumi_produksi/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $ppmb->bulan }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -120,7 +128,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="/submit_bulan_pengolahan_minyak_bumi_produksi/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $ppmb->bulan }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppmb->bulan }}">
                                                                 @method('PUT')
@@ -132,7 +140,7 @@
                                                                 </button>
                                                             </form>
                                                             @if ($ppmb->status_tertinggi != 1)
-                                                                <a href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/produksi"
+                                                                <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/produksi"
                                                                     class="btn btn-sm btn-info">
                                                                     <i class="bx bx-edit" title="Revisi"></i>
                                                                 </a>
@@ -184,20 +192,22 @@
                                             <tbody>
                                                 @foreach ($pengolahanPasokanMB as $ppmb)
                                                     @php
-                                                        $id = Crypt::encryptString($ppmb->bulan . ',' . $ppmb->badan_usaha_id);
+                                                        $id = Crypt::encryptString(
+                                                            $ppmb->bulan . ',' . $ppmb->badan_usaha_id,
+                                                        );
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/pasokan">{{ getBulan($ppmb->bulan) }}
+                                                                    href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/pasokan">{{ getBulan($ppmb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
                                                         </td>
                                                         <td>
                                                             <b><a
-                                                                    href="{{url ('/pengolahan-minyak-bumi-hasil-olah/show/') }}{{ $id }}/pasokan/tahun">{{ getTahun($ppmb->bulan) }}
+                                                                    href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show/') }}{{ $id }}/pasokan/tahun">{{ getTahun($ppmb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
@@ -211,13 +221,13 @@
                                                                 <span class="badge bg-danger">Revisi</span>
                                                             @elseif ($ppmb->status_tertinggi == 0)
                                                                 <span class="badge bg-info">draf</span>
-                                                             @elseif($ppmb->status ==3)
+                                                            @elseif($ppmb->status == 3)
                                                                 <span class="badge bg-primary">Selesai</span>
                                                             @endif
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="/hapus_bulan_pengolahan_minyak_bumi_pasokan/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $ppmb->bulan }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -228,7 +238,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="/submit_bulan_pengolahan_minyak_bumi_pasokan/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $ppmb->bulan }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppmb->bulan }}">
                                                                 @method('PUT')
@@ -240,7 +250,7 @@
                                                                 </button>
                                                             </form>
                                                             @if ($ppmb->status_tertinggi != 1)
-                                                                <a href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/pasokan"
+                                                                <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/pasokan"
                                                                     class="btn btn-sm btn-info">
                                                                     <i class="bx bx-edit" title="Revisi"></i>
                                                                 </a>
@@ -294,14 +304,16 @@
                                             <tbody>
                                                 @foreach ($pengolahanDistribusiMB as $ppmb)
                                                     @php
-                                                        $id = Crypt::encryptString($ppmb->bulan . ',' . $ppmb->badan_usaha_id);
+                                                        $id = Crypt::encryptString(
+                                                            $ppmb->bulan . ',' . $ppmb->badan_usaha_id,
+                                                        );
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b>
                                                                 <a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/distribusi">{{ getBulan($ppmb->bulan) }}
+                                                                    href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/distribusi">{{ getBulan($ppmb->bulan) }}
                                                                     <i class="bx bx-check" title="lihat data laporan"></i>
                                                                 </a>
                                                             </b>
@@ -309,28 +321,28 @@
                                                         <td>
                                                             <b>
                                                                 <a
-                                                                    href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/distribusi/tahun">{{ getTahun($ppmb->bulan) }}
+                                                                    href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/distribusi/tahun">{{ getTahun($ppmb->bulan) }}
                                                                     <i class="bx bx-check" title="lihat data laporan"></i>
                                                                 </a>
                                                             </b>
                                                         </td>
                                                         <td>
-                                           
+
                                                             @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
-                                                            <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                        @elseif ($ppmb->status_tertinggi == 1)
-                                                            <span class="badge bg-success">Diterima</span>
-                                                        @elseif ($ppmb->status_tertinggi == 2)
-                                                            <span class="badge bg-danger">Revisi</span>
-                                                        @elseif ($ppmb->status_tertinggi == 0)
-                                                            <span class="badge bg-info">draf</span>
-                                                         @elseif($ppmb->status ==3)
-                                                            <span class="badge bg-primary">Selesai</span>
-                                                        @endif
+                                                                <span class="badge bg-warning">Sudah Diperbaiki</span>
+                                                            @elseif ($ppmb->status_tertinggi == 1)
+                                                                <span class="badge bg-success">Diterima</span>
+                                                            @elseif ($ppmb->status_tertinggi == 2)
+                                                                <span class="badge bg-danger">Revisi</span>
+                                                            @elseif ($ppmb->status_tertinggi == 0)
+                                                                <span class="badge bg-info">draf</span>
+                                                            @elseif($ppmb->status == 3)
+                                                                <span class="badge bg-primary">Selesai</span>
+                                                            @endif
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="/hapus_bulan_pengolahan_minyak_bumi_distribusi/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $ppmb->bulan }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -341,7 +353,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="/submit_bulan_pengolahan_minyak_bumi_distribusi/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $ppmb->bulan }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppmb->bulan }}">
                                                                 @method('PUT')
@@ -353,7 +365,7 @@
                                                                 </button>
                                                             </form>
                                                             @if ($ppmb->status_tertinggi != 1)
-                                                                <a href="/pengolahan-minyak-bumi-hasil-olah/show/{{ $id }}/distribusi"
+                                                                <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/distribusi"
                                                                     class="btn btn-sm btn-info">
                                                                     <i class="bx bx-edit" title="Revisi"></i>
                                                                 </a>
@@ -407,20 +419,22 @@
                                             <tbody>
                                                 @foreach ($pengolahanProduksiGB as $ppgb)
                                                     @php
-                                                        $id = Crypt::encryptString($ppgb->bulan . ',' . $ppgb->badan_usaha_id);
+                                                        $id = Crypt::encryptString(
+                                                            $ppgb->bulan . ',' . $ppgb->badan_usaha_id,
+                                                        );
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/produksi">{{ getBulan($ppgb->bulan) }}
+                                                                    href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/produksi">{{ getBulan($ppgb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
                                                         </td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/produksi/tahun">{{ getTahun($ppgb->bulan) }}
+                                                                    href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/produksi/tahun">{{ getTahun($ppgb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
@@ -434,13 +448,13 @@
                                                                 <span class="badge bg-danger">Revisi</span>
                                                             @elseif ($ppmb->status_tertinggi == 0)
                                                                 <span class="badge bg-info">draf</span>
-                                                             @elseif($ppmb->status ==3)
+                                                            @elseif($ppmb->status == 3)
                                                                 <span class="badge bg-primary">Selesai</span>
                                                             @endif
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="/hapus_bulan_pengolahan_gas_bumi_produksi/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_gas_bumi_produksi') }}/{{ $ppgb->bulan }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -451,7 +465,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="/submit_bulan_pengolahan_gas_bumi_produksi/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_gas_bumi_produksi') }}/{{ $ppgb->bulan }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppgb->bulan }}">
                                                                 @method('PUT')
@@ -463,7 +477,7 @@
                                                                 </button>
                                                             </form>
                                                             @if ($ppgb->status_tertinggi != 1)
-                                                                <a href="/pengolahan-gas-bumi/show/{{ $id }}/produksi"
+                                                                <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/produksi"
                                                                     class="btn btn-sm btn-info">
                                                                     <i class="bx bx-edit" title="Revisi"></i>
                                                                 </a>
@@ -515,26 +529,28 @@
                                             <tbody>
                                                 @foreach ($pengolahanPasokanGB as $ppgb)
                                                     @php
-                                                        $id = Crypt::encryptString($ppgb->bulan . ',' . $ppgb->badan_usaha_id);
+                                                        $id = Crypt::encryptString(
+                                                            $ppgb->bulan . ',' . $ppgb->badan_usaha_id,
+                                                        );
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/pasokan">{{ getBulan($ppgb->bulan) }}
+                                                                    href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/pasokan">{{ getBulan($ppgb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
                                                         </td>
                                                         <td>
                                                             <b><a
-                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/pasokan/tahun">{{ getTahun($ppgb->bulan) }}
+                                                                    href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/pasokan/tahun">{{ getTahun($ppgb->bulan) }}
                                                                     <i class="bx bx-check"
                                                                         title="lihat data laporan"></i></a>
                                                             </b>
                                                         </td>
                                                         <td>
-                                                             @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
+                                                            @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($ppmb->status_tertinggi == 1)
                                                                 <span class="badge bg-success">Diterima</span>
@@ -542,13 +558,13 @@
                                                                 <span class="badge bg-danger">Revisi</span>
                                                             @elseif ($ppmb->status_tertinggi == 0)
                                                                 <span class="badge bg-info">draf</span>
-                                                             @elseif($ppmb->status ==3)
+                                                            @elseif($ppmb->status == 3)
                                                                 <span class="badge bg-primary">Selesai</span>
                                                             @endif
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="/hapus_bulan_pengolahan_gas_bumi_pasokan/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $ppgb->bulan }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -559,7 +575,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="/submit_bulan_pengolahan_gas_bumi_pasokan/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $ppgb->bulan }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppgb->bulan }}">
                                                                 @method('PUT')
@@ -571,7 +587,7 @@
                                                                 </button>
                                                             </form>
                                                             @if ($ppgb->status_tertinggi != 1)
-                                                                <a href="/pengolahan-gas-bumi/show/{{ $id }}/pasokan"
+                                                                <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/pasokan"
                                                                     class="btn btn-sm btn-info">
                                                                     <i class="bx bx-edit" title="Revisi"></i>
                                                                 </a>
@@ -624,14 +640,16 @@
                                             <tbody>
                                                 @foreach ($pengolahanDistribusiGB as $ppgb)
                                                     @php
-                                                        $id = Crypt::encryptString($ppgb->bulan . ',' . $ppgb->badan_usaha_id);
+                                                        $id = Crypt::encryptString(
+                                                            $ppgb->bulan . ',' . $ppgb->badan_usaha_id,
+                                                        );
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>
                                                             <b>
                                                                 <a
-                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/distribusi">{{ getBulan($ppgb->bulan) }}
+                                                                    href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/distribusi">{{ getBulan($ppgb->bulan) }}
                                                                     <i class="bx bx-check" title="lihat data laporan"></i>
                                                                 </a>
                                                             </b>
@@ -639,13 +657,13 @@
                                                         <td>
                                                             <b>
                                                                 <a
-                                                                    href="/pengolahan-gas-bumi/show/{{ $id }}/distribusi/tahun">{{ getTahun($ppgb->bulan) }}
+                                                                    href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/distribusi/tahun">{{ getTahun($ppgb->bulan) }}
                                                                     <i class="bx bx-check" title="lihat data laporan"></i>
                                                                 </a>
                                                             </b>
                                                         </td>
                                                         <td>
-                                                             @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
+                                                            @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($ppmb->status_tertinggi == 1)
                                                                 <span class="badge bg-success">Diterima</span>
@@ -653,13 +671,13 @@
                                                                 <span class="badge bg-danger">Revisi</span>
                                                             @elseif ($ppmb->status_tertinggi == 0)
                                                                 <span class="badge bg-info">draf</span>
-                                                             @elseif($ppmb->status ==3)
+                                                            @elseif($ppmb->status == 3)
                                                                 <span class="badge bg-primary">Selesai</span>
                                                             @endif
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="/hapus_bulan_pengolahan_gas_bumi_distribusi/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $ppgb->bulan }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -670,7 +688,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="/submit_bulan_pengolahan_gas_bumi_distribusi/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $ppgb->bulan }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppgb->bulan }}">
                                                                 @method('PUT')
@@ -682,7 +700,7 @@
                                                                 </button>
                                                             </form>
                                                             @if ($ppgb->status_tertinggi != 1)
-                                                                <a href="/pengolahan-gas-bumi/show/{{ $id }}/distribusi"
+                                                                <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/distribusi"
                                                                     class="btn btn-sm btn-info">
                                                                     <i class="bx bx-edit" title="Revisi"></i>
                                                                 </a>

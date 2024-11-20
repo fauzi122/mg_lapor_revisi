@@ -6,7 +6,7 @@
                 <h5 class="modal-title" id="myModalLabel">Izin Sementara Minyak Bumi / Gas Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpan_izinSementara" class="form-material m-t-40"
+            <form method="post" action="{{ url('/simpan_izinSementara') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -96,8 +96,8 @@
                 <h5 class="modal-title" id="myModalLabel">Edit LPG Subsidi Verified</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_lgpsub" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_lgpsub">
+            <form method="post" action="{{ url('/update_lgpsub') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_lgpsub">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -170,8 +170,8 @@
                 <h5 class="modal-title" id="myModalLabel">Lihat LPG Subsidi Verified</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_export" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_ekpor">
+            <form method="post" action="{{ url('/update_export') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_ekpor">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
