@@ -15,9 +15,10 @@ class EvJualGasBumiController extends Controller
 
         $perusahaan = DB::table('penjualan_g_b_p_s as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
             ->whereIn('a.status', [1, 2, 3])
             ->groupBy('a.badan_usaha_id')
-            ->select( 'b.ID_PERUSAHAAN', 'b.NAMA_PERUSAHAAN')
+            ->select( 'b.ID_PERUSAHAAN', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN')
             ->get();
         $data = [
             'title'=>'Penjualan Gas Bumi Melalui Pipa',

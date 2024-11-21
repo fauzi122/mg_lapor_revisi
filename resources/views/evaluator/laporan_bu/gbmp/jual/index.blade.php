@@ -110,6 +110,8 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Nama Perusahaan</th>
+                                                    <th>Nomor Izin</th>
+                                                    <th>Tanggal Disetujui</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -118,6 +120,8 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $per->NAMA_PERUSAHAAN }}</td>
+                                                        <td>{{ $per->NOMOR_IZIN }}</td>
+                                                        <td>{{ $per->TGL_DISETUJUI }}</td>
                                                         <td><a href="{{ url('laporan/jual/gbmp/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->ID_PERUSAHAAN) }}"
                                                                 class="btn btn-primary btn-rounded btn-sm"><i
                                                                     class="bx bx-show"></i> Lihat </a></td>

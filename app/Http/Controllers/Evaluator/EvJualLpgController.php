@@ -16,9 +16,10 @@ class EvJualLpgController extends Controller
 
         $perusahaan = DB::table('penjualan_lpgs as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
             ->whereIn('a.status', [1, 2, 3])
             ->groupBy('a.badan_usaha_id')
-            ->select( 'b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+            ->select( 'b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN')
             ->get();
         $data = [
             'title'=>'Laporan Penjualan LPG',
