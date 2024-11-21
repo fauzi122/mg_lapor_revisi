@@ -18,7 +18,6 @@ class EvHasilOlahController extends Controller
     public function index()
     {
 
-
         $perusahaan = DB::table('jual_hasil_olah_bbms as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')

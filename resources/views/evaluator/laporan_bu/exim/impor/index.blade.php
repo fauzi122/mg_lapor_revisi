@@ -111,6 +111,8 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Nama Perusahaan</th>
+                                                    <th>Nomor Izin</th>
+                                                    <th>Tanggal Disetujui</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -119,6 +121,8 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $per->NAMA_PERUSAHAAN }}</td>
+                                                        <td>{{ $per->NOMOR_IZIN }}</td>
+                                                        <td>{{ $per->TGL_DISETUJUI }}</td>
                                                         <td><a href="{{ url('laporan/impor/exim/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"
                                                                 class="btn btn-primary btn-rounded btn-sm"><i
                                                                     class="bx bx-show"></i> Lihat </a></td>
