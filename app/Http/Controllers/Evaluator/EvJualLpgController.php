@@ -37,7 +37,8 @@ class EvJualLpgController extends Controller
         // Query dasar untuk mendapatkan data penjualan
         $query = DB::table('penjualan_lpgs as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN')
+            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+            ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN')
             ->whereBetween('bulan', [$t_awal, $t_akhir]);
     
         // Jika perusahaan bukan 'all', tambahkan kondisi filter untuk badan usaha
@@ -231,16 +232,18 @@ class EvJualLpgController extends Controller
 
         $query = DB::table('penjualan_lpgs as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN')
         ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
         ->whereIn('a.status', [1, 2, 3])
         ->get();
 
         $perusahaan = DB::table('penjualan_lpgs as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
         ->whereIn('a.status', [1, 2, 3])
         ->groupBy('a.badan_usaha_id')
-        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN')
         ->get();
 
         // return json_decode($query); exit;
@@ -259,14 +262,16 @@ class EvJualLpgController extends Controller
 
         $perusahaan = DB::table('penjualan_lpgs as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
         ->whereIn('a.status', [1, 2, 3])
         ->groupBy('a.badan_usaha_id')
-        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
+        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN')
         ->get();
 
         $query = DB::table('penjualan_lpgs as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN');
+        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN');
         
         if ($request->perusahaan != 'all') {
             $query->where('badan_usaha_id', $request->perusahaan);

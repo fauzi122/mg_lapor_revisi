@@ -106,6 +106,8 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Perusahaan</th>
+                                                <th>Nomor Izin</th>
+                                                <th>Tanggal Disetujui</th>
                                                 <th>Bulan</th>
                                                 <th>Tahun</th>
                                                 <th>Status</th>
@@ -135,6 +137,8 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $pgb->NAMA_PERUSAHAAN }}</td>
+                                                    <td>{{ $pgb->NOMOR_IZIN }}</td>
+                                                    <td>{{ $pgb->TGL_DISETUJUI }}</td>
                                                     <td>{{ getBulan($pgb->bulan) }}</td>
                                                     <td>{{ getTahun($pgb->bulan) }}</td>
                                                     <td>

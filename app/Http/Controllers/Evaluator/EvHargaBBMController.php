@@ -198,7 +198,8 @@ class EvHargaBBMController extends Controller
         // Query dasar untuk mendapatkan data harga BBM
         $query = DB::table('harga_bbm_jbus as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN')
+            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+            ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN')
             ->whereBetween('bulan', [$t_awal, $t_akhir]);
     
         // Jika perusahaan bukan 'all', tambahkan kondisi filter untuk badan usaha
@@ -231,13 +232,15 @@ class EvHargaBBMController extends Controller
 
         $query = DB::table('harga_bbm_jbus as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN')
         ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
         ->whereIn('a.status', [1, 2, 3])
         ->get();
 
         $perusahaan = DB::table('harga_bbm_jbus as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
         ->whereIn('a.status', [1, 2, 3])
         ->groupBy('a.badan_usaha_id')
         ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
@@ -259,6 +262,7 @@ class EvHargaBBMController extends Controller
 
         $perusahaan = DB::table('harga_bbm_jbus as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
         ->whereIn('a.status', [1, 2, 3])
         ->groupBy('a.badan_usaha_id')
         ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN')
@@ -266,7 +270,8 @@ class EvHargaBBMController extends Controller
 
         $query = DB::table('harga_bbm_jbus as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN');
+        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN');
         
         if ($request->perusahaan != 'all') {
             $query->where('badan_usaha_id', $request->perusahaan);
