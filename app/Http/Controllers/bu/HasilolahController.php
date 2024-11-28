@@ -15,6 +15,7 @@ use App\Models\Harga_bbm_jbu;
 use App\Models\Produk;
 use App\Models\Izin;
 use App\Model\province;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
 class HasilolahController extends Controller
@@ -307,7 +308,8 @@ class HasilolahController extends Controller
     public function submit_jholbx(Request $request, $id)
     {
        $idx=$id;
-        $validatedData = DB::update("update jual_hasil_olah_bbms set status='1' where id='$idx'");
+       $now = Carbon::now();
+        $validatedData = DB::update("update jual_hasil_olah_bbms set status='1', tgl_kirim='$now' where id='$idx'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -326,7 +328,8 @@ class HasilolahController extends Controller
         // dd($bulanx);
         // die;
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("UPDATE jual_hasil_olah_bbms SET status='1' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id'");
+        $now = Carbon::now();
+        $validatedData = DB::update("UPDATE jual_hasil_olah_bbms SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses

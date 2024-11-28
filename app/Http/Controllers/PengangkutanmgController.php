@@ -11,6 +11,7 @@ use App\Models\pengangkutan_gaskbumi;
 use App\Models\pengangkutan_minyakbumi;
 use App\Imports\ImportPengangkutanMB;
 use App\Imports\ImportPengangkutanGB;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Crypt;
 
@@ -171,7 +172,8 @@ class PengangkutanmgController extends Controller
     public function submit_pengmbx(Request $request, $id)
     {
         $idx = $id;
-        $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update pengangkutan_minyakbumis set status='1', tgl_kirim='$now' where id='$idx'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -395,7 +397,8 @@ class PengangkutanmgController extends Controller
     public function submit_pgbx(Request $request, $id)
     {
         $idx = $id;
-        $validatedData = DB::update("update pengangkutan_gaskbumis set status='1' where id='$idx'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update pengangkutan_gaskbumis set status='1', tgl_kirim='$now' where id='$idx'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -519,7 +522,8 @@ class PengangkutanmgController extends Controller
     {
         $bulanx = $bulan;
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update pengangkutan_minyakbumis set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -555,7 +559,8 @@ class PengangkutanmgController extends Controller
     {
         $bulanx = $bulan;
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("update pengangkutan_gaskbumis set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update pengangkutan_gaskbumis set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses

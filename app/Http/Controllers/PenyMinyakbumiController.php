@@ -11,6 +11,7 @@ use App\Models\Penygasbumi;
 use Illuminate\Support\Facades\Crypt;
 use App\Imports\Importpenyimpananmb;
 use App\Imports\Importpenyimpanangb;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PenyMinyakbumiController extends Controller
@@ -356,7 +357,8 @@ class PenyMinyakbumiController extends Controller
     public function submit_pmbx(Request $request, $id)
     {
         $idx = $id;
-        $validatedData = DB::update("update penyminyakbumis set status='1' where id='$idx'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update penyminyakbumis set status='1', tgl_kirim='$now' where id='$idx'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -371,7 +373,8 @@ class PenyMinyakbumiController extends Controller
     public function submit_pggbx(Request $request, $id)
     {
         $idx = $id;
-        $validatedData = DB::update("update penygasbumis set status='1' where id='$idx'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update penygasbumis set status='1', tgl_kirim='$now' where id='$idx'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -549,7 +552,8 @@ class PenyMinyakbumiController extends Controller
         $bulanx = $bulan;
         // dd($bulanx);
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("update penyminyakbumis set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update penyminyakbumis set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -666,8 +670,8 @@ class PenyMinyakbumiController extends Controller
     {
         $bulanx = $bulan;
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-
-        $validatedData = DB::update("update penygasbumis set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id' and (status='0' or status='1' or status='2')");
+        $now = Carbon::now();
+        $validatedData = DB::update("update penygasbumis set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id' and (status='0' or status='1' or status='2')");
         
         if ($validatedData) {
             //redirect dengan pesan sukses

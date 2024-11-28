@@ -9,6 +9,7 @@ use App\Models\HargaLPG;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\Importhargabbmjbu;
 use App\Imports\Importhargalpg;
+use Carbon\Carbon;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -385,7 +386,8 @@ class HargabbmController extends Controller
   public function submit_harga_bbm_jbux(Request $request, $id)
   {
     $idx = $id;
-    $validatedData = DB::update("update harga_bbm_jbus set status='1' where id='$idx'");
+    $now = Carbon::now();
+    $validatedData = DB::update("update harga_bbm_jbus set status='1', tgl_kirim='$now' where id='$idx'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -568,7 +570,8 @@ class HargabbmController extends Controller
 
   public function submit_harga_lpg(Request $request, $id)
   {
-    $validatedData = DB::table('harga_l_p_g_s')->where('id', $id)->update(['status' => "1"]);
+    $now = Carbon::now();
+    $validatedData = DB::table('harga_l_p_g_s')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
     if ($validatedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil dikirim');
@@ -616,7 +619,8 @@ class HargabbmController extends Controller
         $bulanx = $bulan;
         // dd($bulanx);
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("update harga_bbm_jbus set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update harga_bbm_jbus set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -633,7 +637,8 @@ class HargabbmController extends Controller
         $bulanx = $bulan;
         // dd($bulanx);
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("update harga_l_p_g_s set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update harga_l_p_g_s set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses

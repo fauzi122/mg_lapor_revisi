@@ -74,8 +74,6 @@ header('Pragma: no-cache');
                 <th style="border: 1px solid black;">SATUAN VOLUME SUPPLY</th>
                 <th style="border: 1px solid black;">VOLUME ANGKUT</th>
                 <th style="border: 1px solid black;">SATUAN VOLUME ANGKUT</th>
-
-
                 <th style="border: 1px solid black;">STATUS</th>
                 <th style="border: 1px solid black;">CATATAN</th>
             </tr>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Pasokan_hasil_olah_bbm;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\Importpasokanhasil;
+use Carbon\Carbon;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -222,7 +223,8 @@ class PasokanHasilolahController extends Controller
     public function submit_pasokan_olahx(Request $request, $id)
     {
        $idx=$id;
-        $validatedData = DB::update("update pasokan_hasil_olah_bbms set status='1' where id='$idx'");
+       $now = Carbon::now();
+        $validatedData = DB::update("update pasokan_hasil_olah_bbms set status='1', tgl_kirim='$now' where id='$idx'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -239,7 +241,8 @@ class PasokanHasilolahController extends Controller
         $bulanx = $bulan;
         // dd($bulanx);
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("update pasokan_hasil_olah_bbms set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update pasokan_hasil_olah_bbms set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses

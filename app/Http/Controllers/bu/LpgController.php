@@ -14,7 +14,7 @@ use App\Models\Produk;
 use Illuminate\Support\Facades\Crypt;
 use App\Imports\Importlpgpenjualan;
 use App\Imports\Importlpgpasok;
-
+use Carbon\Carbon;
 
 class LpgController extends Controller
 {
@@ -501,7 +501,8 @@ class LpgController extends Controller
   public function submit_penjualan_lpg(Request $request, $id)
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
-    $validatedData = DB::table('penjualan_lpgs')->where('id', $id)->update(['status' => "1"]);
+    $now = Carbon::now();
+    $validatedData = DB::table('penjualan_lpgs')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -518,7 +519,8 @@ class LpgController extends Controller
     $bulanx = $bulan;
     // dd($bulanx);
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("update penjualan_lpgs set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+    $now = Carbon::now();
+    $validatedData = DB::update("update penjualan_lpgs set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -534,7 +536,8 @@ class LpgController extends Controller
   public function submit_pasokan_lpg(Request $request, $id)
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
-    $validatedData = DB::table('pasokan_l_p_g_s')->where('id', $id)->update(['status' => "1"]);
+    $now = Carbon::now();
+    $validatedData = DB::table('pasokan_l_p_g_s')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -551,7 +554,8 @@ class LpgController extends Controller
     $bulanx = $bulan;
     // dd($bulanx);
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("update pasokan_l_p_g_s set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+    $now = Carbon::now();
+    $validatedData = DB::update("update pasokan_l_p_g_s set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
