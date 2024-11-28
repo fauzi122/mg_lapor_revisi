@@ -18,7 +18,14 @@
                 </div>
             </div>
 
-
+            <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-0"
+            role="alert">
+            <i class="mdi mdi-alert-circle-outline label-icon"></i>
+            <strong>Informasi:</strong> Data yang ditampilkan merupakan informasi perusahaan berdasarkan nomor izin yang telah mengajukan laporan.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                aria-label="Close"></button>
+        </div>
+        <br>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -113,7 +120,8 @@
                                                     <th>No</th>
                                                     <th>Nama Perusahaan</th>
                                                     <th>Nomor Izin</th>
-                                                    <th>Tanggal Disetujui</th>
+                                                    <th>Tanggal Pengajuan Izin</th>
+                                                    <th>Tanggal Disetujui Izin</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -123,6 +131,7 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $per->NAMA_PERUSAHAAN }}</td>
                                                         <td>{{ $per->NOMOR_IZIN }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($per->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
                                                         <td>{{ $per->TGL_DISETUJUI }}</td>
                                                         <td>
                                                             <a href="{{ url('laporan/jual-hasil-olahan/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"

@@ -62,7 +62,8 @@ header('Pragma: no-cache');
                 <th style="border: 1px solid black;">NO</th>
                 <th style="border: 1px solid black;">NAMA PERUSAHAAN</th>
                 <th style="border: 1px solid black;">Nomor Izin </th>
-                <th style="border: 1px solid black;">Tanggal Disetujui </th>
+                <th style="border: 1px solid black;">Tgl Pengajuan Izin</th>
+                <th style="border: 1px solid black;">Tgl Disetujui Izin</th>
                 <th style="border: 1px solid black;">BULAN</th>
                 <th style="border: 1px solid black;">TAHUN</th>
                 <th style="border: 1px solid black;">PRODUK</th>
@@ -75,6 +76,8 @@ header('Pragma: no-cache');
                 <th style="border: 1px solid black;">SATUAN VOLUME SUPPLY</th>
                 <th style="border: 1px solid black;">VOLUME ANGKUT</th>
                 <th style="border: 1px solid black;">SATUAN VOLUME ANGKUT</th>
+                <th style="border: 1px solid black;">Tgl Dibuat Laporan</th>
+                <th style="border: 1px solid black;">Tgl Pengajuan Laporan</th>
 
 
                 <th style="border: 1px solid black;">STATUS</th>
@@ -87,6 +90,8 @@ header('Pragma: no-cache');
                     <td style="border: 1px solid black;">{{ $loop->iteration }}</td>
                     <td style="border: 1px solid black;">{{ $pgb->NAMA_PERUSAHAAN }}</td>
                     <td style="border: 1px solid black;">{{ $pgb->NOMOR_IZIN }}</td>
+                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
+
                     <td style="border: 1px solid black;">{{ $pgb->TGL_DISETUJUI }}</td>
                     <td style="border: 1px solid black;">{{ getBulan($pgb->bulan) }}</td>
                     <td style="border: 1px solid black;">{{ getTahun($pgb->bulan) }}</td>
@@ -118,6 +123,9 @@ header('Pragma: no-cache');
 
                     </td>
                     <td style="border: 1px solid black;">{{ $pgb->catatan }}</td>
+                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->created_at)->format('Y-m-d') }}</td>
+                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('Y-m-d') }}</td>
+
                 </tr>
             @endforeach
         </tbody>
