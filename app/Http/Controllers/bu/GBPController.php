@@ -12,6 +12,7 @@ use App\Models\PenjualanGBP;
 use App\Models\pasokanGBP;
 use App\Imports\Importgbppenjualan;
 use App\Imports\Importgbppasok;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
 class GBPController extends Controller
@@ -383,7 +384,8 @@ class GBPController extends Controller
     public function submit_pasok_gbpx(Request $request, $id)
     {
        $idx=$id;
-        $validatedData = DB::update("update pasokan_g_b_p_s set status='1' where id='$idx'");
+       $now = Carbon::now();
+        $validatedData = DB::update("update pasokan_g_b_p_s set status='1', tgl_kirim='$now' where id='$idx'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -398,7 +400,8 @@ class GBPController extends Controller
     public function submit_gbpx(Request $request, $id)
     {
        $idx=$id;
-        $validatedData = DB::update("update penjualan_g_b_p_s set status='1' where id='$idx'");
+       $now = Carbon::now();
+        $validatedData = DB::update("update penjualan_g_b_p_s set status='1', tgl_kirim='$now' where id='$idx'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -469,7 +472,8 @@ class GBPController extends Controller
         $bulanx = $bulan;
         // dd($bulanx);
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("update penjualan_g_b_p_s set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update penjualan_g_b_p_s set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -486,7 +490,8 @@ class GBPController extends Controller
         $bulanx = $bulan;
         // dd($bulanx);
         $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("update pasokan_g_b_p_s set status='1' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+        $now = Carbon::now();
+        $validatedData = DB::update("update pasokan_g_b_p_s set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
         if ($validatedData) {
             //redirect dengan pesan sukses

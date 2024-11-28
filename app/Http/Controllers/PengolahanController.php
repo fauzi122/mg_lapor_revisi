@@ -17,6 +17,7 @@ use App\Imports\ImportPengolahanMBDistribusi;
 use App\Imports\ImportPengolahanGBProduksi;
 use App\Imports\ImportPengolahanGBPasokan;
 use App\Imports\ImportPengolahanGBDistribusi;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Crypt;
 
@@ -488,7 +489,8 @@ class PengolahanController extends Controller
   public function submit_pengolahan_minyak_bumi_produksi(Request $request, $id)
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
-    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1"]);
+    $now = Carbon::now();
+    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -505,7 +507,8 @@ class PengolahanController extends Controller
   {
     $bulanx = $bulan;
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("UPDATE pengolahans SET status='1' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Produksi'");
+    $now = Carbon::now();
+    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Produksi'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -722,7 +725,8 @@ class PengolahanController extends Controller
   public function submit_pengolahan_minyak_bumi_pasokan(Request $request, $id)
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
-    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1"]);
+    $now = Carbon::now();
+    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -739,7 +743,8 @@ class PengolahanController extends Controller
   {
     $bulanx = $bulan;
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("UPDATE pengolahans SET status='1' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Pasokan'");
+    $now = Carbon::now();
+    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Pasokan'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -953,7 +958,8 @@ class PengolahanController extends Controller
   public function submit_pengolahan_minyak_bumi_distribusi(Request $request, $id)
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
-    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1"]);
+    $now = Carbon::now();
+    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -970,7 +976,8 @@ class PengolahanController extends Controller
   {
     $bulanx = $bulan;
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("UPDATE pengolahans SET status='1' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Distribusi'");
+    $now = Carbon::now();
+    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Distribusi'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1173,7 +1180,8 @@ class PengolahanController extends Controller
   public function submit_pengolahan_gas_bumi_produksi(Request $request, $id)
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
-    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1"]);
+    $now = Carbon::now();
+    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1190,7 +1198,8 @@ class PengolahanController extends Controller
   {
     $bulanx = $bulan;
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("UPDATE pengolahans SET status='1' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Produksi'");
+    $now = Carbon::now();
+    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Produksi'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1394,7 +1403,9 @@ class PengolahanController extends Controller
   public function submit_pengolahan_gas_bumi_pasokan(Request $request, $id)
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
-    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1"]);
+    $now = Carbon::now();
+
+    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1411,7 +1422,8 @@ class PengolahanController extends Controller
   {
     $bulanx = $bulan;
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("UPDATE pengolahans SET status='1' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Pasokan'");
+    $now = Carbon::now();
+    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Pasokan'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1618,7 +1630,8 @@ class PengolahanController extends Controller
   public function submit_pengolahan_gas_bumi_distribusi(Request $request, $id)
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
-    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1"]);
+    $now = Carbon::now();
+    $validatedData = DB::table('pengolahans')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1635,7 +1648,8 @@ class PengolahanController extends Controller
   {
     $bulanx = $bulan;
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("UPDATE pengolahans SET status='1' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Distribusi'");
+    $now = Carbon::now();
+    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Distribusi'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses

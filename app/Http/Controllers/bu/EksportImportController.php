@@ -14,6 +14,7 @@ use App\Models\Izin;
 use App\Imports\Importekspor;
 use App\Imports\Importimport;
 use App\Models\Negara;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 // s
 
@@ -310,7 +311,8 @@ class EksportImportController extends Controller
   public function submit_exportx(Request $request, $id)
   {
     $idx = $id;
-    $validatedData = DB::update("update ekspors set status='1' where id='$idx'");
+    $now = Carbon::now();
+    $validatedData = DB::update("update ekspors set status='1', tgl_kirim='$now' where id='$idx'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -325,7 +327,8 @@ class EksportImportController extends Controller
   public function submit_importx(Request $request, $id)
   {
     $idx = $id;
-    $validatedData = DB::update("update impors set status='1' where id='$idx'");
+    $now = Carbon::now();
+    $validatedData = DB::update("update impors set status='1', tgl_kirim='$now' where id='$idx'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -566,7 +569,8 @@ class EksportImportController extends Controller
     $bulanx = $bulan;
     // dd($bulanx);
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("update ekspors set status='1' where bulan_peb='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+    $now = Carbon::now();
+    $validatedData = DB::update("update ekspors set status='1', tgl_kirim='$now' where bulan_peb='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -583,7 +587,8 @@ class EksportImportController extends Controller
     $bulanx = $bulan;
     // dd($bulanx);
     $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("update impors set status='1' where bulan_pib='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+    $now = Carbon::now();
+    $validatedData = DB::update("update impors set status='1', tgl_kirim='$now' where bulan_pib='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
     if ($validatedData) {
       //redirect dengan pesan sukses
