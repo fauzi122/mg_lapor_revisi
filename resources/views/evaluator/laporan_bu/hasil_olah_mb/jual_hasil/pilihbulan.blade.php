@@ -113,6 +113,8 @@
                                                 <th>Sektor</th>
                                                 <th>Volume</th>
                                                 <th>Satuan</th>
+                                                <th>Tgl Dibuat Laporan</th>
+                                                <th>Tgl Pengajuan Laporan</th>
 
 
                                             </tr>
@@ -205,6 +207,9 @@
                                                     <td>{{ $pgb->sektor }}</td>
                                                     <td>{{ $pgb->volume }}</td>
                                                     <td>{{ $pgb->satuan }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
+
 
 
 

@@ -107,7 +107,8 @@
                                                 <th>No</th>
                                                 <th>Nama Perusahaan</th>
                                                 <th>Nomor Izin</th>
-                                                <th>Tanggal Disetujui</th>
+                                                <th>Tgl Pengajuan Izin</th>
+                                                <th>Tgl Disetujui Izin</th>
                                                 <th>Bulan</th>
                                                 <th>Tahun</th>
                                                 <th>Status</th>
@@ -123,7 +124,8 @@
                                                 <th>Satuan Volume Supply</th>
                                                 <th>Volume Angkut</th>
                                                 <th>Satuan Volume Angkut</th>
-                                                <th>Tanggal Dibuat</th>
+                                                <th>Tgl Dibuat Laporan</th>
+                                                <th>Tgl Pengajuan Laporan</th>
 
                                             </tr>
                                         </thead>
@@ -133,6 +135,8 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $pgb->NAMA_PERUSAHAAN }}</td>
                                                     <td>{{ $pgb->NOMOR_IZIN }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
+
                                                     <td>{{ $pgb->TGL_DISETUJUI }}</td>
                                                     <td>{{ getBulan($pgb->bulan) }}</td>
                                                     <td>{{ getTahun($pgb->bulan) }}</td>
@@ -218,7 +222,7 @@
                                                     <td>{{ $pgb->volume_angkut }}</td>
                                                     <td>{{ $pgb->satuan_volume_angkut }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
-
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
 
                                                 </tr>
                                             @endforeach

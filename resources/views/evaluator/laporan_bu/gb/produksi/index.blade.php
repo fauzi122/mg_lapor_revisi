@@ -17,9 +17,6 @@
                     </div>
                 </div>
             </div>
-
-
-
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -111,7 +108,8 @@
                                                     <th>No</th>
                                                     <th>Nama Perusahaan</th>
                                                     <th>Nomor Izin</th>
-                                                    <th>Tanggal Disetujui</th>
+                                                    <th>Tanggal Pengajuan Izin</th>
+                                                    <th>Tanggal Disetujui Izin</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -121,6 +119,8 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $per->NAMA_PERUSAHAAN }}</td>
                                                         <td>{{ $per->NOMOR_IZIN }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($per->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
+
                                                         <td>{{ $per->TGL_DISETUJUI }}</td>
                                                         <td><a href="{{ url('laporan/produksi/gb/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"
                                                                 class="btn btn-primary btn-rounded btn-sm"><i
