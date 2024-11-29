@@ -120,6 +120,8 @@
                                                 <th>Tanggal Berakhir</th>
                                                 <th>Tarif Penyimpanan</th>
                                                 <th>Satuan Tarif</th>
+                                                <th>Tgl Dibuat Laporan</th>
+                                                <th>Tgl Pengajuan Laporan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -209,6 +211,8 @@
                                                     <td>{{ $pgb->tanggal_berakhir }}</td>
                                                     <td>{{ $pgb->tarif_penyimpanan }}</td>
                                                     <td>{{ $pgb->satuan_tarif }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

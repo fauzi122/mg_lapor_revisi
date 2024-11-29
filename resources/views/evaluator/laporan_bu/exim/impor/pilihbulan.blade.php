@@ -126,6 +126,8 @@
                                                 <th>No. Pendaftaran</th>
                                                 <th>Tgl. Pendaftaran</th>
                                                 <th>Incoterms</th>
+                                                <th>Tgl Dibuat Laporan</th>
+                                                <th>Tgl Pengajuan Laporan</th>
 
 
 
@@ -228,6 +230,8 @@
                                                     <td>{{ $pgb->no_pendaf_pib }}</td>
                                                     <td>{{ $pgb->tanggal_pendaf_pib }}</td>
                                                     <td>{{ $pgb->incoterms }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
 
 
 

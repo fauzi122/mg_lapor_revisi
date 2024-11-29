@@ -120,6 +120,8 @@
                                                 <th>PPN</th>
                                                 {{-- <th>PBBKB</th> --}}
                                                 <th>Harga Jual</th>
+                                                <th>Tgl Dibuat Laporan</th>
+                                                <th>Tgl Pengajuan Laporan</th>
 
 
                                             </tr>
@@ -222,7 +224,8 @@
                                                     <td>{{ $pgb->ppn }}</td>
                                                     {{-- <td>{{ $pgb->pbbkp }}</td> --}}
                                                     <td>{{ $pgb->harga_jual }}</td>
-
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
 
 
 
