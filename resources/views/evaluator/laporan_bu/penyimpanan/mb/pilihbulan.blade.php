@@ -130,6 +130,8 @@
                                                     <th>Nama Penyewa</th>
                                                     <th>Kapasitas Penyewaan</th>
                                                     <th>Kontrak Sewa</th>
+                                                    <th>Tgl Dibuat Laporan</th>
+                                                    <th>Tgl Pengajuan Laporan</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -193,6 +195,10 @@
                                                         <td>{{ $pgb->nama_penyewa }}</td>
                                                         <td>{{ $pgb->kapasitas_penyewaan }}</td>
                                                         <td>{{ $pgb->kontrak_sewa }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}
+                                                        </td>
+                                                        <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>

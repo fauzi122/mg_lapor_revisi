@@ -115,6 +115,8 @@
                                                 <th>Satuan Volume Supply</th>
                                                 <th>Volume Angkut</th>
                                                 <th>Satuan Volume Angkut</th>
+                                                <th>Tgl Dibuat Laporan</th>
+                                                <th>Tgl Pengajuan Laporan</th>
 
                                             </tr>
                                         </thead>
@@ -203,7 +205,8 @@
                                                     <td>{{ $pgb->satuan_volume_supply }}</td>
                                                     <td>{{ $pgb->volume_angkut }}</td>
                                                     <td>{{ $pgb->satuan_volume_angkut }}</td>
-
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
 
                                                 </tr>
                                             @endforeach

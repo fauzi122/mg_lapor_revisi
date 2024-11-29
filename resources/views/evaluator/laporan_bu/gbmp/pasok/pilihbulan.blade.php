@@ -111,6 +111,8 @@
                                                 <th>Volume MSCF</th>
                                                 <th>Volume M3</th>
                                                 <th>Harga</th>
+                                                <th>Tgl Dibuat Laporan</th>
+                                                <th>Tgl Pengajuan Laporan</th>
 
 
                                             </tr>
@@ -199,6 +201,8 @@
                                                     <td>{{ $pgb->volume_mscf }}</td>
                                                     <td>{{ $pgb->volume_m3 }}</td>
                                                     <td>{{ $pgb->harga }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
                                                 </tr>
                                             @endforeach
                                             <!-- Add more rows as needed -->
