@@ -15,11 +15,15 @@ class Importpenyimpananmb implements ToModel, WithStartRow, WithMultipleSheets
      * @return int
      */
 
-    protected $requestData;
+    // protected $requestData;
+    protected $bulan; 
+    protected $izin_id;
 
-    public function __construct($requestData)
+    public function __construct($bulan,$izin_id)
     {
-        $this->requestData = $requestData;
+        // $this->requestData = $requestData;
+        $this->bulan = $bulan; 
+        $this->izin_id = $izin_id;
     }
 
 
@@ -43,13 +47,14 @@ class Importpenyimpananmb implements ToModel, WithStartRow, WithMultipleSheets
      */
     public function model(array $row)
     {
-        // dd($this->requestData);
+        // dd($this->izin_id);
         $tanggalExcel = $row[14];
         $tanggal = Carbon::createFromFormat('Y-m-d', '1900-01-01')->addDays($tanggalExcel - 2);
         $jenis_komoditas = explode(', ', $row[2]);
         return new Penyminyakbumi([
             'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'bulan' => $this->requestData,
+            'izin_id' => $this->izin_id,
+            'bulan' => $this->bulan,
             'jenis_fasilitas' => $row[0],
             'no_tangki' => $row[1],
             'jenis_komoditas' => $jenis_komoditas,
