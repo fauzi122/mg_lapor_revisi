@@ -567,8 +567,9 @@ class PenyMinyakbumiController extends Controller
     }
     public function import_pmbx(Request $request)
     {
+        $izin_id = $request->izin_id;
         $bulan = $request->bulan . "-01";
-        // dd($bulan);
+        //  dd($izin_id);
 
         $badan_usaha_id = Auth::user()->badan_usaha_id;
 
@@ -585,7 +586,7 @@ class PenyMinyakbumiController extends Controller
             }
         }
 
-        $import = Excel::import(new Importpenyimpananmb($bulan), request()->file('file'));
+        $import = Excel::import(new Importpenyimpananmb($bulan, $izin_id), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses
