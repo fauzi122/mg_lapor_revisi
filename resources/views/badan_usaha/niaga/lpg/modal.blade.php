@@ -151,11 +151,13 @@
                 <h5 class="modal-title" id="myModalLabel">Penjualan LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/importLPG') }}" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importlpg') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
 
@@ -169,7 +171,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/niagaLPG_Penjualan.xlsx" id="tombol"
+                    <a href="/storage/template/niagaLPG_Penjualan.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -495,11 +497,13 @@
                 <h5 class="modal-title" id="myModalLabel">Import Pasokan LPG</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/importpasokanLPG') }}" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importlpg_pasok') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_importx">
                         <br>
 
@@ -515,7 +519,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/niagaLPG_Pasokan.xlsx" id="tombol"
+                    <a href="/storage/template/niagaLPG_Pasokan.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download
                         Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"

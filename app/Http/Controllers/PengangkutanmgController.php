@@ -245,6 +245,7 @@ class PengangkutanmgController extends Controller
 
     public function importPengangkutanMB(Request $request)
     {
+        $izin_id = $request->izin_id;
         $bulan = $request->bulan . "-01";
 
         $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -263,7 +264,7 @@ class PengangkutanmgController extends Controller
             }
         }
 
-        $import = Excel::import(new ImportPengangkutanMB($bulan), request()->file('file'));
+        $import = Excel::import(new ImportPengangkutanMB($bulan,$izin_id), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses
@@ -468,6 +469,7 @@ class PengangkutanmgController extends Controller
 
     public function importPengangkutanGB(Request $request)
     {
+        $izin_id = $request->izin_id;
         $bulan = $request->bulan . "-01";
 
         $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -486,7 +488,7 @@ class PengangkutanmgController extends Controller
             }
         }
 
-        $import = Excel::import(new ImportPengangkutanGB($bulan), request()->file('file'));
+        $import = Excel::import(new ImportPengangkutanGB($bulan,$izin_id), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses

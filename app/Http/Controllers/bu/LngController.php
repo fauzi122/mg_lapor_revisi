@@ -486,6 +486,7 @@ class LngController extends Controller
     }
     public function importlngpenx(Request $request)
     {
+        $izin_id = $request->izin_id;
         $bulan = $request->bulan . "-01";
         $badan_usaha_id = Auth::user()->badan_usaha_id;
         $cekdb = DB::table('penjualan_lngs')
@@ -500,7 +501,7 @@ class LngController extends Controller
                 return back();
             }
         }
-        $import = Excel::import(new Importlngpenjualan($bulan), request()->file('file'));
+        $import = Excel::import(new Importlngpenjualan($bulan,$izin_id), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses
@@ -514,6 +515,7 @@ class LngController extends Controller
     }
     public function importlngpasokx(Request $request)
     {
+        $izin_id = $request->izin_id;
         $bulan = $request->bulan . "-01";
         $badan_usaha_id = Auth::user()->badan_usaha_id;
         $cekdb = DB::table('pasokanlngs')
@@ -528,7 +530,7 @@ class LngController extends Controller
                 return back();
             }
         }
-        $import = Excel::import(new Importlngpasok($bulan), request()->file('file'));
+        $import = Excel::import(new Importlngpasok($bulan,$izin_id), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses

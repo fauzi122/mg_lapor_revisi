@@ -13,11 +13,13 @@ class Importlngpenjualan implements ToModel, WithStartRow, WithMultipleSheets
     /**
      * @return int
      */
-    protected $requestData;
+    protected $bulan; 
+    protected $izin_id;
 
-    public function __construct($requestData)
+    public function __construct($bulan,$izin_id)
     {
-        $this->requestData = $requestData;
+        $this->bulan = $bulan; 
+        $this->izin_id = $izin_id;
     }
 
     public function sheets(): array
@@ -40,7 +42,8 @@ class Importlngpenjualan implements ToModel, WithStartRow, WithMultipleSheets
     {
         return new Penjualan_lng([
             'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'bulan' => $this->requestData,
+            'izin_id' => $this->izin_id,
+            'bulan' => $this->bulan,
             'provinsi' => $row[0],
             'kabupaten_kota' => $row[1],
             'produk' => $row[2],

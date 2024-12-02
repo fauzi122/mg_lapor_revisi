@@ -14,11 +14,13 @@ class ImportPengangkutanMB implements ToModel, WithStartRow, WithMultipleSheets
     /**
      * @return int
      */
-    protected $requestData;
+    protected $bulan; 
+    protected $izin_id;
 
-    public function __construct($requestData)
+    public function __construct($bulan,$izin_id)
     {
-        $this->requestData = $requestData;
+        $this->bulan = $bulan; 
+        $this->izin_id = $izin_id;
     }
 
     public function sheets(): array
@@ -44,8 +46,8 @@ class ImportPengangkutanMB implements ToModel, WithStartRow, WithMultipleSheets
         $jenis_moda = explode(', ', $row[1]);
         return new pengangkutan_minyakbumi([
             'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'izin_id' => '1',
-            'bulan' => $this->requestData,
+            'izin_id' => $this->izin_id,
+            'bulan' => $this->bulan,
             'produk' => $row[0],
             'jenis_moda' => $jenis_moda,
             'node_asal' => $row[2],

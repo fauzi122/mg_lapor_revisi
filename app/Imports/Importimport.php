@@ -13,11 +13,13 @@ class Importimport implements ToModel, WithStartRow, WithMultipleSheets
     /**
      * @return int
      */
-    protected $requestData;
+    protected $bulan; 
+    protected $izin_id;
 
-    public function __construct($requestData)
+    public function __construct($bulan,$izin_id)
     {
-        $this->requestData = $requestData;
+        $this->bulan = $bulan; 
+        $this->izin_id = $izin_id;
     }
 
     public function sheets(): array
@@ -40,7 +42,9 @@ class Importimport implements ToModel, WithStartRow, WithMultipleSheets
     {
         return new Impor([
             'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'bulan_pib' => $this->requestData,
+            'izin_id' => $this->izin_id,
+            'bulan_pib' => $this->bulan,
+      
             'produk' => $row[0],
             'hs_code' => $row[1],
             'volume_pib' => $row[2],
