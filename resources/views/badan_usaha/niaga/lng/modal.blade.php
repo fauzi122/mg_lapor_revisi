@@ -1228,6 +1228,8 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
 
@@ -1243,7 +1245,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/niagaLNG_Penjualan.xlsx" id="tombol"
+                    <a href="/storage/template/niagaLNG_Penjualan.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -1269,6 +1271,8 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_importx">
                         <br>
 
@@ -1284,7 +1288,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/niagaLNG_Pasokan.xlsx" id="tombol"
+                    <a href="/storage/template/niagaLNG_Pasokan.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>

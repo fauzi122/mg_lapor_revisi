@@ -509,6 +509,7 @@ class EksportImportController extends Controller
   }
   public function import_eksportx(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
     $badan_usaha_id = Auth::user()->badan_usaha_id;
     $cekdb = DB::table('ekspors')
@@ -523,7 +524,7 @@ class EksportImportController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importekspor($bulan), request()->file('file'));
+    $import = Excel::import(new Importekspor($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -537,6 +538,7 @@ class EksportImportController extends Controller
   }
   public function import_importx(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
     $badan_usaha_id = Auth::user()->badan_usaha_id;
 
@@ -552,7 +554,7 @@ class EksportImportController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importimport($bulan), request()->file('file'));
+    $import = Excel::import(new Importimport($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses

@@ -459,13 +459,15 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                            value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/pengangkutanGasBumi.xlsx" id="tombol"
+                    <a href="/storage/template/pengangkutanGasBumi.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>

@@ -14,11 +14,13 @@ class Importekspor implements ToModel, WithStartRow, WithMultipleSheets
     /**
      * @return int
      */
-    protected $requestData;
+    protected $bulan; 
+    protected $izin_id;
 
-    public function __construct($requestData)
+    public function __construct($bulan,$izin_id)
     {
-        $this->requestData = $requestData;
+        $this->bulan = $bulan; 
+        $this->izin_id = $izin_id;
     }
 
     public function sheets(): array
@@ -45,7 +47,8 @@ class Importekspor implements ToModel, WithStartRow, WithMultipleSheets
         $tanggal2 = Carbon::createFromFormat('Y-m-d', '1900-01-01')->addDays($tanggalPendaftaran - 2);
         return new Ekspor([
             'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'bulan_peb' => $this->requestData,
+            'izin_id' => $this->izin_id,
+            'bulan_peb' => $this->bulan,
             'produk' => $row[0],
             'hs_code' => $row[1],
             'volume_peb' => $row[2],

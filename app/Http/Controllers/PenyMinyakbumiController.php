@@ -600,6 +600,7 @@ class PenyMinyakbumiController extends Controller
     }
     public function import_pggbx(Request $request)
     {
+        $izin_id = $request->izin_id;
         $bulan = $request->bulan . "-01";
 
         $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -616,7 +617,7 @@ class PenyMinyakbumiController extends Controller
                 return back();
             }
         }
-        $import = Excel::import(new Importpenyimpanangb($bulan), request()->file('file'));
+        $import = Excel::import(new Importpenyimpanangb($bulan, $izin_id), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses

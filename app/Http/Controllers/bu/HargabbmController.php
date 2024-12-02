@@ -310,6 +310,7 @@ class HargabbmController extends Controller
 
   public function importhargajbux(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
     $badan_usaha_id = Auth::user()->badan_usaha_id;
     $cekdb = DB::table('harga_bbm_jbus')
@@ -324,7 +325,7 @@ class HargabbmController extends Controller
             return back();
         }
     }
-    $import = Excel::import(new Importhargabbmjbu($bulan), request()->file('file'));
+    $import = Excel::import(new Importhargabbmjbu($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -340,6 +341,7 @@ class HargabbmController extends Controller
   }
   public function importhargalpgx(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
     $badan_usaha_id = Auth::user()->badan_usaha_id;
     $cekdb = DB::table('harga_l_p_g_s')
@@ -354,7 +356,7 @@ class HargabbmController extends Controller
             return back();
         }
     }
-    $import = Excel::import(new Importhargalpg($bulan), request()->file('file'));
+    $import = Excel::import(new Importhargalpg($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses

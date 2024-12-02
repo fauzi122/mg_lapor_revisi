@@ -14,11 +14,13 @@ class Importlpgpasok implements ToModel, WithStartRow, WithMultipleSheets
      * @return int
      */
 
-     protected $requestData;
-
-     public function __construct($requestData)
+     protected $bulan; 
+     protected $izin_id;
+ 
+     public function __construct($bulan,$izin_id)
      {
-         $this->requestData = $requestData;
+         $this->bulan = $bulan; 
+         $this->izin_id = $izin_id;
      }
  
  
@@ -44,7 +46,8 @@ class Importlpgpasok implements ToModel, WithStartRow, WithMultipleSheets
     {
         return new PasokanLPG([
             'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'bulan' => $this->requestData,
+            'izin_id' => $this->izin_id,
+            'bulan' => $this->bulan,
             'nama_pemasok' => $row[0],
             'kategori_pemasok' => $row[1],
             'volume' => $row[2],

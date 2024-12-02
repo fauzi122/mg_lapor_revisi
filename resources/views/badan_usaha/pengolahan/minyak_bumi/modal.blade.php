@@ -335,6 +335,8 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                        value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">
@@ -726,6 +728,8 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                        value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import_pas">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">
@@ -1115,6 +1119,8 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                        value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import_dis">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">

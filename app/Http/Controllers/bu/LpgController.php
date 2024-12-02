@@ -209,6 +209,7 @@ class LpgController extends Controller
 
   public function importlpgx(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
     // dd($bulan);
 
@@ -226,7 +227,7 @@ class LpgController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importlpgpenjualan($bulan), request()->file('file'));
+    $import = Excel::import(new Importlpgpenjualan($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -240,6 +241,7 @@ class LpgController extends Controller
   }
   public function importlpg_pasokx(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
     // dd($bulan);
 
@@ -257,7 +259,7 @@ class LpgController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importlpgpasok($bulan), request()->file('file'));
+    $import = Excel::import(new Importlpgpasok($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses

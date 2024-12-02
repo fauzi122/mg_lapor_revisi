@@ -523,6 +523,7 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_minyak_bumi_produksi(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
 
     $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -543,7 +544,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanMBProduksi($bulan), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanMBProduksi($bulan, $izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -759,6 +760,7 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_minyak_bumi_pasokan(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
 
     $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -779,7 +781,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanMBPasokan($bulan), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanMBPasokan($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -992,6 +994,7 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_minyak_bumi_distribusi(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
 
     $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -1012,7 +1015,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanMBDistribusi($bulan), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanMBDistribusi($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -1214,6 +1217,7 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_gas_bumi_produksi(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
 
     $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -1234,7 +1238,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanGBProduksi($bulan), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanGBProduksi($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -1438,6 +1442,7 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_gas_bumi_pasokan(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
 
     $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -1458,7 +1463,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanGBPasokan($bulan), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanGBPasokan($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -1664,6 +1669,7 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_gas_bumi_distribusi(Request $request)
   {
+    $izin_id = $request->izin_id;
     $bulan = $request->bulan . "-01";
 
     $badan_usaha_id = Auth::user()->badan_usaha_id;
@@ -1684,7 +1690,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanGBDistribusi($bulan), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanGBDistribusi($bulan,$izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses

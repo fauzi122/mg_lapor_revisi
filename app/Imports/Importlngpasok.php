@@ -13,11 +13,13 @@ class Importlngpasok implements ToModel, WithStartRow, WithMultipleSheets
     /**
      * @return int
      */
-    protected $requestData;
+    protected $bulan; 
+    protected $izin_id;
 
-    public function __construct($requestData)
+    public function __construct($bulan,$izin_id)
     {
-        $this->requestData = $requestData;
+        $this->bulan = $bulan; 
+        $this->izin_id = $izin_id;
     }
 
     public function sheets(): array
@@ -41,7 +43,8 @@ class Importlngpasok implements ToModel, WithStartRow, WithMultipleSheets
         // echo json_encode($row);exit;
         return new Pasokanlng([
             'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'bulan' => $this->requestData,
+            'izin_id' => $this->izin_id,
+            'bulan' => $this->bulan,
             'produk' => $row[0],
             'nama_pemasok' => $row[1],
             'kategori_pemasok' => $row[2],
