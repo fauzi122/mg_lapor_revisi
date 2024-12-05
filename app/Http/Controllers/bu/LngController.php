@@ -111,6 +111,8 @@ class LngController extends Controller
     }
     public function simpan_lngx(Request $request)
     {
+        // dd($request->all());
+
         $pesan = [
             'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
             'izin_id.required' => 'izin_id masih kosong',
@@ -170,6 +172,7 @@ class LngController extends Controller
 
         $cekdb = DB::table('penjualan_lngs')
             ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('bulan', $request->izin_id)
             ->where('bulan', $request->bulan . '-01')
             ->orderBy('status', 'desc')
             ->first();
@@ -354,6 +357,7 @@ class LngController extends Controller
 
         $cekdb = DB::table('pasokanlngs')
             ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('bulan', $request->izin_id)
             ->where('bulan', $request->bulan . '-01')
             ->orderBy('status', 'desc')
             ->first();
