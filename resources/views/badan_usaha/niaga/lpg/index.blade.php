@@ -56,7 +56,9 @@
                                     <tbody>
                                         @foreach ($lpgpenjualan as $data)
                                             @php
-                                                $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id);
+                                                $id = Crypt::encryptString(
+                                                    $data->bulan . ',' . $data->badan_usaha_id . ',' . $data->izin_id,
+                                                );
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>

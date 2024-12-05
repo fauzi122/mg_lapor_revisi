@@ -26,12 +26,14 @@ class LpgController extends Controller
     $lpgpenjualan = DB::table('penjualan_lpgs')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan')
       ->get();
 
     $lpgasok = DB::table('pasokan_l_p_g_s')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan')
       ->get();
 
@@ -56,11 +58,15 @@ class LpgController extends Controller
     $bulan_ambil_penjualan_lpg = DB::table('penjualan_lpgs')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan', $pecah[0])
+      ->where('izin_id', $pecah[2])
+      ->orderBy('status', 'desc')
       ->first();
 
     $bulan_ambil_pasok_lpg = DB::table('pasokan_l_p_g_s')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan', $pecah[0])
+      ->where('izin_id', $pecah[2])
+      ->orderBy('status', 'desc')
       ->first();
 
     // Mengambil substring dari bulan
@@ -78,12 +84,14 @@ class LpgController extends Controller
     
     $lpgs = Penjualan_lpg::where([
       ['bulan', 'like', "%". $filterBy ."%"],
-      'badan_usaha_id' => $pecah[1]
+      'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2]
     ])->orderBy('status', 'desc')->get();
 
     $pasokan = PasokanLPG::where([
       ['bulan', 'like', "%". $filterBy ."%"],
-      'badan_usaha_id' => $pecah[1]
+      'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2]
     ])->orderBy('status', 'desc')->get();
 
     $produk = Produk::get();

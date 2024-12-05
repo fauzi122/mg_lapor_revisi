@@ -57,7 +57,12 @@
                                             @php
                                                 $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id);
                                                 $idTahun = Crypt::encryptString(
-                                                    $data->bulan . ',' . $data->badan_usaha_id . ', tahun',
+                                                    $data->bulan .
+                                                        ',' .
+                                                        $data->badan_usaha_id .
+                                                        ',' .
+                                                        $data->izin_id .
+                                                        ', tahun',
                                                 );
                                             @endphp
                                             <tr>

@@ -28,12 +28,14 @@ class HargabbmController extends Controller
     $hargabbmjbu = DB::table('harga_bbm_jbus')
     ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
     ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+    ->where('izin_id', $pecah[0])
     ->groupBy('bulan')
     ->get();
 
     $hargaLPG = DB::table('harga_l_p_g_s')
     ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
     ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+    ->where('izin_id', $pecah[0])
     ->groupBy('bulan')
     ->get();
 
@@ -57,14 +59,16 @@ class HargabbmController extends Controller
 
       $bulan_ambil_hargabbmjbu = DB::table('harga_bbm_jbus')
               ->where('badan_usaha_id', $badan_usaha_id)
-              ->orderBy('status', 'desc')
               ->where('bulan', $pecah[0])
+              ->where('izin_id', $pecah[2])
+              ->orderBy('status', 'desc')
               ->first();
 
       $bulan_ambil_hargalpg = DB::table('harga_l_p_g_s')
               ->where('badan_usaha_id', $badan_usaha_id)
-              ->orderBy('status', 'desc')
               ->where('bulan', $pecah[0])
+              ->where('izin_id', $pecah[2])
+              ->orderBy('status', 'desc')
               ->first();
       
       
@@ -87,12 +91,14 @@ class HargabbmController extends Controller
 
       $hargabbmjbu = Harga_bbm_jbu::where([
         ['bulan', 'like', "%". $filterBy ."%"],
-        'badan_usaha_id' => $pecah[1]
+        'badan_usaha_id' => $pecah[1],
+        'izin_id' => $pecah[2]
       ])->orderBy('status', 'desc')->get();
 
       $hargalpg = HargaLPG::where([
         ['bulan', 'like', "%". $filterBy ."%"],
-        'badan_usaha_id' => $pecah[1]
+        'badan_usaha_id' => $pecah[1],
+        'izin_id' => $pecah[2]
       ])->orderBy('status', 'desc')->get();
 
       // dd($harga);

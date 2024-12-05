@@ -58,7 +58,11 @@
                                         @foreach ($ekspor as $data)
                                             @php
                                                 $id = Crypt::encryptString(
-                                                    $data->bulan_peb . ',' . $data->badan_usaha_id,
+                                                    $data->bulan_peb .
+                                                        ',' .
+                                                        $data->badan_usaha_id .
+                                                        ',' .
+                                                        $data->izin_id,
                                                 );
                                             @endphp
                                             <tr>
@@ -178,7 +182,11 @@
                                         @foreach ($impor as $data)
                                             @php
                                                 $id = Crypt::encryptString(
-                                                    $data->bulan_pib . ',' . $data->badan_usaha_id,
+                                                    $data->bulan_pib .
+                                                        ',' .
+                                                        $data->badan_usaha_id .
+                                                        ',' .
+                                                        $data->izin_id,
                                                 );
                                             @endphp
                                             <tr>

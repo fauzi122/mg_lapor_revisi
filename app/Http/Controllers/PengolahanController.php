@@ -34,6 +34,7 @@ class PengolahanController extends Controller
       ->where('jenis', 'Minyak Bumi')
       ->where('tipe', 'Produksi')
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan')
       ->get();
       // dd($pengolahanProduksiMB);
@@ -43,6 +44,7 @@ class PengolahanController extends Controller
       ->where('jenis', 'Minyak Bumi')
       ->where('tipe', 'Pasokan')
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan')
       ->get();
 
@@ -51,6 +53,7 @@ class PengolahanController extends Controller
       ->where('jenis', 'Minyak Bumi')
       ->where('tipe', 'Distribusi')
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan')
       ->get();
 
@@ -60,6 +63,7 @@ class PengolahanController extends Controller
       ->where('jenis', 'Gas Bumi')
       ->where('tipe', 'Produksi')
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan')
       ->get();
 
@@ -68,6 +72,7 @@ class PengolahanController extends Controller
       ->where('jenis', 'Gas Bumi')
       ->where('tipe', 'Pasokan')
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan')
       ->get();
 
@@ -76,6 +81,7 @@ class PengolahanController extends Controller
       ->where('jenis', 'Gas Bumi')
       ->where('tipe', 'Distribusi')
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan')
       ->get();
 
@@ -102,6 +108,7 @@ class PengolahanController extends Controller
       ->where('tipe', 'Produksi')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan', $pecah[0])
+      ->where('izin_id', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
     $bulan_ambil_pasokan = DB::table('pengolahans')
@@ -109,6 +116,7 @@ class PengolahanController extends Controller
       ->where('tipe', 'Pasokan')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan', $pecah[0])
+      ->where('izin_id', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
     $bulan_ambil_distribusi = DB::table('pengolahans')
@@ -116,6 +124,7 @@ class PengolahanController extends Controller
       ->where('tipe', 'Distribusi')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan', $pecah[0])
+      ->where('izin_id', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
 
@@ -136,6 +145,7 @@ class PengolahanController extends Controller
     $pengolahanProduksiMB = Pengolahan::where([
       ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2],
       'jenis' => 'Minyak Bumi',
       'tipe' => 'Produksi',
     ])->orderBy('status', 'desc')->get();
@@ -143,12 +153,14 @@ class PengolahanController extends Controller
     $pengolahanPasokanMB = Pengolahan::where([
       ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2],
       'jenis' => 'Minyak Bumi',
       'tipe' => 'Pasokan',
     ])->orderBy('status', 'desc')->get();
     $pengolahanDistribusiMB = Pengolahan::where([
       ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2],
       'jenis' => 'Minyak Bumi',
       'tipe' => 'Distribusi',
     ])->orderBy('status', 'desc')->get();
@@ -200,6 +212,7 @@ class PengolahanController extends Controller
       ->where('tipe', 'Produksi')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan', $pecah[0])
+      ->where('izin_id', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
     $bulan_ambil_pasokan = DB::table('pengolahans')
@@ -207,6 +220,7 @@ class PengolahanController extends Controller
       ->where('tipe', 'Pasokan')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan', $pecah[0])
+      ->where('izin_id', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
     $bulan_ambil_distribusi = DB::table('pengolahans')
@@ -214,6 +228,7 @@ class PengolahanController extends Controller
       ->where('tipe', 'Distribusi')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan', $pecah[0])
+      ->where('izin_id', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
 
@@ -235,18 +250,21 @@ class PengolahanController extends Controller
     $pengolahanProduksiGB = Pengolahan::where([
       ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2],
       'jenis' => 'Gas Bumi',
       'tipe' => 'Produksi',
     ])->orderBy('status', 'desc')->get();
     $pengolahanPasokanGB = Pengolahan::where([
       ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2],
       'jenis' => 'Gas Bumi',
       'tipe' => 'Pasokan',
     ])->orderBy('status', 'desc')->get();
     $pengolahanDistribusiGB = Pengolahan::where([
       ['bulan', 'like', "%". $filterBy ."%"],
       'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2],
       'jenis' => 'Gas Bumi',
       'tipe' => 'Distribusi',
     ])->orderBy('status', 'desc')->get();

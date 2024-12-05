@@ -27,12 +27,14 @@ class EksportImportController extends Controller
     $ekspor = DB::table('ekspors')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan_peb')
       ->get();
 
     $impor = DB::table('impors')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+      ->where('izin_id', $pecah[0])
       ->groupBy('bulan_pib')
       ->get();
     // dd($impor);
@@ -53,11 +55,15 @@ class EksportImportController extends Controller
     $bulan_ambil_ekspors = DB::table('ekspors')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan_peb', $pecah[0])
+      ->where('izin_id', $pecah[2])
+      ->orderBy('status', 'desc')
       ->first();
 
     $bulan_ambil_impors = DB::table('impors')
       ->where('badan_usaha_id', $badan_usaha_id)
       ->where('bulan_pib', $pecah[0])
+      ->where('izin_id', $pecah[2])
+      ->orderBy('status', 'desc')
       ->first();
 
     // Mengambil substring dari bulan
@@ -75,12 +81,14 @@ class EksportImportController extends Controller
     
     $expor = Ekspor::where([
       ['bulan_peb', 'like', "%" . $filterBy . "%"],
-      'badan_usaha_id' => $pecah[1]
+      'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2]
     ])->orderBy('status', 'desc')->get();
 
     $imporx = Impor::where([
       ['bulan_pib', 'like', "%" . $filterBy . "%"],
-      'badan_usaha_id' => $pecah[1]
+      'badan_usaha_id' => $pecah[1],
+      'izin_id' => $pecah[2]
     ])->orderBy('status', 'desc')->get();
     // dd($impor);
     return view('badan_usaha.ekspor_impor.show', compact(
