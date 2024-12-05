@@ -82,7 +82,11 @@
                                                 @foreach ($pengolahanProduksiMB as $ppmb)
                                                     @php
                                                         $id = Crypt::encryptString(
-                                                            $ppmb->bulan . ',' . $ppmb->badan_usaha_id,
+                                                            $ppmb->bulan .
+                                                                ',' .
+                                                                $ppmb->badan_usaha_id .
+                                                                ',' .
+                                                                $ppmb->izin_id,
                                                         );
                                                     @endphp
                                                     <tr>
@@ -193,7 +197,11 @@
                                                 @foreach ($pengolahanPasokanMB as $ppmb)
                                                     @php
                                                         $id = Crypt::encryptString(
-                                                            $ppmb->bulan . ',' . $ppmb->badan_usaha_id,
+                                                            $ppmb->bulan .
+                                                                ',' .
+                                                                $ppmb->badan_usaha_id .
+                                                                ',' .
+                                                                $ppmb->izin_id,
                                                         );
                                                     @endphp
                                                     <tr>
@@ -305,7 +313,11 @@
                                                 @foreach ($pengolahanDistribusiMB as $ppmb)
                                                     @php
                                                         $id = Crypt::encryptString(
-                                                            $ppmb->bulan . ',' . $ppmb->badan_usaha_id,
+                                                            $ppmb->bulan .
+                                                                ',' .
+                                                                $ppmb->badan_usaha_id .
+                                                                ',' .
+                                                                $ppmb->izin_id,
                                                         );
                                                     @endphp
                                                     <tr>
@@ -420,7 +432,11 @@
                                                 @foreach ($pengolahanProduksiGB as $ppgb)
                                                     @php
                                                         $id = Crypt::encryptString(
-                                                            $ppgb->bulan . ',' . $ppgb->badan_usaha_id,
+                                                            $ppgb->bulan .
+                                                                ',' .
+                                                                $ppgb->badan_usaha_id .
+                                                                ',' .
+                                                                $ppgb->izin_id,
                                                         );
                                                     @endphp
                                                     <tr>
@@ -530,7 +546,11 @@
                                                 @foreach ($pengolahanPasokanGB as $ppgb)
                                                     @php
                                                         $id = Crypt::encryptString(
-                                                            $ppgb->bulan . ',' . $ppgb->badan_usaha_id,
+                                                            $ppgb->bulan .
+                                                                ',' .
+                                                                $ppgb->badan_usaha_id .
+                                                                ',' .
+                                                                $ppgb->izin_id,
                                                         );
                                                     @endphp
                                                     <tr>
@@ -641,7 +661,11 @@
                                                 @foreach ($pengolahanDistribusiGB as $ppgb)
                                                     @php
                                                         $id = Crypt::encryptString(
-                                                            $ppgb->bulan . ',' . $ppgb->badan_usaha_id,
+                                                            $ppgb->bulan .
+                                                                ',' .
+                                                                $ppgb->badan_usaha_id .
+                                                                ',' .
+                                                                $ppgb->izin_id,
                                                         );
                                                     @endphp
                                                     <tr>

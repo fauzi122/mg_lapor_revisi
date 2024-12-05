@@ -27,6 +27,7 @@ class PengangkutanmgController extends Controller
         $pm = DB::table('pengangkutan_minyakbumis')
             ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
             ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+            ->where('izin_id', $pecah[0])
             ->groupBy('bulan')
             ->get();
 
@@ -43,6 +44,7 @@ class PengangkutanmgController extends Controller
         $pm = DB::table('pengangkutan_gaskbumis')
             ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
             ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+            ->where('izin_id', $pecah[0])
             ->groupBy('bulan')
             ->get();
 
@@ -52,11 +54,13 @@ class PengangkutanmgController extends Controller
     public function show_pengmbx($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
+        dd($pecah);
         $badan_usaha_id = Auth::user()->badan_usaha_id;
         // Mengambil bulan dari tabel pengangkutan_minyakbumis sesuai ID badan usaha dan bulan yang ditemukan
         $bulan_ambil = DB::table('pengangkutan_minyakbumis')
             ->where('badan_usaha_id', $badan_usaha_id)
             ->where('bulan', $pecah[0])
+            ->where('izin_id', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
@@ -64,7 +68,7 @@ class PengangkutanmgController extends Controller
         $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
         $statusx = $bulan_ambil->status;
 
-        if (count($pecah) == 3) {
+        if (count($pecah) == 4) {
             $filterBy = substr($pecah[0], 0, 4);
         } else {
         $filterBy = $pecah[0];
@@ -72,7 +76,8 @@ class PengangkutanmgController extends Controller
 
         $pgb = pengangkutan_minyakbumi::where([
             ['bulan', 'like', "%". $filterBy ."%"],
-            'badan_usaha_id' => $pecah[1]
+            'badan_usaha_id' => $pecah[1],
+            'izin_id' => $pecah[2]
         ])->orderBy('status', 'desc')->get();
 
         // echo json_encode($pgb[3]->jenis_moda);exit;
@@ -285,6 +290,7 @@ class PengangkutanmgController extends Controller
         $bulan_ambil = DB::table('pengangkutan_gaskbumis')
             ->where('badan_usaha_id', $badan_usaha_id)
             ->where('bulan', $pecah[0])
+            ->where('izin_id', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
@@ -292,7 +298,7 @@ class PengangkutanmgController extends Controller
         $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
         $statusx = $bulan_ambil->status;
 
-        if (count($pecah) == 3) {
+        if (count($pecah) == 4) {
             $filterBy = substr($pecah[0], 0, 4);
         } else {
         $filterBy = $pecah[0];
@@ -300,7 +306,8 @@ class PengangkutanmgController extends Controller
 
         $pgb = pengangkutan_gaskbumi::where([
             ['bulan', 'like', "%". $filterBy ."%"],
-            'badan_usaha_id' => $pecah[1]
+            'badan_usaha_id' => $pecah[1],
+            'izin_id' => $pecah[2]
         ])->orderBy('status', 'desc')->get();
 
         return view('badan_usaha.pengangkutan.gas_bumi.show', compact(

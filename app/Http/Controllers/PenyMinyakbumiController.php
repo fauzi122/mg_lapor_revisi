@@ -25,6 +25,7 @@ class PenyMinyakbumiController extends Controller
         $pm = DB::table('penyminyakbumis')
         ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
         ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+        ->where('izin_id', $pecah[0])
         ->groupBy('bulan')
         ->get();
         
@@ -40,6 +41,7 @@ class PenyMinyakbumiController extends Controller
         $pm = DB::table('penygasbumis')
             ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
             ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+            ->where('izin_id', $pecah[0])
             ->groupBy('bulan')
             ->get();
 
@@ -56,6 +58,8 @@ class PenyMinyakbumiController extends Controller
             ->where('badan_usaha_id', $badan_usaha_id)
             ->orderBy('status', 'desc')
             ->where('bulan', $pecah[0])
+            ->where('izin_id', $pecah[2])
+            ->orderBy('status', 'desc')
             ->first();
 
         // Mengambil substring dari bulan
@@ -71,7 +75,8 @@ class PenyMinyakbumiController extends Controller
 
         $pmb = Penyminyakbumi::where([
             ['bulan', 'like', "%". $filterBy ."%"],
-            'badan_usaha_id' => $pecah[1]
+            'badan_usaha_id' => $pecah[1],
+            'izin_id' => $pecah[2]
         ])->orderBy('status', 'desc')->get();
 
         return view('badan_usaha.penyimpanan.minyak_bumi.show', compact(
@@ -91,6 +96,7 @@ class PenyMinyakbumiController extends Controller
         $bulan_ambil = DB::table('penygasbumis')
             ->where('badan_usaha_id', $badan_usaha_id)
             ->where('bulan', $pecah[0])
+            ->where('izin_id', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
@@ -103,11 +109,13 @@ class PenyMinyakbumiController extends Controller
         if ($filter == 'bulan') {
             $pggb = Penygasbumi::where([
                 'bulan' => $pecah[0],
-                'badan_usaha_id' => $pecah[1]
+                'badan_usaha_id' => $pecah[1],
+                'izin_id' => $pecah[2]
             ])->orderBy('status', 'desc')->get();
         } else {
             $pggb = Penygasbumi::where('bulan', 'like' , "%" . $tahun_ambilx . "%")
-                                ->orderBy('status', 'desc')->get();
+                            ->where('izin_id', $pecah[2])
+                            ->orderBy('status', 'desc')->get();
         }
 
         return view('badan_usaha.penyimpanan.gas_bumi.show', compact(
