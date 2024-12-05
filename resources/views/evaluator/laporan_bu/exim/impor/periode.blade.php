@@ -66,12 +66,14 @@
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>
-                                                                <b><a href="/laporan/impor/exim/{{ $id }}">{{ getBulan($data->bulan_pib) }}
+                                                                <b><a
+                                                                        href="{{ url('/laporan/impor/exim') }}/{{ $id }}">{{ getBulan($data->bulan_pib) }}
                                                                         <i {{-- class="bx bx-check" --}}
                                                                             title="lihat data laporan"></i></a><b>
                                                             </td>
                                                             <td>
-                                                                <b><a href="/laporan/impor/exim/{{ $idTahun }}">{{ getTahun($data->bulan_pib) }}
+                                                                <b><a
+                                                                        href="{{ url('/laporan/impor/exim') }}/{{ $idTahun }}">{{ getTahun($data->bulan_pib) }}
                                                                         <i {{-- class="bx bx-check" --}}
                                                                             title="lihat data laporan"></i></a><b>
                                                             </td>
