@@ -63,12 +63,14 @@
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>
-                                                                <b><a href="/laporan/harga-lpg/{{ $id }}">{{ getBulan($data->bulan) }}
+                                                                <b><a
+                                                                        href="{{ url('/laporan/harga-lpg') }}/{{ $id }}">{{ getBulan($data->bulan) }}
                                                                         <i {{-- class="bx bx-check" --}}
                                                                             title="lihat data laporan"></i></a><b>
                                                             </td>
                                                             <td>
-                                                                <b><a href="/laporan/harga-lpg/{{ $idTahun }}">{{ getTahun($data->bulan) }}
+                                                                <b><a
+                                                                        href="{{ url('/laporan/harga-lpg') }}/{{ $idTahun }}">{{ getTahun($data->bulan) }}
                                                                         <i {{-- class="bx bx-check" --}}
                                                                             title="lihat data laporan"></i></a><b>
                                                             </td>
