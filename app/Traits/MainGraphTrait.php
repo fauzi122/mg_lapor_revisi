@@ -92,38 +92,38 @@ trait MainGraphTrait
     {
         // Query count untuk kategori #NIAGA
         $niagaCounts = [
-            DB::table('setum_kop.harga_l_p_g_s')
+            DB::table('harga_l_p_g_s')
                 ->where(DB::raw("DATE_FORMAT(bulan, '%Y-%m')"), $date)
                 ->count(),
 
-            DB::table('setum_kop.penjualan_lngs')
+            DB::table('penjualan_lngs')
                 ->where(DB::raw("DATE_FORMAT(bulan, '%Y-%m')"), $date)
                 ->count(),
 
-            DB::table('setum_kop.pasokanlngs')
+            DB::table('pasokanlngs')
                 ->where(DB::raw("DATE_FORMAT(bulan, '%Y-%m')"), $date)
                 ->count(),
 
-            DB::table('setum_kop.penjualan_lpgs')
+            DB::table('penjualan_lpgs')
                 ->where(DB::raw("DATE_FORMAT(bulan, '%Y-%m')"), $date)
                 ->count(),
 
-            DB::table('setum_kop.pasokan_l_p_g_s')
+            DB::table('pasokan_l_p_g_s')
                 ->where(DB::raw("DATE_FORMAT(bulan, '%Y-%m')"), $date)
                 ->count(),
 
-            DB::table('setum_kop.ekspors')
+            DB::table('ekspors')
                 ->where(DB::raw("DATE_FORMAT(bulan_peb, '%Y-%m')"), $date)
                 ->count(),
 
-            DB::table('setum_kop.impors')
+            DB::table('impors')
                 ->where(DB::raw("DATE_FORMAT(bulan_pib, '%Y-%m')"), $date)
                 ->count(),
         ];
 
         // Query count untuk kategori #PENGOLAHAN
         $pengolahanCounts = [
-            DB::table('setum_kop.pengolahans')
+            DB::table('pengolahans')
                 ->where('jenis', 'Gas Bumi')
                 ->where(DB::raw("DATE_FORMAT(bulan, '%Y-%m')"), $date)
                 ->count(),
@@ -131,14 +131,14 @@ trait MainGraphTrait
 
         // Query count untuk kategori #PENGANGKUTAN
         $pengangkutanCounts = [
-            DB::table('setum_kop.pengangkutan_gaskbumis')
+            DB::table('pengangkutan_gaskbumis')
                 ->where(DB::raw("DATE_FORMAT(bulan, '%Y-%m')"), $date)
                 ->count(),
         ];
 
         // Query count untuk kategori #PENYIMPANAN
         $penyimpananCounts = [
-            DB::table('setum_kop.penygasbumis')
+            DB::table('penygasbumis')
                 ->where(DB::raw("DATE_FORMAT(bulan, '%Y-%m')"), $date)
                 ->count(),
         ];
