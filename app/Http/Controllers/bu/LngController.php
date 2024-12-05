@@ -26,15 +26,18 @@ class LngController extends Controller
         // $pm = Penjualan_lng::where('badan_usaha_id', Auth::user()->badan_usaha_id)
         //     ->groupBy('bulan')->get();
         $pecah = explode(',', Crypt::decryptString($id));
+        // dd($pecah);
         $pm = DB::table('penjualan_lngs')
             ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
             ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+            ->where('izin_id', $pecah[0])
             ->groupBy('bulan')
             ->get();
 
         $pasoklng = DB::table('pasokanlngs')
             ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
             ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+            ->where('izin_id', $pecah[0])
             ->groupBy('bulan')
             ->get();
 
@@ -51,17 +54,20 @@ class LngController extends Controller
         // dd($lngx);
         // die;
         $pecah = explode(',', Crypt::decryptString($id));
+        // dd($pecah);
         $badan_usaha_id = Auth::user()->badan_usaha_id;
 
         $bulan_ambil_penjualan_lng = DB::table('penjualan_lngs')
             ->where('badan_usaha_id', $badan_usaha_id)
             ->where('bulan', $pecah[0])
+            ->where('izin_id', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
         $bulan_ambil_pasok_lng = DB::table('pasokanlngs')
             ->where('badan_usaha_id', $badan_usaha_id)
             ->where('bulan', $pecah[0])
+            ->where('izin_id', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
@@ -80,12 +86,15 @@ class LngController extends Controller
 
         $lng = Penjualan_lng::where([
             ['bulan', 'like', "%". $filterBy ."%"],
-            'badan_usaha_id' => $pecah[1]
+            'badan_usaha_id' => $pecah[1],
+            'izin_id' => $pecah[2]
+            
         ])->orderBy('status', 'desc')->get();
 
         $pasok_lng = Pasokanlng::where([
             ['bulan', 'like', "%". $filterBy ."%"],
-            'badan_usaha_id' => $pecah[1]
+            'badan_usaha_id' => $pecah[1],
+            'izin_id' => $pecah[2]
         ])->orderBy('status', 'desc')->get();
 
 
