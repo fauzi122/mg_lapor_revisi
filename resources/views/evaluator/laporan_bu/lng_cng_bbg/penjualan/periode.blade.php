@@ -54,10 +54,10 @@
                                                     @foreach ($query as $data)
                                                         @php
                                                             $id = Crypt::encryptString(
-                                                                $data->bulan . ',' . $data->badan_usaha_id,
+                                                                $data->bulan . ',' .  $data->izin_id
                                                             );
                                                             $idTahun = Crypt::encryptString(
-                                                                $data->bulan . ',' . $data->badan_usaha_id . ', tahun',
+                                                                $data->bulan  . ', tahun'. ',' .  $data->izin_id
                                                             );
                                                         @endphp
                                                         <tr>

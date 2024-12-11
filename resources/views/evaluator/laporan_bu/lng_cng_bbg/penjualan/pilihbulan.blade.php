@@ -41,9 +41,10 @@
                                     <h4>Periode Bulan {{ dateIndonesia($per->bulan) }}</h4>
 
                                     <div>
-                                        <a href="{{ url('laporan/jual/lng-cng-bbg/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}"
-                                            class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
-                                            Kembali</a>
+                                        <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-danger btn-sm btn-rounded">
+                                            <i class='bx bx-arrow-back'></i> Kembali
+                                        </a>
+                                        
                                         <button type="button" class="btn btn-info btn-sm rounded-pill btn-update-status"
                                             data-bs-toggle="modal" data-bs-target="#modal-update-status">
                                             <i class="bx bxs-edit align-middle"></i> Update Status
@@ -73,7 +74,7 @@
                                                         method="post" id="updateStatusForm" enctype="multipart/form-data">
                                                         @csrf
                                                         <input type="hidden" name="p"
-                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}">
+                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->izin_id) }}">
                                                         <input type="hidden" name="b"
                                                             value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}">
                                                         <div class="modal-body">
@@ -254,7 +255,8 @@
                             data: {
                                 _token: '{{ csrf_token() }}',
                                 b: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}',
-                                p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}'
+                                p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->izin_id) }}',
+                               
                             },
                             success: function(response) {
                                 Swal.fire('Status diperbarui!',
