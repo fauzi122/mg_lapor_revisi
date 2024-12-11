@@ -574,76 +574,109 @@ class EksportImportController extends Controller
       return back();
     }
   }
-  public function submit_bulan_exportx(Request $request, $bulan)
+  public function submit_bulan_exportx(Request $request, $id)
   {
-    $bulanx = $bulan;
-    // dd($bulanx);
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $now = Carbon::now();
-    $validatedData = DB::update("update ekspors set status='1', tgl_kirim='$now' where bulan_peb='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+      $pecah = explode(',', Crypt::decryptString($id));
+      // dd($pecah);
+      $bulanx = $pecah[0]; // Mengambil bulan_peb dari hasil dekripsi
+      $izin_id = $pecah[2]; // Mengambil izin_id dari hasil dekripsi
+  
+      $badan_usaha_id = Auth::user()->badan_usaha_id;
+      $now = Carbon::now();
+  
+      // Update data ekspors dengan izin_id dan bulan_peb
+      $affected = DB::table('ekspors')
+          ->where('bulan_peb', $bulanx)
+          ->where('badan_usaha_id', $badan_usaha_id)
+          ->where('izin_id', $izin_id)
+          ->update(['status' => '1', 'tgl_kirim' => $now]);
+  
+      if ($affected) {
+          // Redirect dengan pesan sukses
+          Alert::success('success', 'Data berhasil dikirim');
+      } else {
+          // Redirect dengan pesan error
+          Alert::error('error', 'Data gagal dikirim');
+      }
+  
+      return back();
+  }
+  
+  public function submit_bulan_importx(Request $request, $id)
+  {
+      $pecah = explode(',', Crypt::decryptString($id));
+      $bulan_pib = $pecah[0];
+      $badan_usaha_id = $pecah[1];
+      $izin_id = $pecah[2];
+      $now = Carbon::now();
+  
+      // Menggunakan parameter binding untuk keamanan
+      $affected = DB::table('impors')
+          ->where('bulan_pib', $bulan_pib)
+          ->where('badan_usaha_id', $badan_usaha_id)
+          ->where('izin_id', $izin_id)
+          ->update(['status' => '1', 'tgl_kirim' => $now]);
+  
+      if ($affected) {
+          // Redirect dengan pesan sukses
+          Alert::success('success', 'Data berhasil dikirim');
+      } else {
+          // Redirect dengan pesan error
+          Alert::error('error', 'Data gagal dikirim');
+      }
+  
+      return back();
+  }
+  
 
-    if ($validatedData) {
-      //redirect dengan pesan sukses
-      Alert::success('success', 'Data berhasil dikirim');
-      return back();
-    } else {
-      //redirect dengan pesan error
-      Alert::error('error', 'Data gagal dikirim');
-      return back();
-    }
-  }
-  public function submit_bulan_importx(Request $request, $bulan)
+  public function hapus_bulan_exportx(Request $request, $id)
   {
-    $bulanx = $bulan;
-    // dd($bulanx);
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $now = Carbon::now();
-    $validatedData = DB::update("update impors set status='1', tgl_kirim='$now' where bulan_pib='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+      // Dekripsi ID dan pecah menjadi array
+      $pecah = explode(',', Crypt::decryptString($id));
 
-    if ($validatedData) {
-      //redirect dengan pesan sukses
-      Alert::success('success', 'Data berhasil dikirim');
+      // Siapkan query untuk menghapus data
+      $affected = DB::table('ekspors')
+          ->where('badan_usaha_id', $pecah[1])
+          ->where('bulan_peb', $pecah[0])
+          ->where('izin_id', $pecah[2])
+          ->delete();
+
+      // Cek hasil penghapusan dan tampilkan pesan sesuai
+      if ($affected) {
+          Alert::success('Success', 'Data berhasil dihapus');
+      } else {
+          Alert::error('Error', 'Data gagal dihapus');
+      }
+
       return back();
-    } else {
-      //redirect dengan pesan error
-      Alert::error('error', 'Data gagal dikirim');
-      return back();
-    }
   }
-  public function hapus_bulan_exportx(Request $request, $bulan)
+
+
+  public function hapus_bulan_importx(Request $request, $id)
   {
-    // dd($bulan);
-    // die;
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("delete from ekspors where badan_usaha_id='$badan_usaha_id' and bulan_peb='$bulanx'");
-    // pengangkutan_minyakbumi::destroy($bulan);
-    if ($validatedData) {
-      //redirect dengan pesan sukses
-      Alert::success('Success', 'Data berhasil dihapus');
+      // Dekripsi ID dan pecah menjadi array
+      $pecah = explode(',', Crypt::decryptString($id));
+      $bulan_pib = $pecah[0];
+      $badan_usaha_id = $pecah[1];
+      $izin_id = $pecah[2];
+  
+      // Menggunakan query builder untuk menghapus data
+      $affected = DB::table('impors')
+          ->where('badan_usaha_id', $badan_usaha_id)
+          ->where('bulan_pib', $bulan_pib)
+          ->where('izin_id', $izin_id)
+          ->delete();
+  
+      // Cek hasil penghapusan dan tampilkan pesan sesuai
+      if ($affected) {
+          // Redirect dengan pesan sukses
+          Alert::success('Success', 'Data berhasil dihapus');
+      } else {
+          // Redirect dengan pesan error
+          Alert::error('Error', 'Data gagal dihapus');
+      }
+  
       return back();
-    } else {
-      //redirect dengan pesan error
-      Alert::error('Error', 'Data gagal dihapus');
-      return back();
-    }
   }
-  public function hapus_bulan_importx(Request $request, $bulan)
-  {
-    // dd($bulan);
-    // die;
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("delete from impors where badan_usaha_id='$badan_usaha_id' and bulan_pib='$bulanx'");
-    // pengangkutan_minyakbumi::destroy($bulan);
-    if ($validatedData) {
-      //redirect dengan pesan sukses
-      Alert::success('Success', 'Data berhasil dihapus');
-      return back();
-    } else {
-      //redirect dengan pesan error
-      Alert::error('Error', 'Data gagal dihapus');
-      return back();
-    }
-  }
+  
 }

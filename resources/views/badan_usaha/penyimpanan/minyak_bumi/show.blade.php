@@ -20,6 +20,12 @@
                         swal("{{ session('success') }}", "", "success");
                     </script>
                     @endif  --}}
+
+                    @php
+                        $id = Crypt::encryptString(
+                            $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2],
+                        );
+                    @endphp
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Minyak Bumi</h5>
@@ -28,7 +34,7 @@
                                         class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                     @if ($statusx == 1)
-                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $bulan_ambilx . '-01' }}"
+                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -46,7 +52,7 @@
                                             onclick="tambahPMB('{{ $bulan_ambilx }}' )" data-bs-toggle="modal"
                                             data-bs-target="#excelpmb" disabled>Import Excel</button>
                                     @elseif ($statusx == 2)
-                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $bulan_ambilx . '-01' }}"
+                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -64,7 +70,7 @@
                                             onclick="tambahPMB('{{ $bulan_ambilx }}' )" data-bs-toggle="modal"
                                             data-bs-target="#excelpmb" disabled>Import Excel</button>
                                     @else
-                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $bulan_ambilx . '-01' }}"
+                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf

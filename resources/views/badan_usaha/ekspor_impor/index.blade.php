@@ -51,7 +51,7 @@
                                             <th>Bulan</th>
                                             <th>Tahun</th>
                                             <th>Status</th>
-                                            <th>Aksi</th>
+                                            <th>Aksi </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -66,6 +66,7 @@
                                                 );
                                             @endphp
                                             <tr>
+                                              
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td><b><a
                                                             href="{{ url('/eksport-import/show') }}/{{ $id }}/ekspor">{{ getBulan($data->bulan_peb) }}<i
@@ -94,17 +95,19 @@
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
+                                                           
                                                             <button type="button" class="btn btn-sm btn-danger"
                                                                 onclick="hapusData($(this).closest('form'))" disabled>
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
                                                         <form
-                                                            action="{{ url('/submit_bulan_export') }}/{{ $data->bulan_peb }}"
+                                                            action="{{ url('/submit_bulan_export') }}/{{ $id }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan_peb }}">
                                                             @method('PUT')
                                                             @csrf
+                                                           
                                                             <button type="button" class="btn btn-sm btn-success"
                                                                 onclick="kirimData($(this).closest('form'))" disabled>
                                                                 <i class="bx bx-paper-plane" title="Kirim data"></i>
@@ -114,7 +117,7 @@
                                                 @else
                                                     <td>
                                                         <form
-                                                            action="{{ url('/hapus_bulan_export') }}/{{ $data->bulan_peb }}"
+                                                            action="{{ url('/hapus_bulan_export') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -124,7 +127,7 @@
                                                             </button>
                                                         </form>
                                                         <form
-                                                            action="{{ url('/submit_bulan_export') }}/{{ $data->bulan_peb }}"
+                                                            action="{{ url('/submit_bulan_export') }}/{{ $id }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan_peb }}">
                                                             @method('PUT')
@@ -214,7 +217,7 @@
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
                                                         <form
-                                                            action="{{ url('/hapus_bulan_import') }}/{{ $data->bulan_pib }}"
+                                                            action="{{ url('/hapus_bulan_import') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -224,7 +227,7 @@
                                                             </button>
                                                         </form>
                                                         <form
-                                                            action="{{ url('/submit_bulan_import') }}/{{ $data->bulan_pib }}"
+                                                            action="{{ url('/submit_bulan_import') }}/{{ $id }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan_pib }}">
                                                             @method('PUT')
@@ -238,7 +241,7 @@
                                                 @else
                                                     <td>
                                                         <form
-                                                            action="{{ url('/hapus_bulan_import') }}/{{ $data->bulan_pib }}"
+                                                            action="{{ url('/hapus_bulan_import') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -248,7 +251,7 @@
                                                             </button>
                                                         </form>
                                                         <form
-                                                            action="{{ url('/submit_bulan_import') }}/{{ $data->bulan_pib }}"
+                                                            action="{{ url('/submit_bulan_import') }}/{{ $id }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan_pib }}">
                                                             @method('PUT')

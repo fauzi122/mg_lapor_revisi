@@ -83,7 +83,7 @@
                                                 <!-- <td>{{ $data->catatan }}</td> -->
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
-                                                        <form action="{{ url('/hapus_bulan_pmb') }}/{{ $data->bulan }}"
+                                                        <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -92,7 +92,7 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $data->bulan }}"
+                                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}"
                                                             method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf
@@ -104,7 +104,7 @@
                                                     </td>
                                                 @else
                                                     <td>
-                                                        <form action="{{ url('/hapus_bulan_pmb') }}/{{ $data->bulan }}"
+                                                        <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -113,7 +113,7 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $data->bulan }}"
+                                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}"
                                                             method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf

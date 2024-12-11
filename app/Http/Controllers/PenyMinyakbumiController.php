@@ -537,42 +537,59 @@ class PenyMinyakbumiController extends Controller
             return back();
         }
     }
-    public function hapus_bulan_pmbx(Request $request, $bulan)
+    public function hapus_bulan_pmbx(Request $request, $id)
     {
-        // dd($bulan);
-        // die;
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("delete from penyminyakbumis where badan_usaha_id='$badan_usaha_id' and bulan='$bulanx'");
-        // pengangkutan_minyakbumi::destroy($bulan);
-        if ($validatedData) {
-            //redirect dengan pesan sukses
+        // Dekripsi ID dan pecah menjadi array
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[0];
+        $badan_usaha_id = $pecah[1];
+        $izin_id = $pecah[2];
+    
+        // Menggunakan query builder untuk menghapus data
+        $affected = DB::table('penyminyakbumis')
+            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('bulan', $bulanx)
+            ->where('izin_id', $izin_id)
+            ->delete();
+    
+        // Cek hasil penghapusan dan tampilkan pesan sesuai
+        if ($affected) {
+            // Redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil dihapus');
-            return back();
         } else {
-            //redirect dengan pesan error
+            // Redirect dengan pesan error
             Alert::error('error', 'Data gagal dihapus');
-            return back();
         }
+    
+        return back();
     }
-    public function submit_bulan_pmbx(Request $request, $bulan)
+    public function submit_bulan_pmbx(Request $request, $id)
     {
-        $bulanx = $bulan;
-        // dd($bulanx);
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        // Dekripsi ID dan pecah menjadi array
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[0];
+        $badan_usaha_id = $pecah[1];
+        $izin_id = $pecah[2];
         $now = Carbon::now();
-        $validatedData = DB::update("update penyminyakbumis set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
-
-        if ($validatedData) {
-            //redirect dengan pesan sukses
+    
+        // Update data penyminyakbumis dengan izin_id
+        $affected = DB::table('penyminyakbumis')
+            ->where('bulan', $bulanx)
+            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('izin_id', $izin_id)
+            ->update(['status' => '1', 'tgl_kirim' => $now]);
+    
+        if ($affected) {
+            // Redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil dikirim');
-            return back();
         } else {
-            //redirect dengan pesan error
+            // Redirect dengan pesan error
             Alert::error('error', 'Data gagal dikirim');
-            return back();
         }
+    
+        return back();
     }
+     
     public function import_pmbx(Request $request)
     {
         $izin_id = $request->izin_id;
@@ -658,39 +675,58 @@ class PenyMinyakbumiController extends Controller
         // $data = Produk::get();
         return response()->json(['data' => $data]);
     }
-    public function hapus_bulan_pggbx(Request $request, $bulan)
+    public function hapus_bulan_pggbx(Request $request, $id)
     {
-        // dd($bulan);
-        // die;
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("delete from penygasbumis where badan_usaha_id='$badan_usaha_id' and bulan='$bulanx'");
-        // pengangkutan_minyakbumi::destroy($bulan);
-        if ($validatedData) {
-            //redirect dengan pesan sukses
+        // Dekripsi ID dan pecah menjadi array
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[0];
+        $badan_usaha_id = $pecah[1];
+        $izin_id = $pecah[2];
+    
+        // Menggunakan query builder untuk menghapus data
+        $affected = DB::table('penygasbumis')
+            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('bulan', $bulanx)
+            ->where('izin_id', $izin_id)
+            ->delete();
+    
+        // Cek hasil penghapusan dan tampilkan pesan sesuai
+        if ($affected) {
+            // Redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil dihapus');
-            return back();
         } else {
-            //redirect dengan pesan error
+            // Redirect dengan pesan error
             Alert::error('error', 'Data gagal dihapus');
-            return back();
         }
+    
+        return back();
     }
-    public function submit_bulan_pggbx(Request $request, $bulan)
+    public function submit_bulan_pggbx(Request $request, $id)
     {
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        // Dekripsi ID dan pecah menjadi array
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[0];
+        $badan_usaha_id = $pecah[1];
+        $izin_id = $pecah[2];
         $now = Carbon::now();
-        $validatedData = DB::update("update penygasbumis set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id' and (status='0' or status='1' or status='2')");
-        
-        if ($validatedData) {
-            //redirect dengan pesan sukses
+    
+        // Update data penygasbumis dengan izin_id
+        $affected = DB::table('penygasbumis')
+            ->where('bulan', $bulanx)
+            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('izin_id', $izin_id)
+            ->whereIn('status', ['0', '1', '2'])
+            ->update(['status' => '1', 'tgl_kirim' => $now]);
+    
+        if ($affected) {
+            // Redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil dikirim');
-            return back();
         } else {
-            //redirect dengan pesan error
+            // Redirect dengan pesan error
             Alert::error('error', 'Data gagal dikirim');
-            return back();
         }
+    
+        return back();
     }
+     
 }

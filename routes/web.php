@@ -151,9 +151,9 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::put('/update_pasok_lng/{id}', 'update_pasok_lngx');
 		Route::get('/get_kota_lng/{kabupaten_kota}', 'get_kota');
 		Route::put('/submit_lng/{id}', 'submit_lngx');
-		Route::put('/submit_bulan_lng/{bulan}', 'submit_bulan_lngx');
+		Route::put('/submit_bulan_lng/{id}', 'submit_bulan_lngx');
 		Route::put('/submit_pasok_lng/{id}', 'submit_pasok_lngx');
-		Route::put('/submit_bulan_pasok_lng/{bulan}', 'submit_bulan_pasok_lngx');
+		Route::put('/submit_bulan_pasok_lng/{id}', 'submit_bulan_pasok_lngx');
 		Route::post('/importlngpen', 'importlngpenx');
 		Route::post('/importlngpasok', 'importlngpasokx');
 	});
@@ -211,30 +211,6 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/import_gbp_pasok', 'import_gbp_pasokx');
 	});
 
-	// Ekspor - Import
-
-	// Route::controller(EksportImportController::class)->group(function () {
-	// 	Route::get('/eksport-import', 'index');
-	// 	route::get('/eksport-import/show/{id}/{eix}', 'show_eix');
-	// 	Route::post('/simpan_export', 'simpan_exportx');
-	// 	Route::put('/update_export/{id}', 'update_exportx');
-	// 	Route::delete('/hapus_export/{id}', 'hapus_exportx');
-	// 	Route::delete('/hapus_bulan_export/{bulan}', 'hapus_bulan_exportx');
-	// 	Route::get('/get-export/{id}', 'get_export');
-	// 	Route::put('/submit_export/{id}', 'submit_exportx');
-	// 	Route::put('/submit_bulan_export/{bulan}', 'submit_bulan_exportx');
-	// 	Route::post('/simpan_import', 'simpan_importx');
-	// 	Route::delete('/hapus_import/{id}', 'hapus_importx');
-	// 	Route::delete('/hapus_bulan_import/{bulan}', 'hapus_bulan_importx');
-	// 	Route::get('/get-import/{id}', 'get_import');
-	// 	Route::put('/update_import/{id}', 'update_importx');
-	// 	Route::get('/get_kota_import/{kabupaten_kota}', 'get_kota');
-	// 	Route::put('/submit_import/{id}', 'submit_importx');
-	// 	Route::put('/submit_bulan_import/{bulan}', 'submit_bulan_importx');
-	// 	Route::get('/get-negara', 'get_negara');
-	// 	Route::post('/import_eksport', 'import_eksportx');
-	// 	Route::post('/import_import', 'import_importx');
-	// });
 	include __DIR__.'/badan_usaha/EksporImpor.php';
 
 	// Penyimpanan Gas
@@ -245,17 +221,17 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/simpan_pmb', 'simpan_pmbx');
 		Route::put('/update_pmb/{id}', 'update_pmbx');
 		Route::delete('/hapus_pmb/{id}', 'hapus_pmbx');
-		Route::delete('/hapus_bulan_pmb/{bulan}', 'hapus_bulan_pmbx');
+		Route::delete('/hapus_bulan_pmb/{id}', 'hapus_bulan_pmbx');
 		Route::get('/get-pmb/{id}', 'get_pmb');
 		Route::put('/submit_pmb/{id}', 'submit_pmbx');
-		Route::put('/submit_bulan_pmb/{bulan}', 'submit_bulan_pmbx');
+		Route::put('/submit_bulan_pmb/{id}', 'submit_bulan_pmbx');
 
 		Route::get('/penyimpanan-gas-bumi/{id}', 'index_pggb');
 		route::get('/penyimpanan-gas-bumi/show/{filter}/{id}', 'show_pggbx');
 		Route::post('/simpan_pggb', 'simpan_pggbx');
 		Route::put('/update_pggb/{id}', 'update_pggbx');
 		Route::delete('/hapus_pggb/{id}', 'hapus_pggbx');
-		Route::delete('/hapus_bulan_pggb/{bulan}', 'hapus_bulan_pggbx');
+		Route::delete('/hapus_bulan_pggb/{id}', 'hapus_bulan_pggbx');
 		Route::get('/get-pggb/{id}', 'get_pggb');
 		Route::put('/submit_pggb/{id}', 'submit_pggbx');
 		Route::put('/submit_bulan_pggb/{id}', 'submit_bulan_pggbx');

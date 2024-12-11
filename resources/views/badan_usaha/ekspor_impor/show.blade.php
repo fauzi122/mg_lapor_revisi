@@ -20,14 +20,21 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Ekspor</h5>
                                     <div>
+                                        @php
+                                        $id = Crypt::encryptString(
+                                            $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2],
+                                        );
+                                    @endphp
+
                                         <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
                                         @if ($statusbulan_ambil_eksporsx == 1)
                                             <form
-                                                action="{{ url('/submit_bulan_export') }}/{{ $bulan_ambil_eksporsx . '-01' }}"
+                                                action="{{ url('/submit_bulan_export') }}/{{ $id}}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
+                                                  
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))" disabled>
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -42,10 +49,11 @@
                                                 data-bs-target="#excelexpor" disabled>Import Excel</button>
                                         @elseif ($statusbulan_ambil_eksporsx == 2)
                                             <form
-                                                action="{{ url('/submit_bulan_export') }}/{{ $bulan_ambil_eksporsx . '-01' }}"
+                                                action="{{ url('/submit_bulan_export') }}/{{ $id}}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
+                                                
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))">
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -60,10 +68,11 @@
                                                 data-bs-target="#excelexpor" disabled>Import Excel</button>
                                         @else
                                             <form
-                                                action="{{ url('/submit_bulan_export') }}/{{ $bulan_ambil_eksporsx . '-01' }}"
+                                                action="{{ url('/submit_bulan_export') }}/{{ $id}}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
+                                                  
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))">
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -214,14 +223,20 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Impor</h5>
                                     <div>
+                                        @php
+                                            $id = Crypt::encryptString(
+                                                $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2],
+                                            );
+                                        @endphp
                                         <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
                                         @if ($statusbulan_ambil_imporsx == 1)
                                             <form
-                                                action="{{ url('/submit_bulan_import') }}/{{ $bulan_ambil_imporsx . '-01' }}"
+                                                action="{{ url('/submit_bulan_import') }}/{{ $id}}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
+                                                  <input type="hidden" name="izin_id" value="{{ $izin_id }}">
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))" disabled>
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -236,10 +251,11 @@
                                                 Excel</button>
                                         @elseif ($statusbulan_ambil_imporsx == 2)
                                             <form
-                                                action="{{ url('/submit_bulan_import') }}/{{ $bulan_ambil_imporsx . '-01' }}"
+                                                action="{{ url('/submit_bulan_import') }}/{{ $id}}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
+                                                  <input type="hidden" name="izin_id" value="{{ $izin_id }}">
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))">
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -254,10 +270,11 @@
                                                 data-bs-target="#excelimport" disabled>Import Excel</button>
                                         @else
                                             <form
-                                                action="{{ url('/submit_bulan_import') }}/{{ $bulan_ambil_imporsx . '-01' }}"
+                                                action="{{ url('/submit_bulan_import') }}/{{ $id}}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
+                                                  <input type="hidden" name="izin_id" value="{{ $izin_id }}">
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))">
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -398,211 +415,8 @@
             @endif
 
             {{-- impor --}}
-            @if ($statusbulan_ambil_imporsx != '' and $eixx == 'impor')
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">Impor</h5>
-                                    <div>
-                                        <a href="javascript:history.back()"
-                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                        @if ($statusbulan_ambil_imporsx == 1)
-                                            <form
-                                                action="{{ url('/submit_bulan_import') }}/{{ $bulan_ambil_imporsx . '-01' }}"
-                                                method="post" class="d-inline">
-                                                @method('put')
-                                                @csrf
-                                                <button type="button" class="btn btn-info"
-                                                    onclick="kirimData($(this).closest('form'))" disabled>
-                                                    <span title="Kirim semua data">Kirim Semua</span>
-                                                </button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms();"
-                                                data-bs-toggle="modal" data-bs-target="#inputimpor" disabled>Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_imporsx) }}</button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
-                                                data-bs-toggle="modal" data-bs-target="#excelimport" disabled>Import
-                                                Excel</button>
-                                        @elseif ($statusbulan_ambil_imporsx == 2)
-                                            <form
-                                                action="{{ url('/submit_bulan_import') }}/{{ $bulan_ambil_imporsx . '-01' }}"
-                                                method="post" class="d-inline">
-                                                @method('put')
-                                                @csrf
-                                                <button type="button" class="btn btn-info"
-                                                    onclick="kirimData($(this).closest('form'))">
-                                                    <span title="Kirim semua data">Kirim Semua</span>
-                                                </button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms(); tambahPMB('{{ $bulan_ambil_imporsx }}');"
-                                                data-bs-toggle="modal" data-bs-target="#inputimpor" disabled>Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_imporsx) }}</button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
-                                                onclick="tambahPMB('{{ $bulan_ambil_imporsx }}');" data-bs-toggle="modal"
-                                                data-bs-target="#excelimport" disabled>Import Excel</button>
-                                        @else
-                                            <form
-                                                action="{{ url('/submit_bulan_import') }}/{{ $bulan_ambil_imporsx . '-01' }}"
-                                                method="post" class="d-inline">
-                                                @method('put')
-                                                @csrf
-                                                <button type="button" class="btn btn-info"
-                                                    onclick="kirimData($(this).closest('form'))">
-                                                    <span title="Kirim semua data">Kirim Semua</span>
-                                                </button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms(); tambahPMB('{{ $bulan_ambil_imporsx }}');"
-                                                data-bs-toggle="modal" data-bs-target="#inputimpor">Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_imporsx) }}</button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
-                                                onclick="tambahPMB('{{ $bulan_ambil_imporsx }}');" data-bs-toggle="modal"
-                                                data-bs-target="#excelimport">Import Excel</button>
-                                        @endif
-                                        @include('badan_usaha.ekspor_impor.modal')
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table id="table2" class="table table-bordered dt-responsive nowrap w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Bulan PIB</th>
-                                                <th>Status</th>
-                                                <th>Catatan</th>
-                                                <th>Produk</th>
-                                                <th>HS Code</th>
-                                                <th>Volume PIB</th>
-                                                <th>Aksi</th>
-                                                <th>Satuan</th>
-                                                <th>Invoice Amount Nilai Pabean</th>
-                                                <th>Invoice Amount Final</th>
-                                                <th>Nama Supplier</th>
-                                                <th>Negara Asal</th>
-                                                <th>Pelabuhan Muat</th>
-                                                <th>Pelabuhan Bongkar</th>
-                                                <th>Vessel Name</th>
-                                                <th>Tanggal BL</th>
-                                                <th>BL NO</th>
-                                                <th>No Pendaftaran PIB</th>
-                                                <th>Tanggal Pendaftaran PIB</th>
-                                                <th>Incoterms</th>
 
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($imporx as $impor)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ dateIndonesia($impor->bulan_pib) }}</td>
-                                                    <td>
-                                                        @if ($impor->status == 1 && $impor->catatan)
-                                                            <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                        @elseif ($impor->status == 1)
-                                                            <span class="badge bg-success">Diterima</span>
-                                                        @elseif ($impor->status == 2)
-                                                            <span class="badge bg-danger">Revisi</span>
-                                                        @elseif ($impor->status == 0)
-                                                            <span class="badge bg-info">draf</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $impor->catatan }}</td>
-                                                    <td>{{ $impor->produk }}</td>
-                                                    <td>{{ $impor->hs_code }}</td>
-                                                    <td>{{ $impor->volume_pib }}</td>
-                                                    <td>
-                                                        <?php
-                                            $status = $impor->status;
-                                            if ($status == "0") { ?>
-                                                        <center><button type="button" class="btn btn-sm btn-info "
-                                                                id="" data-bs-toggle="modal"
-                                                                onclick="edit_impor('{{ $impor->id }}','{{ $impor->produk }}' ,'{{ $impor->negara_asal }}')"
-                                                                data-bs-target="#edit-impor"
-                                                                data-id="{{ $impor->id }}"> <i class="bx bx-edit-alt"
-                                                                    title="Edit data"></i></button>
-                                                            <form
-                                                                action="{{ url('/hapus_import') }}/{{ $impor->id }}"
-                                                                method="post" class="d-inline">
-                                                                @method('delete')
-                                                                @csrf
-                                                                <button type="button" class="btn btn-sm btn-danger"
-                                                                    onclick="hapusData($(this).closest('form'))">
-                                                                    <i class="bx bx-trash-alt" title="Hapus data"></i>
-                                                                </button>
-                                                            </form>
-                                                            <button type="button" class="btn btn-sm btn-info "
-                                                                id="" data-bs-toggle="modal"
-                                                                onclick="lihat_import('{{ $impor->id }}' ,'{{ $impor->produk }}')"
-                                                                data-bs-target="#lihat-import"
-                                                                data-id="{{ $impor->id }}"> <i class="bx bx-show-alt"
-                                                                    title="Lihat data"></i></button>
-                                                        </center>
-
-
-                                                        <?php } elseif ($status == "1") { ?>
-
-                                                        <center><button type="button" class="btn btn-sm btn-info "
-                                                                id="" data-bs-toggle="modal"
-                                                                onclick="lihat_import('{{ $impor->id }}')"
-                                                                data-bs-target="#lihat-import"
-                                                                data-id="{{ $impor->id }}"> <i class="bx bx-show-alt"
-                                                                    title="Lihat data"></i></button></center>
-
-                                                        <?php } elseif ($status == "2") { ?>
-                                                        <center><button type="button" class="btn btn-sm btn-info "
-                                                                id="" data-bs-toggle="modal"
-                                                                onclick="edit_impor('{{ $impor->id }}','{{ $impor->produk }}' ,'{{ $impor->negara_asal }}')"
-                                                                data-bs-target="#edit-pasokan"
-                                                                data-id="{{ $impor->id }}"> <i class="bx bx-edit-alt"
-                                                                    title="Edit data"></i></button>
-                                                            <button type="button" class="btn btn-sm btn-info "
-                                                                id="" data-bs-toggle="modal"
-                                                                onclick="lihat_import('{{ $impor->id }}')"
-                                                                data-bs-target="#lihat-import"
-                                                                data-id="{{ $impor->id }}"> <i class="bx bx-show-alt"
-                                                                    title="Lihat data"></i></button>
-                                                        </center>
-                                                        <?php } ?>
-                                                    </td>
-                                                    <td>{{ $impor->satuan }}</td>
-                                                    <td>{{ $impor->invoice_amount_nilai_pabean }}</td>
-                                                    <td>{{ $impor->invoice_amount_final }}</td>
-                                                    <td>{{ $impor->nama_supplier }}</td>
-                                                    <td>{{ $impor->negara_asal }}</td>
-                                                    <td>{{ $impor->pelabuhan_muat }}</td>
-                                                    <td>{{ $impor->pelabuhan_bongkar }}</td>
-                                                    <td>{{ $impor->vessel_name }}</td>
-                                                    <td>{{ $impor->tanggal_bl }}</td>
-                                                    <td>{{ $impor->bl_no }}</td>
-                                                    <td>{{ $impor->no_pendaf_pib }}</td>
-                                                    <td>{{ $impor->tanggal_pendaf_pib }}</td>
-                                                    <td>{{ $impor->incoterms }}</td>
-
-                                                </tr>
-                                            @endforeach
-                                            <!-- Add more rows as needed -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @else
-                <div class="row"></div>
-            @endif
 
         </div>
-        {{-- <script>
-    document.querySelector('.btn-primary').addEventListener('click', function() {
-        const url = this.getAttribute('data-url');
-        window.location.href = url;
-    });
-</script>  --}}
+
     @endsection
