@@ -21,7 +21,7 @@ class PenyMinyakbumiController extends Controller
         // $pm = Penyminyakbumi::where('badan_usaha_id', Auth::user()->badan_usaha_id)
         //     ->groupBy('bulan')->get();
         $pecah = explode(',', Crypt::decryptString($id));
-        
+        // dd($pecah);
         $pm = DB::table('penyminyakbumis')
         ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
         ->where('badan_usaha_id', Auth::user()->badan_usaha_id)

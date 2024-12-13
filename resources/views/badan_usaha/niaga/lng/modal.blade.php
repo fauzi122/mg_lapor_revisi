@@ -16,7 +16,7 @@
                         <input class="form-control" type="hidden" id="" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="" name="izin_id"
-                            value="{{ $pecah[2] }}">
+                            value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" id="bulanx" name="bulan"
                             value="{{ old('bulan') }}">
                         @error('bulan')
@@ -859,7 +859,7 @@
                         <input class="form-control" type="hidden" id="" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="" name="izin_id"
-                            value="{{ $pecah[2] }}">
+                            value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" id="bulanxx" name="bulan"
                             value="{{ old('bulan') }}">
                         @error('bulan')
@@ -1229,7 +1229,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="{{ $pecah[2] }}">
+                            value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
 
