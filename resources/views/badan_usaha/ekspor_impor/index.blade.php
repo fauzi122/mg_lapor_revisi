@@ -66,7 +66,7 @@
                                                 );
                                             @endphp
                                             <tr>
-                                              
+
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td><b><a
                                                             href="{{ url('/eksport-import/show') }}/{{ $id }}/ekspor">{{ getBulan($data->bulan_peb) }}<i
@@ -95,7 +95,7 @@
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
-                                                           
+
                                                             <button type="button" class="btn btn-sm btn-danger"
                                                                 onclick="hapusData($(this).closest('form'))" disabled>
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
@@ -107,7 +107,7 @@
                                                             data-id="{{ $data->bulan_peb }}">
                                                             @method('PUT')
                                                             @csrf
-                                                           
+
                                                             <button type="button" class="btn btn-sm btn-success"
                                                                 onclick="kirimData($(this).closest('form'))" disabled>
                                                                 <i class="bx bx-paper-plane" title="Kirim data"></i>

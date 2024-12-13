@@ -17,11 +17,14 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Minyak Bumi</h5>
+                                @php
+                                    $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                @endphp
                                 <div>
 
-                                    <a href="/pengangkutan-minyak-bumi"
+                                    <a href="javascript:history.back()"
                                         class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                    <form action="/submit_bulan_pengmb/{{ $bulan_ambilx . '-01' }}" method="post"
+                                    <form action="{{ url('submit_bulan_pengmb') }}/{{ $id }}" method="post"
                                         class="d-inline">
                                         @method('put')
                                         @csrf
@@ -101,13 +104,14 @@
                                             if ($status=="0"){ ?>
                                                     <center>
                                                         <button type="button" class="btn btn-sm btn-info editPMB"
-                                                            id="editCompany" onclick="editpengmb('{{ $pgb->id }}', '{{ $pgb->produk }}' )"
+                                                            id="editCompany"
+                                                            onclick="editpengmb('{{ $pgb->id }}', '{{ $pgb->produk }}' )"
                                                             data-bs-toggle="modal" data-bs-target="#edit-pengmb"
                                                             data-id="{{ $pgb->id }}"> <i class="bx bx-edit-alt"
                                                                 title="Edit Data"></i>
                                                         </button>
-                                                        <form action="/hapus_pengmb/{{ $pgb->id }}" method="post"
-                                                            class="d-inline">
+                                                        <form action="{{ url('hapus_pengmb') }}/{{ $pgb->id }}"
+                                                            method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
                                                             <button type="button" class="btn btn-sm btn-danger"

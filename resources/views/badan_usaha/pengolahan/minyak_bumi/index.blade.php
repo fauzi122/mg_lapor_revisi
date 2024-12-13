@@ -121,7 +121,7 @@
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -132,7 +132,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="{{ url('/submit_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $id }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppmb->bulan }}">
                                                                 @method('PUT')
@@ -235,7 +235,7 @@
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -246,7 +246,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="{{ url('/submit_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $id }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppmb->bulan }}">
                                                                 @method('PUT')
@@ -354,7 +354,7 @@
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -365,7 +365,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="{{ url('/submit_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $ppmb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $id }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppmb->bulan }}">
                                                                 @method('PUT')
@@ -470,7 +470,7 @@
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="{{ url('/hapus_bulan_pengolahan_gas_bumi_produksi') }}/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_gas_bumi_produksi') }}/{{ $id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -481,7 +481,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="{{ url('/submit_bulan_pengolahan_gas_bumi_produksi') }}/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_gas_bumi_produksi') }}/{{ $id }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppgb->bulan }}">
                                                                 @method('PUT')
@@ -584,7 +584,7 @@
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="{{ url('/hapus_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -595,7 +595,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="{{ url('/submit_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $id }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppgb->bulan }}">
                                                                 @method('PUT')
@@ -687,21 +687,21 @@
                                                             </b>
                                                         </td>
                                                         <td>
-                                                            @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
+                                                            @if ($ppgb->status_tertinggi == 1 && $ppgb->catatanx)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($ppmb->status_tertinggi == 1)
+                                                            @elseif ($ppgb->status_tertinggi == 1)
                                                                 <span class="badge bg-success">Diterima</span>
-                                                            @elseif ($ppmb->status_tertinggi == 2)
+                                                            @elseif ($ppgb->status_tertinggi == 2)
                                                                 <span class="badge bg-danger">Revisi</span>
-                                                            @elseif ($ppmb->status_tertinggi == 0)
+                                                            @elseif ($ppgb->status_tertinggi == 0)
                                                                 <span class="badge bg-info">draf</span>
-                                                            @elseif($ppmb->status == 3)
+                                                            @elseif($ppgb->status == 3)
                                                                 <span class="badge bg-primary">Selesai</span>
                                                             @endif
                                                         </td>
                                                         <td>
                                                             <form
-                                                                action="{{ url('/hapus_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/hapus_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -712,7 +712,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="{{ url('/submit_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $ppgb->bulan }}"
+                                                                action="{{ url('/submit_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $id }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $ppgb->bulan }}">
                                                                 @method('PUT')

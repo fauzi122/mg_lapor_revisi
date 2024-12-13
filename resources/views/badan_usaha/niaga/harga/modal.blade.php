@@ -16,7 +16,7 @@
                         <input class="form-control" type="hidden" id="" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="" name="izin_id"
-                            value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -226,7 +226,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                        value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
 
@@ -242,8 +242,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/niagaHargaBBM_JBU-HasilOlahan_MinyakBumi.xlsx"
-                        id="tombol" class="btn btn-success waves-effect waves-light">Download
+                    <a href="/storage/template/niagaHargaBBM_JBU-HasilOlahan_MinyakBumi.xlsx" id="tombol"
+                        class="btn btn-success waves-effect waves-light">Download
                         Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -568,7 +568,7 @@
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -770,7 +770,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                        value="{{ $pecah[0] }}">
+                            value="{{ $pecah[0] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_importx">
                         <br>
                         <input type="file" name="file" required="required">
@@ -1040,7 +1040,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="example-text-input" class="form-label">Biaya Penyimpanan <font color="red">(Satuan
+                    <label for="example-text-input" class="form-label">Biaya Penyimpanan <font color="red">
+                            (Satuan
                             RP / Mton)</font></label>
                     <input class="form-control" type="number" name="biaya_penyimpanan"
                         id="lihat_biaya_penyimpanan_hargaLPG" readonly>

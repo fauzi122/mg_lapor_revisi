@@ -54,7 +54,7 @@ class PengangkutanmgController extends Controller
     public function show_pengmbx($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-        dd($pecah);
+        // dd($pecah);
         $badan_usaha_id = Auth::user()->badan_usaha_id;
         // Mengambil bulan dari tabel pengangkutan_minyakbumis sesuai ID badan usaha dan bulan yang ditemukan
         $bulan_ambil = DB::table('pengangkutan_minyakbumis')
@@ -508,13 +508,20 @@ class PengangkutanmgController extends Controller
         }
     }
 
-    public function hapus_bulan_pengmbx(Request $request, $bulan)
+    public function hapus_bulan_pengmbx(Request $request, $id)
     {
         // dd($bulan);
         // die;
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("delete from pengangkutan_minyakbumis where badan_usaha_id='$badan_usaha_id' and bulan='$bulanx'");
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[0];
+        $badan_usaha_id = $pecah[1];
+        $izin_id = $pecah[2];
+            
+        $validatedData = DB::table('pengangkutan_minyakbumis')
+            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('bulan', $bulanx)
+            ->where('izin_id', $izin_id)
+            ->delete();
         // pengangkutan_minyakbumi::destroy($bulan);
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -527,12 +534,20 @@ class PengangkutanmgController extends Controller
         }
     }
 
-    public function submit_bulan_pengmbx(Request $request, $bulan)
+    public function submit_bulan_pengmbx(Request $request, $id)
     {
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $now = Carbon::now();
-        $validatedData = DB::update("update pengangkutan_minyakbumis set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+      $pecah = explode(',', Crypt::decryptString($id));
+      $bulanx = $pecah[0];
+      $badan_usaha_id = $pecah[1];
+      $izin_id = $pecah[2];
+      $now = Carbon::now();
+  
+      // Menggunakan parameter binding untuk keamanan
+      $validatedData = DB::table('pengangkutan_minyakbumis')
+          ->where('bulan', $bulanx)
+          ->where('badan_usaha_id', $badan_usaha_id)
+          ->where('izin_id', $izin_id)
+          ->update(['status' => '1', 'tgl_kirim' => $now]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -545,13 +560,20 @@ class PengangkutanmgController extends Controller
         }
     }
 
-    public function hapus_bulan_pgbx(Request $request, $bulan)
+    public function hapus_bulan_pgbx(Request $request, $id)
     {
         // dd($bulan);
         // die;
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("delete from pengangkutan_gaskbumis where badan_usaha_id='$badan_usaha_id' and bulan='$bulanx'");
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[0];
+        $badan_usaha_id = $pecah[1];
+        $izin_id = $pecah[2];
+            
+        $validatedData = DB::table('pengangkutan_gaskbumis')
+            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('bulan', $bulanx)
+            ->where('izin_id', $izin_id)
+            ->delete();
         // pengangkutan_minyakbumi::destroy($bulan);
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -564,12 +586,20 @@ class PengangkutanmgController extends Controller
         }
     }
 
-    public function submit_bulan_pgbx(Request $request, $bulan)
+    public function submit_bulan_pgbx(Request $request, $id)
     {
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $now = Carbon::now();
-        $validatedData = DB::update("update pengangkutan_gaskbumis set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+      $pecah = explode(',', Crypt::decryptString($id));
+      $bulanx = $pecah[0];
+      $badan_usaha_id = $pecah[1];
+      $izin_id = $pecah[2];
+      $now = Carbon::now();
+  
+      // Menggunakan parameter binding untuk keamanan
+      $validatedData = DB::table('pengangkutan_gaskbumis')
+          ->where('bulan', $bulanx)
+          ->where('badan_usaha_id', $badan_usaha_id)
+          ->where('izin_id', $izin_id)
+          ->update(['status' => '1', 'tgl_kirim' => $now]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses

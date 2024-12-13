@@ -590,45 +590,68 @@ class HargabbmController extends Controller
       return back();
     }
   }
-  public function hapusbulanHargabbmjbux(Request $request, $bulan)
+  public function hapusbulanHargabbmjbux(Request $request, $id)
     {
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("DELETE FROM harga_bbm_jbus WHERE badan_usaha_id='$badan_usaha_id' AND bulan='$bulanx'");
-        // pengangkutan_minyakbumi::destroy($bulan);
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('Success', 'Data berhasil dihapus');
-            return back();
-        } else {
-            //redirect dengan pesan error
-            Alert::error('Error', 'Data gagal dihapus');
-            return back();
-        }
+      
+      $pecah = explode(',', Crypt::decryptString($id));
+      $bulanx = $pecah[0];
+      $badan_usaha_id = $pecah[1];
+      $izin_id = $pecah[2];
+        
+      $validatedData = DB::table('harga_bbm_jbus')
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('bulan', $bulanx)
+        ->where('izin_id', $izin_id)
+        ->delete();
+      // pengangkutan_minyakbumi::destroy($bulan);
+      if ($validatedData) {
+          //redirect dengan pesan sukses
+          Alert::success('Success', 'Data berhasil dihapus');
+          return back();
+      } else {
+          //redirect dengan pesan error
+          Alert::error('Error', 'Data gagal dihapus');
+          return back();
+      }
+
     }
-  public function hapus_bulan_harga_lpg(Request $request, $bulan)
+  public function hapus_bulan_harga_lpg(Request $request, $id)
     {
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("DELETE FROM harga_l_p_g_s WHERE badan_usaha_id='$badan_usaha_id' AND bulan='$bulanx'");
-        // pengangkutan_minyakbumi::destroy($bulan);
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('Success', 'Data berhasil dihapus');
-            return back();
-        } else {
-            //redirect dengan pesan error
-            Alert::error('Error', 'Data gagal dihapus');
-            return back();
-        }
+      $pecah = explode(',', Crypt::decryptString($id));
+      $bulanx = $pecah[0];
+      $badan_usaha_id = $pecah[1];
+      $izin_id = $pecah[2];
+        
+      $validatedData = DB::table('harga_l_p_g_s')
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('bulan', $bulanx)
+        ->where('izin_id', $izin_id)
+        ->delete();
+      // pengangkutan_minyakbumi::destroy($bulan);
+      if ($validatedData) {
+          //redirect dengan pesan sukses
+          Alert::success('Success', 'Data berhasil dihapus');
+          return back();
+      } else {
+          //redirect dengan pesan error
+          Alert::error('Error', 'Data gagal dihapus');
+          return back();
+      }
     }
-  public function submit_bulan_harga_bbm_jbux(Request $request, $bulan)
+  public function submit_bulan_harga_bbm_jbux(Request $request, $id)
     {
-        $bulanx = $bulan;
-        // dd($bulanx);
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $now = Carbon::now();
-        $validatedData = DB::update("update harga_bbm_jbus set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+      $pecah = explode(',', Crypt::decryptString($id));
+      $bulanx = $pecah[0];
+      $badan_usaha_id = $pecah[1];
+      $izin_id = $pecah[2];
+      $now = Carbon::now();
+  
+      // Menggunakan parameter binding untuk keamanan
+      $validatedData = DB::table('harga_bbm_jbus')
+          ->where('bulan', $bulanx)
+          ->where('badan_usaha_id', $badan_usaha_id)
+          ->where('izin_id', $izin_id)
+          ->update(['status' => '1', 'tgl_kirim' => $now]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -640,13 +663,20 @@ class HargabbmController extends Controller
             return back();
         }
     }
-  public function submit_bulan_harga_lpg(Request $request, $bulan)
+  public function submit_bulan_harga_lpg(Request $request, $id)
     {
-        $bulanx = $bulan;
-        // dd($bulanx);
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $now = Carbon::now();
-        $validatedData = DB::update("update harga_l_p_g_s set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+      $pecah = explode(',', Crypt::decryptString($id));
+      $bulanx = $pecah[0];
+      $badan_usaha_id = $pecah[1];
+      $izin_id = $pecah[2];
+      $now = Carbon::now();
+  
+      // Menggunakan parameter binding untuk keamanan
+      $validatedData = DB::table('harga_l_p_g_s')
+          ->where('bulan', $bulanx)
+          ->where('badan_usaha_id', $badan_usaha_id)
+          ->where('izin_id', $izin_id)
+          ->update(['status' => '1', 'tgl_kirim' => $now]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses

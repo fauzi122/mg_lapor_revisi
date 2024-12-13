@@ -19,11 +19,13 @@
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Penjualan LPG</h5>
+                                    @php
+                                        $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                    @endphp
                                     <div>
                                         <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                        <form
-                                            action="{{ url('/submit_bulan_penjualan_lpg') }}/{{ $bulan_ambil_penjualan_lpgx . '-01' }}"
+                                        <form action="{{ url('/submit_bulan_penjualan_lpg') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -187,11 +189,14 @@
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Pasokan LPG</h5>
+                                    @php
+                                        $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                    @endphp
                                     <div>
                                         <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                        <form action="/submit_bulan_pasokan_lpg/{{ $bulan_ambil_pasok_lpgx . '-01' }}"
-                                            method="post" class="d-inline">
+                                        <form action="/submit_bulan_pasokan_lpg/{{ $id }}" method="post"
+                                            class="d-inline">
                                             @method('put')
                                             @csrf
                                             <button type="button" class="btn btn-info"
