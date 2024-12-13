@@ -7,6 +7,9 @@
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-size-18">Laporan Pengolahan Gas Bumi</h4>
+                        @php
+                            $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                        @endphp
                     </div>
                 </div>
             </div>
@@ -24,7 +27,7 @@
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="{{ url('/submit_bulan_pengolahan_gas_bumi_produksi') }}/{{ $bulan_ambil_produksix . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_gas_bumi_produksi') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -175,7 +178,7 @@
                 {{-- Pengolahan Minyak Bumi Produksi Kilang --}}
             @endif
 
-            @if ($status_produksix != '' and $jenis == 'pasokan')
+            @if ($status_pasokanx != '' and $jenis == 'pasokan')
                 {{-- Pengolahan Minyak Bumi Pasokan Kilang --}}
                 <div class="row">
                     <div class="col-12">
@@ -188,7 +191,7 @@
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="{{ url('/submit_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $bulan_ambil_pasokanx . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -341,7 +344,7 @@
                 {{-- Pengolahan Minyak Bumi Pasokan Kilang --}}
             @endif
 
-            @if ($status_produksix != '' and $jenis == 'distribusi')
+            @if ($status_distribusix != '' and $jenis == 'distribusi')
                 {{-- Pengolahan Minyak Bumi Distribusi Kilang --}}
                 <div class="row">
                     <div class="col-12">
@@ -349,12 +352,13 @@
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Distribusi/Penjualan Domestik Kilang</h5>
+
                                     <div>
                                         <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="{{ url('/submit_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $bulan_ambil_distribusix . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf

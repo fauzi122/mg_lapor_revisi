@@ -17,10 +17,13 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Gas Bumi</h5>
+                                @php
+                                    $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                @endphp
                                 <div>
                                     <a href="javascript:history.back()"
                                         class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                    <form action="{{ url('/submit_bulan_pgb') }}/{{ $bulan_ambilx . '-01' }}" method="post"
+                                    <form action="{{ url('/submit_bulan_pgb') }}/{{ $id }}" method="post"
                                         class="d-inline">
                                         @method('put')
                                         @csrf

@@ -231,7 +231,7 @@ class PengolahanController extends Controller
       ->where('izin_id', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
-
+      
     // Mengambil substring dari bulan
     $bulan_ambil_produksix = $bulan_ambil_produksi ? substr($bulan_ambil_produksi->bulan, 0, 7) : '';
     $status_produksix = $bulan_ambil_produksi->status ?? '';
@@ -487,11 +487,20 @@ class PengolahanController extends Controller
     }
   }
 
-  public function hapus_bulan_pengolahan_minyak_bumi_produksi(Request $request, $bulan)
+  public function hapus_bulan_pengolahan_minyak_bumi_produksi(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("DELETE FROM pengolahans WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Produksi'");
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
+      
+    $validatedData = DB::table('pengolahans')
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Minyak Bumi')
+      ->where('tipe', 'Produksi')
+      ->where('izin_id', $izin_id)
+      ->delete();
     // Pengolahan::destroy($bulan);
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -521,12 +530,22 @@ class PengolahanController extends Controller
     }
   }
 
-  public function submit_bulan_pengolahan_minyak_bumi_produksi(Request $request, $bulan)
+  public function submit_bulan_pengolahan_minyak_bumi_produksi(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
     $now = Carbon::now();
-    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Produksi'");
+
+    // Menggunakan parameter binding untuk keamanan
+    $validatedData = DB::table('pengolahans')
+        ->where('bulan', $bulanx)
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('jenis', 'Minyak Bumi')
+        ->where('tipe', 'Produksi')
+        ->where('izin_id', $izin_id)
+        ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -724,11 +743,20 @@ class PengolahanController extends Controller
     }
   }
 
-  public function hapus_bulan_pengolahan_minyak_bumi_pasokan(Request $request, $bulan)
+  public function hapus_bulan_pengolahan_minyak_bumi_pasokan(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("DELETE FROM pengolahans WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Pasokan'");
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
+      
+    $validatedData = DB::table('pengolahans')
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Minyak Bumi')
+      ->where('tipe', 'Pasokan')
+      ->where('izin_id', $izin_id)
+      ->delete();
     // Pengolahan::destroy($bulan);
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -758,12 +786,22 @@ class PengolahanController extends Controller
     }
   }
 
-  public function submit_bulan_pengolahan_minyak_bumi_pasokan(Request $request, $bulan)
+  public function submit_bulan_pengolahan_minyak_bumi_pasokan(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
     $now = Carbon::now();
-    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Pasokan'");
+
+    // Menggunakan parameter binding untuk keamanan
+    $validatedData = DB::table('pengolahans')
+        ->where('bulan', $bulanx)
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('jenis', 'Minyak Bumi')
+        ->where('tipe', 'Pasokan')
+        ->where('izin_id', $izin_id)
+        ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -958,11 +996,20 @@ class PengolahanController extends Controller
     }
   }
 
-  public function hapus_bulan_pengolahan_minyak_bumi_distribusi(Request $request, $bulan)
+  public function hapus_bulan_pengolahan_minyak_bumi_distribusi(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("DELETE FROM pengolahans WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Distribusi'");
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
+      
+    $validatedData = DB::table('pengolahans')
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Minyak Bumi')
+      ->where('tipe', 'Distribusi')
+      ->where('izin_id', $izin_id)
+      ->delete();
     // Pengolahan::destroy($bulan);
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -992,12 +1039,22 @@ class PengolahanController extends Controller
     }
   }
 
-  public function submit_bulan_pengolahan_minyak_bumi_distribusi(Request $request, $bulan)
+  public function submit_bulan_pengolahan_minyak_bumi_distribusi(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
     $now = Carbon::now();
-    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Minyak Bumi' AND tipe='Distribusi'");
+
+    // Menggunakan parameter binding untuk keamanan
+    $validatedData = DB::table('pengolahans')
+        ->where('bulan', $bulanx)
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('jenis', 'Minyak Bumi')
+        ->where('tipe', 'Distribusi')
+        ->where('izin_id', $izin_id)
+        ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1181,11 +1238,20 @@ class PengolahanController extends Controller
     }
   }
 
-  public function hapus_bulan_pengolahan_gas_bumi_produksi(Request $request, $bulan)
+  public function hapus_bulan_pengolahan_gas_bumi_produksi(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("DELETE FROM pengolahans WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Produksi'");
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
+      
+    $validatedData = DB::table('pengolahans')
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Gas Bumi')
+      ->where('tipe', 'Produksi')
+      ->where('izin_id', $izin_id)
+      ->delete();
     // Pengolahan::destroy($bulan);
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1215,12 +1281,22 @@ class PengolahanController extends Controller
     }
   }
 
-  public function submit_bulan_pengolahan_gas_bumi_produksi(Request $request, $bulan)
+  public function submit_bulan_pengolahan_gas_bumi_produksi(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
     $now = Carbon::now();
-    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Produksi'");
+
+    // Menggunakan parameter binding untuk keamanan
+    $validatedData = DB::table('pengolahans')
+        ->where('bulan', $bulanx)
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('jenis', 'Gas Bumi')
+        ->where('tipe', 'Produksi')
+        ->where('izin_id', $izin_id)
+        ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1405,11 +1481,20 @@ class PengolahanController extends Controller
     }
   }
 
-  public function hapus_bulan_pengolahan_gas_bumi_pasokan(Request $request, $bulan)
+  public function hapus_bulan_pengolahan_gas_bumi_pasokan(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("DELETE FROM pengolahans WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Pasokan'");
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
+      
+    $validatedData = DB::table('pengolahans')
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Gas Bumi')
+      ->where('tipe', 'Pasokan')
+      ->where('izin_id', $izin_id)
+      ->delete();
     // Pengolahan::destroy($bulan);
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1440,12 +1525,22 @@ class PengolahanController extends Controller
     }
   }
 
-  public function submit_bulan_pengolahan_gas_bumi_pasokan(Request $request, $bulan)
+  public function submit_bulan_pengolahan_gas_bumi_pasokan(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
     $now = Carbon::now();
-    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Pasokan'");
+
+    // Menggunakan parameter binding untuk keamanan
+    $validatedData = DB::table('pengolahans')
+        ->where('bulan', $bulanx)
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('jenis', 'Gas Bumi')
+        ->where('tipe', 'Pasokan')
+        ->where('izin_id', $izin_id)
+        ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1633,12 +1728,21 @@ class PengolahanController extends Controller
     }
   }
 
-  public function hapus_bulan_pengolahan_gas_bumi_distribusi(Request $request, $bulan)
+  public function hapus_bulan_pengolahan_gas_bumi_distribusi(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("DELETE FROM pengolahans WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Distribusi'");
-    // Pengolahan::destroy($bulan);
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
+      
+    $validatedData = DB::table('pengolahans')
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Gas Bumi')
+      ->where('tipe', 'Distribusi')
+      ->where('izin_id', $izin_id)
+      ->delete();
+
     if ($validatedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil dihapus');
@@ -1667,12 +1771,22 @@ class PengolahanController extends Controller
     }
   }
 
-  public function submit_bulan_pengolahan_gas_bumi_distribusi(Request $request, $bulan)
+  public function submit_bulan_pengolahan_gas_bumi_distribusi(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
     $now = Carbon::now();
-    $validatedData = DB::update("UPDATE pengolahans SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id' AND jenis='Gas Bumi' AND tipe='Distribusi'");
+
+    // Menggunakan parameter binding untuk keamanan
+    $validatedData = DB::table('pengolahans')
+        ->where('bulan', $bulanx)
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('jenis', 'Gas Bumi')
+        ->where('tipe', 'Distribusi')
+        ->where('izin_id', $izin_id)
+        ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses

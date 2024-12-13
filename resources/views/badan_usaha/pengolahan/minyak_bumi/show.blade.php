@@ -7,6 +7,9 @@
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-size-18">Laporan Pengolahan Minyak Bumi/Hasil Olahan</h4>
+                        @php
+                            $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                        @endphp
                     </div>
                 </div>
             </div>
@@ -24,7 +27,7 @@
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="{{ url('/submit_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $bulan_ambil_produksix . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -194,7 +197,7 @@
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="{{ url('/submit_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $bulan_ambil_pasokanx . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -370,7 +373,7 @@
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
 
                                         <form
-                                            action="{{ url('/submit_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $bulan_ambil_distribusix . '-01' }}"
+                                            action="{{ url('/submit_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf

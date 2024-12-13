@@ -524,15 +524,23 @@ class LpgController extends Controller
       return back();
     }
   }
-  public function submit_bulan_penjualan_lpgx(Request $request, $bulan)
+  public function submit_bulan_penjualan_lpgx(Request $request, $id)
   {
-    $bulanx = $bulan;
-    // dd($bulanx);
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
     $now = Carbon::now();
-    $validatedData = DB::update("update penjualan_lpgs set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
-    if ($validatedData) {
+    // $validatedData = DB::update("update penjualan_lpgs set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+
+    $affected = DB::table('penjualan_lpgs')
+          ->where('bulan', $bulanx)
+          ->where('badan_usaha_id', $badan_usaha_id)
+          ->where('izin_id', $izin_id)
+          ->update(['status' => '1', 'tgl_kirim' => $now]);
+
+    if ($affected) {
       //redirect dengan pesan sukses
       Alert::success('success', 'Data berhasil dikirim');
       return back();
@@ -559,15 +567,23 @@ class LpgController extends Controller
       return back();
     }
   }
-  public function submit_bulan_pasokan_lpgx(Request $request, $bulan)
+  public function submit_bulan_pasokan_lpgx(Request $request, $id)
   {
-    $bulanx = $bulan;
-    // dd($bulanx);
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
     $now = Carbon::now();
-    $validatedData = DB::update("update pasokan_l_p_g_s set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
-    if ($validatedData) {
+    // $validatedData = DB::update("update penjualan_lpgs set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
+
+    $affected = DB::table('pasokan_l_p_g_s')
+          ->where('bulan', $bulanx)
+          ->where('badan_usaha_id', $badan_usaha_id)
+          ->where('izin_id', $izin_id)
+          ->update(['status' => '1', 'tgl_kirim' => $now]);
+
+    if ($affected) {
       //redirect dengan pesan sukses
       Alert::success('success', 'Data berhasil dikirim');
       return back();
@@ -577,36 +593,56 @@ class LpgController extends Controller
       return back();
     }
   }
-  public function hapus_bulan_lpg(Request $request, $bulan)
+  public function hapus_bulan_lpg(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("DELETE FROM penjualan_lpgs WHERE badan_usaha_id='$badan_usaha_id' AND bulan='$bulanx'");
-    // pengangkutan_minyakbumi::destroy($bulan);
-    if ($validatedData) {
-      //redirect dengan pesan sukses
-      Alert::success('Success', 'Data berhasil dihapus');
-      return back();
+    // Dekripsi ID dan pecah menjadi array
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
+
+    // Menggunakan query builder untuk menghapus data
+    $affected = DB::table('penjualan_lpgs')
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('bulan', $bulanx)
+        ->where('izin_id', $izin_id)
+        ->delete();
+
+    // Cek hasil penghapusan dan tampilkan pesan sesuai
+    if ($affected) {
+        // Redirect dengan pesan sukses
+        Alert::success('Success', 'Data berhasil dihapus');
     } else {
-      //redirect dengan pesan error
-      Alert::error('Error', 'Data gagal dihapus');
-      return back();
+        // Redirect dengan pesan error
+        Alert::error('Error', 'Data gagal dihapus');
     }
+
+    return back();
   }
-  public function hapus_bulan_pasokanLPG(Request $request, $bulan)
+  public function hapus_bulan_pasokanLPG(Request $request, $id)
   {
-    $bulanx = $bulan;
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
-    $validatedData = DB::update("DELETE FROM pasokan_l_p_g_s WHERE badan_usaha_id='$badan_usaha_id' AND bulan='$bulanx'");
-    // pengangkutan_minyakbumi::destroy($bulan);
-    if ($validatedData) {
-      //redirect dengan pesan sukses
-      Alert::success('Success', 'Data berhasil dihapus');
-      return back();
+    // Dekripsi ID dan pecah menjadi array
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[0];
+    $badan_usaha_id = $pecah[1];
+    $izin_id = $pecah[2];
+
+    // Menggunakan query builder untuk menghapus data
+    $affected = DB::table('pasokan_l_p_g_s')
+        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('bulan', $bulanx)
+        ->where('izin_id', $izin_id)
+        ->delete();
+
+    // Cek hasil penghapusan dan tampilkan pesan sesuai
+    if ($affected) {
+        // Redirect dengan pesan sukses
+        Alert::success('Success', 'Data berhasil dihapus');
     } else {
-      //redirect dengan pesan error
-      Alert::error('Error', 'Data gagal dihapus');
-      return back();
+        // Redirect dengan pesan error
+        Alert::error('Error', 'Data gagal dihapus');
     }
+
+    return back();
   }
 }

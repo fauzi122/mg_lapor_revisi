@@ -166,16 +166,16 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/simpan_lpg', 'simpan_lpg');
 		Route::put('/update_lpg/{id}', 'update_lpg');
 		Route::delete('/hapus_lpg/{id}', 'hapus_lpg');
-		Route::delete('/hapus_bulan_lpg/{bulan}', 'hapus_bulan_lpg');
+		Route::delete('/hapus_bulan_lpg/{id}', 'hapus_bulan_lpg');
 		Route::put('/submit_penjualan_lpg/{id}', 'submit_penjualan_lpg');
-		Route::put('/submit_bulan_penjualan_lpg/{bulan}', 'submit_bulan_penjualan_lpgx');
+		Route::put('/submit_bulan_penjualan_lpg/{id}', 'submit_bulan_penjualan_lpgx');
 
 		Route::post('/simpan_pasokanLPG', 'simpan_pasokanLPG');
 		Route::put('/update_pasokanLPG/{id}', 'update_pasokanLPG');
 		Route::delete('/hapus_pasokanLPG/{id}', 'hapus_pasokanLPG');
-		Route::delete('/hapus_bulan_pasokanLPG/{bulan}', 'hapus_bulan_pasokanLPG');
+		Route::delete('/hapus_bulan_pasokanLPG/{id}', 'hapus_bulan_pasokanLPG');
 		Route::put('/submit_pasokan_lpg/{id}', 'submit_pasokan_lpg');
-		Route::put('/submit_bulan_pasokan_lpg/{bulan}', 'submit_bulan_pasokan_lpgx');
+		Route::put('/submit_bulan_pasokan_lpg/{id}', 'submit_bulan_pasokan_lpgx');
 
 		Route::get('/get-penjualan-lpg/{id}', 'get_penjualan_lpg');
 		Route::get('/getPasokanLPG/{id}', 'getPasokanLPG');
@@ -251,7 +251,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::get('/get-harga-bbm/{id}', 'get_harga_bbm');
 		Route::put('/submit_harga-bbm-jbu/{id}', 'submit_harga_bbm_jbux');
 		Route::put('/submit_bulan_harga-bbm-jbu/{id}', 'submit_bulan_harga_bbm_jbux');
-		Route::delete('/hapusbulanHargabbmjbu/{bulan}', 'hapusbulanHargabbmjbux');
+		Route::delete('/hapusbulanHargabbmjbu/{id}', 'hapusbulanHargabbmjbux');
 
 		Route::post('/simpanHargaLPG', 'simpan_harga_lpg');
 		Route::get('/get-harga-lpg/{id}', 'get_harga_lpg');
@@ -259,7 +259,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::get('/get_kota_lpg/{kabupaten_kota}', 'get_kota');
 		Route::delete('/hapusHargaLPG/{id}', 'hapus_harga_lpg');
 		Route::put('/submitHargaLPG/{id}', 'submit_harga_lpg');
-		Route::delete('/hapusbulanHargaLPG/{bulan}', 'hapus_bulan_harga_lpg');
+		Route::delete('/hapusbulanHargaLPG/{id}', 'hapus_bulan_harga_lpg');
 		Route::put('/submitbulanHargaLPG/{id}', 'submit_bulan_harga_lpg');
 		Route::post('/importHargaLPG', 'importhargalpgx');
 	});
@@ -307,10 +307,10 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/simpan_pengmb', 'simpan_pengmbx');
 		Route::put('/update_pengmb/{id}', 'update_pengmbx');
 		Route::delete('/hapus_pengmb/{id}', 'hapus_pengmbx');
-		Route::delete('/hapus_bulan_pengmb/{bulan}', 'hapus_bulan_pengmbx');
+		Route::delete('/hapus_bulan_pengmb/{id}', 'hapus_bulan_pengmbx');
 		Route::get('/get-pengmb/{id}', 'get_pengmb');
 		Route::put('/submit_pengmb/{id}', 'submit_pengmbx');
-		Route::put('/submit_bulan_pengmb/{bulan}', 'submit_bulan_pengmbx');
+		Route::put('/submit_bulan_pengmb/{id}', 'submit_bulan_pengmbx');
 		Route::post('/importPengangkutanMB', 'importPengangkutanMB');
 
 		Route::get('/pengangkutan-gas-bumi/{id}', 'index_pgb');
@@ -318,10 +318,10 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/simpan_pgb', 'simpan_pgbx');
 		Route::put('/update_pgb/{id}', 'update_pgbx');
 		Route::delete('/hapus_pgb/{id}', 'hapus_pgbx');
-		Route::delete('/hapus_bulan_pgb/{bulan}', 'hapus_bulan_pgbx');
+		Route::delete('/hapus_bulan_pgb/{id}', 'hapus_bulan_pgbx');
 		Route::get('/get-pgb/{id}', 'get_pgb');
 		Route::put('/submit_pgb/{id}', 'submit_pgbx');
-		Route::put('/submit_bulan_pgb/{bulan}', 'submit_bulan_pgbx');
+		Route::put('/submit_bulan_pgb/{id}', 'submit_bulan_pgbx');
 		Route::post('/importPengangkutanGB', 'importPengangkutanGB');
 	});
 

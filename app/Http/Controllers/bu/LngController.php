@@ -636,31 +636,31 @@ class LngController extends Controller
     }
 
     public function hapus_bulan_pasok_lngx(Request $request, $id)
-{
-    // Dekripsi ID dan pecah menjadi array
-    $pecah = explode(',', Crypt::decryptString($id));
-    $bulanx = $pecah[0];
-    $badan_usaha_id = $pecah[1];
-    $izin_id = $pecah[2];
+    {
+        // Dekripsi ID dan pecah menjadi array
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[0];
+        $badan_usaha_id = $pecah[1];
+        $izin_id = $pecah[2];
 
-    // Menggunakan query builder untuk menghapus data
-    $affected = DB::table('pasokanlngs')
-        ->where('badan_usaha_id', $badan_usaha_id)
-        ->where('bulan', $bulanx)
-        ->where('izin_id', $izin_id)
-        ->delete();
+        // Menggunakan query builder untuk menghapus data
+        $affected = DB::table('pasokanlngs')
+            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('bulan', $bulanx)
+            ->where('izin_id', $izin_id)
+            ->delete();
 
-    // Cek hasil penghapusan dan tampilkan pesan sesuai
-    if ($affected) {
-        // Redirect dengan pesan sukses
-        Alert::success('Success', 'Data berhasil dihapus');
-    } else {
-        // Redirect dengan pesan error
-        Alert::error('Error', 'Data gagal dihapus');
+        // Cek hasil penghapusan dan tampilkan pesan sesuai
+        if ($affected) {
+            // Redirect dengan pesan sukses
+            Alert::success('Success', 'Data berhasil dihapus');
+        } else {
+            // Redirect dengan pesan error
+            Alert::error('Error', 'Data gagal dihapus');
+        }
+
+        return back();
     }
-
-    return back();
-}
 
     
 }

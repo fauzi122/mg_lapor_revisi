@@ -55,7 +55,9 @@
                                     <tbody>
                                         @foreach ($pm as $data)
                                             @php
-                                                $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id);
+                                                $id = Crypt::encryptString(
+                                                    $data->bulan . ',' . $data->badan_usaha_id . ',' . $data->izin_id,
+                                                );
                                                 $idTahun = Crypt::encryptString(
                                                     $data->bulan .
                                                         ',' .
@@ -67,10 +69,12 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><b><a href="/pengangkutan-minyak-bumi/show/{{ $id }}">{{ getBulan($data->bulan) }}<i
+                                                <td><b><a
+                                                            href="{{ url('pengangkutan-minyak-bumi/show') }}/{{ $id }}">{{ getBulan($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
-                                                <td><b><a href="/pengangkutan-minyak-bumi/show/{{ $idTahun }}">{{ getTahun($data->bulan) }}<i
+                                                <td><b><a
+                                                            href="{{ url('pengangkutan-minyak-bumi/show') }}/{{ $idTahun }}">{{ getTahun($data->bulan) }}<i
                                                                 class="bx bx-check" title="lihat data laporan"></i></a><b>
                                                 </td>
                                                 <td>
@@ -87,7 +91,7 @@
                                                 <!-- <td>{{ $data->catatan }}</td> -->
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
-                                                        <form action="/hapus_bulan_pengmb/{{ $data->bulan }}"
+                                                        <form action="{{ url('hapus_bulan_pengmb') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -96,7 +100,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_pengmb/{{ $data->bulan }}"
+                                                        <form
+                                                            action="{{ url('submit_bulan_pengmb') }}/{{ $id }}"
                                                             method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf
@@ -108,7 +113,7 @@
                                                     </td>
                                                 @else
                                                     <td>
-                                                        <form action="/hapus_bulan_pengmb/{{ $data->bulan }}"
+                                                        <form action="{{ url('hapus_bulan_pengmb') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -117,7 +122,8 @@
                                                                 <i class="bx bx-trash-alt" title="Hapus data"></i>
                                                             </button>
                                                         </form>
-                                                        <form action="/submit_bulan_pengmb/{{ $data->bulan }}"
+                                                        <form
+                                                            action="{{ url('submit_bulan_pengmb') }}/{{ $id }}"
                                                             method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf
@@ -126,7 +132,7 @@
                                                                 <i class="bx bx-paper-plane" title="Kirim data"></i>
                                                             </button>
                                                         </form>
-                                                        <a href="/pengangkutan-minyak-bumi/show/{{ $id }}"
+                                                        <a href="{{ url('pengangkutan-minyak-bumi/show') }}/{{ $id }}"
                                                             class="btn btn-sm btn-info"><i class="bx bx-edit"
                                                                 title="Revisi"></i>
                                                         </a>

@@ -20,16 +20,17 @@
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Penjualan LNG/CNG/BBG </h5>
+                                    @php
+                                        $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                    @endphp
                                     <div>
                                         <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
                                         @if ($statuspenjualan_lngx == 1)
-                                            <form
-                                                action="{{ url('/submit_bulan_lng') }}/{{ $bulan_ambil_penjualan_lngx . '-01' }}"
-                                                method="post" class="d-inline">
+                                            <form action="{{ url('/submit_bulan_lng') }}/{{ $id }}" method="post"
+                                                class="d-inline">
                                                 @method('put')
                                                 @csrf
-                                                <input type="hidden" name="izin_id" value="{{ $izin_id }}">
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))" disabled>
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -44,12 +45,10 @@
                                                 data-bs-toggle="modal" data-bs-target="#excellng" disabled>Import
                                                 Excel</button>
                                         @elseif ($statuspenjualan_lngx == 2)
-                                            <form
-                                                action="{{ url('/submit_bulan_lng') }}/{{ $bulan_ambil_penjualan_lngx . '-01' }}"
-                                                method="post" class="d-inline">
+                                            <form action="{{ url('/submit_bulan_lng') }}/{{ $id }}" method="post"
+                                                class="d-inline">
                                                 @method('put')
                                                 @csrf
-                                                <input type="hidden" name="izin_id" value="{{ $izin_id }}">
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))">
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -64,12 +63,10 @@
                                                 data-bs-toggle="modal" data-bs-target="#excellng" disabled>Import
                                                 Excel</button>
                                         @else
-                                            <form
-                                                action="{{ url('/submit_bulan_lng') }}/{{ $bulan_ambil_penjualan_lngx . '-01' }}"
+                                            <form action="{{ url('/submit_bulan_lng') }}/{{ $id }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
-                                                <input type="hidden" name="izin_id" value="{{ $izin_id }}">
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))">
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -236,19 +233,15 @@
                                     <h5 class="mb-0">Pasokan LNG/CNG/BBG</h5>
                                     <div>
                                         @php
-                                            $id = Crypt::encryptString(
-                                                $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2],
-                                            );
-                                        @endphp 
+                                            $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                        @endphp
                                         <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
                                         @if ($statuspasok_lngx == 1)
-                                            <form
-                                                action="{{ url('/submit_bulan_pasok_lng') }}/{{ $id}}"
+                                            <form action="{{ url('/submit_bulan_pasok_lng') }}/{{ $id }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
-                                                <input type="hidden" name="izin_id" value="{{ $izin_id }}">
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))" disabled>
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -265,12 +258,10 @@
                                                 Excel
                                             </button>
                                         @elseif ($statuspasok_lngx == 2)
-                                            <form
-                                                action="{{ url('/submit_bulan_pasok_lng') }}/{{ $id}}"
+                                            <form action="{{ url('/submit_bulan_pasok_lng') }}/{{ $id }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
-                                                <input type="hidden" name="izin_id" value="{{ $izin_id }}">
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))">
                                                     <span title="Kirim semua data">Kirim Semua</span>
@@ -285,12 +276,10 @@
                                                 data-bs-toggle="modal" data-bs-target="#excellng_pasok" disabled>Import
                                                 Excel</button>
                                         @else
-                                            <form
-                                                action="{{ url('/submit_bulan_pasok_lng') }}/{{ $id}}"
+                                            <form action="{{ url('/submit_bulan_pasok_lng') }}/{{ $id }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
-                                                <input type="hidden" name="izin_id" value="{{ $izin_id }}">
                                                 <button type="button" class="btn btn-info"
                                                     onclick="kirimData($(this).closest('form'))">
                                                     <span title="Kirim semua data">Kirim Semua</span>

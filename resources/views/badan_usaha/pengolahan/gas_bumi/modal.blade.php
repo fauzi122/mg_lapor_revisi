@@ -15,7 +15,7 @@
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -299,7 +299,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                        value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">
@@ -337,7 +337,7 @@
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -623,7 +623,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                        value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import_pas">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">
@@ -661,7 +661,7 @@
                         <input class="form-control" type="hidden" id="" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="" name="izin_id"
-                            value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -977,7 +977,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                        value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import_dis">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">

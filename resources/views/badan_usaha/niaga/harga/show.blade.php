@@ -17,13 +17,14 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">Harga BBM JBU/Hasil Olahan/Minyak Bumi
-                                    </h5>
+                                    <h5 class="mb-0">Harga BBM JBU/Hasil Olahan/Minyak Bumi</h5>
+                                    @php
+                                        $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                    @endphp
                                     <div>
                                         <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                        <form
-                                            action="{{ url('/submit_bulan_harga-bbm-jbu') }}/{{ $bulan_ambil_hargabbmjbux . '-01' }}"
+                                        <form action="{{ url('/submit_bulan_harga-bbm-jbu') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf
@@ -210,13 +211,14 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">Harga LPG
-                                    </h5>
+                                    <h5 class="mb-0">Harga LPG</h5>
+                                    @php
+                                        $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                    @endphp
                                     <div>
                                         <a href="javascript:history.back()"
                                             class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                        <form
-                                            action="{{ url('/submitbulanHargaLPG') }}/{{ $bulan_ambil_hargalpgx . '-01' }}"
+                                        <form action="{{ url('/submitbulanHargaLPG') }}/{{ $id }}"
                                             method="post" class="d-inline">
                                             @method('put')
                                             @csrf

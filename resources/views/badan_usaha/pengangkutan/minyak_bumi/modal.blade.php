@@ -6,7 +6,8 @@
                 <h5 class="modal-title" id="myModalLabel">Pengangkutan Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpan_pengmb" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('simpan_pengmb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -14,7 +15,7 @@
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
+                            value="{{ $pecah[2] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -199,8 +200,7 @@
 
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -395,8 +395,7 @@
 
                         <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
                             value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -568,7 +567,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="{{ $pecah[0] }}">
+                            value="{{ $pecah[2] }}">
                         <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">

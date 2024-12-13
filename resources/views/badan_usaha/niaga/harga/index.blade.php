@@ -95,7 +95,7 @@
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
                                                         <form
-                                                            action="{{ url('/hapusbulanHargabbmjbu') }}/{{ $data->bulan }}"
+                                                            action="{{ url('/hapusbulanHargabbmjbu') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -105,7 +105,7 @@
                                                             </button>
                                                         </form>
                                                         <form
-                                                            action="{{ url('/submit_bulan_harga-bbm-jbu') }}/{{ $data->bulan }}"
+                                                            action="{{ url('/submit_bulan_harga-bbm-jbu') }}/{{ $id }}"
                                                             method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf
@@ -118,7 +118,7 @@
                                                 @else
                                                     <td>
                                                         <form
-                                                            action="{{ url('/hapusbulanHargabbmjbu') }}/{{ $data->bulan }}"
+                                                            action="{{ url('/hapusbulanHargabbmjbu') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -128,7 +128,7 @@
                                                             </button>
                                                         </form>
                                                         <form
-                                                            action="{{ url('/submit_bulan_harga-bbm-jbu') }}/{{ $data->bulan }}"
+                                                            action="{{ url('/submit_bulan_harga-bbm-jbu') }}/{{ $id }}"
                                                             method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                             @method('PUT')
                                                             @csrf
@@ -186,7 +186,9 @@
                                     <tbody>
                                         @foreach ($hargaLPG as $data)
                                             @php
-                                                $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id);
+                                                $id = Crypt::encryptString(
+                                                    $data->bulan . ',' . $data->badan_usaha_id . ',' . $data->izin_id,
+                                                );
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
@@ -213,7 +215,7 @@
                                                 @if ($data->status_tertinggi == 1)
                                                     <td>
                                                         <form
-                                                            action="{{ url('/hapusbulanHargaLPG') }}/{{ $data->bulan }}"
+                                                            action="{{ url('/hapusbulanHargaLPG') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -223,7 +225,7 @@
                                                             </button>
                                                         </form>
                                                         <form
-                                                            action="{{ url('/submitbulanHargaLPG') }}/{{ $data->bulan }}"
+                                                            action="{{ url('/submitbulanHargaLPG') }}/{{ $id }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan }}">
                                                             @method('PUT')
@@ -237,7 +239,7 @@
                                                 @else
                                                     <td>
                                                         <form
-                                                            action="{{ url('/hapusbulanHargaLPG') }}/{{ $data->bulan }}"
+                                                            action="{{ url('/hapusbulanHargaLPG') }}/{{ $id }}"
                                                             method="post" class="d-inline">
                                                             @method('delete')
                                                             @csrf
@@ -247,7 +249,7 @@
                                                             </button>
                                                         </form>
                                                         <form
-                                                            action="{{ url('/submitbulanHargaLPG') }}/{{ $data->bulan }}"
+                                                            action="{{ url('/submitbulanHargaLPG') }}/{{ $id }}"
                                                             method="post" class="d-inline"
                                                             data-id="{{ $data->bulan }}">
                                                             @method('PUT')
