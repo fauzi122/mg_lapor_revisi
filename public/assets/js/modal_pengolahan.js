@@ -10,7 +10,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
             id: id,
         },
         success: function (response) {
-            // console.log(response);
+            // console.log(response)..........;
             // console.log(response.data.find.tipe);
             // Tangkap pesan dari server dan tampilkan ke user
             let produkSelect = response.data.find.produk;
