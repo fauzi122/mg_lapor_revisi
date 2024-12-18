@@ -265,14 +265,15 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
         ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
         ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
         ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.izin_id','a.badan_usaha_id')
+        // ->groupBy('a.izin_id','a.badan_usaha_id')
         ->get();
 
         $perusahaan = DB::table('penjualan_lngs as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
         ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
         ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.badan_usaha_id')
+        
+        // ->groupBy('a.badan_usaha_id')
         ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
         ->get();
 
