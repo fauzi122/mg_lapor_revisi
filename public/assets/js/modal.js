@@ -1414,65 +1414,37 @@ function pelabuhan() {
     });
 }
 
-// function incoterms() {
-//     $(".form-reset").trigger("reset");
-//     // Kirim data melalui Ajax
-//     $.ajax({
+function incoterms() {
+    $(".form-reset").trigger("reset");
+    // Kirim data melalui Ajax
+    $.ajax({
       
-//         url: "/get-incoterms/",
-//         method: "GET",
-//         data: {},
-//         success: function (response) {
-//             // console.log(response);
-//             // Loop melalui data dan tambahkan opsi ke dalam select
-//             $(".incoterms").empty();
-//             $(".incoterms").append(
-//                 ` <option selected disabled>Pilih Incoterms</option>`
-//             );
-//             $.each(response.data, function (i, value) {
-//                 $(".incoterms").append(
-//                     `<option value="` +
-//                         value.incoterm +
-//                         `">` +
-//                         value.ket +
-//                         `</option>`
-//                 );
-//             });
-//         },
-//         error: function (xhr, status, error) {
-//             // Tangkap pesan error jika ada
-//             alert("Terjadi kesalahan saat mengirim data.");
-//         },
-//     });
-// }
-
-    function incoterms() {
-        $(".form-reset").trigger("reset");
-
-        // Kirim data melalui Ajax
-        $.ajax({
-            url: incotermsUrl,
-            method: "GET",
-            data: {},
-            success: function (response) {
-                // Loop melalui data dan tambahkan opsi ke dalam select
-                $(".incoterms").empty();
+        url: "/pelaporan-hilir/get-incoterms/",
+        method: "GET",
+        data: {},
+        success: function (response) {
+            // console.log(response);
+            // Loop melalui data dan tambahkan opsi ke dalam select
+            $(".incoterms").empty();
+            $(".incoterms").append(
+                ` <option selected disabled>Pilih Incoterms</option>`
+            );
+            $.each(response.data, function (i, value) {
                 $(".incoterms").append(
-                    `<option selected disabled>Pilih Incoterms</option>`
+                    `<option value="` +
+                        value.incoterm +
+                        `">` +
+                        value.ket +
+                        `</option>`
                 );
-                $.each(response.data, function (i, value) {
-                    $(".incoterms").append(
-                        `<option value="` + value.incoterm + `">` + value.ket + `</option>`
-                    );
-                });
-            },
-            error: function (xhr, status, error) {
-                // Tangkap pesan error jika ada
-                alert("Terjadi kesalahan saat mengirim data.");
-            },
-        });
-    }
-
+            });
+        },
+        error: function (xhr, status, error) {
+            // Tangkap pesan error jika ada
+            alert("Terjadi kesalahan saat mengirim data.");
+        },
+    });
+}
 
 
 function getCommingle(target, option, jumlah_bu = " ", nama_penyewa = " ") {
