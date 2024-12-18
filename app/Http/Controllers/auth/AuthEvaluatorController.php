@@ -22,6 +22,10 @@ class AuthEvaluatorController extends Controller
 	{
 		return view('evaluator.login');
 	}
+	public function index_sso()
+	{
+		return view('evaluator.ssologin');
+	}
 // pindah sementara
     // public function postloginEvaluator(Request $request)
 	// {

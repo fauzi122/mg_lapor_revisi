@@ -78,6 +78,7 @@ Route::post('/login/post-login', [AuthBuController::class, 'postloginIzin']);
 
 //auth Evaluator
 Route::get('/evaluator/login', [AuthEvaluatorController::class, 'index']);
+Route::get('/evaluator/login-sso', [AuthEvaluatorController::class, 'index_sso']);
 // Route::post('/evaluator/login/post-login', [AuthEvaluatorController::class, 'postloginEvaluator']);
 Route::post('/evaluator/login/post-login', [AuthEvaluatorController::class, 'postLogin']);
 Route::post('/login/generate-otp', [AuthEvaluatorController::class, 'genOTP']);

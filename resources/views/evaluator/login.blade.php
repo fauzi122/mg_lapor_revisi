@@ -25,7 +25,7 @@
                             <div class="w-100">
                                 <div class="d-flex flex-column h-100">
                                     <div class="mb-4 mb-md-5 text-center">
-                                       <a href="index.html">
+                                       <a href="">
 
                                     <img src="{{ asset('assets/images/logo-esdm.png') }}" alt="" height="30"
 
@@ -35,8 +35,8 @@
                                     </div>
                                     <div class="auth-content my-auto">
                                         <div class="text-center">
-                                            <h5 class="mb-0">Welcome Back !</h5>
-                                            <p class="text-muted mt-2">Sign in to continue to Pelaporan Migas.</p>
+                                            <h5 class="mb-0">Selamat Datang</h5>
+                                            <p class="text-muted mt-2">Untuk Single Sign On Pada Kementrian ESDM, <a href="{{url ('/evaluator/login-sso') }}">klik disini</a></p>
                                         </div>
                                       <form method="POST" action="{{ url('/evaluator/login/post-login') }}" enctype="multipart/form-data">
                                     @csrf
