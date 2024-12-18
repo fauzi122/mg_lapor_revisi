@@ -4,7 +4,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get_Pengolahan/" + id,
+        url: "/pelaporan-hilir/get_Pengolahan/" + id,
         method: "GET",
         data: {
             id: id,
