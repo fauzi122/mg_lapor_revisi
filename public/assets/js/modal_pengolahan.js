@@ -4,13 +4,13 @@ function editPengolahan(id, produk, kabupaten_kota) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/pelaporan-hilir/get_Pengolahan/" + id,
+        url: "/get_Pengolahan/" + id,
         method: "GET",
         data: {
             id: id,
         },
         success: function (response) {
-            // console.log(response)..........;
+            // console.log(response);
             // console.log(response.data.find.tipe);
             // Tangkap pesan dari server dan tampilkan ke user
             let produkSelect = response.data.find.produk;
