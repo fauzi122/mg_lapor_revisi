@@ -187,6 +187,7 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <script type="text/javascript"> const incotermsUrl = "{{ url('/get-incoterms') }}"; </script>
                         <label for="example-text-input" class="form-label">Incoterms</label>
                         <select class="form-select incoterms" name="incoterms" id="incoterms">
                             <option>Pilih Incoterms</option>
