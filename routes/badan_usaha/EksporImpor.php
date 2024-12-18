@@ -27,5 +27,5 @@ Route::controller(EksportImportController::class)->group(function () {
   Route::post('/import_eksport', 'import_eksportx');
   Route::post('/import_import', 'import_importx');
   Route::get('/get-pelabuhan', 'get_pelabuhan');
-  Route::get('/get-incoterms', 'get_incoterms');
+  // Route::get('/get-incoterms', 'get_incoterms');
 });
