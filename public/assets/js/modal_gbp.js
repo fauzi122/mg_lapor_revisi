@@ -1,9 +1,15 @@
+// Tentukan apakah situs diakses dari localhost
+var isLocalhost = window.location.hostname === '127.0.0.1:8000' || window.location.hostname === 'localhost';
+
+// Atur baseUrl berdasarkan apakah situs diakses dari localhost
+var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
+
 function lihat_penjualan_gbp(id, kabupaten_kota) {
   // $('.editPenjualan').click(function () {
   //     let id = $(this).attr('data-id')
   // Kirim data melalui Ajax
   $.ajax({
-    url: '/get-penjualan-gbp/' + id,
+    url: baseUrl + 'get-penjualan-gbp/' + id,
     method: 'GET',
     data: {
       id: id
@@ -44,7 +50,7 @@ function lihat_penjualan_gbp(id, kabupaten_kota) {
 
 
       $.ajax({
-        url: '/get_kota_gbp/' + kabupaten_kota,
+        url: baseUrl + 'get_kota_gbp/' + kabupaten_kota,
         method: 'GET',
         data: {
         },
@@ -84,7 +90,7 @@ function edit_penjualan_gbp(id, kabupaten_kota) {
   //     let id = $(this).attr('data-id')
   // Kirim data melalui Ajax
   $.ajax({
-    url: '/get-penjualan-gbp/' + id,
+    url: baseUrl + 'get-penjualan-gbp/' + id,
     method: 'GET',
     data: {
       id: id
@@ -136,7 +142,7 @@ function edit_penjualan_gbp(id, kabupaten_kota) {
 
 
       $.ajax({
-        url: '/get_kota_gbp/' + kabupaten_kota,
+        url: baseUrl + 'get_kota_gbp/' + kabupaten_kota,
         method: 'GET',
         data: {
         },
@@ -177,7 +183,7 @@ function edit_pasokan_gbp(id) {
   //     let id = $(this).attr('data-id')
   // Kirim data melalui Ajax
   $.ajax({
-    url: '/get-pasok-gbp/' + id,
+    url: baseUrl + 'get-pasok-gbp/' + id,
     method: 'GET',
     data: {
       id: id
@@ -213,7 +219,7 @@ function lihat_pasokan_gbp(id) {
   //     let id = $(this).attr('data-id')
   // Kirim data melalui Ajax
   $.ajax({
-    url: '/get-pasok-gbp/' + id,
+    url: baseUrl + 'get-pasok-gbp/' + id,
     method: 'GET',
     data: {
       id: id

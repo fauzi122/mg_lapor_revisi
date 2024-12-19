@@ -1,3 +1,9 @@
+// Tentukan apakah situs diakses dari localhost
+var isLocalhost = window.location.hostname === '127.0.0.1:8000' || window.location.hostname === 'localhost';
+
+// Atur baseUrl berdasarkan apakah situs diakses dari localhost
+var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
+
 function editpengmb(id, produk, kabupaten_kota) {
   // $('.editPenjualan').click(function () {
   //   let id = $(this).attr('data-id')
@@ -7,7 +13,7 @@ function editpengmb(id, produk, kabupaten_kota) {
   $('#edit-laut').prop('checked', false);
   $('#edit-sungai-danau').prop('checked', false);
   $.ajax({
-    url: '/get-pengmb/' + id,
+    url:baseUrl + 'get-pengmb/' + id,
     method: 'GET',
     data: {
       id: id
@@ -62,7 +68,7 @@ function editpengmb(id, produk, kabupaten_kota) {
       });
 
       $.ajax({
-        url: '/get-satuan/' + produk,
+        url:baseUrl + 'get-satuan/' + produk,
         method: 'GET',
         data: {},
         success: function (response) {
@@ -117,7 +123,7 @@ function editpengmb(id, produk, kabupaten_kota) {
 
 
       $.ajax({
-        url: '/get_kota_lng/' + kabupaten_kota,
+        url:baseUrl + 'get_kota_lng/' + kabupaten_kota,
         method: 'GET',
         data: {},
         success: function (response) {
@@ -156,7 +162,7 @@ function lihat_pengmb(id) {
   $('input:checkbox').removeAttr('checked');
   // Kirim data melalui Ajax
   $.ajax({
-    url: '/get-pengmb/' + id,
+    url:baseUrl + 'get-pengmb/' + id,
     method: 'GET',
     data: {
       id: id
@@ -205,7 +211,7 @@ function editpgb(id, kabupaten_kota, produk) {
   //   let id = $(this).attr('data-id')
   // Kirim data melalui Ajax
   $.ajax({
-    url: '/get-pgb/' + id,
+    url:baseUrl + 'get-pgb/' + id,
     method: 'GET',
     data: {
       id: id
@@ -244,7 +250,7 @@ function editpgb(id, kabupaten_kota, produk) {
       });
 
       $.ajax({
-        url: '/get-satuan/' + produk,
+        url:baseUrl + 'get-satuan/' + produk,
         method: 'GET',
         data: {},
         success: function (response) {
@@ -312,7 +318,7 @@ function lihat_pgb(id) {
   //   let id = $(this).attr('data-id')
   // Kirim data melalui Ajax
   $.ajax({
-    url: '/get-pgb/' + id,
+    url:baseUrl + 'get-pgb/' + id,
     method: 'GET',
     data: {
       id: id

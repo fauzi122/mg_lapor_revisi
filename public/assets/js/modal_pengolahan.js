@@ -1,10 +1,16 @@
+// Tentukan apakah situs diakses dari localhost
+var isLocalhost = window.location.hostname === '127.0.0.1:8000' || window.location.hostname === 'localhost';
+
+// Atur baseUrl berdasarkan apakah situs diakses dari localhost
+var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
+
 // Pengolahan Minyak Bumi
 function editPengolahan(id, produk, kabupaten_kota) {
     // $('.editPenjualan').click(function () {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get_Pengolahan/" + id,
+        url: baseUrl +"get_Pengolahan/" + id,
         method: "GET",
         data: {
             id: id,
@@ -27,7 +33,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
             ) {
                 $("#form_updatePengolahanProduksiMB").attr(
                     "action",
-                    "/update_pengolahan_minyak_bumi_produksi/" +
+                    baseUrl + "update_pengolahan_minyak_bumi_produksi/" +
                         response.data.find.id
                 );
                 $("#badan_usaha_id").val(response.data.find.badan_usaha_id);
@@ -61,7 +67,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_satuan/" + produk,
+                    url: baseUrl +"get_satuan/" + produk,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -119,7 +125,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_kota_pengolahan/" + kabupaten_kota,
+                    url: baseUrl +"get_kota_pengolahan/" + kabupaten_kota,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -155,7 +161,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
             ) {
                 $("#form_updatePengolahanPasokanMB").attr(
                     "action",
-                    "/update_pengolahan_minyak_bumi_pasokan/" +
+                    baseUrl + "update_pengolahan_minyak_bumi_pasokan/" +
                         response.data.find.id
                 );
                 $("#badan_usaha_id_pasokan").val(
@@ -195,7 +201,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_satuan/" + produk,
+                    url: baseUrl +"get_satuan/" + produk,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -253,7 +259,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_kota_pengolahan/" + kabupaten_kota,
+                    url: baseUrl +"get_kota_pengolahan/" + kabupaten_kota,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -289,7 +295,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
             ) {
                 $("#form_updatePengolahanDistribusiMB").attr(
                     "action",
-                    "/update_pengolahan_minyak_bumi_distribusi/" +
+                    baseUrl + "update_pengolahan_minyak_bumi_distribusi/" +
                         response.data.find.id
                 );
                 $("#badan_usaha_id_distribusi").val(
@@ -330,7 +336,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_satuan/" + produk,
+                    url: baseUrl +"get_satuan/" + produk,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -388,7 +394,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_kota_pengolahan/" + kabupaten_kota,
+                    url: baseUrl +"get_kota_pengolahan/" + kabupaten_kota,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -424,7 +430,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
             ) {
                 $("#form_updatePengolahanProduksiGB").attr(
                     "action",
-                    "/update_pengolahan_gas_bumi_produksi/" +
+                    baseUrl + "update_pengolahan_gas_bumi_produksi/" +
                         response.data.find.id
                 );
                 $("#badan_usaha_id").val(response.data.find.badan_usaha_id);
@@ -455,7 +461,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_satuan/" + produk,
+                    url: baseUrl +"get_satuan/" + produk,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -513,7 +519,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_kota_pengolahan/" + kabupaten_kota,
+                    url: baseUrl +"get_kota_pengolahan/" + kabupaten_kota,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -549,7 +555,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
             ) {
                 $("#form_updatePengolahanPasokanGB").attr(
                     "action",
-                    "/update_pengolahan_gas_bumi_pasokan/" +
+                    baseUrl + "update_pengolahan_gas_bumi_pasokan/" +
                         response.data.find.id
                 );
                 $("#badan_usaha_id_pasokan").val(
@@ -583,7 +589,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_satuan/" + produk,
+                    url: baseUrl +"get_satuan/" + produk,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -641,7 +647,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_kota_pengolahan/" + kabupaten_kota,
+                    url: baseUrl +"get_kota_pengolahan/" + kabupaten_kota,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -677,7 +683,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
             ) {
                 $("#form_updatePengolahanDistribusiGB").attr(
                     "action",
-                    "/update_pengolahan_gas_bumi_distribusi/" +
+                    baseUrl + "update_pengolahan_gas_bumi_distribusi/" +
                         response.data.find.id
                 );
                 $("#badan_usaha_id_distribusi").val(
@@ -734,7 +740,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_satuan/" + produk,
+                    url: baseUrl +"get_satuan/" + produk,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -792,7 +798,7 @@ function editPengolahan(id, produk, kabupaten_kota) {
                 });
 
                 $.ajax({
-                    url: "/get_kota_pengolahan/" + kabupaten_kota,
+                    url: baseUrl +"get_kota_pengolahan/" + kabupaten_kota,
                     method: "GET",
                     data: {},
                     success: function (response) {
@@ -839,7 +845,7 @@ function lihatPengolahan(id) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get_Pengolahan/" + id,
+        url: baseUrl +"get_Pengolahan/" + id,
         method: "GET",
         data: {
             id: id,
