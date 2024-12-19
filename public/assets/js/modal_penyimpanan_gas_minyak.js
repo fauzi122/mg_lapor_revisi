@@ -1,3 +1,10 @@
+// Tentukan apakah situs diakses dari localhost
+var isLocalhost = window.location.hostname === '127.0.0.1:8000' || window.location.hostname === 'localhost';
+
+// Atur baseUrl berdasarkan apakah situs diakses dari localhost
+var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
+
+
 function editPMB(id, kab_kota, produk) {
     // alert('test');
     // $('.editPenjualan').click(function () {
@@ -6,7 +13,7 @@ function editPMB(id, kab_kota, produk) {
     // $('input[type="checkbox"]').removeAttr('checked');
     $('input[type="checkbox"]').prop("checked", false);
     $.ajax({
-        url: "/get-pmb/" + id,
+        url: baseUrl + "get-pmb/" + id,
         method: "GET",
         data: {
             id: id,
@@ -34,7 +41,7 @@ function editPMB(id, kab_kota, produk) {
             let bulanx = response.data.find.bulan.substring(0, 7);
             $("#form_pmb").attr(
                 "action",
-                "/update_pmb/" + response.data.find.id
+                baseUrl + "update_pmb/" + response.data.find.id
             );
             $("#id_pmb").val(response.data.find.id);
             // $('#bulan_pmb').val(response.data.find.bulan)
@@ -114,7 +121,7 @@ function editPMB(id, kab_kota, produk) {
             });
 
             $.ajax({
-                url: "/get-satuan/" + produk,
+                url: baseUrl + "get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -164,7 +171,7 @@ function editPMB(id, kab_kota, produk) {
             // console.log(response.data.provinsi);
 
             $.ajax({
-                url: "/get-kab-kota-mb/" + kab_kota,
+                url: baseUrl + "get-kab-kota-mb/" + kab_kota,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -212,7 +219,7 @@ function lihat_pmb(id, produk, kabupaten_kota) {
     // Kirim data melalui Ajax
     $("input:checkbox").removeAttr("checked");
     $.ajax({
-        url: "/get-pmb/" + id,
+        url: baseUrl + "get-pmb/" + id,
         method: "GET",
         data: {
             id: id,
@@ -304,7 +311,7 @@ function editpggb(id, kab_kota, produk) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-pggb/" + id,
+        url: baseUrl + "get-pggb/" + id,
         method: "GET",
         data: {
             id: id,
@@ -315,7 +322,7 @@ function editpggb(id, kab_kota, produk) {
             let bulanx = response.data.find.bulan.substring(0, 7);
             $("#form_pggb").attr(
                 "action",
-                "/update_pggb/" + response.data.find.id
+                baseUrl + "update_pggb/" + response.data.find.id
             );
             $("#id_pggb").val(response.data.find.id);
             // $('#bulan_pggb').val(response.data.find.bulan)
@@ -373,7 +380,7 @@ function editpggb(id, kab_kota, produk) {
             });
 
             $.ajax({
-                url: "/get-satuan/" + produk,
+                url: baseUrl + "get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -402,7 +409,7 @@ function editpggb(id, kab_kota, produk) {
             });
 
             $.ajax({
-                url: "/get-kab-kota/",
+                url: baseUrl + "get-kab-kota/",
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -449,7 +456,7 @@ function lihat_pggb(id, produk, kabupaten_kota) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-pggb/" + id,
+        url: baseUrl + "get-pggb/" + id,
         method: "GET",
         data: {
             id: id,
@@ -460,7 +467,7 @@ function lihat_pggb(id, produk, kabupaten_kota) {
 
             $("#form_pggb").attr(
                 "action",
-                "/update_pggb/" + response.data.find.id
+                baseUrl + "update_pggb/" + response.data.find.id
             );
             $("#id_pggb_lihat").val(response.data.find.id);
             // $('#bulan_pggb_lihat').val(response.data.find.bulan)

@@ -1,6 +1,6 @@
 
 // Tentukan apakah situs diakses dari localhost
-var isLocalhost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+var isLocalhost = window.location.hostname === '127.0.0.1:8000' || window.location.hostname === 'localhost';
 
 // Atur baseUrl berdasarkan apakah situs diakses dari localhost
 var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
@@ -23,7 +23,7 @@ function editPenjualan(id, produk, kabupaten_kota) {
 
             $("#form_penjualan").attr(
                 "action",
-                "/update_jholb/" + response.data.find.id
+                baseUrl +"update_jholb/" + response.data.find.id
             );
             $("#id_penjualan").val(response.data.find.id);
             // $('#bulan_penjualan').val(response.data.find.bulan)
@@ -195,7 +195,7 @@ function lihat_jholb(id, produk, kabupaten_kota) {
 
             $("#form_penjualan").attr(
                 "action",
-                "/update_jholb/" + response.data.find.id
+                baseUrl +"update_jholb/" + response.data.find.id
             );
             $("#lihat_id_penjualan").val(response.data.find.id);
             // $('#lihat_bulan_penjualan').val(response.data.find.bulan)
@@ -348,7 +348,7 @@ function editPasokan(id, produk, kabupaten_kota) {
 
             $("#form_pasokan").attr(
                 "action",
-                "/update_pasokan/" + response.data.find.id
+                baseUrl +"update_pasokan/" + response.data.find.id
             );
             $("#id_pasokan").val(response.data.find.id);
             // $('#bulan_pasokan').val(response.data.find.bulan)
@@ -484,7 +484,7 @@ function lihatPasokan(id, produk, kabupaten_kota) {
 
             $("#form_pasokan").attr(
                 "action",
-                "/update_pasokan/" + response.data.id
+                baseUrl +"update_pasokan/" + response.data.id
             );
             $("#lihat_id_pasokan").val(response.data.id);
             // $('#lihat_bulan_pasokan').val(response.data.find.bulan)
@@ -599,7 +599,7 @@ function edit_hargabbmx(id) {
 
             $("#form_hargabbm").attr(
                 "action",
-                "/harga-bbm-jbu/" + response.data.find.id
+                baseUrl +"harga-bbm-jbu/" + response.data.find.id
             );
             $("#id_hargabbm").val(response.data.find.id);
             // $('#bulan_hargabbmx').val(response.data.find.bulan)
@@ -719,7 +719,7 @@ function edit_hargaLPG(id, kabupaten_kota) {
 
             $("#form_hargaLPG").attr(
                 "action",
-                "/updateHargaLPG/" + response.data.find.id
+                baseUrl +"updateHargaLPG/" + response.data.find.id
             );
             $("#id_hargaLPG").val(response.data.find.id);
             // $('#bulan_hargaLPG').val(response.data.find.bulan)
