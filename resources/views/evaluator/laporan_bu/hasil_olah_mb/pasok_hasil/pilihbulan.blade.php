@@ -24,6 +24,7 @@
                         <div class="card-header">
 
                             <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
+                            <h6>Nomor izin yang dilaporkan <b>{{ $query->first()->NOMOR_IZIN }}</b></h6>
 
                         </div>
 
@@ -41,7 +42,7 @@
                                     <h4>Periode Bulan {{ dateIndonesia($per->bulan) }}</h4>
 
                                     <div>
-                                        <a href="{{ url('laporan/pasokan-hasil-olahan/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}"
+                                        <a href="javascript:void(0);" onclick="window.history.back();"
                                             class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
                                             Kembali</a>
                                         <button type="button" class="btn btn-info btn-sm rounded-pill btn-update-status"

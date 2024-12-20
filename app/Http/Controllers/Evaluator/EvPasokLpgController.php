@@ -15,14 +15,34 @@ class EvPasokLpgController extends Controller
 
         $perusahaan = DB::table('pasokan_l_p_g_s as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+            ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
+            ->whereIn('a.status', [1, 2, 3])
+            ->groupBy('a.izin_id', 'a.badan_usaha_id')
+            ->select(
+                'a.izin_id',
+                'b.id_perusahaan',
+                'b.NAMA_PERUSAHAAN',
+                'c.TGL_DISETUJUI',
+                'c.NOMOR_IZIN',
+                'c.TGL_PENGAJUAN'
+            )
+            ->get();
+
+        // Kondisi untuk grup hanya berdasarkan `badan_usaha_id`
+        $perusahaan_only_bu = DB::table('pasokan_l_p_g_s as a')
+            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->whereIn('a.status', [1, 2, 3])
             ->groupBy('a.badan_usaha_id')
-            ->select( 'b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
+            ->select(
+                'b.id_perusahaan',
+                'b.NAMA_PERUSAHAAN'
+            )
             ->get();
+
         $data = [
             'title'=>'Laporan Pasokan LPG',
             'perusahaan' => $perusahaan,
+            'perusahaan_only_bu' => $perusahaan_only_bu, // Menambahkan ke data array
         ];
 
         return view('evaluator.laporan_bu.lpg.pasokan.index',$data);
@@ -36,9 +56,10 @@ class EvPasokLpgController extends Controller
         // Query dasar untuk mendapatkan data pasokan
         $query = DB::table('pasokan_l_p_g_s as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+            ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-            ->whereBetween('bulan', [$t_awal, $t_akhir]);
+            ->whereBetween('bulan', [$t_awal, $t_akhir])
+            ->whereIn('a.status', [1, 2, 3]);
     
         // Jika perusahaan bukan 'all', tambahkan kondisi filter untuk badan usaha
         if ($perusahaan !== 'all') {
@@ -68,25 +89,29 @@ class EvPasokLpgController extends Controller
     {
 
 
-        $p = !empty($kode) ? Crypt::decrypt($kode) : null;
+        $p = !empty($kode) ? explode(',', Crypt::decryptString($kode)) : null;
         if ($p) {
+            $per = DB::table('t_perusahaan as a')->select('NAMA_PERUSAHAAN')
+            ->where('a.ID_PERUSAHAAN', $p[0])->first();
+
             $query = DB::table('pasokan_l_p_g_s as a')
                 ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-                ->select('a.*', 'b.NAMA_PERUSAHAAN')
-                ->where('a.badan_usaha_id', $p)
-                ->whereIn('a.status', [1, 2,3])
+                ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
+                ->select('a.*', 'b.NAMA_PERUSAHAAN','c.NOMOR_IZIN')
+                ->where('a.badan_usaha_id', $p[0])
+                ->where('a.izin_id', $p[1])
+                ->whereIn('a.status', [1, 2, 3])
                 ->groupBy('a.bulan')->get();
-
-
         } else {
-            $query = '';
+            $query = collect(); // Empty collection
+            $per = collect(); // Empty collection
 
         }
         $data = [
             'title'=>'Laporan Pasokan LPG',
             'p' => $p,
             'query' => $query,
-            'per' => $query->first()
+            'per' => $per
         ];
         return view('evaluator.laporan_bu.lpg.pasokan.periode', $data);
     }
@@ -104,8 +129,9 @@ class EvPasokLpgController extends Controller
         
         $query = DB::table('pasokan_l_p_g_s as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('a.badan_usaha_id', $pecah[1])
+            ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
+            ->select('a.*', 'b.NAMA_PERUSAHAAN','c.NOMOR_IZIN')
+            ->where('a.izin_id', $pecah[1])
             ->where('a.bulan', 'like', "%". $filterBy ."%")
             ->whereIn('a.status', [1, 2,3])
             ->get();
@@ -147,13 +173,13 @@ class EvPasokLpgController extends Controller
         $request->validate([
             'catatan' => 'required',
         ]);
-        $badan_usaha_id = Crypt::decrypt($request->input('p')) ;
+        $izin_id = Crypt::decrypt($request->input('p')) ;
         $bulan = Crypt::decrypt($request->input('b')) ;
 
 
 
         $update = DB::table('pasokan_l_p_g_s')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('izin_id', $izin_id)
             ->where('bulan',$bulan)
             ->whereIn('status', [1, 2,3])
             ->update([
@@ -173,12 +199,12 @@ class EvPasokLpgController extends Controller
     {
         try {
 
-            $badan_usaha_id = Crypt::decrypt($request->input('p'));
+            $izin_id = Crypt::decrypt($request->input('p'));
             $bulan = Crypt::decrypt($request->input('b'));
 
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
+            // Pastikan bahwa izin_id dan bulan ada dalam kondisi where
             $update = DB::table('pasokan_l_p_g_s')
-                ->where('badan_usaha_id', $badan_usaha_id)
+                ->where('izin_id', $izin_id)
                 ->where('bulan', $bulan)
                 ->whereIn('status', [1, 2,3])
                 ->update([
@@ -231,7 +257,7 @@ class EvPasokLpgController extends Controller
 
         $query = DB::table('pasokan_l_p_g_s as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
         ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
         ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
         ->whereIn('a.status', [1, 2, 3])
@@ -239,7 +265,7 @@ class EvPasokLpgController extends Controller
 
         $perusahaan = DB::table('pasokan_l_p_g_s as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
         ->whereIn('a.status', [1, 2, 3])
         ->groupBy('a.badan_usaha_id')
         ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
@@ -261,7 +287,7 @@ class EvPasokLpgController extends Controller
 
         $perusahaan = DB::table('pasokan_l_p_g_s as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
         ->whereIn('a.status', [1, 2, 3])
         ->groupBy('a.badan_usaha_id')
         ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
@@ -269,7 +295,7 @@ class EvPasokLpgController extends Controller
 
         $query = DB::table('pasokan_l_p_g_s as a')
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
         ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN');
         
         if ($request->perusahaan != 'all') {
