@@ -59,7 +59,8 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-            ->whereBetween('bulan', [$t_awal, $t_akhir]);
+            ->whereBetween('bulan', [$t_awal, $t_akhir])
+            ->whereIn('a.status', [1, 2, 3]);
             // ->groupBy('a.izin_id', 'a.badan_usaha_id');
     
         // Jika perusahaan bukan 'all', tambahkan kondisi filter untuk perusahaan
@@ -90,14 +91,14 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
     {
         $p = !empty($kode) ? explode(',', Crypt::decryptString($kode)) : null;
       
-    
         if ($p) {
             $per = DB::table('t_perusahaan as a')->select('NAMA_PERUSAHAAN')
             ->where('a.ID_PERUSAHAAN', $p[0])->first();
     
             $query = DB::table('penjualan_lngs as a')
                 ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-                ->select('a.*', 'b.NAMA_PERUSAHAAN')
+                ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
+                ->select('a.*', 'b.NAMA_PERUSAHAAN','c.NOMOR_IZIN')
                 ->where('a.badan_usaha_id', $p[0])
                 ->where('a.izin_id', $p[1])
                 ->whereIn('a.status', [1, 2, 3])
@@ -111,7 +112,8 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
             'title' => 'Laporan Penjualan LNG/CNG/BBG',
             'p' => $p,
             'query' => $query,
-            'per' => $per // Include per within the data array
+            'per' => $per
+            // 'per' => $per->first() // Include per within the data array
         ];
         // dd($per);
    
@@ -122,7 +124,7 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
     {
 
         $pecah = explode(',', Crypt::decryptString($kode));
-
+        
         if (count($pecah) == 3) {
             $filterBy = substr($pecah[0], 0, 4);
         } else {
@@ -131,7 +133,8 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
 
         $query = DB::table('penjualan_lngs as a')
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN')
+            ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
+            ->select('a.*', 'b.NAMA_PERUSAHAAN','c.NOMOR_IZIN')
             ->where('a.izin_id', $pecah[1])
             ->where('a.bulan', 'like', "%". $filterBy ."%")
             ->whereIn('a.status', [1, 2,3])
@@ -265,7 +268,7 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
         ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
         ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
         ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.izin_id','a.badan_usaha_id')
+        // ->groupBy('a.izin_id','a.badan_usaha_id')
         ->get();
 
         $perusahaan = DB::table('penjualan_lngs as a')

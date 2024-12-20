@@ -74,7 +74,7 @@
                                                                 <option value="all"> Semua Perusahaan </option>
 
                                                                 @foreach ($perusahaan as $p)
-                                                                    <option value="{{ $p->id_perusahaan }}">
+                                                                    <option value="{{ $p->id_perusahaan_only_bu }}">
                                                                         {{ $p->NAMA_PERUSAHAAN }}</option>
                                                                 @endforeach
                                                             </select>
@@ -136,7 +136,13 @@
                                                         </td>
 
                                                         <td>{{ $per->TGL_DISETUJUI }}</td>
-                                                        <td><a href="{{ url('laporan/penyimpanan/mb/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"
+                                                        @php
+
+                                                            $kode = Crypt::encryptString(
+                                                                $per->id_perusahaan . ',' . $per->izin_id,
+                                                            );
+                                                        @endphp
+                                                        <td><a href="{{ url('laporan/penyimpanan/mb/periode') }}/{{ $kode }}"
                                                                 class="btn btn-primary btn-rounded btn-sm"><i
                                                                     class="bx bx-show"></i> Lihat </a></td>
 

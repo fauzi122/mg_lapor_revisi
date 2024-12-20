@@ -91,7 +91,7 @@
                                                         <td>{{ $item->NOMOR_IZIN }}</td>
                                                         <td>
                                                             @php
-                                                                
+
                                                                 $show = Crypt::encryptString(
                                                                     $item->ID_PERMOHONAN . ',' . $item->NOMOR_IZIN,
                                                                 );
