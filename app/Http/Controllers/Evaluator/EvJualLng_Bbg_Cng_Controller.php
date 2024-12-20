@@ -272,7 +272,8 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
         ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
         ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.badan_usaha_id')
+        
+        // ->groupBy('a.badan_usaha_id')
         ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
         ->get();
 

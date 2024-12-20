@@ -1,9 +1,15 @@
+// Tentukan apakah situs diakses dari localhost
+var isLocalhost = window.location.hostname === '127.0.0.1:8000' || window.location.hostname === 'localhost';
+
+// Atur baseUrl berdasarkan apakah situs diakses dari localhost
+var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
+
 function edit_ekpor(id, produk, negara_tujuan) {
     // $('.editPenjualan').click(function () {
     //     let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-export/" + id,
+        url: baseUrl + "get-export/" + id,
         method: "GET",
         data: {
             id: id,
@@ -13,7 +19,7 @@ function edit_ekpor(id, produk, negara_tujuan) {
             let bulanx = response.data.find.bulan_peb.substring(0, 7);
             $("#form_ekpor").attr(
                 "action",
-                "/update_export/" + response.data.find.id
+                baseUrl + "update_export/" + response.data.find.id
             );
             $("#id_ekpor").val(response.data.find.id);
             // $('#bulan_ekpor').val(response.data.find.bulan_peb)
@@ -64,7 +70,7 @@ function edit_ekpor(id, produk, negara_tujuan) {
             // alert(response.data.find.provinsi)
 
             $.ajax({
-                url: "/get-satuan/" + produk,
+                url: baseUrl + "get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -153,7 +159,7 @@ function lihat_ekspor(id, produk) {
     //     let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-export/" + id,
+        url: baseUrl + "get-export/" + id,
         method: "GET",
         data: {
             id: id,
@@ -163,7 +169,7 @@ function lihat_ekspor(id, produk) {
             let bulanx = response.data.find.bulan_peb.substring(0, 7);
             $("#form_ekpor").attr(
                 "action",
-                "/update_export/" + response.data.find.id
+                baseUrl + "update_export/" + response.data.find.id
             );
             $("#id_ekpor_lihat").val(response.data.find.id);
             // $('#bulan_ekpor_lihat').val(response.data.find.bulan_peb)
@@ -220,7 +226,7 @@ function lihat_ekspor(id, produk) {
             // alert(response.data.find.provinsi)
 
             $.ajax({
-                url: "/get-satuan/" + produk,
+                url: baseUrl + "get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -266,7 +272,7 @@ function edit_impor(id, produk, negara_tujuan) {
     //     let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-import/" + id,
+        url: baseUrl + "get-import/" + id,
         method: "GET",
         data: {
             id: id,
@@ -276,7 +282,7 @@ function edit_impor(id, produk, negara_tujuan) {
             let bulanx = response.data.find.bulan_pib.substring(0, 7);
             $("#form_impor").attr(
                 "action",
-                "/update_import/" + response.data.find.id
+                baseUrl + "update_import/" + response.data.find.id
             );
             $("#id_impor").val(response.data.find.id);
             // $('#bulan_impor').val(response.data.find.bulan_pib)
@@ -327,7 +333,7 @@ function edit_impor(id, produk, negara_tujuan) {
             // alert(response.data.find.provinsi)
 
             $.ajax({
-                url: "/get-satuan/" + produk,
+                url: baseUrl + "get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -439,7 +445,7 @@ function lihat_import(id, produk) {
     //     let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-import/" + id,
+        url: baseUrl + "get-import/" + id,
         method: "GET",
         data: {
             id: id,
@@ -449,7 +455,7 @@ function lihat_import(id, produk) {
             let bulanx = response.data.find.bulan_pib.substring(0, 7);
             $("#form_impor_lihat").attr(
                 "action",
-                "/update_impor_lihat/" + response.data.find.id
+                baseUrl + "update_impor_lihat/" + response.data.find.id
             );
             $("#id_impor_lihat").val(response.data.find.id);
             // $('#bulan_impor_lihat').val(response.data.find.bulan_pib)
@@ -507,7 +513,7 @@ function lihat_import(id, produk) {
             // alert(response.data.find.provinsi)
 
             $.ajax({
-                url: "/get-satuan/" + produk,
+                url: baseUrl + "get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {

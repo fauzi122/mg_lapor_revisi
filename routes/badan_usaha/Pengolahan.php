@@ -17,7 +17,8 @@ Route::controller(PengolahanController::class)->group(function () {
   Route::get('/get_kota_pengolahan/{kabupaten_kota}', 'get_kota_pengolahan'); //Ambil Kota
   Route::get('/get_satuan/{produk}', 'get_satuan'); //Ambil Kota
   Route::get('/get_Pengolahan/{id}', 'get_Pengolahan'); //Ambil data berdasrkan ID
-
+  Route::get('/get-provinsi', 'get_provinsi');
+  Route::get('/get_kota_lpg/{kabupaten_kota}', 'get_kota');
   // Pengolahan Minyak Bumi Produksi Kilang
   Route::post('/simpan_pengolahan_minyak_bumi_produksi', 'simpan_pengolahan_minyak_bumi_produksi');
   Route::put('/update_pengolahan_minyak_bumi_produksi/{id}', 'update_pengolahan_minyak_bumi_produksi');

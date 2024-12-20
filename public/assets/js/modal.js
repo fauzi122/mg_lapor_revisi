@@ -1,9 +1,17 @@
+
+// Tentukan apakah situs diakses dari localhost
+var isLocalhost = window.location.hostname === '127.0.0.1:8000' || window.location.hostname === 'localhost';
+
+// Atur baseUrl berdasarkan apakah situs diakses dari localhost
+var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
+
 function editPenjualan(id, produk, kabupaten_kota) {
     // $('.editPenjualan').click(function () {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-penjualan-ho/" + id,
+        // url: baseUrl + "get-incoterms/",
+        url: baseUrl + "get-penjualan-ho/" + id,
         method: "GET",
         data: {
             id: id,
@@ -15,7 +23,7 @@ function editPenjualan(id, produk, kabupaten_kota) {
 
             $("#form_penjualan").attr(
                 "action",
-                "/update_jholb/" + response.data.find.id
+                baseUrl +"update_jholb/" + response.data.find.id
             );
             $("#id_penjualan").val(response.data.find.id);
             // $('#bulan_penjualan').val(response.data.find.bulan)
@@ -74,7 +82,7 @@ function editPenjualan(id, produk, kabupaten_kota) {
             });
 
             $.ajax({
-                url: "/get-satuan/" + produk,
+                url: baseUrl + "/get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -129,7 +137,7 @@ function editPenjualan(id, produk, kabupaten_kota) {
             });
 
             $.ajax({
-                url: "/get_kota_lng/" + kabupaten_kota,
+                url: baseUrl + "get_kota_lng/" + kabupaten_kota,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -176,7 +184,7 @@ function lihat_jholb(id, produk, kabupaten_kota) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-penjualan-ho/" + id,
+        url: baseUrl + "get-penjualan-ho/" + id,
         method: "GET",
         data: {
             id: id,
@@ -187,7 +195,7 @@ function lihat_jholb(id, produk, kabupaten_kota) {
 
             $("#form_penjualan").attr(
                 "action",
-                "/update_jholb/" + response.data.find.id
+                baseUrl +"update_jholb/" + response.data.find.id
             );
             $("#lihat_id_penjualan").val(response.data.find.id);
             // $('#lihat_bulan_penjualan').val(response.data.find.bulan)
@@ -228,7 +236,7 @@ function lihat_jholb(id, produk, kabupaten_kota) {
             });
 
             $.ajax({
-                url: "/get-satuan/" + produk,
+                url: baseUrl + "get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -281,7 +289,7 @@ function lihat_jholb(id, produk, kabupaten_kota) {
             });
 
             $.ajax({
-                url: "/get_kota_lng/" + kabupaten_kota,
+                url: baseUrl + "get_kota_lng/" + kabupaten_kota,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -328,7 +336,7 @@ function editPasokan(id, produk, kabupaten_kota) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-pasokan-ho/" + id,
+        url: baseUrl + "get-pasokan-ho/" + id,
         method: "GET",
         data: {
             id: id,
@@ -340,7 +348,7 @@ function editPasokan(id, produk, kabupaten_kota) {
 
             $("#form_pasokan").attr(
                 "action",
-                "/update_pasokan/" + response.data.find.id
+                baseUrl +"update_pasokan/" + response.data.find.id
             );
             $("#id_pasokan").val(response.data.find.id);
             // $('#bulan_pasokan').val(response.data.find.bulan)
@@ -384,7 +392,7 @@ function editPasokan(id, produk, kabupaten_kota) {
             });
 
             $.ajax({
-                url: "/get-satuan/" + produk,
+                url: baseUrl + "get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -464,7 +472,7 @@ function lihatPasokan(id, produk, kabupaten_kota) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-pasokan-ho/" + id,
+        url: baseUrl + "get-pasokan-ho/" + id,
         method: "GET",
         data: {
             id: id,
@@ -476,7 +484,7 @@ function lihatPasokan(id, produk, kabupaten_kota) {
 
             $("#form_pasokan").attr(
                 "action",
-                "/update_pasokan/" + response.data.id
+                baseUrl +"update_pasokan/" + response.data.id
             );
             $("#lihat_id_pasokan").val(response.data.id);
             // $('#lihat_bulan_pasokan').val(response.data.find.bulan)
@@ -516,7 +524,7 @@ function edit_hargabbmx(id) {
     // let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-harga-bbm/" + id,
+        url: baseUrl + "get-harga-bbm/" + id,
         method: "GET",
         data: {
             id: id,
@@ -591,7 +599,7 @@ function edit_hargabbmx(id) {
 
             $("#form_hargabbm").attr(
                 "action",
-                "/harga-bbm-jbu/" + response.data.find.id
+                baseUrl +"harga-bbm-jbu/" + response.data.find.id
             );
             $("#id_hargabbm").val(response.data.find.id);
             // $('#bulan_hargabbmx').val(response.data.find.bulan)
@@ -639,7 +647,7 @@ function lihatHargaBBM(id) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-harga-bbm/" + id,
+        url: baseUrl + "get-harga-bbm/" + id,
         method: "GET",
         data: {
             id: id,
@@ -698,7 +706,7 @@ function edit_hargaLPG(id, kabupaten_kota) {
     // let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-harga-lpg/" + id,
+        url: baseUrl + "get-harga-lpg/" + id,
         method: "GET",
         data: {
             id: id,
@@ -711,7 +719,7 @@ function edit_hargaLPG(id, kabupaten_kota) {
 
             $("#form_hargaLPG").attr(
                 "action",
-                "/updateHargaLPG/" + response.data.find.id
+                baseUrl +"updateHargaLPG/" + response.data.find.id
             );
             $("#id_hargaLPG").val(response.data.find.id);
             // $('#bulan_hargaLPG').val(response.data.find.bulan)
@@ -786,7 +794,7 @@ function edit_hargaLPG(id, kabupaten_kota) {
             });
 
             $.ajax({
-                url: "/get_kota_lng/" + kabupaten_kota,
+                url: baseUrl + "get_kota_lng/" + kabupaten_kota,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -838,7 +846,7 @@ function lihatHargaLPG(id) {
     //   let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-harga-lpg/" + id,
+        url: baseUrl + "get-harga-lpg/" + id,
         method: "GET",
         data: {
             id: id,
@@ -899,7 +907,7 @@ function produk(jenis_komuditas = "") {
     $(".form-reset").trigger("reset");
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-produk/",
+        url: baseUrl + "get-produk/",
         method: "GET",
         data: {
             jenis_komuditas: jenis_komuditas,
@@ -933,7 +941,7 @@ $(".name_produk").change(function () {
     let value = elemen.val();
 
     $.ajax({
-        url: "/get-satuan/" + value,
+        url: baseUrl + "get-satuan/" + value,
         method: "GET",
         data: {},
         success: function (response) {
@@ -985,7 +993,7 @@ function provinsi() {
     $(".form-reset").trigger("reset");
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-provinsi/",
+        url: baseUrl + "get-provinsi/",
         method: "GET",
         data: {},
         success: function (response) {
@@ -1020,7 +1028,7 @@ $(".name_provinsi").change(function () {
     let value = elemen.attr("data-id");
 
     $.ajax({
-        url: "/get_kota/" + value,
+        url: baseUrl + "get_kota/" + value,
         method: "GET",
         data: {},
         success: function (response) {
@@ -1067,7 +1075,7 @@ $(document).ready(function () {
         choices.clearStore(); // Clear Choices.js store
 
         $.ajax({
-            url: "/get_kota/" + value,
+            url: baseUrl + "get_kota/" + value,
             method: "GET",
             data: {},
             success: function (response) {
@@ -1096,7 +1104,7 @@ function intake_kilang() {
     $(".form-reset").trigger("reset");
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get_intakeKilang/",
+        url: baseUrl + "get_intakeKilang/",
         method: "GET",
         data: {},
         success: function (response) {
@@ -1127,7 +1135,7 @@ $(".intake_kilang").change(function () {
     let value = elemen.val();
 
     $.ajax({
-        url: "/get_satuanIntakeKilang/" + value,
+        url: baseUrl + "get_satuanIntakeKilang/" + value,
         method: "GET",
         data: {},
         success: function (response) {
@@ -1267,7 +1275,7 @@ function negara() {
     $(".form-reset").trigger("reset");
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-negara/",
+        url: baseUrl + "get-negara/",
         method: "GET",
         data: {},
         success: function (response) {
@@ -1301,7 +1309,7 @@ function kab_kota() {
     $(".form-reset").trigger("reset");
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-kab-kota/",
+        url: baseUrl + "get-kab-kota/",
         method: "GET",
         data: {},
         success: function (response) {
@@ -1335,7 +1343,7 @@ function sektor() {
     $(".form-reset").trigger("reset");
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-sektor/",
+        url: baseUrl + "get-sektor/",
         method: "GET",
         data: {},
         success: function (response) {
@@ -1385,7 +1393,7 @@ function pelabuhan() {
     $(".form-reset").trigger("reset");
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-pelabuhan/",
+        url: baseUrl + "get-pelabuhan/",
         method: "GET",
         data: {},
         success: function (response) {
@@ -1418,7 +1426,8 @@ function incoterms() {
     $(".form-reset").trigger("reset");
     // Kirim data melalui Ajax
     $.ajax({
-        url: "/get-incoterms/",
+      
+        url: baseUrl + "get-incoterms/",
         method: "GET",
         data: {},
         success: function (response) {
@@ -1444,6 +1453,7 @@ function incoterms() {
         },
     });
 }
+
 
 function getCommingle(target, option, jumlah_bu = " ", nama_penyewa = " ") {
     let commingle = $(target).val();

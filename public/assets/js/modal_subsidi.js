@@ -1,9 +1,16 @@
+// Tentukan apakah situs diakses dari localhost
+var isLocalhost = window.location.hostname === '127.0.0.1:8000' || window.location.hostname === 'localhost';
+
+// Atur baseUrl berdasarkan apakah situs diakses dari localhost
+var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
+
+
 function edit_lgpsub(id) {
     // $('.editPenjualan').click(function () {
     //     let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-      url: '/get-lgpsub/' + id,
+      url: baseUrl +'get-lgpsub/' + id,
       method: 'GET',
       data: {
         id: id
@@ -53,7 +60,7 @@ function lihat_lgpsub(id) {
     //     let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-      url: '/get-lgpsub/' + id,
+      url: baseUrl +'get-lgpsub/' + id,
       method: 'GET',
       data: {
         id: id
@@ -89,7 +96,7 @@ function edit_klpg(id, kab_kota) {
     //     let id = $(this).attr('data-id')
     // Kirim data melalui Ajax
     $.ajax({
-      url: '/get-klpgs/' + id,
+      url: baseUrl +'get-klpgs/' + id,
       method: 'GET',
       data: {
         id: id
@@ -120,7 +127,7 @@ function edit_klpg(id, kab_kota) {
         });
   
         $.ajax({
-            url: '/get_kota_subsidi/' + kab_kota,
+            url: baseUrl +'get_kota_subsidi/' + kab_kota,
             method: 'GET',
             data: {
             },
@@ -161,7 +168,7 @@ function lihat_klpg(id, kab_kota) {
   //     let id = $(this).attr('data-id')
   // Kirim data melalui Ajax
   $.ajax({
-    url: '/get-klpgs/' + id,
+    url: baseUrl +'get-klpgs/' + id,
     method: 'GET',
     data: {
       id: id

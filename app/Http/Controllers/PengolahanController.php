@@ -1834,4 +1834,17 @@ class PengolahanController extends Controller
       return back();
     }
   }
+  public function get_provinsi()
+  {
+    $data = DB::select("SELECT provinces.id, provinces.name FROM provinces ORDER BY provinces.name ASC");
+    // $data = province::get();
+    return response()->json(['data' => $data]);
+  }
+  public function get_kota($kabupaten_kota)
+  {
+    // $data = DB::select("SELECT kotas.nama_kota FROM kotas WHERE kotas.kabupaten_kota = '$kabupaten_kota'");
+    $data = DB::select("SELECT kotas.`nama_kota` FROM  kotas WHERE kotas.`id_prov` = (SELECT kotas.`id_prov` FROM kotas WHERE kotas.`nama_kota` = '$kabupaten_kota')");
+    // $data = Produk::get();
+    return response()->json(['data' => $data]);
+  }
 }
