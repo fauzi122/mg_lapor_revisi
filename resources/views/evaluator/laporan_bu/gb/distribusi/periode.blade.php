@@ -26,10 +26,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
-                                        <h6>Nomor izin yang dilaporkan <b>{{ $query->first()->NOMOR_IZIN }}</b></h6>
-                                    </div>
+                                    <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
                                     <div>
                                         <a href="{{ url('laporan/distribusi/gb') }}"
                                             class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
@@ -57,7 +54,7 @@
                                                     @foreach ($query as $data)
                                                         @php
                                                             $id = Crypt::encryptString(
-                                                                $data->bulan . ',' . $data->izin_id,
+                                                                $data->bulan . ',' . $data->badan_usaha_id,
                                                             );
                                                         @endphp
                                                         <tr>
