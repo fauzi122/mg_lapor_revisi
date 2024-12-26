@@ -1245,7 +1245,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/niagaLNG_Penjualan.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/niagaLNG_Penjualan.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -1288,7 +1288,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/niagaLNG_Pasokan.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/niagaLNG_Pasokan.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>

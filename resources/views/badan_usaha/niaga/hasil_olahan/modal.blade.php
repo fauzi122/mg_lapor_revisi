@@ -148,7 +148,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/niagaHasilOlahan_Penjualan.xlsx"
+                    <a href="{{ url('/storage') }}/template/niagaHasilOlahan_Penjualan.xlsx"
                         id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -517,7 +517,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/niagaHasilOlahan_Pasokan.xlsx"
+                    <a href="{{ url('/storage') }}/template/niagaHasilOlahan_Pasokan.xlsx"
                         id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>

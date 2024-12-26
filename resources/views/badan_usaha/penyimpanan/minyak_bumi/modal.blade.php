@@ -1051,7 +1051,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/penyimpananMinyakBumi.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/penyimpananMinyakBumi.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>

@@ -306,7 +306,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/pengolahanGasBumi_ProduksiKilang.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/pengolahanGasBumi_ProduksiKilang.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -630,7 +630,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/pengolahanGasBumi_PasokanKilang.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/pengolahanGasBumi_PasokanKilang.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -984,7 +984,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/pengolahanGasBumi_DistribusiKilang.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/pengolahanGasBumi_DistribusiKilang.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>

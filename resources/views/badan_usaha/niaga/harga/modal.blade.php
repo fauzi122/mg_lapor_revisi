@@ -242,7 +242,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/niagaHargaBBM_JBU-HasilOlahan_MinyakBumi.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/niagaHargaBBM_JBU-HasilOlahan_MinyakBumi.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download
                         Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
@@ -778,7 +778,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/niagaHargaLPG.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/niagaHargaLPG.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download
                         Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
