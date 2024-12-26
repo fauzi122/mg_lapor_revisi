@@ -1369,7 +1369,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/templateExpor.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/templateExpor.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
@@ -1412,7 +1412,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/templateImpor.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/templateImpor.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
