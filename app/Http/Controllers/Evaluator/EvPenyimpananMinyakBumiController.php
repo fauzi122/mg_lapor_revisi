@@ -38,7 +38,7 @@ class EvPenyimpananMinyakBumiController extends Controller
             'b.NAMA_PERUSAHAAN'
         )
         ->get();
-
+// dd($perusahaan_only_bu);
 
         $data = [
             'title'=>'Laporan Penyimpanan Minyak Bumi',
