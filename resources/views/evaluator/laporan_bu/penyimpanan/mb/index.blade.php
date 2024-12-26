@@ -74,7 +74,7 @@
                                                                 <option value="all"> Semua Perusahaan </option>
 
                                                                 @foreach ($perusahaan as $p)
-                                                                    <option value="{{ $p->id_perusahaan_only_bu }}">
+                                                                    <option value="{{ $p->id_perusahaan }}">
                                                                         {{ $p->NAMA_PERUSAHAAN }}</option>
                                                                 @endforeach
                                                             </select>
