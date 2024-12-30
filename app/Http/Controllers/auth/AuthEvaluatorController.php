@@ -93,9 +93,6 @@ class AuthEvaluatorController extends Controller
 			'login_error' => 'Username atau password salah.',
 		])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
 	}
-	
-
-
 
 	public function logout()
 	{
@@ -149,4 +146,94 @@ class AuthEvaluatorController extends Controller
 
 		return redirect('/evaluator/login')->with('statusToken', 'Sukses Generate Token, Silahkan Cek Email Anda');
 	}
+
+	public function login_sso(Request $request)
+    {
+        //dd($this->cas_url(), $request->get('ticket'));
+        $sso_redirect_path = env('URL_LOGIN_SSO', url('login_sso'));
+
+        if ($request->has('ticket')) {
+			//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
+			$email = "administrator@gmail.com";
+			$credentials = $request->only('email');
+			$user = User::where('email', $email)->first();
+
+			if ($user) {
+				Auth::login($user, $request->boolean('remember-check'));
+				return redirect()->intended('master'); // or wherever you want to redirect
+			}
+			else{
+				return back()->withErrors([
+					'login_error' => 'Username atau password salah.',
+				])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
+			}
+			//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
+			
+            list($verified, $data, $error) = $this->verifySSOTicket($request->get('ticket'));
+
+            //proses otentikasi
+            if ($verified) {
+                // Proses jika otentikasi berhasil
+
+				
+
+                return response()->json(['status' => 'success', 'data' => $data]);
+            } else {
+				// Proses jika otentikasi gagal
+                $response = response()->json(['status' => 'error', 'message' => $error]);
+
+				// Redirect kembali dengan pesan kesalahan jika login gagal
+				return back()->withErrors([
+					'login_error' => $error,
+				])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
+            }
+        } else {
+            // Redirect ke SSO jika tidak ada tiket
+            return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
+        }
+    }
+
+	private function verifySSOTicket($ticket)
+    {
+        $sso_redirect_path = env('URL_LOGIN_SSO', url('login_sso'));
+        $success = false;
+        $data = [];
+        $error = null;
+
+        $url = $this->cas_url() . "/p3/serviceValidate?format=json&service=" . $sso_redirect_path . "&ticket=" . $ticket;
+
+        $arrContextOptions = [
+            "ssl" => [
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ]
+        ];
+        $resp = json_decode(file_get_contents($url, false, stream_context_create($arrContextOptions)));
+
+        if ($resp) {
+            if($resp->serviceResponse){
+                if (isset($resp->serviceResponse->authenticationFailure)) {
+                    $error = $resp->serviceResponse->authenticationFailure->description;
+                } elseif (isset($resp->serviceResponse->authenticationSuccess)) {
+                    $success = true;
+                    $data = $resp->serviceResponse->authenticationSuccess->attributes ?? (object)[];
+                    $data->username = $resp->serviceResponse->authenticationSuccess->user;
+                } else {
+                    $error = "Not a valid CAS Response";
+                }
+            }
+            else{
+                $error = "Not a valid CAS Response";
+            }
+        } else {
+            $error = "Failed to connect to SSO server";
+        }
+
+        return [$success, $data, $error];
+    }
+
+	private function cas_url()
+    {
+        return env('CAS_BASE_URL', 'https://auth.esdm.go.id/cas');
+    }
 }

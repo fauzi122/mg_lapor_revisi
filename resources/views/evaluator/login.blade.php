@@ -36,7 +36,7 @@
                                     <div class="auth-content my-auto">
                                         <div class="text-center">
                                             <h5 class="mb-0">Selamat Datang</h5>
-                                            <p class="text-muted mt-2">Untuk Single Sign On Pada Kementrian ESDM, <a href="{{url ('/evaluator/login-sso') }}">klik disini</a></p>
+                                            <p class="text-muted mt-2">Untuk Single Sign On Pada Kementrian ESDM, <a href="{{url ('/evaluator/login_sso') }}">klik disini</a></p>
                                         </div>
                                       <form method="POST" action="{{ url('/evaluator/login/post-login') }}" enctype="multipart/form-data">
                                     @csrf
