@@ -153,30 +153,28 @@ class AuthEvaluatorController extends Controller
         $sso_redirect_path = env('URL_LOGIN_SSO', url('login_sso'));
 
         if ($request->has('ticket')) {
-			//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
-			$email = "administrator@gmail.com";
-			$credentials = $request->only('email');
-			$user = User::where('email', $email)->first();
-
-			if ($user) {
-				Auth::login($user, $request->boolean('remember-check'));
-				return redirect()->intended('master'); // or wherever you want to redirect
-			}
-			else{
-				return back()->withErrors([
-					'login_error' => 'Username atau password salah.',
-				])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
-			}
-			//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
-			
             list($verified, $data, $error) = $this->verifySSOTicket($request->get('ticket'));
 
             //proses otentikasi
             if ($verified) {
                 // Proses jika otentikasi berhasil
+				dd($data);
+				//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
+				$email = "administrator@gmail.com";
+				$credentials = $request->only('email');
+				$user = User::where('email', $email)->first();
 
+				if ($user) {
+					Auth::login($user, $request->boolean('remember-check'));
+					return redirect()->intended('master'); // or wherever you want to redirect
+				}
+				else{
+					return back()->withErrors([
+						'login_error' => 'Username atau password salah.',
+					])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
+				}
+				//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
 				
-
                 return response()->json(['status' => 'success', 'data' => $data]);
             } else {
 				// Proses jika otentikasi gagal
