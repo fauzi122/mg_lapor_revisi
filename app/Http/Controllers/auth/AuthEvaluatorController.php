@@ -155,15 +155,15 @@ class AuthEvaluatorController extends Controller
 		
         if ($request->has('ticket')) {
 			list($verified, $data, $error) = $this->verifySSOTicket($request->get('ticket'));
+			// $user = User::where('email', $email)->first();
+			
+			// $sessions = DB::table('sessions')->whereNull('user_id')->where('user_id', $user->id)->get();
+			
+			// if ($sessions->isEmpty()) {
+			// 	return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
+			// }
+			
 			$email = $data->username;
-			$user = User::where('email', $email)->first();
-			
-			$sessions = DB::table('sessions')->whereNull('user_id')->where('user_id', $user->id)->get();
-			
-			if ($sessions->isEmpty()) {
-				return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
-			}
-			
             //proses otentikasi
             if ($verified) {
 				// Proses jika otentikasi berhasil
@@ -193,6 +193,7 @@ class AuthEvaluatorController extends Controller
 				])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
             }
         } else {
+			dd($email);
             // Redirect ke SSO jika tidak ada tiket
             return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
         }
