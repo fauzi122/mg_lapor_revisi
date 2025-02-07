@@ -161,11 +161,11 @@ class AuthEvaluatorController extends Controller
             if ($verified) {
 				// Proses jika otentikasi berhasil
 				$email = $data->username;
-				dd($email);
 				$user = User::where('email', $email)->first();
-			
+				
 				$sessions = DB::table('sessions')->whereNull('user_id')->where('user_id', $user->id)->get();
 				
+				dd($sessions->isEmpty());
 				if ($sessions->isEmpty()) {
 					return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
 				}
