@@ -154,7 +154,6 @@ class AuthEvaluatorController extends Controller
 		
         if ($request->has('ticket')) {
 			list($verified, $data, $error) = $this->verifySSOTicket($request->get('ticket'));
-			dd($request->all(),$verified, $data);
 			$user = User::where('email', $email)->first();
 			
 			$sessions = Session::whereNull('user_id')->where('user_id', $user->id)->get();
