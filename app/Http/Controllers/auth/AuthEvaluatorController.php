@@ -158,9 +158,8 @@ class AuthEvaluatorController extends Controller
             //proses otentikasi
             if ($verified) {
                 // Proses jika otentikasi berhasil
-				dd($data->username);
 				//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
-				$email = "administrator@gmail.com";
+				$email = $data->username;
 				$credentials = $request->only('email');
 				$user = User::where('email', $email)->first();
 
