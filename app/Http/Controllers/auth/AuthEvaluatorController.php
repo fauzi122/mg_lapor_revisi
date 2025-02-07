@@ -14,6 +14,7 @@ use App\Models\Meping;
 use App\Models\User;
 use Mail;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\auth\Session;
 
 class AuthEvaluatorController extends Controller
 {
