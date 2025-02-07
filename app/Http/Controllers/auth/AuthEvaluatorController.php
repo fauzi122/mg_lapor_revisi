@@ -158,7 +158,7 @@ class AuthEvaluatorController extends Controller
 			$email = $data->username;
 			$user = User::where('email', $email)->first();
 			
-			$sessions = Session::whereNull('user_id')->where('user_id', $user->id)->get();
+			$sessions = DB::table('sessions')->whereNull('user_id')->where('user_id', $user->id)->get();
 			
 			if ($sessions->isEmpty()) {
 				return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
