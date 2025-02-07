@@ -154,7 +154,7 @@ class AuthEvaluatorController extends Controller
 		
         if ($request->has('ticket')) {
 			list($verified, $data, $error) = $this->verifySSOTicket($request->get('ticket'));
-			dd($data);
+			$email = $data->username;
 			$user = User::where('email', $email)->first();
 			
 			$sessions = Session::whereNull('user_id')->where('user_id', $user->id)->get();
@@ -167,7 +167,6 @@ class AuthEvaluatorController extends Controller
             if ($verified) {
 				// Proses jika otentikasi berhasil
 				//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
-				$email = $data->username;
 				$credentials = $request->only('email');
 				$user = User::where('email', $email)->first();
 
