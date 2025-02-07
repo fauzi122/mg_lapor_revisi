@@ -159,6 +159,7 @@ class AuthEvaluatorController extends Controller
 			
             //proses otentikasi
             if ($verified) {
+				dd($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
 				// Proses jika otentikasi berhasil
 				$email = $data->username;
 				$user = User::where('email', $email)->first();
