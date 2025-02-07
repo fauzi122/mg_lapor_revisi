@@ -163,11 +163,12 @@ class AuthEvaluatorController extends Controller
 			// 	return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
 			// }
 			
-			$email = $data->username;
             //proses otentikasi
+			dd($verified);
             if ($verified) {
 				// Proses jika otentikasi berhasil
 				//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
+				$email = $data->username;
 				$credentials = $request->only('email');
 				$user = User::where('email', $email)->first();
 
@@ -193,7 +194,6 @@ class AuthEvaluatorController extends Controller
 				])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
             }
         } else {
-			dd($email);
             // Redirect ke SSO jika tidak ada tiket
             return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
         }
