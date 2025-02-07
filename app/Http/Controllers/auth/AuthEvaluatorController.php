@@ -159,16 +159,15 @@ class AuthEvaluatorController extends Controller
 			
             //proses otentikasi
             if ($verified) {
-				dd($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
 				// Proses jika otentikasi berhasil
 				$email = $data->username;
 				$user = User::where('email', $email)->first();
 				
 				$sessions = DB::table('sessions')->whereNull('user_id')->where('user_id', $user->id)->get();
 				
-				if ($sessions->isEmpty()) {
-					return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
-				}
+				// if ($sessions->isEmpty()) {
+				// 	return redirect($this->cas_url().'/login?service='.urlencode($sso_redirect_path));
+				// }
 
 				//test jika oke (modul ini bakalan dipindah klo callback udah di daftarin)
 				$credentials = $request->only('email');
