@@ -110,7 +110,8 @@ class DashboardController extends Controller
 		Session::put('j_pengangkutan', $this->sumSimilarTemplates($template_counts, 'pengangkutan'));
 
 
-		return view('badan_usaha.dashboard',compact(
+		// return view('badan_usaha.dashboard',compact(
+		return view('layouts.main.master',compact(
 			'result',
 			'meping',
 			'sub_page',
