@@ -14,6 +14,7 @@
 
     <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/global/plugins.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/style.bundle.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assetsMetronic/css/flatpickr.css') }}" />
 </head>
 
 <body id="kt_app_body" 
@@ -60,16 +61,16 @@
                                 </form>
                             </div>
                         </div>
-                        
+
                         <div class="app-navbar flex-shrink-0">
                             <div class="app-navbar-item ms-1 ms-md-3">
-                                <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                                    <i class="ki-outline ki-calendar fs-1"></i>
-                                </div>
-                            </div>
-                            <div class="app-navbar-item ms-1 ms-md-3">
-                                <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                                    <i class="ki-outline ki-abstract-26 fs-1"></i>
+                                <div class="app-navbar-item ms-1 ms-md-3 position-relative" id="calendar_wrapper">
+                                    <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" id="calendar_trigger">
+                                        <i class="ki-outline ki-calendar fs-1"></i>
+                                    </div>
+                                    <div id="calendar_popup">
+                                        <div class="calendar_inline"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="app-navbar-item">
@@ -79,13 +80,21 @@
                             </div>
                             <div class="app-navbar-item ms-1 ms-md-3" id="kt_header_user_menu_toggle">
                                 <div class="cursor-pointer symbol symbol-circle symbol-30px symbol-md-40px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                                    <img src="{{ asset('assets/images/users/avatar-1.jpg')}}" alt="user" />
+                                    @if(Auth::user()->role == 'BU')
+                                        <img src="{{ asset('assetsMetronic/media/company_img.png')}}" alt="user"/>
+                                    @else
+                                        <img src="{{ asset('assets/images/users/avatar-1.jpg')}}" alt="user"/>
+                                    @endif
                                 </div>
                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
                                     <div class="menu-item px-3">
                                         <div class="menu-content d-flex align-items-center px-3">
                                             <div class="symbol symbol-50px me-5">
-                                                <img alt="Logo" src="{{ asset('assets/images/users/avatar-1.jpg')}}" />
+                                                @if(Auth::user()->role == 'BU')
+                                                    <img alt="Logo" src="{{ asset('assetsMetronic/media/company_img.png')}}"/>
+                                                @else
+                                                    <img alt="Logo" src="{{ asset('assets/images/users/avatar-1.jpg')}}"/>
+                                                @endif
                                             </div>
                                             <div class="d-flex flex-column">
                                                 <div class="fw-bold d-flex align-items-center fs-5">{{ Auth::user()->name }}
@@ -97,7 +106,7 @@
                                     </div>
                                     <div class="separator my-2"></div>
                                     <div class="menu-item px-5">
-                                        <a href="../../demo33/dist/account/overview.html" class="menu-link px-5">My Profile</a>
+                                        <a href="#" class="menu-link px-5">My Profile</a>
                                     </div>
                                     <div class="separator my-2"></div>
                                     <div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
@@ -136,9 +145,34 @@
                                         </div>
                                     </div>
                                     <div class="menu-item px-5">
-                                        <a href="../../demo33/dist/authentication/layouts/corporate/sign-in.html" class="menu-link px-5">Sign Out</a>
+                                        @if (Auth::user()->role == 'BU')
+                                            <a class="menu-link px-5" href="{{ url('/logoutBU') }}">Sign Out</a>
+                                        @else
+                                            <a class="menu-link px-5" href="{{ url('/logout') }}">Sign Out</a>
+                                        @endif
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+                <!--Sidebar-->
+                @include('layouts.main.sidebar.index')
+
+                <!--Main-->
+                <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+                    <div class="d-flex flex-column flex-column-fluid">
+                        @yield('content')
+                    </div>
+                    <!--Footer-->
+                    <div id="kt_app_footer" class="app-footer">
+                        <div class="app-container container-xxl d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+                            <div class="text-dark order-2 order-md-1">
+                                <span class="text-muted fw-semibold me-1">{{ date('Y') }}&copy;</span>
+                                <a href="#" class="text-gray-800 text-hover-primary">Aplikasi Pelaporan Migas</a>
                             </div>
                         </div>
                     </div>
@@ -151,29 +185,8 @@
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
     <script src="{{ asset('assetsMetronic/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assetsMetronic/js/scripts.bundle.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/flatpickr.js') }}"></script>
     <!--end::Global Javascript Bundle-->
-
-    <!--begin::Vendors Javascript(used for this page only)-->
-    <script src="{{ asset('assetsMetronic/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/continentsLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
-    <script src="{{ asset('assetsMetronic/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-    <!--end::Vendors Javascript-->
-
-    <script src="{{ asset('assetsMetronic/js/widgets.bundle.js') }}"></script>
-    <script src="{{ asset('assetsMetronic/js/custom/widgets.js') }}"></script>
-    <script src="{{ asset('assetsMetronic/js/custom/apps/chat/chat.js') }}"></script>
-    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/upgrade-plan.js') }}"></script>
-    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/users-search.js') }}"></script>
 </body>
 
 </html>

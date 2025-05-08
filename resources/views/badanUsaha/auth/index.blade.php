@@ -17,37 +17,31 @@
     
 	<body id="kt_body" class="app-blank">
 		<div class="d-flex flex-column flex-root" id="kt_app_root">
-			<div class="d-flex flex-column flex-lg-row flex-column-fluid">
+			<div class="d-flex flex-column flex-lg-row flex-column-fluid" style="background-color: #e7f0fd;">
 
                 <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1">
                     <div class="d-flex flex-center flex-column flex-lg-row-fluid">
-                        <div class="w-lg-500px p-10">
+                        <div class="card shadow mb-5">
                             <form class="formLoad" method="POST" action="{{ url('/login/post-login') }}" enctype="multipart/form-data">
                                 @csrf
-                                <!-- Title and Subtitle -->
-                                <div class="text-center mb-11">
-                                    <h1 class="text-dark fw-bolder mb-3">Pelaporan Migas</h1>
-                                    <div class="text-gray-600 fw-semibold fs-6">Silakan pilih perusahaan Anda untuk melanjutkan</div>
-                                </div>
-                
-                                <!-- Separator -->
-                                <div class="separator separator-content my-14">
-                                    <span class="w-125px text-gray-500 fw-semibold fs-7">-</span>
-                                </div>
-                
-                                <!-- Company Select -->
-                                <div class="fv-row mb-8">
-                                    <div class="d-flex flex-column flex-sm-row align-items-stretch gap-3">
-                                        <div class="flex-grow-1">
-                                            <select name="perusahaan" data-control="select2" class="form-select form-select-solid" required>
-                                                <option value="" disabled selected>-- Pilih Nama Perusahaan --</option>
-                                                @foreach ($perusahaan as $item)
-                                                    <option value="{{ $item->ID_PERUSAHAAN }}">{{ $item->NAMA_PERUSAHAAN }}</option>
-                                                @endforeach
-                                            </select>
+                                <div class="w-lg-500px p-10">
+                                    <div class="card-header">
+                                        <div class="text-center mb-11">
+                                            <h1 class="text-dark fw-bolder mb-3">Pelaporan Migas</h1>
+                                            <div class="text-gray-600 fw-semibold fs-6">Silakan pilih perusahaan Anda untuk melanjutkan</div>
                                         </div>
-                                        <div class="flex-shrink-0 w-100 w-sm-auto">
-                                            <button type="submit" id="kt_sign_in_submit" class="btn btn-primary d-flex align-items-center justify-content-center w-100 w-sm-auto px-4" onclick="handleSubmit(this)">
+                                    </div>
+                                    <div class="card-body">
+                                        <select name="perusahaan" data-control="select2" class="form-select form-select-solid shadow-lg" required>
+                                            <option value="" disabled selected>-- Pilih Nama Perusahaan --</option>
+                                            @foreach ($perusahaan as $item)
+                                                <option value="{{ $item->ID_PERUSAHAAN }}">{{ $item->NAMA_PERUSAHAAN }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="d-flex align-items-center justify-content-center w-100 w-sm-auto mt-5">
+                                            <button type="submit" id="kt_sign_in_submit" class="btn btn-primary" onclick="handleSubmit(this)">
                                                 <span class="me-2 btn-text">Lanjut</span>
                                                 <i class="ki-outline ki-arrow-right fs-3 btn-icon"></i>
                                             </button>
@@ -73,6 +67,9 @@
                                 });
                             </script>
                         </div>
+                    </div>
+                    <div class="text-gray-500 text-center fw-semibold fs-6 mt-auto py-4">
+                        <span>&copy; ESDM {{ date('Y') }}</span>
                     </div>
                 </div>
                 

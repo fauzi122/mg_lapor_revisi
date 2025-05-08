@@ -111,7 +111,7 @@ class DashboardController extends Controller
 
 
 		// return view('badan_usaha.dashboard',compact(
-		return view('layouts.main.master',compact(
+		return view('badanUsaha.dashboard',compact(
 			'result',
 			'meping',
 			'sub_page',
