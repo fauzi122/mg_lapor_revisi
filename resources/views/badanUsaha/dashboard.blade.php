@@ -6,6 +6,8 @@
         <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
             <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
                 <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bold fs-3 m-0">Dashboard</h1>
+            </div>
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
                     <li class="breadcrumb-item text-muted">
                         <a href="#" class="text-muted text-hover-primary">Home</a>
@@ -16,7 +18,6 @@
                     <li class="breadcrumb-item text-muted">Dashboards</li>
                 </ul>
             </div>
-            <div class="d-flex align-items-center gap-2 gap-lg-3"></div>
         </div>
     </div>
 </div>
@@ -71,134 +72,131 @@
             <div class="col-12">
                 <div class="card mb-5 mb-xl-8 shadow">
                     <!--begin::Header-->
-                    <div class="card-header border-0 pt-5">
+                    <div class="card-header pt-5">
                         <h3 class="card-title align-items-start flex-column">
                             <span class="card-label fw-bold fs-3 mb-1">Data Perizinan </span>
                             <span class="text-muted mt-1 fw-semibold fs-7">"{{ Auth::user()->name }}"</span>
                         </h3>
                     </div>
-                    <hr>
                     <div class="card-body py-3">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover dt-responsive w-100" id="tableWithExport">
-                                <thead class="table-secondary">
-                                    <tr class="fw-bold">
-                                        <th>Izin</th>
-                                        <th class="text-start">Tanggal ACC</th>
-                                        <th>Nomor Izin</th>
-                                        <th>Menu Laporan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($result as $item)
-                                        <tr>
-                                            <td>{{ $item->NAMA_TEMPLATE }}
-                                                <br>
-                                                <b>Jenis Izin:</b> {{ $item->nama_opsi ?? 'N/A' }}
-                                            </td>
-                                            <td class="align-top text-center">{{ $item->TGL_DISETUJUI }}</td>
-                                            <td>{{ $item->NOMOR_IZIN }}</td>
-                                            <td>
+                        <table class="table table-bordered table-striped table-hover dt-responsive w-100 tableWithExport">
+                            <thead class="table-secondary">
+                                <tr class="fw-bold">
+                                    <th>Izin</th>
+                                    <th>Tanggal ACC</th>
+                                    <th>Nomor Izin</th>
+                                    <th>Menu Laporan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-semibold text-gray-600">
+                                @foreach ($result as $item)
+                                    <tr class="align-top">
+                                        <td>{{ $item->NAMA_TEMPLATE }}
+                                            <br>
+                                            <b>Jenis Izin:</b> {{ $item->nama_opsi ?? 'N/A' }}
+                                        </td>
+                                        <td>{{ $item->TGL_DISETUJUI }}</td>
+                                        <td>{{ $item->NOMOR_IZIN }}</td>
+                                        <td>
+                                            @php
+                                                $show = Crypt::encryptString(
+                                                    $item->ID_PERMOHONAN . ',' . $item->NOMOR_IZIN,
+                                                );
+                                                $filteredUrls = collect($sub_page)
+                                                    ->whereIn(
+                                                        'id_sub_page',
+                                                        collect($result)->pluck('SUB_PAGE'),
+                                                    )
+                                                    ->pluck('url')
+                                                    ->unique()
+                                                    ->toArray();
+                                            @endphp
+                                            <ul class="sub-menu" aria-expanded="false">
+                                                {{-- URL Dinamis --}}
+                                                @foreach ($filteredUrls as $url)
+                                                    @if (!empty($url))
+                                                        <!-- Pastikan URL tidak kosong -->
+                                                        <li>
+                                                            <a href="{{ url($url) }}/{{ $show }}">{{ $sub_page->firstWhere('url', $url)->nama_menu }}</a>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                                {{-- Kondisi Khusus --}}
                                                 @php
-                                                    $show = Crypt::encryptString(
-                                                        $item->ID_PERMOHONAN . ',' . $item->NOMOR_IZIN,
-                                                    );
-                                                    $filteredUrls = collect($sub_page)
+                                                    $matchedSubPage = collect($sub_page)
                                                         ->whereIn(
                                                             'id_sub_page',
                                                             collect($result)->pluck('SUB_PAGE'),
                                                         )
-                                                        ->pluck('url')
-                                                        ->unique()
-                                                        ->toArray();
+                                                        ->firstWhere('kategori', 2);
+                                                    $matchedSubPage1 = collect($sub_page)
+                                                        ->whereIn(
+                                                            'id_sub_page',
+                                                            collect($result)->pluck('SUB_PAGE'),
+                                                        )
+                                                        ->firstWhere('kategori', 1);
+                                                    $kusus = collect($sub_page)
+                                                        ->whereIn(
+                                                            'id_sub_page',
+                                                            collect($result)->pluck('SUB_PAGE'),
+                                                        )
+                                                        ->firstWhere('id_sub_menu', 1);
                                                 @endphp
-                                                <ul class="sub-menu" aria-expanded="false">
-                                                    {{-- URL Dinamis --}}
-                                                    @foreach ($filteredUrls as $url)
-                                                        @if (!empty($url))
-                                                            <!-- Pastikan URL tidak kosong -->
-                                                            <li>
-                                                                <a href="{{ url($url) }}/{{ $show }}">{{ $sub_page->firstWhere('url', $url)->nama_menu }}</a>
-                                                            </li>
-                                                        @endif
-                                                    @endforeach
-                                                    {{-- Kondisi Khusus --}}
-                                                    @php
-                                                        $matchedSubPage = collect($sub_page)
-                                                            ->whereIn(
-                                                                'id_sub_page',
-                                                                collect($result)->pluck('SUB_PAGE'),
-                                                            )
-                                                            ->firstWhere('kategori', 2);
-                                                        $matchedSubPage1 = collect($sub_page)
-                                                            ->whereIn(
-                                                                'id_sub_page',
-                                                                collect($result)->pluck('SUB_PAGE'),
-                                                            )
-                                                            ->firstWhere('kategori', 1);
-                                                        $kusus = collect($sub_page)
-                                                            ->whereIn(
-                                                                'id_sub_page',
-                                                                collect($result)->pluck('SUB_PAGE'),
-                                                            )
-                                                            ->firstWhere('id_sub_menu', 1);
-                                                    @endphp
-                                                    {{-- Pengolahan --}}
-                                                    @if (Session::get('j_pengolahan') > 0)
-                                                        @if ($matchedSubPage)
-                                                            <li>
-                                                                <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak Bumi</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{{ url('/harga-bbm-jbu') }}/{{ $show }}">Harga BBM JBU</a>
-                                                            </li>
-                                                        @endif
-                                                        @if ($kusus)
-                                                            <li>
-                                                                <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas Bumi</a>
-                                                            </li>
-                                                        @endif
+                                                {{-- Pengolahan --}}
+                                                @if (Session::get('j_pengolahan') > 0)
+                                                    @if ($matchedSubPage)
+                                                        <li>
+                                                            <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak Bumi</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ url('/harga-bbm-jbu') }}/{{ $show }}">Harga BBM JBU</a>
+                                                        </li>
                                                     @endif
-                                                    {{-- Niaga --}}
-                                                    @if (Session::get('j_niaga') > 0)
-                                                        @if ($matchedSubPage)
-                                                            <li>
-                                                                <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak Bumi</a></li>
-                                                            <li>
-                                                                <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{{ url('/harga-bbm-jbu') }}/{{ $show }}">Harga BBM JBU</a>
-                                                            </li>
-                                                        @endif
-                                                        @if ($matchedSubPage1)
-                                                            <li>
-                                                                <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
-                                                            </li>
-                                                        @endif
-                                                    @endif
-                                                    {{-- Pengangkutan --}}
-                                                    @if (Session::get('j_pengangkutan') > 0 && $kusus)
+                                                    @if ($kusus)
                                                         <li>
                                                             <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas Bumi</a>
                                                         </li>
                                                     @endif
-                                                    {{-- Niaga S --}}
-                                                    @if (Session::get('j_niaga_s') > 0)
+                                                @endif
+                                                {{-- Niaga --}}
+                                                @if (Session::get('j_niaga') > 0)
+                                                    @if ($matchedSubPage)
                                                         <li>
-                                                            <a href="{{ url('/progres-pembangunan/show') }}/{{ $show }}">Progres Pembangunan</a>
+                                                            <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak Bumi</a></li>
+                                                        <li>
+                                                            <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ url('/harga-bbm-jbu') }}/{{ $show }}">Harga BBM JBU</a>
                                                         </li>
                                                     @endif
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                                    @if ($matchedSubPage1)
+                                                        <li>
+                                                            <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
+                                                        </li>
+                                                    @endif
+                                                @endif
+                                                {{-- Pengangkutan --}}
+                                                @if (Session::get('j_pengangkutan') > 0 && $kusus)
+                                                    <li>
+                                                        <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas Bumi</a>
+                                                    </li>
+                                                @endif
+                                                {{-- Niaga S --}}
+                                                @if (Session::get('j_niaga_s') > 0)
+                                                    <li>
+                                                        <a href="{{ url('/progres-pembangunan/show') }}/{{ $show }}">Progres Pembangunan</a>
+                                                    </li>
+                                                @endif
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
