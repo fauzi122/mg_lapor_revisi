@@ -190,26 +190,28 @@
                     </ul>
                 </li>
                 @endcan
-                {{-- <li>
+                <li class="menu-title mt-2" data-key="t-components">BPH Inline</li>
+                <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="file-text"></i>
-                        <span data-key="t-pages">Subsidi BBM </span>
+                        <span data-key="t-pages">Niaga - BBM </span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="pages-starter.html" data-key="t-starter-page">Penjualan JBKP</a></li>
+                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Penjualan JBT</a></li>
+                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Penjualan JBU</a></li>
+                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Penjualan BBM</a></li>
+
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i data-feather="file-text"></i>
+                        <span data-key="t-pages">Subsidi BBM</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="pages-starter.html" data-key="t-starter-page">JBT Kuota</a></li>
-                        <li><a href="pages-maintenance.html" data-key="t-maintenance">JBKP Kuota</a></li>
-
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow">
-                        <i data-feather="file-text"></i>
-                        <span data-key="t-pages">Fasilitas Pengangkutan</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="pages-starter.html" data-key="t-starter-page">Minyak Bumi</a></li>
-                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Gas Bumi</a></li>
-                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Gas Bumi melalui Pipa</a></li>
+                        <li><a href="pages-starter.html" data-key="t-starter-page">JBKP Kuota</a></li>
 
                     </ul>
                 </li>
@@ -217,14 +219,24 @@
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i data-feather="file-text"></i>
-                        <span data-key="t-pages">Investasi</span>
+                        <span data-key="t-pages">Gas Bumi Melalui Pipa</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="pages-starter.html" data-key="t-starter-page">Minyak Bumi</a></li>
-                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Gas Bumi</a></li>
+                        <li><a href="pages-starter.html" data-key="t-starter-page">Penjualan Gas Bumi</a></li>
+                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Pasokan Gas Bumi</a></li>
 
                     </ul>
-                </li> --}}
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i data-feather="file-text"></i>
+                        <span data-key="t-pages">Gas Bumi Melalui Pipa</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="pages-starter.html" data-key="t-starter-page">Pengangkutan Gas</a></li>
+
+                    </ul>
+                </li>
                 @can('Master Data')
                 <li class="menu-title mt-2" data-key="t-components">Administrasi</li>
                 <li>
