@@ -697,7 +697,7 @@
                 
             </div>
             <div class="modal-footer">
-                <a href="https://lapor.duniasakha.com/storage/template/penjualan_gbp.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
+                <a href="{{ url('/storage') }}/template/penjualan_gbp.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                 <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
             </div>
@@ -734,7 +734,7 @@
                 
             </div>
             <div class="modal-footer">
-                <a href="https://lapor.duniasakha.com/storage/template/pasokan_gbp.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
+                <a href="{{ url('/storage') }}/template/pasokan_gbp.xlsx" id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                 <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
             </div>

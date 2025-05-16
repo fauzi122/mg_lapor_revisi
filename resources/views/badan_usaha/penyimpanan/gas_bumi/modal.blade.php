@@ -653,7 +653,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="https://lapor.duniasakha.com/storage/template/penyimpananGasBumi.xlsx" id="tombol"
+                    <a href="{{ url('/storage') }}/template/penyimpananGasBumi.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>

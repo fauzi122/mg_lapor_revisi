@@ -14,6 +14,7 @@ class EvPenyimpananMinyakBumiController extends Controller
     public function index(){
 
         $perusahaan = DB::table('penyminyakbumis  as a')
+<<<<<<< HEAD
             ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
             ->leftJoin('r_permohonan_izin as c', 'a.badan_usaha_id', '=', 'c.ID_PERUSAHAAN')
             ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
@@ -21,6 +22,33 @@ class EvPenyimpananMinyakBumiController extends Controller
             ->whereIn('a.status', [1, 2,3])
             ->get();
 
+=======
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->groupBy('a.izin_id', 'a.badan_usaha_id')
+        ->select(
+            'a.izin_id',
+            'b.id_perusahaan',
+            'b.NAMA_PERUSAHAAN',
+            'c.TGL_DISETUJUI',
+            'c.NOMOR_IZIN',
+            'c.TGL_PENGAJUAN'
+        )
+        ->get();
+
+    // Kondisi untuk grup hanya berdasarkan `badan_usaha_id`
+    $perusahaan_only_bu = DB::table('penyminyakbumis as a')
+        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        ->whereIn('a.status', [1, 2, 3])
+        ->groupBy('a.badan_usaha_id')
+        ->select(
+            'b.id_perusahaan',
+            'b.NAMA_PERUSAHAAN'
+        )
+        ->get();
+// dd($perusahaan_only_bu);
+>>>>>>> d43ccfe08769a64150ae4e38d16622e2800fca27
 
         $data = [
             'title'=>'Laporan Penyimpanan Minyak Bumi',

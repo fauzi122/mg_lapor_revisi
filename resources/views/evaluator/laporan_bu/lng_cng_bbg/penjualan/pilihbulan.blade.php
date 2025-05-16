@@ -41,10 +41,11 @@
                                     <h4>Periode Bulan {{ dateIndonesia($per->bulan) }}</h4>
 
                                     <div>
-                                        <a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-danger btn-sm btn-rounded">
+                                        <a href="javascript:void(0);" onclick="window.history.back();"
+                                            class="btn btn-danger btn-sm btn-rounded">
                                             <i class='bx bx-arrow-back'></i> Kembali
                                         </a>
-                                        
+
                                         <button type="button" class="btn btn-info btn-sm rounded-pill btn-update-status"
                                             data-bs-toggle="modal" data-bs-target="#modal-update-status">
                                             <i class="bx bxs-edit align-middle"></i> Update Status
@@ -256,7 +257,7 @@
                                 _token: '{{ csrf_token() }}',
                                 b: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}',
                                 p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->izin_id) }}',
-                               
+
                             },
                             success: function(response) {
                                 Swal.fire('Status diperbarui!',
