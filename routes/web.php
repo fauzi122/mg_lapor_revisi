@@ -50,7 +50,8 @@ use App\Http\Controllers\Evaluator\{
 	EvImporController,
 	DataIzinBuController,
 	DataUserController,
-	SubsidiLpg
+    EvPenjualanJbkp,
+    SubsidiLpg
 };
 use App\Http\Controllers\user\PermissionController;
 use App\Http\Controllers\user\RoleController;
@@ -801,6 +802,23 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
         Route::post('/laporan/pengangkutan/gb/cetak-periode', 'cetakperiode');
 
 	});
+	
+	//Penjualan JBKP
+	Route::controller(EvPenjualanJbkp::class)->group(function () {
+		Route::get('/laporan/penjualan-jbkp', 'index');
+		Route::get('/laporan/penjualan-jbkp/{kode}', 'show');
+		Route::get('/laporan/penjualan-jbkp-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/penjualan-jbkp-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-jbkp/periode/{kode}', 'periode');
+		Route::post('/laporan/penjualan-jbkp/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/penjualan-jbkp/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/penjualan-jbkp/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/penjualan-jbkp/selesai-periode', 'selesaiPeriode');
+        Route::post('/laporan/penjualan-jbkp/cetak-periode', 'cetakperiode');
+
+	});
+
+
 
 	Route::get('/logout', [AuthEvaluatorController::class, 'logout']);
 });
