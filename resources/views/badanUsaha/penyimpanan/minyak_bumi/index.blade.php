@@ -21,7 +21,8 @@
         </div>
     </div>
 </div>
-@include('badan_usaha.penyimpanan.minyak_bumi.modal')
+
+@include('badanUsaha.penyimpanan.minyak_bumi.modal')
 
 <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
     <div id="kt_app_content_container" class="app-container container-xxl">
@@ -44,8 +45,7 @@
                         <div class="row w-100">
                             <div class="col-12">
                                 <div class="d-flex justify-content-end gap-2">
-                                    <a type="button" class="btn btn-sm btn-primary"
-                                        onclick="produk(); provinsi(); kab_kota();" 
+                                    <a type="button" class="btn btn-sm btn-primary" onclick="produk(); provinsi(); kab_kota();"
                                         data-bs-toggle="modal" data-bs-target="#myModal">
                                         Buat Laporan
                                     </a>
@@ -58,11 +58,11 @@
                         <table class="table table-bordered table-striped table-hover dt-responsive w-100 tableWithExport">
                             <thead class="table-secondary">
                                 <tr class="fw-bold">
-                                    <th>No</th>
+                                    <th class="text-center">No</th>
                                     <th>Bulan</th>
                                     <th>Tahun</th>
                                     <th>Status</th>
-                                    <th>Aksi</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,73 +73,66 @@
                                         );
                                     @endphp
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td><b><a
-                                                    href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}">{{ getBulan($data->bulan) }}<i
-                                                        class="bx bx-check" title="lihat data laporan"></i></a><b>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="fw-bold">
+                                            <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}">
+                                                {{ getBulan($data->bulan) }}
+                                                <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                            </a>
                                         </td>
-                                        <td><b><a
-                                                    href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}/tahun">{{ getTahun($data->bulan) }}<i
-                                                        class="bx bx-check" title="lihat data laporan"></i></a><b>
+                                        <td class="fw-bold">
+                                            <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}/tahun">
+                                                {{ getTahun($data->bulan) }}
+                                                <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                            </a>
                                         </td>
                                         <td>
                                             @if ($data->status_tertinggi == 1 && $data->catatanx)
-                                                <span class="badge bg-warning">Sudah Diperbaiki</span>
+                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
                                             @elseif ($data->status_tertinggi == 1)
-                                                <span class="badge bg-success">Diterima</span>
+                                                <span class="badge badge-success">Diterima</span>
                                             @elseif ($data->status_tertinggi == 2)
-                                                <span class="badge bg-danger">Revisi</span>
+                                                <span class="badge badge-danger">Revisi</span>
                                             @elseif ($data->status_tertinggi == 0)
-                                                <span class="badge bg-info">draf</span>
+                                                <span class="badge badge-info">draf</span>
                                             @endif
                                         </td>
-                                        <!-- <td>{{ $data->catatan }}</td> -->
-                                        @if ($data->status_tertinggi == 1)
-                                            <td>
-                                                <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}"
-                                                    method="post" class="d-inline">
+                                        <td class="text-center">
+                                            @if ($data->status_tertinggi == 1)
+                                                <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline">
                                                     @method('delete')
                                                     @csrf
-                                                    <button type="button" class="btn btn-sm btn-danger"
-                                                        onclick="hapusData($(this).closest('form'))" disabled>
-                                                        <i class="bx bx-trash-alt" title="Hapus data"></i>
+                                                    <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="hapusData($(this).closest('form'))" disabled>
+                                                        <i class="ki-solid ki-trash" title="Hapus data"></i>
                                                     </button>
                                                 </form>
-                                                <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}"
-                                                    method="post" class="d-inline" data-id="{{ $data->bulan }}">
+                                                <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                     @method('PUT')
                                                     @csrf
-                                                    <button type="button" class="btn btn-sm btn-success"
-                                                        onclick="kirimData($(this).closest('form'))" disabled>
-                                                        <i class="bx bx-paper-plane" title="Kirim data"></i>
-                                                    </button></center>
+                                                    <button type="button" class="btn btn-icon btn-sm btn-success" onclick="kirimData($(this).closest('form'))" disabled>
+                                                        <i class="ki-solid ki-send" title="Kirim data"></i>
+                                                    </button>
                                                 </form>
-                                            </td>
-                                        @else
-                                            <td>
-                                                <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}"
-                                                    method="post" class="d-inline">
+                                            @else
+                                                <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline">
                                                     @method('delete')
                                                     @csrf
-                                                    <button type="button" class="btn btn-sm btn-danger"
-                                                        onclick="hapusData($(this).closest('form'))">
-                                                        <i class="bx bx-trash-alt" title="Hapus data"></i>
+                                                    <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="hapusData($(this).closest('form'))">
+                                                        <i class="ki-solid ki-trash" title="Hapus data"></i>
                                                     </button>
                                                 </form>
-                                                <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}"
-                                                    method="post" class="d-inline" data-id="{{ $data->bulan }}">
+                                                <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $data->bulan }}">
                                                     @method('PUT')
                                                     @csrf
-                                                    <button type="button" class="btn btn-sm btn-success"
-                                                        onclick="kirimData($(this).closest('form'))">
-                                                        <i class="bx bx-paper-plane" title="Kirim data"></i>
-                                                    </button></center>
+                                                    <button type="button" class="btn btn-icon btn-sm btn-success" onclick="kirimData($(this).closest('form'))">
+                                                        <i class="ki-solid ki-send" title="Revisi"></i>
+                                                    </button>
                                                 </form>
-                                                <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}"
-                                                    class="btn btn-sm btn-info"><i class="bx bx-edit"
-                                                        title="Revisi"></i></a>
-                                            </td>
-                                        @endif
+                                                <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}" class="btn btn-icon btn-sm btn-info">
+                                                    <i class="ki-solid ki-pencil" title="Kirim data"></i>
+                                                </a>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

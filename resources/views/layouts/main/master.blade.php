@@ -15,6 +15,13 @@
     <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/global/plugins.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/style.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/flatpickr.css') }}" />
+
+    <style>
+        .modal-body {
+            max-height: 63vh;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 
 <body id="kt_app_body" 
