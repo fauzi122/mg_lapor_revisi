@@ -11,66 +11,63 @@ use Illuminate\Support\Facades\DB;
 
 class EvPenjualanJbkp extends Controller
 {
-    public function index(){
+public function index()
+{
+    $perusahaan = DB::table('bph_penjualan_jbkp')
+        ->select('id_badan_usaha', 'izin_usaha','nama_badan_usaha','npwp_badan_usaha') 
+        ->groupBy('id_badan_usaha')
+        ->get();
 
-        $perusahaan = DB::table('bph_penjualan_jbkp')
-            ->groupBy('id_badan_usaha')
-            // ->whereIn('a.status', [1, 2,3])
-            ->get();
-
-
-
-        $data = [
-            'title'=>'Laporan Penjualan JBKP',
-            'perusahaan' => $perusahaan,
-        ];
-// return $perusahaan;
-		return view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.index',$data);
-	}
-
-    public function periode($kode = '')
-    {
-
-        $p = !empty($kode) ? Crypt::decrypt($kode) : null;
-        if ($p) {
-            $query = DB::table('bph_penjualan_jbkp as a')
-                ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
-                ->select('a.*', 'b.NAMA_PERUSAHAAN')
-                ->where('a.id_badan_usaha', $p)
-                ->whereIn('a.status', [1, 2,3])
-                ->groupBy('a.bulan')->get();
-
-
-        } else {
-            $query = '';
-
-        }
-        $data = [
-            'title'=>'Laporan Pengangkutan Minyak Bumi',
-            'p' => $p,
-            'query' => $query,
-            'per' => $query->first()
-        ];
-        return view('evaluator.laporan_bu.pengangkutan.mb.periode', $data);
+    // Dekode JSON pada field izin_usaha
+    foreach ($perusahaan as $item) {
+        $item->izin_list = json_decode($item->izin_usaha, true);
     }
+
+    $data = [
+        'title' => 'Laporan Penjualan JBKP',
+        'perusahaan' => $perusahaan,
+    ];
+    // dd($perusahaan);
+    return view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.index', $data);
+}
+
+
+
+public function periode($kode = '')
+{
+    $p = !empty($kode) ? Crypt::decryptString($kode) : null;
+    $query = collect();
+
+    if ($p) {
+        // Ambil dan group berdasarkan bulan-tahun
+        $query = DB::table('bph_penjualan_jbkp')
+            ->select('bulan', 'tahun', DB::raw('MIN(id) as id')) // ambil ID pertama per group
+            ->where('npwp_badan_usaha', $p)
+            ->groupBy('tahun', 'bulan')
+            ->orderBy('tahun', 'desc')
+            ->orderBy('bulan', 'desc')
+            ->get();
+    }
+
+    $data = [
+        'title' => 'Laporan Penjualan JBKP',
+        'p' => $p,
+        'query' => $query,
+        'per' => $query->first()
+    ];
+//   dd($query);
+    return view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.periode', $data);
+}
+
 
     public function show($kode = '')
     {
 
         $pecah = explode(',', Crypt::decryptString($kode));
 
-        if (count($pecah) == 3) {
-            $filterBy = substr($pecah[0], 0, 4);
-        } else {
-        $filterBy = $pecah[0];
-        }
 
         $query = DB::table('bph_penjualan_jbkp as a')
-            ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('a.id_badan_usaha', $pecah[1])
-            ->where('a.bulan', 'like', "%". $filterBy ."%")
-            ->whereIn('a.status', [1, 2,3])
+            ->select('a.*')
             ->get();
 
 //        var_dump($query);die();
