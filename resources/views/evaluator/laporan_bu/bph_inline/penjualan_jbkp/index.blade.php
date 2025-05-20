@@ -37,6 +37,9 @@
                             </div>
 
                             <div class="card-header">
+                                <button type="button" class="btn btn-warning waves-effect waves-light">
+                                    <i class='bx bx-sync'></i> Sinkronisasi Data
+                                </button>
                                 <button type="button" class="btn btn-success waves-effect waves-light"
                                     data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i
                                         class='bx bx-printer'></i> Cetak
@@ -74,8 +77,8 @@
                                                                 <option value="all"> Semua Perusahaan </option>
 
                                                                 @foreach ($perusahaan as $p)
-                                                                    <option value="{{ $p->id_perusahaan }}">
-                                                                        {{ $p->NAMA_PERUSAHAAN }}</option>
+                                                                    <option value="{{ $p->id_badan_usaha }}">
+                                                                        {{ $p->nama_badan_usaha }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -130,13 +133,16 @@
                                                 @foreach ($perusahaan as $per)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $per->NAMA_PERUSAHAAN }}</td>
-                                                        <td>{{ $per->NOMOR_IZIN }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($per->TGL_PENGAJUAN)->format('Y-m-d') }}
+                                                        <td>{{ $per->nama_badan_usaha }}</td>
+                                                        <td>{{ $per->nomor_izin_usaha }}</td>
+                                                        <td>
+                                                            {{-- {{ \Carbon\Carbon::parse($per->TGL_PENGAJUAN)->format('Y-m-d') }} --}}
                                                         </td>
 
-                                                        <td>{{ $per->TGL_DISETUJUI }}</td>
-                                                        <td><a href="{{ url('laporan/pengangkutan/mb/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"
+                                                        <td>
+                                                            {{-- {{ $per->TGL_DISETUJUI }} --}}
+                                                        </td>
+                                                        <td><a href="{{ url('laporan/penjualan-jbkp') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_badan_usaha) }}"
                                                                 class="btn btn-primary btn-rounded btn-sm"><i
                                                                     class="bx bx-show"></i> Lihat </a></td>
 

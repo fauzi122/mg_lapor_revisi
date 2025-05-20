@@ -70,7 +70,7 @@
                                                                 <option value="">--Pilih Perusahaan--</option>
                                                                 <option value="all">Semua Perusahaan </option>
                                                                 <!-- Opsi untuk semua perusahaan -->
-                                                                @foreach ($perusahaan_only_bu as $p)
+                                                                @foreach ($perusahaan as $p)
                                                                     <option value="{{ $p->id_perusahaan }}">
                                                                         {{ $p->NAMA_PERUSAHAAN }}</option>
                                                                 @endforeach
@@ -131,13 +131,7 @@
                                                         <td>{{ \Carbon\Carbon::parse($per->TGL_PENGAJUAN)->format('Y-m-d') }}
                                                         </td>
                                                         <td>{{ $per->TGL_DISETUJUI }}</td>
-                                                        @php
-
-                                                            $kode = Crypt::encryptString(
-                                                                $per->id_perusahaan . ',' . $per->izin_id,
-                                                            );
-                                                        @endphp
-                                                        <td><a href="{{ url('laporan/harga-bbm/periode') }}/{{ $kode }}"
+                                                        <td><a href="{{ url('laporan/harga-bbm/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"
                                                                 class="btn btn-primary btn-rounded btn-sm"><i
                                                                     class="bx bx-show"></i> Lihat </a></td>
 

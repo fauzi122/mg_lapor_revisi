@@ -3,89 +3,40 @@
 namespace App\Http\Controllers\Evaluator;
 
 use App\Http\Controllers\Controller;
+use App\Models\PenjualanJbkp;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
-class EvPasokanGasBumiController extends Controller
+class EvPenjualanJbkp extends Controller
 {
     public function index(){
 
-        $perusahaan = DB::table('pengolahans as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-            ->where('a.jenis', 'Gas Bumi')
-            ->where('a.tipe', 'Pasokan')
-            ->whereIn('a.status', [1, 2, 3])
-            ->groupBy('a.badan_usaha_id')
-            ->select('a.jenis', 'a.tipe', 'a.status', 'b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
+        $perusahaan = DB::table('bph_penjualan_jbkp')
+            ->groupBy('id_badan_usaha')
+            // ->whereIn('a.status', [1, 2,3])
             ->get();
 
 
 
         $data = [
-            'title'=>'Laporan Gas Bumi Pasokan Kilang',
+            'title'=>'Laporan Penjualan JBKP',
             'perusahaan' => $perusahaan,
         ];
-
-        return view('evaluator.laporan_bu.gb.pasokan.index',$data);
-    }
-
-    public function cetakperiode(Request $request)
-    {
-        $request->validate([
-            'perusahaan' => 'required',
-            't_awal' => 'required|date',
-            't_akhir' => 'required|date|after_or_equal:t_awal',
-        ]);
-    
-        $perusahaan = $request->input('perusahaan');
-        $t_awal = $request->input('t_awal');
-        $t_akhir = $request->input('t_akhir');
-    
-        $query = DB::table('pengolahans as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-            ->where('a.tipe', 'Pasokan')
-            ->whereIn('a.status', [1, 2, 3])
-            ->whereBetween('bulan', [$t_awal, $t_akhir]);
-    
-        if ($perusahaan != 'all') {
-            $query->where('a.badan_usaha_id', $perusahaan);
-        }
-    
-        $result = $query->get();
-    
-        if ($result->isEmpty()) {
-            return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
-        } else {
-            $data = [
-                'title' => 'Laporan Gas Bumi Pasokan Kilang',
-                'result' => $result
-            ];
-    
-            $view = view('evaluator.laporan_bu.gb.pasokan.cetak', $data);
-            $view->with('reload', true);
-    
-            return response($view);
-        }
-    }
-    
+// return $perusahaan;
+		return view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.index',$data);
+	}
 
     public function periode($kode = '')
     {
 
-
         $p = !empty($kode) ? Crypt::decrypt($kode) : null;
         if ($p) {
-            $query = DB::table('pengolahans as a')
-                ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+            $query = DB::table('bph_penjualan_jbkp as a')
+                ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
                 ->select('a.*', 'b.NAMA_PERUSAHAAN')
-                ->where('a.jenis', 'Gas Bumi')
-                ->where('a.tipe', 'Pasokan')
-                ->where('a.badan_usaha_id', $p)
+                ->where('a.id_badan_usaha', $p)
                 ->whereIn('a.status', [1, 2,3])
                 ->groupBy('a.bulan')->get();
 
@@ -95,45 +46,42 @@ class EvPasokanGasBumiController extends Controller
 
         }
         $data = [
-            'title'=>'Laporan Gas Bumi Pasokan Kilang',
+            'title'=>'Laporan Pengangkutan Minyak Bumi',
             'p' => $p,
             'query' => $query,
             'per' => $query->first()
         ];
-        return view('evaluator.laporan_bu.gb.pasokan.periode', $data);
+        return view('evaluator.laporan_bu.pengangkutan.mb.periode', $data);
     }
 
-    public function show($kode = '', $filter = null)
+    public function show($kode = '')
     {
 
         $pecah = explode(',', Crypt::decryptString($kode));
 
-        if ($filter && $filter === "tahun") {
+        if (count($pecah) == 3) {
             $filterBy = substr($pecah[0], 0, 4);
-        } 
-        else {
-            $filterBy = $pecah[0];
+        } else {
+        $filterBy = $pecah[0];
         }
 
-        $query = DB::table('pengolahans as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        $query = DB::table('bph_penjualan_jbkp as a')
+            ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
             ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('a.jenis', 'Gas Bumi')
-            ->where('a.tipe', 'Pasokan')
-            ->where('a.badan_usaha_id', $pecah[1])
+            ->where('a.id_badan_usaha', $pecah[1])
             ->where('a.bulan', 'like', "%". $filterBy ."%")
             ->whereIn('a.status', [1, 2,3])
             ->get();
 
-        // var_dump($query);die();
+//        var_dump($query);die();
 
         $data = [
-            'title'=>'Laporan Gas Bumi Pasokan Kilang',
+            'title'=>'Laporan Pengangkutan Minyak Bumi',
             'query'=>$query,
             'per'=>$query->first()
 
         ];
-        return view('evaluator.laporan_bu.gb.pasokan.pilihbulan', $data);
+        return view('evaluator.laporan_bu.pengangkutan.mb.pilihbulan', $data);
 
     }
 
@@ -147,7 +95,7 @@ class EvPasokanGasBumiController extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = DB::table('pengolahans')->where('id', $id)
+        $update = PenjualanJbkp::where('id', $id)
             ->update([
                 'catatan' => $request->catatan,
                 'status' => '2'
@@ -167,10 +115,7 @@ class EvPasokanGasBumiController extends Controller
 
 
 
-        $update = DB::table('pengolahans')
-            ->where('jenis', 'Gas Bumi')
-            ->where('tipe', 'Distribusi')
-            ->where('badan_usaha_id', $badan_usaha_id)
+        $update = PenjualanJbkp::where('badan_usaha_id', $badan_usaha_id)
             ->where('bulan',$bulan)
             ->whereIn('status', [1, 2,3])
             ->update([
@@ -193,16 +138,12 @@ class EvPasokanGasBumiController extends Controller
             $bulan = Crypt::decrypt($request->input('b'));
 
             // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = DB::table('pengolahans')
-                ->where('jenis', 'Gas Bumi')
-                ->where('tipe', 'Distribusi')
-                ->where('badan_usaha_id', $badan_usaha_id)
+            $update = PenjualanJbkp::where('badan_usaha_id', $badan_usaha_id)
                 ->where('bulan', $bulan)
                 ->whereIn('status', [1, 2,3])
                 ->update([
                     'status' => '3'
                 ]);
-
 
 
 
@@ -225,7 +166,7 @@ class EvPasokanGasBumiController extends Controller
             $id = $request->input('id');
 
             // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = DB::table('pengolahans')->where('id', $id)
+            $update = PenjualanJbkp::where('id', $id)
                 ->update([
                     'status' => '3'
                 ]);
@@ -244,32 +185,30 @@ class EvPasokanGasBumiController extends Controller
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);
         }
     }
-
+	
     public function lihatSemuaData()
     {
         $tgl = Carbon::now();
 
-        $query = DB::table('pengolahans as a')
-        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        $query = DB::table('bph_penjualan_jbkp as a')
+        ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
         ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
         ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-        ->where('a.jenis', 'Gas Bumi')
-        ->where('a.tipe', 'Pasokan')
         ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
         ->whereIn('a.status', [1, 2, 3])
         ->get();
 
-        $perusahaan = DB::table('pengolahans as a')
-        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        $perusahaan = DB::table('bph_penjualan_jbkp as a')
+        ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
         ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
         ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.badan_usaha_id')
+        ->groupBy('a.id_badan_usaha')
         ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
         ->get();
 
         // return json_decode($query); exit;
-        return view('evaluator.laporan_bu.gb.pasokan.lihat-semua-data', [
-            'title' => 'Laporan Gas Bumi Pasokan Kilang',
+        return view('evaluator.laporan_bu.pengangkutan.mb.lihat-semua-data', [
+            'title' => 'Laporan Pengangkutan Minyak Bumi',
             'periode' => 'Bulan ' . $tgl->monthName . " " . $tgl->year,
             'query' => $query,
             'perusahaan' => $perusahaan,
@@ -281,20 +220,18 @@ class EvPasokanGasBumiController extends Controller
         $t_awal = Carbon::parse($request->t_awal);
         $t_akhir = Carbon::parse($request->t_akhir);
 
-        $perusahaan = DB::table('pengolahans as a')
-        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        $perusahaan = DB::table('bph_penjualan_jbkp as a')
+        ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
         ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
         ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.badan_usaha_id')
+        ->groupBy('a.id_badan_usaha')
         ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
         ->get();
 
-        $query = DB::table('pengolahans as a')
-        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
+        $query = DB::table('bph_penjualan_jbkp as a')
+        ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
         ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-        ->where('a.jenis', 'Gas Bumi')
-        ->where('a.tipe', 'Pasokan');
+        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN');
         
         if ($request->perusahaan != 'all') {
             $query->where('badan_usaha_id', $request->perusahaan);
@@ -303,8 +240,8 @@ class EvPasokanGasBumiController extends Controller
         $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
                     ->whereIn('a.status', [1, 2, 3])->get();
 
-        return view('evaluator.laporan_bu.gb.pasokan.lihat-semua-data', [
-            'title' => 'Laporan Gas Bumi Pasokan Kilang',
+        return view('evaluator.laporan_bu.pengangkutan.mb.lihat-semua-data', [
+            'title' => 'Laporan Pengangkutan Minyak Bumi',
             'periode' => 'Tanggal ' . $t_awal->format('d F Y') . " - " . $t_akhir->format('d F Y'),
             'query' => $result,
             'perusahaan' => $perusahaan,
