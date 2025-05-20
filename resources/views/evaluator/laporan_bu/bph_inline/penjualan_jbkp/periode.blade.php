@@ -26,11 +26,12 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
+                                    {{-- <h4>{{ $per->nama_badan_usaha }}</h4> --}}
                                     <div>
-                                        <a href="{{ url('laporan/pengangkutan/mb') }}"
-                                            class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
-                                            Kembali</a>
+                                        <a href="{{ url()->previous() }}" class="btn btn-danger btn-sm btn-rounded">
+                                            <i class='bx bx-arrow-back'></i> Kembali
+                                        </a>
+
                                     </div>
                                 </div>
                             </div>
@@ -39,127 +40,37 @@
                                     <div class="tab-pane fade show active" id="penjualan">
                                         <div class="table-responsive">
                                             <table id="datatable-buttons" class="table table-bordered nowrap w-100">
+                                              
                                                 <thead>
-                                                    <tr>
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Bulan</th>
                                                         <th>Tahun</th>
-                                                        <th>Status</th>
-                                                        <!-- <th>Catatan</th> -->
+                                                        
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($query as $data)
-                                                        @php
-                                                            $id = Crypt::encryptString(
-                                                                $data->bulan . ',' . $data->badan_usaha_id,
-                                                            );
-                                                            $idTahun = Crypt::encryptString(
-                                                                $data->bulan . ',' . $data->badan_usaha_id . ', tahun',
-                                                            );
-                                                        @endphp
+                                                    @foreach ($query as $i => $row)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>
-                                                                <b><a
-                                                                        href="{{ url('/laporan/pengangkutan/mb') }}/{{ $id }}">{{ getBulan($data->bulan) }}
-                                                                        <i {{-- class="bx bx-check" --}}
-                                                                            title="lihat data laporan"></i></a><b>
+                                                                <a href="#" class="text-primary">
+                                                                    {{ \Carbon\Carbon::createFromFormat('m', $row->bulan)->translatedFormat('F') }}
+                                                                </a>
                                                             </td>
+                                                            <td><span class="text-primary">{{ $row->tahun }}</span></td>
+                                                           
                                                             <td>
-                                                                <b><a
-                                                                        href="{{ url('/laporan/pengangkutan/mb') }}/{{ $idTahun }}">{{ getTahun($data->bulan) }}
-                                                                        <i {{-- class="bx bx-check" --}}
-                                                                            title="lihat data laporan"></i></a><b>
+                                                                <a href="" class="btn btn-sm btn-primary btn-rounded">
+                                                                    <i class="bx bx-show"></i> Lihat Detail
+                                                                </a>
                                                             </td>
-                                                            <td>
-                                                                @if ($data->status == 1 && $data->catatan)
-                                                                    <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                                @elseif ($data->status == 1)
-                                                                    <span class="badge bg-success">Diterima</span>
-                                                                @elseif ($data->status == 2)
-                                                                    <span class="badge bg-danger">Revisi</span>
-                                                                @elseif ($data->status == 0)
-                                                                    <span class="badge bg-info">draf</span>
-                                                                @elseif($data->status == 3)
-                                                                    <span class="badge bg-primary">Selesai</span>
-                                                                @endif
-                                                            </td>
-
-                                                            @if ($data->status == 1)
-                                                                <td>
-                                                                    <button type="button"
-                                                                        class="btn btn-info btn-sm rounded-pill btn-update"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#modal-update" title="Revisi data">
-                                                                        <i class="bx bxs-edit align-middle"></i>
-                                                                    </button>
-
-                                                                    @if ($data->status == 1 && $data->catatan)
-                                                                        <button
-                                                                            class="btn btn-primary btn-rounded btn-sm btn-selesai-status"
-                                                                            data-p="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}"
-                                                                            data-b="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}"><i
-                                                                                class="bx bx-check"
-                                                                                title="Selesai"></i></button>
-                                                                    @endif
-
-                                                                    <div class="modal fade" id="modal-update"
-                                                                        data-bs-backdrop="static" data-bs-keyboard="false"
-                                                                        aria-labelledby="staticBackdropLabel"
-                                                                        aria-hidden="true">
-                                                                        <div class="modal-dialog modal-lg">
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header">
-                                                                                    <h5 class="modal-title"
-                                                                                        id="staticBackdropLabel">Update
-                                                                                        Status</h5>
-                                                                                    <button type="button" class="btn-close"
-                                                                                        data-bs-dismiss="modal"
-                                                                                        aria-label="Close"></button>
-                                                                                </div>
-                                                                                <form
-                                                                                    action="{{ url('/laporan/pengangkutan/mb/update-revision-all') }}"
-                                                                                    method="post" id="updateStatusForm"
-                                                                                    enctype="multipart/form-data">
-                                                                                    @csrf
-                                                                                    <input type="hidden" name="p"
-                                                                                        value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}">
-                                                                                    <input type="hidden" name="b"
-                                                                                        value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}">
-                                                                                    <div class="modal-body">
-                                                                                        <label
-                                                                                            for="catatan">Notesss</label>
-                                                                                        <textarea name="catatan" id="catatan" cols="5" rows="5" class="form-control"></textarea>
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="button"
-                                                                                            class="btn btn-secondary"
-                                                                                            data-bs-dismiss="modal">Close
-                                                                                        </button>
-                                                                                        <button type="submit"
-                                                                                            class="btn btn-primary">Update
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </form>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </td>
-                                                            @else
-                                                                <td>
-
-                                                                </td>
-                                                            @endif
                                                         </tr>
                                                     @endforeach
-                                                    <!-- Add more rows as needed -->
                                                 </tbody>
-
                                             </table>
+
                                         </div>
                                     </div>
 

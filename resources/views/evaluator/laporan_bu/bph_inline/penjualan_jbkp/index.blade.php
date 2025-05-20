@@ -124,8 +124,8 @@
                                                     <th>No</th>
                                                     <th>Nama Perusahaan</th>
                                                     <th>Nomor Izin</th>
-                                                    <th>Tanggal Pengajuan Izin</th>
-                                                    <th>Tanggal Disetujui Izin</th>
+                                                    {{-- <th>Tanggal Pengajuan Izin</th>
+                                                    <th>Tanggal Disetujui Izin</th> --}}
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -134,17 +134,27 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $per->nama_badan_usaha }}</td>
-                                                        <td>{{ $per->nomor_izin_usaha }}</td>
-                                                        <td>
-                                                            {{-- {{ \Carbon\Carbon::parse($per->TGL_PENGAJUAN)->format('Y-m-d') }} --}}
-                                                        </td>
+                                                        
+                                                    <td>
+                                                        @if(is_array($per->izin_list))
+                                                            <ul style="margin: 0; padding-left: 15px;">
+                                                                @foreach($per->izin_list as $izin)
+                                                                    <li>ID: {{ $izin['id_izin_usaha'] }} - Nomor: {{ $izin['nomor_izin_usaha'] }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @else
+                                                            <span class="text-muted">Tidak ada data</span>
+                                                        @endif
+                                                    </td>
 
-                                                        <td>
-                                                            {{-- {{ $per->TGL_DISETUJUI }} --}}
-                                                        </td>
-                                                        <td><a href="{{ url('laporan/penjualan-jbkp') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_badan_usaha) }}"
-                                                                class="btn btn-primary btn-rounded btn-sm"><i
-                                                                    class="bx bx-show"></i> Lihat </a></td>
+                                                <td>
+                                                   <a href="{{ url('laporan/penjualan-jbkp/periode/' . Crypt::encryptString($per->npwp_badan_usaha)) }}"
+                                                    class="btn btn-primary btn-rounded btn-sm">
+                                                    <i class="bx bx-show"></i> Lihat
+                                                </a>
+
+                                                </td>
+
 
                                                     </tr>
                                                 @endforeach
