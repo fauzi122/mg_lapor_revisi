@@ -219,9 +219,12 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{ url('/laporan/penjualan-jbkp') }}" data-key="t-starter-page">Penjualan
                                 JBKP</a></li>
-                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Penjualan JBT</a></li>
-                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Penjualan JBU</a></li>
-                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Penjualan BBM</a></li>
+                        <li><a href="{{ url('/laporan/penjualan-jbt') }}" data-key="t-maintenance">Penjualan JBT</a>
+                        </li>
+                        <li><a href="{{ url('/laporan/penjualan-jbu') }}" data-key="t-maintenance">Penjualan JBU</a>
+                        </li>
+                        <li><a href="{{ url('/laporan/penjualan-bbm') }}" data-key="t-maintenance">Penjualan BBM</a>
+                        </li>
 
                     </ul>
                 </li>
@@ -243,8 +246,10 @@
                         <span data-key="t-pages">Gas Bumi Melalui Pipa</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="pages-starter.html" data-key="t-starter-page">Penjualan Gas Bumi</a></li>
-                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Pasokan Gas Bumi</a></li>
+                        <li><a href="{{ url('/laporan/penjualan-gas-bumi') }}" data-key="t-starter-page">Penjualan
+                                Gas Bumi</a></li>
+                        <li><a href="{{ url('/laporan/pasokan-gas-bumi') }}" data-key="t-maintenance">Pasokan Gas
+                                Bumi</a></li>
 
                     </ul>
                 </li>
@@ -254,7 +259,8 @@
                         <span data-key="t-pages">Gas Bumi Melalui Pipa</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="pages-starter.html" data-key="t-starter-page">Pengangkutan Gas</a></li>
+                        <li><a href="{{ url('/laporan/pengangkutan-gas') }}" data-key="t-starter-page">Pengangkutan
+                                Gas</a></li>
 
                     </ul>
                 </li>
