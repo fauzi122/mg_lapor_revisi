@@ -45,10 +45,10 @@
                                         class='bx bx-printer'></i> Cetak
                                 </button>
 
-                                <a href="{{ url('/laporan/pengangkutan/mb-lihat-semua-data') }}"
+                                <a href="{{ url('/laporan/penjualan-jbkp-lihat-semua-data') }}"
                                     class="btn btn-info waves-effect waves-light">
                                     <i class='bx bx-file'></i>
-                                    Lihat Semua Data
+                                    Lihat Semua Data..
                                 </a>
 
                                 <div class="modal fade modal-select bs-example-modal-center" tabindex="-1" role="dialog"
