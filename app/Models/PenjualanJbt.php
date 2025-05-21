@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PenjualanJbkp extends Model
+class PenjualanJbt extends Model
 {
     use HasFactory;
     
-    protected $table = 'bph_penjualan_jbkp';
+    protected $table = 'bph_penjualan_jbt';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
