@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!-- APP CSS-->
     <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}"/>
+    <!-- DATATABLE -->
     <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/custom/datatables/datatables.bundle.css') }}" />
-
+    <!-- GLOBAL CSS-->
     <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/global/plugins.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/style.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/flatpickr.css') }}" />
@@ -39,8 +40,9 @@
                             <i class="ki-outline ki-abstract-14 fs-2"></i>
                         </div>
                     </div>
-                    <a class="app-sidebar-secondary-collapse-d-none" href="#">
-                        <img alt="Logo" src="{{ asset('assets/images/logo-esdm.png') }}" class="h-30px"/> <span class="fw-bold text-dark"> | Pelaporan Migas</span>
+                    <a class="app-sidebar-secondary-collapse-d-none" href="{{ route('dashboard') }}">
+                        <img alt="Logo" src="{{ asset('assets/images/logo-esdm.png') }}" class="h-25px"/> 
+                        <span class="badge badge-light-dark"><h5>Pelaporan Migas</h5></span>
                     </a>
                     <button id="kt_app_sidebar_secondary_toggle" class="btn btn-sm btn-icon bg-body btn-color-gray-400 btn-active-color-primary d-none d-lg-flex ms-2" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-secondary-collapse">
                         <i class="ki-outline ki-menu fs-1"></i>

@@ -80,7 +80,8 @@ class PenyMinyakbumiController extends Controller
             'izin_id' => $pecah[2]
         ])->orderBy('status', 'desc')->get();
 
-        return view('badan_usaha.penyimpanan.minyak_bumi.show', compact(
+        // return view('badan_usaha.penyimpanan.minyak_bumi.show', compact(
+        return view('badanUsaha.penyimpanan.minyak_bumi.show', compact(
             'pmb',
             'pggb',
             'bulan_ambilx',

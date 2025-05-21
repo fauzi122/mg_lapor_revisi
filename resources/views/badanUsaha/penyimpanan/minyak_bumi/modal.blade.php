@@ -14,7 +14,7 @@
                 <input type="hidden" name="izin_id" value="{{ $pecah[0] }}">
 
                 <div class="modal-body">
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Bulan </label>
                         <input class="form-control" type="month" id="bulanx" name="bulan" required>
                         @error('bulan')
@@ -23,7 +23,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">No Tangki</label>
                         <input class="form-control" type="text" id="" name="no_tangki" value="{{ old('no_tangki') }}" required>
                         @error('no_tangki')
@@ -32,7 +32,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Kapasitas Tangki</label>
                         <input class="form-control" type="number" step="0.01" id="" name="kapasitas_tangki" value="{{ old('kapasitas_tangki') }}" required>
                         @error('kapasitas_tangki')
@@ -41,7 +41,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Pengguna</label>
                         <input class="form-control" type="text" id="" name="pengguna" value="{{ old('pengguna') }}" required>
                         @error('pengguna')
@@ -50,7 +50,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Jenis Fasilitas</label>
                         <select class="form-select" name="jenis_fasilitas" id="" required>
                             <option selected disabled>Pilih Jenis Fasilitas</option>
@@ -63,7 +63,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Jenis Komoditas</label>
                         <div class="col-lg-12 d-flex flex-wrap gap-2">
                             <div class="form-check">
@@ -85,7 +85,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Produk</label>
                         <select class="form-select produk name_produk" name="produk" id="name_produk">
                             <option>Pilih Produk</option>
@@ -96,7 +96,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Satuan</label>
                         <select class="form-select produk satuan" name="satuan" id="satuan_penjualan">
                             <option>Pilih Satuan</option>
@@ -107,7 +107,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Provinsi</label>
                         <select class="form-select provinsi name_provinsi" name="provinsi" id="name_provinsi">
                             <option>Pilih Provinsi</option>
@@ -118,7 +118,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Kabupaten Kota</label>
                         <select class="form-select nama_kota" name="kab_kota" id="nama_kota">
                             <option>Pilih Kab / Kota</option>
@@ -129,7 +129,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Kategori Supplai</label>
                         <select class="form-select" name="kategori_supplai" id="">
                             <option selected disabled>Pilih Kategori Supplai</option>
@@ -142,7 +142,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Volume Stok Awal</label>
                         <input class="form-control" type="number" step="0.01" id=""
                             name="volume_stok_awal" value="{{ old('volume_stok_awal') }}" required>
@@ -152,7 +152,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Volume Supply</label>
                         <input class="form-control" type="number" step="0.01" id=""
                             name="volume_supply" value="{{ old('volume_supply') }}" required>
@@ -162,7 +162,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Volume Output</label>
                         <input class="form-control" type="number" step="0.01" id=""
                             name="volume_output" value="{{ old('volume_output') }}" required>
@@ -172,7 +172,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Volume Stok Akhir</label>
                         <input class="form-control" type="number" step="0.01" id="volume_stok_akhir"
                             name="volume_stok_akhir" value="{{ old('volume_stok_akhir') }}" required>
@@ -182,7 +182,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Kapasitas Penyewaan</label>
                         <input class="form-control" type="number" step="0.01" id="kapasitas_penyewaan"
                             name="kapasitas_penyewaan" value="{{ old('kapasitas_penyewaan') }}" required>
@@ -192,7 +192,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Dokumen Kontrak Sewa</label>
                         <input class="form-control" type="file" name="kontrak_sewa"
                             value="{{ old('kontrak_sewa') }}" required>
@@ -202,9 +202,8 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Utilisasi Tangki <font color="red">(%)
-                            </font></label>
+                    <div class="mb-6">
+                        <label class="form-label">Utilisasi Tangki <span class="text-danger">(%)</span></label>
                         <input class="form-control" type="number" name="utilisasi_tangki"
                             value="{{ old('utilisasi_tangki') }}" id="utilisasi_tangki" min="0"
                             max="100" required readonly>
@@ -214,10 +213,10 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Jangka Waktu Penggunaan</label>
-                        <div class="ps-3 mt-2">
-                            <div>
+                        <div class="row">
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">Tanggal Awal</label>
                                 <input class="form-control" type="date" name="tanggal_awal"
                                     value="{{ old('tanggal_awal') }}">
@@ -227,7 +226,7 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div>
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">Tanggal Berakhir</label>
                                 <input class="form-control" type="date" value="{{ old('tanggal_akhir') }}"
                                     name="tanggal_akhir">
@@ -239,7 +238,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Tarif Penyimpanan</label>
                         <input class="form-control" type="number" step="0.01" id=""
                             name="tarif_penyimpanan" value="{{ old('tarif_penyimpanan') }}" required>
@@ -249,7 +248,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Satuan Tarif</label>
                         <select class="form-select" name="satuan_tarif" id="">
                             <option selected disabled>Pilih Satuan Tarif</option>
@@ -262,7 +261,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">keterangan</label>
                         <input class="form-control" type="text" id="" name="keterangan"
                             value="{{ old('keterangan') }}" required>
@@ -272,7 +271,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label class="form-label">Commingle</label>
                         <select class="form-select" name="commingle" id="commingle" required>
                             <option selected disabled>Pilih Commingle</option>
@@ -285,7 +284,7 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-6">
                         @error('jumlah_bu')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -306,7 +305,6 @@
         </div>
     </div>
 </div>
-<!-- /.modal -->
 
 <!-- edit simpan_Penyimpanan Minyak Bumi -->
 <div id="edit-pmb" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
@@ -976,43 +974,52 @@
 
 
 <!-- import simpan_pmb -->
-<div id="excelpmb" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-    data-bs-scroll="true">
+<div class="modal fade" tabindex="-1" id="excelpmb">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Penyimpanan Minyak Bumi.</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white">Import Penyimpanan Minyak Bumi..</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-2x"><span class="path1"></span><span class="path2"></span></i>
+                </div>
             </div>
-            <form method="post" action="{{ url('/import_pmb') }}" class="form-material m-t-40"
-                enctype="multipart/form-data">
+            <form method="post" action="{{ url('/import_pmb') }}" class="form-material m-t-40" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="izin_id" value="{{ $pecah[0] }}">
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <input class="form-control" type="hidden" name="izin_id"
-                            value="{{ $pecah[0] }}">
-                        <input class="form-control" type="month" name="bulan" id="bulan_import">
-                        <br>
-                        <input type="file" name="file" required="required">
-
-                        @error('badan_usaha_id')
+                    <div class="mb-6">
+                        <label class="form-label">Bulan </label>
+                        <input class="form-control" type="month" name="bulan" id="bulan_import" required>
+                        @error('bulan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
-
-
+                    <div class="mb-6">
+                        <label class="form-label">File Excel </label>
+                        <input class="form-control" type="file" name="file" required="required">
+                        @error('file')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <a href="{{ url('/storage') }}/template/penyimpananMinyakBumi.xlsx" id="tombol"
-                        class="btn btn-success waves-effect waves-light">Download Template</a>
-                    <button type="button" class="btn btn-secondary waves-effect"
-                        data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
-                </div>
-
+                <div class="modal-footer text-start">
+                    <div class="row w-100">
+                        <div class="col-6">
+                            <a href="{{ url('/storage') }}/template/penyimpananMinyakBumi.xlsx" class="btn btn-success">Download Template</a>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-end">
+                                <button type="button" class="btn btn-outline btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
             </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>

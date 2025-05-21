@@ -10,7 +10,7 @@
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
                     <li class="breadcrumb-item text-muted">
-                        <a href="#" class="text-muted text-hover-primary">Home</a>
+                        <a href="{{ route('dashboard') }}" class="text-muted text-hover-primary">Dashboard</a>
                     </li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
@@ -41,102 +41,114 @@
             </div>
             <div class="col-12">
                 <div class="card mb-5 mb-xl-8 shadow">
-                    <div class="card-header p-5">
+                    <div class="card-header bg-light p-5">
                         <div class="row w-100">
                             <div class="col-12">
                                 <div class="d-flex justify-content-end gap-2">
-                                    <a type="button" class="btn btn-sm btn-primary" onclick="produk(); provinsi(); kab_kota();"
-                                        data-bs-toggle="modal" data-bs-target="#myModal">
-                                        Buat Laporan
+                                    <a type="button" class="btn btn-sm btn-primary" onclick="produk(); provinsi(); kab_kota();" data-bs-toggle="modal" data-bs-target="#myModal">
+                                        <i class="fas fa-plus"></i> Buat Laporan
                                     </a>
-                                    <a type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#excelpmb">Import Excel</a>
+                                    <a type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#excelpmb">
+                                        <i class="fas fa-upload"></i> Import Excel
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body py-3">
-                        <table class="table table-bordered table-striped table-hover dt-responsive w-100 tableWithExport">
-                            <thead class="table-secondary">
-                                <tr class="fw-bold">
-                                    <th class="text-center">No</th>
-                                    <th>Bulan</th>
-                                    <th>Tahun</th>
-                                    <th>Status</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($pm as $data)
-                                    @php
-                                        $id = Crypt::encryptString(
-                                            $data->bulan . ',' . $data->badan_usaha_id . ',' . $data->izin_id,
-                                        );
-                                    @endphp
-                                    <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td class="fw-bold">
-                                            <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}">
-                                                {{ getBulan($data->bulan) }}
-                                                <i class="ki-solid ki-check" title="lihat data laporan"></i>
-                                            </a>
-                                        </td>
-                                        <td class="fw-bold">
-                                            <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}/tahun">
-                                                {{ getTahun($data->bulan) }}
-                                                <i class="ki-solid ki-check" title="lihat data laporan"></i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            @if ($data->status_tertinggi == 1 && $data->catatanx)
-                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
-                                            @elseif ($data->status_tertinggi == 1)
-                                                <span class="badge badge-success">Diterima</span>
-                                            @elseif ($data->status_tertinggi == 2)
-                                                <span class="badge badge-danger">Revisi</span>
-                                            @elseif ($data->status_tertinggi == 0)
-                                                <span class="badge badge-info">draf</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            @if ($data->status_tertinggi == 1)
-                                                <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="hapusData($(this).closest('form'))" disabled>
-                                                        <i class="ki-solid ki-trash" title="Hapus data"></i>
-                                                    </button>
-                                                </form>
-                                                <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $data->bulan }}">
-                                                    @method('PUT')
-                                                    @csrf
-                                                    <button type="button" class="btn btn-icon btn-sm btn-success" onclick="kirimData($(this).closest('form'))" disabled>
-                                                        <i class="ki-solid ki-send" title="Kirim data"></i>
-                                                    </button>
-                                                </form>
-                                            @else
-                                                <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="hapusData($(this).closest('form'))">
-                                                        <i class="ki-solid ki-trash" title="Hapus data"></i>
-                                                    </button>
-                                                </form>
-                                                <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $data->bulan }}">
-                                                    @method('PUT')
-                                                    @csrf
-                                                    <button type="button" class="btn btn-icon btn-sm btn-success" onclick="kirimData($(this).closest('form'))">
-                                                        <i class="ki-solid ki-send" title="Revisi"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}" class="btn btn-icon btn-sm btn-info">
-                                                    <i class="ki-solid ki-pencil" title="Kirim data"></i>
-                                                </a>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="card-body p-3">
+                        <div class="card">
+                            <div class="card-header align-items-center px-2">
+                                <div class="card-toolbar"></div>
+                                <div class="card-title flex-row-fluid justify-content-end gap-5">
+                                    <input type="hidden" class="export-title" value="Laporan Penyimpanan Minyak Bumi" />
+                                </div>
+                            </div>
+                            <div class="card-body p-2">
+                                <table class="kt-datatable table table-bordered table-hover">
+                                    <thead class="bg-light">
+                                        <tr class="fw-bold text-uppercase">
+                                            <th class="text-center">No</th>
+                                            <th>Bulan</th>
+                                            <th>Tahun</th>
+                                            <th>Status</th>
+                                            <th class="text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-semibold text-gray-600">
+                                        @foreach ($pm as $data)
+                                            @php
+                                                $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id . ',' . $data->izin_id);
+                                            @endphp
+                                            <tr>
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td>
+                                                    <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}">
+                                                        {{ getBulan($data->bulan) }}
+                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}/tahun">
+                                                        {{ getTahun($data->bulan) }}
+                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    @if ($data->status_tertinggi == 1 && $data->catatanx)
+                                                        <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                    @elseif ($data->status_tertinggi == 1)
+                                                        <span class="badge badge-success">Diterima</span>
+                                                    @elseif ($data->status_tertinggi == 2)
+                                                        <span class="badge badge-danger">Revisi</span>
+                                                    @elseif ($data->status_tertinggi == 0)
+                                                        <span class="badge badge-info">Draf</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    @if ($data->status_tertinggi == 1)
+                                                        <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="hapusData($(this).closest('form'))" disabled>
+                                                                <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $data->bulan }}">
+                                                            @method('PUT')
+                                                            @csrf
+                                                            <button type="button" class="btn btn-icon btn-sm btn-success" onclick="kirimData($(this).closest('form'))" disabled>
+                                                                <i class="ki-solid ki-send" title="Kirim data"></i>
+                                                            </button>
+                                                        </form>
+                                                        <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}" class="btn btn-icon btn-sm btn-info">
+                                                            <i class="ki-solid ki-pencil" title="Kirim data"></i>
+                                                        </a>
+                                                    @else
+                                                        <form action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <button type="button" class="btn btn-icon btn-sm btn-danger" onclick="hapusData($(this).closest('form'))">
+                                                                <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ url('/submit_bulan_pmb') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $data->bulan }}">
+                                                            @method('PUT')
+                                                            @csrf
+                                                            <button type="button" class="btn btn-icon btn-sm btn-success" onclick="kirimData($(this).closest('form'))">
+                                                                <i class="ki-solid ki-send" title="Revisi"></i>
+                                                            </button>
+                                                        </form>
+                                                        <a href="{{ url('/penyimpanan-minyak-bumi/show') }}/{{ $id }}" class="btn btn-icon btn-sm btn-info">
+                                                            <i class="ki-solid ki-pencil" title="Kirim data"></i>
+                                                        </a>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
