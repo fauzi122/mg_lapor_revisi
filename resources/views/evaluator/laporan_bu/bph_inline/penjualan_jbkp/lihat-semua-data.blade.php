@@ -34,7 +34,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h4>Periode {{ $periode }}</h4>
                                     <div>
-                                        <a href="{{ url('laporan/pengangkutan/mb') }}"
+                                        <a href="{{ url()->previous() }}"
                                             class="btn btn-danger waves-effect waves-light">
                                             <i class='bx bx-arrow-back'></i> Kembali
                                         </a>
@@ -68,8 +68,8 @@
                                                                     </option>
                                                                     <option value="all">Semua Perusahaan</option>
                                                                     @foreach ($perusahaan as $p)
-                                                                        <option value="{{ $p->id_perusahaan }}">
-                                                                            {{ $p->NAMA_PERUSAHAAN }}</option>
+                                                                        <option value="{{ $p->id_badan_usaha }}">
+                                                                            {{ $p->nama_badan_usaha }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -100,135 +100,59 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="datatable-buttons"
-                                        class="table table-bordered table-striped dt nowrap w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama Perusahaan</th>
-                                                <th>Nomor Izin</th>
-                                                <th>Tgl Pengajuan Izin</th>
-                                                <th>Tgl Disetujui Izin</th>
-                                                <th>Bulan</th>
-                                                <th>Tahun</th>
-                                                <th>Status</th>
-                                                <th>Catatan</th>
-                                                <th>Produk</th>
-                                                <th>Jenis Moda</th>
-                                                <th>Node Asal</th>
-                                                <th>Provinsi Asal</th>
-                                                <th>Aksi</th>
-                                                <th>Node Tujuan</th>
-                                                <th>Provinsi Tujuan</th>
-                                                <th>Volume Supply</th>
-                                                <th>Satuan Volume Supply</th>
-                                                <th>Volume Angkut</th>
-                                                <th>Satuan Volume Angkut</th>
-                                                <th>Tgl Dibuat Laporan</th>
-                                                <th>Tgl Pengajuan Laporan</th>
+                            <table id="datatable-buttons"
+                                class="table table-bordered table-striped dt nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Badan Usaha</th>
+                                        <th>NPWP Badan Usaha</th>
+                                        <th>Izin Usaha</th>
+                                        <th>Bulan</th>
+                                        <th>Tahun</th>
+                                        <th>Produk</th>
+                                        <th>Provinsi</th>
+                                        <th>Kabupaten/Kota</th>
+                                        <th>Sektor</th>
+                                        <th>Volume</th>
+                                        <th>Satuan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($query as $pgb)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $pgb->nama_badan_usaha }}</td>
+                                            <td>{{ $pgb->npwp_badan_usaha }}</td>
+                                           <td>
+                                                @php
+                                                    $izinList = json_decode($pgb->izin_usaha, true); // jika izin_usaha disimpan dalam bentuk JSON string
+                                                @endphp
 
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($query as $pgb)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $pgb->NAMA_PERUSAHAAN }}</td>
-                                                    <td>{{ $pgb->NOMOR_IZIN }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($pgb->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
+                                                @if (is_array($izinList))
+                                                    <ul style="margin: 0; padding-left: 15px;">
+                                                        @foreach ($izinList as $izin)
+                                                            <li>ID: {{ $izin['id_izin_usaha'] ?? '-' }} - Nomor: {{ $izin['nomor_izin_usaha'] ?? '-' }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                @else
+                                                    <span class="text-muted">Tidak ada data</span>
+                                                @endif
+                                            </td>
 
-                                                    <td>{{ $pgb->TGL_DISETUJUI }}</td>
-                                                    <td>{{ getBulan($pgb->bulan) }}</td>
-                                                    <td>{{ getTahun($pgb->bulan) }}</td>
-                                                    <td>
-                                                        @if ($pgb->status == 1 && $pgb->catatan)
-                                                            <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                        @elseif ($pgb->status == 1)
-                                                            <span class="badge bg-success">Diterima</span>
-                                                        @elseif ($pgb->status == 2)
-                                                            <span class="badge bg-danger">Revisi</span>
-                                                        @elseif ($pgb->status == 3)
-                                                            <span class="badge bg-primary">Selesai</span>
-                                                        @elseif ($pgb->status == 0)
-                                                            <span class="badge bg-info">draf</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $pgb->catatan }}</td>
-                                                    <td>{{ $pgb->produk }}</td>
-                                                    <td>{{ str_replace(['"', '[', ']', '\\'], '', $pgb->jenis_moda) }}</td>
-                                                    <td>{{ $pgb->node_asal }}</td>
-                                                    <td>{{ $pgb->provinsi_asal }}</td>
-                                                    <td>
-                                                        @if ($pgb->status == 1)
-                                                            <button type="button"
-                                                                class="btn btn-info btn-sm rounded-pill btn-update"
-                                                                data-bs-toggle="modal" data-bs-target="#modal-update"
-                                                                title="Revisi data">
-                                                                <i class="bx bxs-edit align-middle"></i>
-                                                            </button>
+                                            <td>{{ getBulan($pgb->bulan) }}</td>
+                                            <td>{{ $pgb->tahun }}</td>
+                                            <td>{{ $pgb->produk }}</td>
+                                            <td>{{ $pgb->provinsi }}</td>
+                                            <td>{{ $pgb->kabupaten_kota }}</td>
+                                            <td>{{ $pgb->sektor }}</td>
+                                            <td>{{ $pgb->volume }}</td>
+                                            <td>{{ $pgb->satuan }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
 
-                                                            @if ($pgb->status == 1 && $pgb->catatan)
-                                                                <button
-                                                                    class="btn btn-primary btn-rounded btn-sm btn-selesai"
-                                                                    data-id="{{ $pgb->id }}"><i class="bx bx-check"
-                                                                        title="Selesai"></i></button>
-                                                            @endif
-
-                                                            <div class="modal fade" id="modal-update"
-                                                                data-bs-backdrop="static" data-bs-keyboard="false"
-                                                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                                <div class="modal-dialog modal-lg">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title"
-                                                                                id="staticBackdropLabel">Update
-                                                                                Status</h5>
-                                                                            <button type="button" class="btn-close"
-                                                                                data-bs-dismiss="modal"
-                                                                                aria-label="Close"></button>
-                                                                        </div>
-                                                                        <form
-                                                                            action="{{ url('/laporan/pengangkutan/mb/update-revision') }}"
-                                                                            method="post" id="updateStatusForm"
-                                                                            enctype="multipart/form-data">
-                                                                            @csrf
-                                                                            <input type="hidden" name="id"
-                                                                                value="{{ \Illuminate\Support\Facades\Crypt::encrypt($pgb->id) }}">
-                                                                            <div class="modal-body">
-                                                                                <label for="catatan">Notes</label>
-                                                                                <textarea name="catatan" id="catatan" cols="5" rows="5" class="form-control"></textarea>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                    class="btn btn-secondary"
-                                                                                    data-bs-dismiss="modal">Close
-                                                                                </button>
-                                                                                <button type="submit"
-                                                                                    class="btn btn-primary">Update
-                                                                                </button>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-
-
-                                                    </td>
-                                                    <td>{{ $pgb->node_tujuan }}</td>
-                                                    <td>{{ $pgb->provinsi_tujuan }}</td>
-                                                    <td>{{ $pgb->volume_supply }}</td>
-                                                    <td>{{ $pgb->satuan_volume_supply }}</td>
-                                                    <td>{{ $pgb->volume_angkut }}</td>
-                                                    <td>{{ $pgb->satuan_volume_angkut }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
-
-                                                </tr>
-                                            @endforeach
-                                            <!-- Add more rows as needed -->
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -239,78 +163,4 @@
     </div>
 @endsection
 
-{{-- @section('script')
-    <script>
-        $(document).ready(function() {
-            $('.btn-selesai-status').on('click', function() {
-                Swal.fire({
-                    title: 'Apakah Anda yakin ingin menyelesaikan periode ini?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, selesaikan!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '{{ url('/laporan/jual-hasil-olahan/selesai-periode-all') }}',
-                            type: 'POST',
-                            data: {
-                                _token: '{{ csrf_token() }}',
-                                b: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}',
-                                p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}'
-                            },
-                            success: function(response) {
-                                Swal.fire('Status diperbarui!', 'Periode telah diselesaikan.', 'success').then(function() {
-                                    location.reload();
-                                });
-                            },
-                            error: function(error) {
-                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui status.', 'error');
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
 
-    <script>
-        document.querySelectorAll('.btn-selesai').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var id = this.getAttribute('data-id');
-                console.log('cek id =', id);
-
-                Swal.fire({
-                    title: 'Apakah Anda yakin ingin menyelesaikan periode ini?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, selesaikan!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '{{ url('/laporan/jual-hasil-olahan/selesai-periode') }}',
-                            type: 'POST',
-                            data: {
-                                _token: '{{ csrf_token() }}',
-                                id: id
-                            },
-                            success: function(response) {
-                                Swal.fire('Status diperbarui!', 'Periode telah diselesaikan.', 'success').then(function() {
-                                    location.reload();
-                                });
-                            },
-                            error: function(error) {
-                                Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui status.', 'error');
-                            }
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-@endsection --}}
