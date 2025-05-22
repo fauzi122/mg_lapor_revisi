@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
 function hari_ini() {
     $hari = date("D");
     switch($hari) {
@@ -61,6 +65,41 @@ function getBulan($date) {
 function getTahun($date) {
     $tahun = date('Y', strtotime($date));
     return $tahun;
+}
+
+function tokenBphApi() {
+    $url = "https://ngembangin.esdm.go.id/inline/hilir/internal/api/dev/pelaporan-migas/login";
+
+    try {
+        
+        $response = Http::withBasicAuth('ditjenmigas', 'P@ssw0rd')->post($url, [
+            'Username' => "ditjenmigas",
+            'Password' => "P@ssw0rd"
+        ]);
+
+        if ($response->successful()) 
+        {
+            $response = $response->json();
+            $token = $response['access_token'];
+            $expiresIn = $response['expires_in'];
+
+            // Simpan token dan waktu kadaluarsa
+            Cache::put('access_token', $token, now()->addSeconds($expiresIn));
+            Cache::put('token_expiry', now()->addSeconds($expiresIn));
+
+            return $token;
+        } 
+        else 
+        {
+            Log::error('Gagal mendapatkan token.', ["message" => $response["error"]]);
+            return;
+        }
+
+    } catch (\Throwable $th) {
+        log::error('Gagal mendapatkan token.', ["message" => $th->getMessage()]);
+        throw new \Exception("Gagal mendapatkan token.");
+    }
+    
 }
 
 // Contoh penggunaan:

@@ -821,7 +821,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/penjualan-jbkp/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/penjualan-jbkp/selesai-periode', 'selesaiPeriode');
         Route::post('/laporan/penjualan-jbkp/cetak-periode', 'cetakperiode');
-
+		Route::get('/laporan/sinkronisasi-data/penjualan-jbkp', 'sinkronisasiData');
 	});
 	//Penjualan JBT
 	Route::controller(EvPenjualanJbt::class)->group(function () {
