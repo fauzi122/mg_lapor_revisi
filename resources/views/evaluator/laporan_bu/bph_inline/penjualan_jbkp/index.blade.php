@@ -37,9 +37,10 @@
                             </div>
 
                             <div class="card-header">
-                                <button type="button" class="btn btn-warning waves-effect waves-light">
+                                <a href="{{ url('/laporan/sinkronisasi-data/penjualan-jbkp') }}"
+                                    class="btn btn-warning waves-effect waves-light">
                                     <i class='bx bx-sync'></i> Sinkronisasi Data
-                                </button>
+                                </a>
                                 <button type="button" class="btn btn-success waves-effect waves-light"
                                     data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i
                                         class='bx bx-printer'></i> Cetak
@@ -48,7 +49,7 @@
                                 <a href="{{ url('/laporan/penjualan-jbkp-lihat-semua-data') }}"
                                     class="btn btn-info waves-effect waves-light">
                                     <i class='bx bx-file'></i>
-                                    Lihat Semua Data..
+                                    Lihat Semua Data
                                 </a>
 
                                 <div class="modal fade modal-select bs-example-modal-center" tabindex="-1" role="dialog"
@@ -62,7 +63,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <form id="cetakForm"
-                                                    action="{{ url('laporan/pengangkutan/mb/cetak-periode') }}"
+                                                    action="{{ url('/laporan/penjualan-jbkp/cetak-periode') }}"
                                                     method="post">
                                                     @csrf
                                                     <div>
@@ -86,14 +87,14 @@
                                                         <div class="mb-3">
                                                             <label for="example-text-input" class="form-label">Tanggal
                                                                 Awal</label>
-                                                            <input class="form-control" name="t_awal" type="date"
+                                                            <input class="form-control" name="t_awal" type="month"
                                                                 id="example-text-input" required>
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label for="example-text-input" class="form-label">Tanggal
                                                                 Akhir</label>
-                                                            <input class="form-control" name="t_akhir" type="date"
+                                                            <input class="form-control" name="t_akhir" type="month"
                                                                 value="Artisanal kale" id="example-text-input" required>
                                                         </div>
                                                         <div class="mb-3">
@@ -134,26 +135,27 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $per->nama_badan_usaha }}</td>
-                                                        
-                                                    <td>
-                                                        @if(is_array($per->izin_list))
-                                                            <ul style="margin: 0; padding-left: 15px;">
-                                                                @foreach($per->izin_list as $izin)
-                                                                    <li>ID: {{ $izin['id_izin_usaha'] }} - Nomor: {{ $izin['nomor_izin_usaha'] }}</li>
-                                                                @endforeach
-                                                            </ul>
-                                                        @else
-                                                            <span class="text-muted">Tidak ada data</span>
-                                                        @endif
-                                                    </td>
 
-                                                <td>
-                                                   <a href="{{ url('laporan/penjualan-jbkp/periode/' . Crypt::encryptString($per->npwp_badan_usaha)) }}"
-                                                    class="btn btn-primary btn-rounded btn-sm">
-                                                    <i class="bx bx-show"></i> Lihat
-                                                </a>
+                                                        <td>
+                                                            @if (is_array($per->izin_list))
+                                                                <ul style="margin: 0; padding-left: 15px;">
+                                                                    @foreach ($per->izin_list as $izin)
+                                                                        <li>ID: {{ $izin['id_izin_usaha'] }} - Nomor:
+                                                                            {{ $izin['nomor_izin_usaha'] }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            @else
+                                                                <span class="text-muted">Tidak ada data</span>
+                                                            @endif
+                                                        </td>
 
-                                                </td>
+                                                        <td>
+                                                            <a href="{{ url('laporan/penjualan-jbkp/periode/' . Crypt::encryptString($per->npwp_badan_usaha)) }}"
+                                                                class="btn btn-primary btn-rounded btn-sm">
+                                                                <i class="bx bx-show"></i> Lihat
+                                                            </a>
+
+                                                        </td>
 
 
                                                     </tr>
