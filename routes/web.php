@@ -17,12 +17,13 @@ use App\Http\Controllers\{
 	IntakeController,
 	ProdukController,
 	DashboardController,
-    JabatanController,
-    PenyMinyakbumiController,
+	JabatanController,
+	PenyMinyakbumiController,
 	PengangkutanmgController,
 	PengolahanController,
 	SubsidilpgController,
-	ProgresPembangunanController
+	ProgresPembangunanController,
+	IzinMigasController
 };
 
 use App\Http\Controllers\Evaluator\{
@@ -50,6 +51,13 @@ use App\Http\Controllers\Evaluator\{
 	EvImporController,
 	DataIzinBuController,
 	DataUserController,
+	EvBphPasokanGasBumi,
+	EvBphPengangkutanGas,
+	EvBphPenjualanGasBumi,
+	EvPenjualanBbm,
+	EvPenjualanJbkp,
+	EvPenjualanJbt,
+	EvPenjualanJbu,
 	SubsidiLpg
 };
 use App\Http\Controllers\user\PermissionController;
@@ -82,7 +90,7 @@ Route::get('/evaluator/login', [AuthEvaluatorController::class, 'index']);
 // Route::post('/evaluator/login/post-login', [AuthEvaluatorController::class, 'postloginEvaluator']);
 Route::post('/evaluator/login/post-login', [AuthEvaluatorController::class, 'postLogin']);
 Route::post('/login/generate-otp', [AuthEvaluatorController::class, 'genOTP']);
-Route::get('/evaluator/login_sso',[AuthEvaluatorController::class,'login_sso']);
+Route::get('/evaluator/login_sso', [AuthEvaluatorController::class, 'login_sso']);
 
 
 // Konten yang hanya dapat diakses oleh pengguna dengan peran "Badan Usaha"
@@ -213,7 +221,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/import_gbp_pasok', 'import_gbp_pasokx');
 	});
 
-	include __DIR__.'/badan_usaha/EksporImpor.php';
+	include __DIR__ . '/badan_usaha/EksporImpor.php';
 
 	// Penyimpanan Gas
 
@@ -327,8 +335,8 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/importPengangkutanGB', 'importPengangkutanGB');
 	});
 
-	
-	include __DIR__.'/badan_usaha/Pengolahan.php';
+
+	include __DIR__ . '/badan_usaha/Pengolahan.php';
 
 	Route::get('/logoutBU', [AuthBuController::class, 'logoutBU']);
 });
@@ -423,7 +431,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/pasokan-hasil-olahan/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasokan-hasil-olahan/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/pasokan-hasil-olahan/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/pasokan-hasil-olahan/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/pasokan-hasil-olahan/cetak-periode', 'cetakperiode');
 	});
 
 	// harga bbm
@@ -441,7 +449,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/harga-bbm/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/harga-bbm/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/harga-bbm/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/harga-bbm/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/harga-bbm/cetak-periode', 'cetakperiode');
 	});
 
 	// harga LPG
@@ -459,7 +467,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/harga-lpg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/harga-lpg/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/harga-lpg/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/harga-lpg/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/harga-lpg/cetak-periode', 'cetakperiode');
 	});
 
 	// Penjualan LNG/CNG/BBG
@@ -477,7 +485,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/jual/lng-cng-bbg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/jual/lng-cng-bbg/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/jual/lng-cng-bbg/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/jual/lng-cng-bbg/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/jual/lng-cng-bbg/cetak-periode', 'cetakperiode');
 	});
 
 	// pasokan LNG/CNG/BBG
@@ -495,7 +503,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/pasok/lng-cng-bbg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasok/lng-cng-bbg/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/pasok/lng-cng-bbg/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/pasok/lng-cng-bbg/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/pasok/lng-cng-bbg/cetak-periode', 'cetakperiode');
 	});
 
 	// jual lpg
@@ -513,8 +521,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/jual/lpg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/jual/lpg/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/jual/lpg/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/jual/lpg/cetak-periode', 'cetakperiode');
-
+		Route::post('/laporan/jual/lpg/cetak-periode', 'cetakperiode');
 	});
 
 	// pasok lpg
@@ -532,7 +539,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/pasok/lpg/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasok/lpg/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/pasok/lpg/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/pasok/lpg/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/pasok/lpg/cetak-periode', 'cetakperiode');
 	});
 
 	//jualgbmp
@@ -550,7 +557,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/jual/gbmp/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/jual/gbmp/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/jual/gbmp/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/jual/gbmp/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/jual/gbmp/cetak-periode', 'cetakperiode');
 	});
 
 	//pasokgbmp
@@ -568,8 +575,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/pasok/gbmp/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasok/gbmp/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/pasok/gbmp/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/pasok/gbmp/cetak-periode', 'cetakperiode');
-
+		Route::post('/laporan/pasok/gbmp/cetak-periode', 'cetakperiode');
 	});
 
 	//produksi minyak bumi
@@ -587,7 +593,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/produksi/mb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/produksi/mb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/produksi/mb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/produksi/mb/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/produksi/mb/cetak-periode', 'cetakperiode');
 	});
 
 	//pasokan minyak bumi
@@ -605,7 +611,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/pasokan/mb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasokan/mb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/pasokan/mb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/pasokan/mb/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/pasokan/mb/cetak-periode', 'cetakperiode');
 	});
 
 	//distribusi minyak bumi
@@ -623,7 +629,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/distribusi/mb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/distribusi/mb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/distribusi/mb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/distribusi/mb/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/distribusi/mb/cetak-periode', 'cetakperiode');
 	});
 
 	//produksi gas bumi
@@ -641,7 +647,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/produksi/gb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/produksi/gb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/produksi/gb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/produksi/gb/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/produksi/gb/cetak-periode', 'cetakperiode');
 	});
 
 	//pasokan gas bumi
@@ -658,7 +664,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/pasokan/gb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pasokan/gb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/pasokan/gb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/pasokan/gb/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/pasokan/gb/cetak-periode', 'cetakperiode');
 	});
 
 	//distribusi gas bumi
@@ -676,7 +682,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/distribusi/gb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/distribusi/gb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/distribusi/gb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/distribusi/gb/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/distribusi/gb/cetak-periode', 'cetakperiode');
 	});
 
 	//export
@@ -694,7 +700,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/expor/exim/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/expor/exim/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/expor/exim/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/expor/exim/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/expor/exim/cetak-periode', 'cetakperiode');
 	});
 
 	//export
@@ -712,8 +718,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/impor/exim/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/impor/exim/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/impor/exim/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/impor/exim/cetak-periode', 'cetakperiode');
-
+		Route::post('/laporan/impor/exim/cetak-periode', 'cetakperiode');
 	});
 
 	//penyimpanan minyak bumi
@@ -727,7 +732,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/penyimpanan/mb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/penyimpanan/mb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/penyimpanan/mb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/penyimpanan/mb/cetak-periode', 'cetakperiode');
+		Route::post('/laporan/penyimpanan/mb/cetak-periode', 'cetakperiode');
 	});
 
 	//penyimpanan gas bumi
@@ -741,8 +746,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/penyimpanan/gb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/penyimpanan/gb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/penyimpanan/gb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/penyimpanan/gb/cetak-periode', 'cetakperiode');
-
+		Route::post('/laporan/penyimpanan/gb/cetak-periode', 'cetakperiode');
 	});
 
 	//pengangkutan minyak bumi
@@ -756,37 +760,36 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/pengangkutan/mb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pengangkutan/mb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/pengangkutan/mb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/pengangkutan/mb/cetak-periode', 'cetakperiode');
-
+		Route::post('/laporan/pengangkutan/mb/cetak-periode', 'cetakperiode');
 	});
 
-	
-    // Permissions route group
-    Route::controller(PermissionController::class)->group(function () {
-        Route::get('/permission', 'index')->name('permission.index');
-        Route::get('/permission/json', 'jsonpermission')->name('permission.json');
-        Route::get('/permission/create', 'create')->name('permission.create');
-        Route::post('/permission', 'store')->name('permission.store');
-    });
 
-    // Role access management route group
-    Route::controller(RoleController::class)->group(function () {
-        Route::get('/role', 'index')->name('role.index');
-        Route::get('/role/create', 'create')->name('role.create');
-        Route::post('/role', 'store')->name('role.store');
-        Route::get('/role/edit/{role}', 'edit')->name('role.edit');
-        Route::patch('/role/update/{role}', 'update')->name('role.update');
-    });
+	// Permissions route group
+	Route::controller(PermissionController::class)->group(function () {
+		Route::get('/permission', 'index')->name('permission.index');
+		Route::get('/permission/json', 'jsonpermission')->name('permission.json');
+		Route::get('/permission/create', 'create')->name('permission.create');
+		Route::post('/permission', 'store')->name('permission.store');
+	});
 
-    Route::controller(UserController::class)->group(function () {
-        Route::get('/user', 'index')->name('user.index');
-        Route::get('/user-badan-usaha', 'index_bu')->name('user.index_bu');
-        Route::get('/user-admin', 'create')->name('user.create');
+	// Role access management route group
+	Route::controller(RoleController::class)->group(function () {
+		Route::get('/role', 'index')->name('role.index');
+		Route::get('/role/create', 'create')->name('role.create');
+		Route::post('/role', 'store')->name('role.store');
+		Route::get('/role/edit/{role}', 'edit')->name('role.edit');
+		Route::patch('/role/update/{role}', 'update')->name('role.update');
+	});
+
+	Route::controller(UserController::class)->group(function () {
+		Route::get('/user', 'index')->name('user.index');
+		Route::get('/user-badan-usaha', 'index_bu')->name('user.index_bu');
+		Route::get('/user-admin', 'create')->name('user.create');
 		Route::post('/user-admin-store', 'store')->name('user.store');
-        Route::get('/user/edit/admin/{user}', 'edit')->name('user.edit');
-        Route::put('/user/update/admin', 'update');
-        Route::delete('/hapus-user/admin/{id}', 'destroy');
-    });
+		Route::get('/user/edit/admin/{user}', 'edit')->name('user.edit');
+		Route::put('/user/update/admin', 'update');
+		Route::delete('/hapus-user/admin/{id}', 'destroy');
+	});
 	//pengangkutan Gas bumi
 	Route::controller(EvPengangkutanGasBumiController::class)->group(function () {
 		Route::get('/laporan/pengangkutan/gb', 'index');
@@ -798,9 +801,105 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/pengangkutan/gb/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/pengangkutan/gb/selesai-periode-all', 'selesaiPeriodeAll');
 		Route::post('/laporan/pengangkutan/gb/selesai-periode', 'selesaiPeriode');
-        Route::post('/laporan/pengangkutan/gb/cetak-periode', 'cetakperiode');
-
+		Route::post('/laporan/pengangkutan/gb/cetak-periode', 'cetakperiode');
 	});
 
+	//Penjualan JBKP
+	Route::controller(EvPenjualanJbkp::class)->group(function () {
+		Route::get('/laporan/penjualan-jbkp', 'index');
+		Route::get('/laporan/penjualan-jbkp/{kode}', 'show');
+		Route::get('/laporan/penjualan-jbkp-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/penjualan-jbkp-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-jbkp/periode/{kode}', 'periode');
+		Route::post('/laporan/penjualan-jbkp/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/penjualan-jbkp/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/penjualan-jbkp/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/penjualan-jbkp/selesai-periode', 'selesaiPeriode');
+		Route::post('/laporan/penjualan-jbkp/cetak-periode', 'cetakperiode');
+	});
+	//Penjualan JBT
+	Route::controller(EvPenjualanJbt::class)->group(function () {
+		Route::get('/laporan/penjualan-jbt', 'index');
+		Route::get('/laporan/penjualan-jbt/{kode}', 'show');
+		Route::get('/laporan/penjualan-jbt-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/penjualan-jbt-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-jbt/periode/{kode}', 'periode');
+		Route::post('/laporan/penjualan-jbt/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/penjualan-jbt/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/penjualan-jbt/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/penjualan-jbt/selesai-periode', 'selesaiPeriode');
+		Route::post('/laporan/penjualan-jbt/cetak-periode', 'cetakperiode');
+	});
+	//Penjualan JBu
+	Route::controller(EvPenjualanJbu::class)->group(function () {
+		Route::get('/laporan/penjualan-jbu', 'index');
+		Route::get('/laporan/penjualan-jbu/{kode}', 'show');
+		Route::get('/laporan/penjualan-jbu-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/penjualan-jbu-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-jbu/periode/{kode}', 'periode');
+		Route::post('/laporan/penjualan-jbu/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/penjualan-jbu/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/penjualan-jbu/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/penjualan-jbu/selesai-periode', 'selesaiPeriode');
+		Route::post('/laporan/penjualan-jbu/cetak-periode', 'cetakperiode');
+	});
+	//Penjualan BBM
+	Route::controller(EvPenjualanBbm::class)->group(function () {
+		Route::get('/laporan/penjualan-bbm', 'index');
+		Route::get('/laporan/penjualan-bbm/{kode}', 'show');
+		Route::get('/laporan/penjualan-bbm-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/penjualan-bbm-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-bbm/periode/{kode}', 'periode');
+		Route::post('/laporan/penjualan-bbm/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/penjualan-bbm/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/penjualan-bbm/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/penjualan-bbm/selesai-periode', 'selesaiPeriode');
+		Route::post('/laporan/penjualan-bbm/cetak-periode', 'cetakperiode');
+	});
+	//Penjualan Gas Bumi
+	Route::controller(EvBphPenjualanGasBumi::class)->group(function () {
+		Route::get('/laporan/penjualan-gas-bumi', 'index');
+		Route::get('/laporan/penjualan-gas-bumi/{kode}', 'show');
+		Route::get('/laporan/penjualan-gas-bumi-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/penjualan-gas-bumi-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-gas-bumi/periode/{kode}', 'periode');
+		Route::post('/laporan/penjualan-gas-bumi/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/penjualan-gas-bumi/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/penjualan-gas-bumi/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/penjualan-gas-bumi/selesai-periode', 'selesaiPeriode');
+		Route::post('/laporan/penjualan-gas-bumi/cetak-periode', 'cetakperiode');
+	});
+	//Pasokan Gas Bumi
+	Route::controller(EvBphPasokanGasBumi::class)->group(function () {
+		Route::get('/laporan/pasokan-gas-bumi', 'index');
+		Route::get('/laporan/pasokan-gas-bumi/{kode}', 'show');
+		Route::get('/laporan/pasokan-gas-bumi-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/pasokan-gas-bumi-lihat-semua-data', 'filterData');
+		Route::get('/laporan/pasokan-gas-bumi/periode/{kode}', 'periode');
+		Route::post('/laporan/pasokan-gas-bumi/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/pasokan-gas-bumi/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/pasokan-gas-bumi/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/pasokan-gas-bumi/selesai-periode', 'selesaiPeriode');
+		Route::post('/laporan/pasokan-gas-bumi/cetak-periode', 'cetakperiode');
+	});
+	//Pengangkutan Gas
+	Route::controller(EvBphPengangkutanGas::class)->group(function () {
+		Route::get('/laporan/pengangkutan-gas', 'index');
+		Route::get('/laporan/pengangkutan-gas/{kode}', 'show');
+		Route::get('/laporan/pengangkutan-gas-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/pengangkutan-gas-lihat-semua-data', 'filterData');
+		Route::get('/laporan/pengangkutan-gas/periode/{kode}', 'periode');
+		Route::post('/laporan/pengangkutan-gas/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/pengangkutan-gas/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/pengangkutan-gas/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/pengangkutan-gas/selesai-periode', 'selesaiPeriode');
+		Route::post('/laporan/pengangkutan-gas/cetak-periode', 'cetakperiode');
+	});
+
+
+
 	Route::get('/logout', [AuthEvaluatorController::class, 'logout']);
+});
+Route::controller(IzinMigasController::class)->group(function () {
+	Route::get('/izin-migas/simpan', 'store');
 });
