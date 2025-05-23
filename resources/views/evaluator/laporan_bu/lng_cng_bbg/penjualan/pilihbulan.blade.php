@@ -24,7 +24,7 @@
                         <div class="card-header">
 
                             <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
-                            <h6>Nomor izin yang dilaporkan <b>{{ $query->first()->NOMOR_IZIN }}</b></h6>
+
                         </div>
 
                     </div>

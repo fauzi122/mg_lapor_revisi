@@ -136,13 +136,7 @@
                                                         </td>
 
                                                         <td>{{ $per->TGL_DISETUJUI }}</td>
-                                                        @php
-
-                                                            $kode = Crypt::encryptString(
-                                                                $per->id_perusahaan . ',' . $per->izin_id,
-                                                            );
-                                                        @endphp
-                                                        <td><a href="{{ url('laporan/penyimpanan/mb/periode') }}/{{ $kode }}"
+                                                        <td><a href="{{ url('laporan/penyimpanan/mb/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"
                                                                 class="btn btn-primary btn-rounded btn-sm"><i
                                                                     class="bx bx-show"></i> Lihat </a></td>
 

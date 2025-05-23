@@ -72,8 +72,13 @@
                                                                 <option value="">--Pilih Perusahaan--</option>
                                                                 <option value="all"> Semua Perusahaan </option>
                                                                 <!-- Tambahkan opsi untuk semua perusahaan -->
+<<<<<<< HEAD
+                                                                @foreach ($perusahaan as $p)
+                                                                    <option value="{{ $p->ID_PERUSAHAAN }}">
+=======
                                                                 @foreach ($perusahaan_only_bu as $p)
                                                                     <option value="{{ $p->id_perusahaan }}">
+>>>>>>> d43ccfe08769a64150ae4e38d16622e2800fca27
                                                                         {{ $p->NAMA_PERUSAHAAN }}</option>
                                                                 @endforeach
                                                             </select>
@@ -133,13 +138,7 @@
                                                         </td>
 
                                                         <td>{{ $per->TGL_DISETUJUI }}</td>
-                                                        @php
-
-                                                            $kode = Crypt::encryptString(
-                                                                $per->id_perusahaan . ',' . $per->izin_id,
-                                                            );
-                                                        @endphp
-                                                        <td><a href="{{ url('laporan/pasok/gbmp/periode') }}/{{ $kode }}"
+                                                        <td><a href="{{ url('laporan/pasok/gbmp/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->ID_PERUSAHAAN) }}"
                                                                 class="btn btn-primary btn-rounded btn-sm"><i
                                                                     class="bx bx-show"></i> Lihat </a></td>
 
