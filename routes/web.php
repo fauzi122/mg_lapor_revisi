@@ -22,7 +22,8 @@ use App\Http\Controllers\{
 	PengangkutanmgController,
 	PengolahanController,
 	SubsidilpgController,
-	ProgresPembangunanController
+	ProgresPembangunanController,
+	IzinMigasController
 };
 
 use App\Http\Controllers\Evaluator\{
@@ -911,4 +912,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 
 
 	Route::get('/logout', [AuthEvaluatorController::class, 'logout']);
+});
+Route::controller(IzinMigasController::class)->group(function () {
+	Route::get('/izin-migas/simpan', 'store');
 });
