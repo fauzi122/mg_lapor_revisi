@@ -1,0 +1,11 @@
+.modal-body {
+    max-height: 63vh;
+    overflow-y: auto;
+}
+mark.highlight {
+    background-color: yellow;
+    padding: 0 2px;
+}
+mark.current-match {
+    background-color: orange;
+}

@@ -5,7 +5,7 @@
     <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
         <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
             <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
-                <h1 class="page-heading d-flex flex-column justify-content-center text-dark fw-bold fs-3 m-0">Dashboard</h1>
+                <h3 class="text-dark fw-bold">Dashboard</h3>
             </div>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
@@ -81,7 +81,7 @@
                     <div class="card-body p-3">
                         <div class="card">
                             <div class="card-header align-items-center px-2">
-                                <div class="card-toolbar"></div>
+                                <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                 <div class="card-title flex-row-fluid justify-content-end gap-5">
                                     <input type="hidden" class="export-title" value="Data Perizinan" />
                                 </div>

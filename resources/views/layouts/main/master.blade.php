@@ -16,13 +16,8 @@
     <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/global/plugins.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/style.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/flatpickr.css') }}" />
-
-    <style>
-        .modal-body {
-            max-height: 63vh;
-            overflow-y: auto;
-        }
-    </style>
+    <!-- CUSTOM CSS-->
+    <link rel="stylesheet" href="{{ asset('assetsMetronic/css/custom.css') }}" />
 </head>
 
 <body id="kt_app_body" 
@@ -30,6 +25,8 @@
     data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" 
     data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" 
     data-kt-app-sidebar-stacked="true" data-kt-app-sidebar-secondary-enabled="true" class="app-default">
+
+    @include('sweetalert::alertMetronic')
 
     <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
         <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
@@ -60,7 +57,7 @@
                                 <form data-kt-search-element="form" class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
                                     <input type="hidden" />
                                     <i class="ki-outline ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
-                                    <input type="text" class="search-input form-control form-control-solid ps-13" name="search" value="" placeholder="Search..." data-kt-search-element="input" />
+                                    <input type="text" class="search-input form-control form-control-solid ps-13" name="search" value="" placeholder="Search..." data-kt-search-element="input" id="searchInput"/>
                                     <span class="search-spinner position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-5" data-kt-search-element="spinner">
                                         <span class="spinner-border h-15px w-15px align-middle text-gray-400"></span>
                                     </span>
@@ -70,7 +67,7 @@
                                 </form>
                             </div>
                         </div>
-
+                        
                         <div class="app-navbar flex-shrink-0">
                             <div class="app-navbar-item ms-1 ms-md-3">
                                 <div class="app-navbar-item ms-1 ms-md-3 position-relative" id="calendar_wrapper">
@@ -199,6 +196,19 @@
     <!-- Datatable-->
     <script src="{{ asset('assetsMetronic/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('assetsMetronic/js/custom/initdatatable.js') }}"></script>
+    
+    <!-- searchInput-->
+    <script src="{{ asset('assetsMetronic/js/custom/searchInput.js') }}"></script>
+    
+    <!-- JS For Page -->
+    <script src="{{ asset('assets/js/modal.js') }}"></script>
+    <script src="{{ asset('assets/js/modal_lpg.js') }}"></script>
+    <script src="{{ asset('assets/js/modal_gbp.js') }}"></script>
+    <script src="{{ asset('assets/js/modal_ei.js') }}"></script>
+    <script src="{{ asset('assets/js/modal_pengolahan.js') }}"></script>
+    <script src="{{ asset('assets/js/modal_penyimpanan_gas_minyak.js') }}"></script>
+    <script src="{{ asset('assets/js/modal_pengangkutan_minyak_gas.js') }}"></script>
+    <script src="{{ asset('assets/js/modal_subsidi.js') }}"></script>
 </body>
 
 </html>
