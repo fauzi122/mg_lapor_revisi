@@ -85,7 +85,8 @@ class PengolahanController extends Controller
       ->groupBy('bulan')
       ->get();
 
-    return view('badan_usaha.pengolahan.minyak_bumi.index', compact(
+    // return view('badan_usaha.pengolahan.minyak_bumi.index', compact(
+    return view('badanUsaha.pengolahan.minyak_bumi.index', compact(
       'pengolahanProduksiMB',
       'pengolahanPasokanMB',
       'pengolahanDistribusiMB',
