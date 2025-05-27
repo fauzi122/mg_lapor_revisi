@@ -39,7 +39,7 @@
             border-radius: 0 0 0.5rem 0.5rem; /* bottom corners only */
             padding: 1rem;
             background-color: #e9f2ff;
-            z-index: 0;
+            /* z-index: 0; */
             position: relative;
         }
     </style>
