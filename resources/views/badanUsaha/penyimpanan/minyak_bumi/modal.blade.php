@@ -749,7 +749,7 @@
                     </div>
                     <div class="mb-6">
                         <label class="form-label">File Excel </label>
-                        <input class="form-control" type="file" name="file" required="required">
+                        <input class="form-control" type="file" name="file" accept=".xlsx" required>
                         @error('file')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>

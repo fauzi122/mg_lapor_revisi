@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/global/plugins.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/style.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/flatpickr.css') }}" />
+    <!-- CHOICES CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" />
     <!-- CUSTOM CSS-->
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/custom.css') }}" />
 </head>
@@ -196,6 +198,9 @@
     <!-- Datatable-->
     <script src="{{ asset('assetsMetronic/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('assetsMetronic/js/custom/initdatatable.js') }}"></script>
+    
+    <!-- choices js -->
+    <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
     
     <!-- searchInput-->
     <script src="{{ asset('assetsMetronic/js/custom/searchInput.js') }}"></script>
