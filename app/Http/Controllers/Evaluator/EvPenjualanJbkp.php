@@ -43,7 +43,7 @@ class EvPenjualanJbkp extends Controller
 
         if ($p) {
             // Ambil dan group berdasarkan bulan-tahun
-            $query = PenjualanJbkp::select('bulan', 'tahun', DB::raw('MIN(id) as id')) 
+            $query = PenjualanJbkp::select('nama_badan_usaha','bulan', 'tahun', 'npwp_badan_usaha',DB::raw('MIN(id) as id')) 
                 ->where('npwp_badan_usaha', $p)
                 ->groupBy('tahun', 'bulan')
                 ->orderBy('tahun', 'desc')
@@ -64,8 +64,14 @@ class EvPenjualanJbkp extends Controller
 
     public function show($kode = '')
     {
-        $pecah = explode(',', Crypt::decryptString($kode));
-        $query = PenjualanJbkp::get();
+        $pecah = explode(",", Crypt::decryptString($kode));
+
+        $query = PenjualanJbkp::where([
+                        ['npwp_badan_usaha', $pecah[0]],
+                        ['tahun', $pecah[1]],
+                        ['bulan', $pecah[2]],
+                    ])->get();
+                    
         $data = [
             'title'=>'Laporan Penjualan JBKP',
             'query'=>$query,
@@ -82,8 +88,9 @@ class EvPenjualanJbkp extends Controller
 
         $token = Cache::get('access_token');
         $items = collect();
-        $tahun = Carbon::now()->format('Y');
-        $bulan = (int) Carbon::now()->format('m');
+        $tgl = Carbon::now();
+        $bulan = $tgl->month; // hasilnya 1–12
+        $tahun = $tgl->year;
         $page = 1;
         
         while (true) {
@@ -172,7 +179,7 @@ class EvPenjualanJbkp extends Controller
     
         // Jika yang dipilih adalah 'all', maka tidak ada filter berdasarkan perusahaan
         if ($perusahaan !== 'all') {
-            $query->where('badan_usaha_id', $perusahaan);
+            $query->where('id_badan_usaha', $perusahaan);
         }
     
         $result = $query->get();
@@ -199,7 +206,7 @@ class EvPenjualanJbkp extends Controller
         $tgl = Carbon::now();
         $bulan = $tgl->month; // hasilnya 1–12
         $tahun = $tgl->year;
-
+        
         $query = PenjualanJbkp::where('bulan', $bulan)
                     ->where('tahun', $tahun)
                     ->get();

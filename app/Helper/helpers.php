@@ -27,6 +27,8 @@ function hari_ini() {
 }
 
 function bulan($bulan) {
+    $bulan = str_pad($bulan, 2, '0', STR_PAD_LEFT); // Ubah jadi 2 digit
+    
     $arrayBulan = [
         '01' => 'Januari',
         '02' => 'Februari',
