@@ -813,10 +813,10 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	//Penjualan JBKP
 	Route::controller(EvPenjualanJbkp::class)->group(function () {
 		Route::get('/laporan/penjualan-jbkp', 'index');
+		Route::get('/laporan/penjualan-jbkp/periode/{kode}', 'periode');
 		Route::get('/laporan/penjualan-jbkp/{kode}', 'show');
 		Route::get('/laporan/penjualan-jbkp-lihat-semua-data', 'lihatSemuaData');
 		Route::post('/laporan/penjualan-jbkp-lihat-semua-data', 'filterData');
-		Route::get('/laporan/penjualan-jbkp/periode/{kode}', 'periode');
 		Route::post('/laporan/penjualan-jbkp/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/penjualan-jbkp/update-revision-all', 'updateRevisionNotesAll');
 		Route::post('/laporan/penjualan-jbkp/selesai-periode-all', 'selesaiPeriodeAll');
