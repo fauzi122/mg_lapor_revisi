@@ -19,16 +19,17 @@
             </div>
 
 
-{{-- tes --}}
+            {{-- tes --}}
             @if ($query)
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    {{-- <h4>{{ $per->nama_badan_usaha }}</h4> --}}
+                                    <h4>{{ $per->nama_badan_usaha }}</h4>
                                     <div>
-                                        <a href="{{ url()->previous() }}" class="btn btn-danger btn-sm btn-rounded">
+                                        <a href="{{ url('/laporan/pasokan-gas-bumi') }}"
+                                            class="btn btn-danger btn-sm btn-rounded">
                                             <i class='bx bx-arrow-back'></i> Kembali
                                         </a>
 
@@ -40,29 +41,39 @@
                                     <div class="tab-pane fade show active" id="penjualan">
                                         <div class="table-responsive">
                                             <table id="datatable-buttons" class="table table-bordered nowrap w-100">
-                                              
+
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Bulan</th>
                                                         <th>Tahun</th>
-                                                        
+
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach ($query as $i => $row)
+                                                        @php
+                                                            $params = Crypt::encryptString(
+                                                                $row->npwp_badan_usaha .
+                                                                    ',' .
+                                                                    $row->tahun .
+                                                                    ',' .
+                                                                    $row->bulan,
+                                                            );
+                                                        @endphp
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>
-                                                                <a href="#" class="text-primary">
+                                                                <a class="text-primary">
                                                                     {{ \Carbon\Carbon::createFromFormat('m', $row->bulan)->translatedFormat('F') }}
                                                                 </a>
                                                             </td>
                                                             <td><span class="text-primary">{{ $row->tahun }}</span></td>
-                                                           
+
                                                             <td>
-                                                                <a href="" class="btn btn-sm btn-primary btn-rounded">
+                                                                <a href="{{ url('/laporan/pasokan-gas-bumi') }}/{{ $params }}"
+                                                                    class="btn btn-sm btn-primary btn-rounded">
                                                                     <i class="bx bx-show"></i> Lihat Detail
                                                                 </a>
                                                             </td>

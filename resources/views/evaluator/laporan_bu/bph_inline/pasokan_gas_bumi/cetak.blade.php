@@ -61,70 +61,36 @@ header('Pragma: no-cache');
             <tr>
                 <th style="border: 1px solid black;">NO</th>
                 <th style="border: 1px solid black;">NAMA PERUSAHAAN</th>
-                <th style="border: 1px solid black;">Nomor Izin </th>
-                <th style="border: 1px solid black;">Tgl Pengajuan Izin</th>
-                <th style="border: 1px solid black;">Tgl Disetujui Izin</th>
+                <th style="border: 1px solid black;">NPWP PERUSAHAAN</th>
+                <th style="border: 1px solid black;">IZIN USAHA</th>
                 <th style="border: 1px solid black;">BULAN</th>
                 <th style="border: 1px solid black;">TAHUN</th>
-                <th style="border: 1px solid black;">PRODUK</th>
-                <th style="border: 1px solid black;">JENIS MODA</th>
-                <th style="border: 1px solid black;">NODE ASAL</th>
-                <th style="border: 1px solid black;">PROVINSI ASAL</th>
-                <th style="border: 1px solid black;">NODE TUJUAN</th>
-                <th style="border: 1px solid black;">PROVINSI TUJUAN</th>
-                <th style="border: 1px solid black;">VOLUME SUPPLY</th>
-                <th style="border: 1px solid black;">SATUAN VOLUME SUPPLY</th>
-                <th style="border: 1px solid black;">VOLUME ANGKUT</th>
-                <th style="border: 1px solid black;">SATUAN VOLUME ANGKUT</th>
-                <th style="border: 1px solid black;">Tgl Dibuat Laporan</th>
-                <th style="border: 1px solid black;">Tgl Pengajuan Laporan</th>
-
-
-                <th style="border: 1px solid black;">STATUS</th>
-                <th style="border: 1px solid black;">CATATAN</th>
+                <th style="border: 1px solid black;">NAMA PEMASOK</th>
+                <th style="border: 1px solid black;">HARGA PASOK</th>
+                <th style="border: 1px solid black;">VOLUME MMBTU</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($result as $pgb)
+            @foreach ($result as $laporan)
                 <tr>
                     <td style="border: 1px solid black;">{{ $loop->iteration }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->NAMA_PERUSAHAAN }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->NOMOR_IZIN }}</td>
-                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
-
-                    <td style="border: 1px solid black;">{{ $pgb->TGL_DISETUJUI }}</td>
-                    <td style="border: 1px solid black;">{{ getBulan($pgb->bulan) }}</td>
-                    <td style="border: 1px solid black;">{{ getTahun($pgb->bulan) }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->produk }}</td>
-                    <td style="border: 1px solid black;">{{ str_replace(['"', '[', ']', '\\'], '', $pgb->jenis_moda) }}
-                    </td>
-                    <td style="border: 1px solid black;">{{ $pgb->node_asal }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->provinsi_asal }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->node_tujuan }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->provinsi_tujuan }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->volume_supply }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->satuan_volume_supply }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->volume_angkut }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->satuan_volume_angkut }}</td>
-
+                    <td style="border: 1px solid black;">{{ $laporan->nama_badan_usaha }}</td>
+                    <td style="border: 1px solid black;">'{{ $laporan->npwp_badan_usaha }}</td>
                     <td style="border: 1px solid black;">
-                        @if ($pgb->status == 1 && $pgb->catatan)
-                            Sudah Diperbaiki
-                        @elseif ($pgb->status == 1)
-                            Kirim
-                        @elseif ($pgb->status == 2)
-                            Revisi
-                        @elseif ($pgb->status == 3)
-                            Selesa
-                        @elseif ($pgb->status == 0)
-                            draf
-                        @endif
-
-
+                        @php
+                            $izin = json_decode($laporan->izin_usaha);
+                        @endphp
+                        <ul>
+                            @foreach ($izin as $item)
+                                <li>ID: {{ $item->id_izin_usaha }} - NOMOR: {{ $item->nomor_izin_usaha }}</li>
+                            @endforeach
+                        </ul>
                     </td>
-                    <td style="border: 1px solid black;">{{ $pgb->catatan }}</td>
-                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->created_at)->format('Y-m-d') }}</td>
-                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('Y-m-d') }}</td>
+                    <td style="border: 1px solid black;">{{ $laporan->bulan }}</td>
+                    <td style="border: 1px solid black;">{{ $laporan->tahun }}</td>
+                    <td style="border: 1px solid black;">{{ $laporan->nama_pemasok }}</td>
+                    <td style="border: 1px solid black;">{{ $laporan->harga_pasok }}</td>
+                    <td style="border: 1px solid black;">{{ $laporan->volume_mmbtu }}</td>
 
                 </tr>
             @endforeach

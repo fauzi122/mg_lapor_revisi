@@ -34,7 +34,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h4>Periode {{ $periode }}</h4>
                                     <div>
-                                        <a href="{{ url()->previous() }}"
+                                        <a href="{{ url('/laporan/penjualan-jbkp') }}"
                                             class="btn btn-danger waves-effect waves-light">
                                             <i class='bx bx-arrow-back'></i> Kembali
                                         </a>
@@ -55,7 +55,7 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="{{ url('laporan/pengangkutan/mb-lihat-semua-data') }}"
+                                                        <form action="{{ url('laporan/penjualan-jbkp-lihat-semua-data') }}"
                                                             method="post">
                                                             @csrf
                                                             <div class="mb-3">
@@ -76,13 +76,13 @@
                                                             <div class="mb-3">
                                                                 <label for="example-text-input" class="form-label">Tanggal
                                                                     Awal</label>
-                                                                <input class="form-control" name="t_awal" type="date"
+                                                                <input class="form-control" name="t_awal" type="month"
                                                                     required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="example-text-input" class="form-label">Tanggal
                                                                     Akhir</label>
-                                                                <input class="form-control" name="t_akhir" type="date"
+                                                                <input class="form-control" name="t_akhir" type="month"
                                                                     required>
                                                             </div>
                                                             <div class="mb-3">
@@ -100,58 +100,59 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                            <table id="datatable-buttons"
-                                class="table table-bordered table-striped dt nowrap w-100">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Badan Usaha</th>
-                                        <th>NPWP Badan Usaha</th>
-                                        <th>Izin Usaha</th>
-                                        <th>Bulan</th>
-                                        <th>Tahun</th>
-                                        <th>Produk</th>
-                                        <th>Provinsi</th>
-                                        <th>Kabupaten/Kota</th>
-                                        <th>Sektor</th>
-                                        <th>Volume</th>
-                                        <th>Satuan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($query as $pgb)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $pgb->nama_badan_usaha }}</td>
-                                            <td>{{ $pgb->npwp_badan_usaha }}</td>
-                                           <td>
-                                                @php
-                                                    $izinList = json_decode($pgb->izin_usaha, true); // jika izin_usaha disimpan dalam bentuk JSON string
-                                                @endphp
+                                    <table id="datatable-buttons"
+                                        class="table table-bordered table-striped dt nowrap w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Badan Usaha</th>
+                                                <th>NPWP Badan Usaha</th>
+                                                <th>Izin Usaha</th>
+                                                <th>Bulan</th>
+                                                <th>Tahun</th>
+                                                <th>Produk</th>
+                                                <th>Provinsi</th>
+                                                <th>Kabupaten/Kota</th>
+                                                <th>Sektor</th>
+                                                <th>Volume</th>
+                                                <th>Satuan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($query as $pgb)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $pgb->nama_badan_usaha }}</td>
+                                                    <td>{{ $pgb->npwp_badan_usaha }}</td>
+                                                    <td>
+                                                        @php
+                                                            $izinList = json_decode($pgb->izin_usaha, true); // jika izin_usaha disimpan dalam bentuk JSON string
+                                                        @endphp
 
-                                                @if (is_array($izinList))
-                                                    <ul style="margin: 0; padding-left: 15px;">
-                                                        @foreach ($izinList as $izin)
-                                                            <li>ID: {{ $izin['id_izin_usaha'] ?? '-' }} - Nomor: {{ $izin['nomor_izin_usaha'] ?? '-' }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                @else
-                                                    <span class="text-muted">Tidak ada data</span>
-                                                @endif
-                                            </td>
+                                                        @if (is_array($izinList))
+                                                            <ul style="margin: 0; padding-left: 15px;">
+                                                                @foreach ($izinList as $izin)
+                                                                    <li>ID: {{ $izin['id_izin_usaha'] ?? '-' }} - Nomor:
+                                                                        {{ $izin['nomor_izin_usaha'] ?? '-' }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @else
+                                                            <span class="text-muted">Tidak ada data</span>
+                                                        @endif
+                                                    </td>
 
-                                            <td>{{ getBulan($pgb->bulan) }}</td>
-                                            <td>{{ $pgb->tahun }}</td>
-                                            <td>{{ $pgb->produk }}</td>
-                                            <td>{{ $pgb->provinsi }}</td>
-                                            <td>{{ $pgb->kabupaten_kota }}</td>
-                                            <td>{{ $pgb->sektor }}</td>
-                                            <td>{{ $pgb->volume }}</td>
-                                            <td>{{ $pgb->satuan }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                                    <td>{{ bulan($pgb->bulan) }}</td>
+                                                    <td>{{ $pgb->tahun }}</td>
+                                                    <td>{{ $pgb->produk }}</td>
+                                                    <td>{{ $pgb->provinsi }}</td>
+                                                    <td>{{ $pgb->kabupaten_kota }}</td>
+                                                    <td>{{ $pgb->sektor }}</td>
+                                                    <td>{{ $pgb->volume }}</td>
+                                                    <td>{{ $pgb->satuan }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
 
                                 </div>
                             </div>
@@ -162,5 +163,3 @@
         </div>
     </div>
 @endsection
-
-
