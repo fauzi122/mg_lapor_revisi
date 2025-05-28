@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\PenjualanBbm;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class EvPenjualanBbm extends Controller
 {
-    
     public function index()
     {
-        $perusahaan = DB::table('bph_penjualan_bbm')
-            ->select('id_badan_usaha', 'izin_usaha','nama_badan_usaha','npwp_badan_usaha') 
+        $perusahaan = PenjualanBbm::select('id_badan_usaha', 'izin_usaha','nama_badan_usaha','npwp_badan_usaha') 
             ->groupBy('id_badan_usaha')
             ->get();
 
@@ -41,8 +42,7 @@ class EvPenjualanBbm extends Controller
 
         if ($p) {
             // Ambil dan group berdasarkan bulan-tahun
-            $query = DB::table('bph_penjualan_bbm')
-                ->select('bulan', 'tahun', DB::raw('MIN(id) as id')) // ambil ID pertama per group
+            $query = PenjualanBbm::select('nama_badan_usaha','bulan', 'tahun', 'npwp_badan_usaha',DB::raw('MIN(id) as id')) 
                 ->where('npwp_badan_usaha', $p)
                 ->groupBy('tahun', 'bulan')
                 ->orderBy('tahun', 'desc')
@@ -63,18 +63,16 @@ class EvPenjualanBbm extends Controller
 
     public function show($kode = '')
     {
+        $pecah = explode(",", Crypt::decryptString($kode));
 
-        $pecah = explode(',', Crypt::decryptString($kode));
-
-
-        $query = DB::table('bph_penjualan_bbm as a')
-            ->select('a.*')
-            ->get();
-
-//        var_dump($query);die();
-
+        $query = PenjualanBbm::where([
+                        ['npwp_badan_usaha', $pecah[0]],
+                        ['tahun', $pecah[1]],
+                        ['bulan', $pecah[2]],
+                    ])->get();
+                    
         $data = [
-            'title'=>'Laporan Pengangkutan Minyak Bumi',
+            'title'=>'Laporan Penjualan BBM',
             'query'=>$query,
             'per'=>$query->first()
 
@@ -83,164 +81,173 @@ class EvPenjualanBbm extends Controller
 
     }
 
-    public function updateRevisionNotes(Request $request)
+    public function sinkronisasiData() 
     {
 
-        $request->validate([
-            'catatan' => 'required',
-        ]);
+        $url = "https://ngembangin.esdm.go.id/inline/hilir/internal/api/dev/pelaporan-migas/bbm/penyediaan";
 
-        $id = Crypt::decrypt($request->input('id'));
-
-
-        $update = PenjualanBbm::where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
+        $token = Cache::get('access_token');
+        $items = collect();
+        $tgl = Carbon::now();
+        $bulan = $tgl->month; // hasilnya 1–12
+        $tahun = $tgl->year;
+        $page = 1;
+        
+        while (true) {
+            // Gunakan token untuk akses API
+            $response = Http::withToken($token)->post($url, [
+                'tahun' => $tahun,
+                'page' => $page
             ]);
 
-        return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+            if ($response->status() === 401) {
+                $token = tokenBphApi();
+                $response = Http::withToken($token)->post($url, [
+                    'tahun' => $tahun
+                ]);
+            }
+
+            if ($response->status() === 404) {
+                break;
+            }
+
+            if ($response->failed()) {
+                Log::error('Gagal sinkronisasi data', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
+                return back()->with('sweet_error', 'Gagal sinkronisasi data');
+            }
+            
+            // Jika berhasil
+            $response =  $response->json();
+
+            foreach ($response['data'] as $value) {
+
+                if ($value['bulan'] == $bulan) {
+                    $items->push($value);
+                }
+            }
+
+            $page++;
+        }
+
+        // Update Or Create data di Database
+        if (count($items) > 0) {
+            foreach ($items as $item) {
+                PenjualanBbm::updateOrCreate(
+                    [
+                        'id_badan_usaha'   => $item['id_badan_usaha'],
+                        'tahun'            => $item['tahun'],
+                        'bulan'            => $item['bulan'],
+                        'produk'           => $item['produk'],
+                        'sumber'           => $item['sumber'],
+                        'supplier'         => $item['supplier'],
+                    ],
+                    [
+                        "id_badan_usaha" => $item['id_badan_usaha'],
+                        "nama_badan_usaha" => $item['nama_badan_usaha'],
+                        "npwp_badan_usaha" => $item['npwp_badan_usaha'],
+                        "izin_usaha" => json_encode($item['izin_usaha']),
+                        'tahun' => $item['tahun'],
+                        'bulan' => $item['bulan'],
+                        'produk' => $item['produk'],
+                        'sumber' => $item['sumber'],
+                        'supplier' => $item['supplier'],
+                        'volume' => $item['volume'],
+                        'satuan' => $item['satuan'],
+                    ]
+                );
+    
+            }
+        }
+
+        return back()->with('sweet_success', 'Sinkronisasi Data Berhasil');
     }
 
-    public function updateRevisionNotesAll(Request $request)
+    public function cetakperiode(Request $request)
     {
+        $perusahaan = $request->input('perusahaan');
 
-        $request->validate([
-            'catatan' => 'required',
-        ]);
-        $badan_usaha_id = Crypt::decrypt($request->input('p')) ;
-        $bulan = Crypt::decrypt($request->input('b')) ;
+        $t_awal = (int) date('Ym', strtotime($request->input("t_awal")));
+        $t_akhir   = (int) date('Ym', strtotime($request->input("t_akhir"))); 
 
+        // Query untuk mendapatkan data penjualan berdasarkan perusahaan dan tanggal
+        $query = DB::table('bph_penjualan_bbm')
+                ->whereRaw('(tahun * 100 + bulan) BETWEEN ? AND ?', [$t_awal, $t_akhir])
+                ->orderBy('tahun')
+                ->orderBy('bulan');
+    
+        // Jika yang dipilih adalah 'all', maka tidak ada filter berdasarkan perusahaan
+        if ($perusahaan !== 'all') {
+            $query->where('id_badan_usaha', $perusahaan);
+        }
+    
+        $result = $query->get();
 
-
-        $update = PenjualanBbm::where('badan_usaha_id', $badan_usaha_id)
-            ->where('bulan',$bulan)
-            ->whereIn('status', [1, 2,3])
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
-
-
-        if ($update) {
-            return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+        if ($result->isEmpty()) {
+            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
         } else {
-            return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
+            $data = [
+                'title' => 'Laporan Penjualan BBM',
+                'result' => $result
+            ];
+    
+            $view = view('evaluator.laporan_bu.bph_inline.penjualan_bbm.cetak', $data);
+    
+            // Menambahkan script JavaScript untuk reload halaman
+            $view->with('reload', true);
+    
+            return response($view);
         }
     }
 
-    public function selesaiPeriodeAll(Request $request)
-    {
-        try {
-            $badan_usaha_id = Crypt::decrypt($request->input('p'));
-            $bulan = Crypt::decrypt($request->input('b'));
-
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = PenjualanBbm::where('badan_usaha_id', $badan_usaha_id)
-                ->where('bulan', $bulan)
-                ->whereIn('status', [1, 2,3])
-                ->update([
-                    'status' => '3'
-                ]);
-
-
-
-            if ($update) {
-                // Jika berhasil, kembalikan respons JSON
-                return response()->json(['success' => 'Periode berhasil diselesaikan.']);
-            } else {
-                // Jika gagal, kembalikan respons JSON dengan status 500 (Internal Server Error)
-                return response()->json(['error' => 'Gagal menyelesaikan periode.'], 500);
-            }
-        } catch (\Exception $e) {
-            // Tangkap dan tangani exception
-            return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);
-        }
-    }
-
-    public function selesaiPeriode(Request $request)
-    {
-        try {
-            $id = $request->input('id');
-
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = PenjualanBbm::where('id', $id)
-                ->update([
-                    'status' => '3'
-                ]);
-
-
-
-            if ($update) {
-                // Jika berhasil, kembalikan respons JSON
-                return response()->json(['success' => 'Periode berhasil diselesaikan.']);
-            } else {
-                // Jika gagal, kembalikan respons JSON dengan status 500 (Internal Server Error)
-                return response()->json(['error' => 'Gagal menyelesaikan periode.'], 500);
-            }
-        } catch (\Exception $e) {
-            // Tangkap dan tangani exception
-            return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);
-        }
-    }
-	
     public function lihatSemuaData()
     {
         $tgl = Carbon::now();
+        $bulan = $tgl->month; // hasilnya 1–12
+        $tahun = $tgl->year;
+        
+        $query = PenjualanBbm::where('bulan', $bulan)
+                    ->where('tahun', $tahun)
+                    ->get();
+        $perusahaan  = PenjualanBbm::groupBy('npwp_badan_usaha')->get();
+        $periode = $tgl->translatedFormat('F Y'); // contoh: "Mei 2025"
 
-        $query = DB::table('bph_penjualan_bbm as a')
-        ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-        ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
-        ->whereIn('a.status', [1, 2, 3])
-        ->get();
-
-        $perusahaan = DB::table('bph_penjualan_bbm as a')
-        ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-        ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.id_badan_usaha')
-        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-        ->get();
-
-        // return json_decode($query); exit;
         return view('evaluator.laporan_bu.bph_inline.penjualan_bbm.lihat-semua-data', [
-            'title' => 'Laporan Pengangkutan Minyak Bumi',
-            'periode' => 'Bulan ' . $tgl->monthName . " " . $tgl->year,
-            'query' => $query,
-            'perusahaan' => $perusahaan,
+            'title'     => 'Laporan Penjualan BBM',
+            'query'     => $query,
+            'periode'   => $periode,
+            'perusahaan'=> $perusahaan,
         ]);
     }
+
 
     public function filterData(Request $request)
     {
         $t_awal = Carbon::parse($request->t_awal);
         $t_akhir = Carbon::parse($request->t_akhir);
 
-        $perusahaan = DB::table('bph_penjualan_bbm as a')
-        ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-        ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.id_badan_usaha')
-        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-        ->get();
+        $perusahaan = PenjualanBbm::select('id_badan_usaha', 'izin_usaha','nama_badan_usaha','npwp_badan_usaha') 
+            ->groupBy('id_badan_usaha')
+            ->get();
 
-        $query = DB::table('bph_penjualan_bbm as a')
-        ->leftJoin('t_perusahaan as b', 'a.id_badan_usaha', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN');
-        
-        if ($request->perusahaan != 'all') {
-            $query->where('badan_usaha_id', $request->perusahaan);
+        // Query untuk mendapatkan data penjualan berdasarkan perusahaan dan tanggal
+        $query = DB::table('bph_penjualan_bbm')
+                ->whereRaw('(tahun * 100 + bulan) BETWEEN ? AND ?', [$t_awal->format('Ym'), $t_akhir->format('Ym')])
+                ->orderBy('tahun')
+                ->orderBy('bulan');
+    
+        // Jika yang dipilih adalah 'all', maka tidak ada filter berdasarkan perusahaan
+        if ($request->input("perusahaan") !== 'all') {
+            $query->where('id_badan_usaha', $request->input("perusahaan"));
         }
 
-        $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                    ->whereIn('a.status', [1, 2, 3])->get();
+        $result = $query->get();
 
         return view('evaluator.laporan_bu.bph_inline.penjualan_bbm.lihat-semua-data', [
-            'title' => 'Laporan Pengangkutan Minyak Bumi',
-            'periode' => 'Tanggal ' . $t_awal->format('d F Y') . " - " . $t_akhir->format('d F Y'),
+            'title' => 'Laporan Penjualan BBM',
+            'periode' =>  bulan($t_awal->month) ." ".$t_awal->year ." - ". bulan($t_akhir->month) ." ". $t_akhir->year,
             'query' => $result,
             'perusahaan' => $perusahaan,
         ]);

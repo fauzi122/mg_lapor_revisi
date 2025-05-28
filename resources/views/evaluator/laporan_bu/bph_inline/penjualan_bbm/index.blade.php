@@ -37,15 +37,16 @@
                             </div>
 
                             <div class="card-header">
-                                <button type="button" class="btn btn-warning waves-effect waves-light">
+                                <a href="{{ url('/laporan/sinkronisasi-data/penjualan-bbm') }}"
+                                    class="btn btn-warning waves-effect waves-light">
                                     <i class='bx bx-sync'></i> Sinkronisasi Data
-                                </button>
+                                </a>
                                 <button type="button" class="btn btn-success waves-effect waves-light"
                                     data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i
                                         class='bx bx-printer'></i> Cetak
                                 </button>
 
-                                <a href="{{ url('/laporan/pengangkutan/mb-lihat-semua-data') }}"
+                                <a href="{{ url('/laporan/penjualan-bbm-lihat-semua-data') }}"
                                     class="btn btn-info waves-effect waves-light">
                                     <i class='bx bx-file'></i>
                                     Lihat Semua Data
@@ -62,7 +63,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <form id="cetakForm"
-                                                    action="{{ url('laporan/pengangkutan/mb/cetak-periode') }}"
+                                                    action="{{ url('/laporan/penjualan-bbm/cetak-periode') }}"
                                                     method="post">
                                                     @csrf
                                                     <div>
@@ -86,14 +87,14 @@
                                                         <div class="mb-3">
                                                             <label for="example-text-input" class="form-label">Tanggal
                                                                 Awal</label>
-                                                            <input class="form-control" name="t_awal" type="date"
+                                                            <input class="form-control" name="t_awal" type="month"
                                                                 id="example-text-input" required>
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label for="example-text-input" class="form-label">Tanggal
                                                                 Akhir</label>
-                                                            <input class="form-control" name="t_akhir" type="date"
+                                                            <input class="form-control" name="t_akhir" type="month"
                                                                 value="Artisanal kale" id="example-text-input" required>
                                                         </div>
                                                         <div class="mb-3">
