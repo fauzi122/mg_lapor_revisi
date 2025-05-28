@@ -86,7 +86,7 @@ class PengolahanController extends Controller
       ->get();
 
     // return view('badan_usaha.pengolahan.minyak_bumi.index', compact(
-      return view('badanUsaha.pengolahan.minyak_bumi.index', compact(
+      return view('badanUsaha.pengolahan.index', compact(
       'pengolahanProduksiMB',
       'pengolahanPasokanMB',
       'pengolahanDistribusiMB',
@@ -274,7 +274,8 @@ class PengolahanController extends Controller
     // exit;
     // echo json_encode($pgb[3]->jenis_moda);exit;
 
-    return view('badan_usaha.pengolahan.gas_bumi.show', compact(
+    // return view('badan_usaha.pengolahan.gas_bumi.show', compact(
+    return view('badanUsaha.pengolahan.gas_bumi.show', compact(
       'jenis',
       'pengolahanProduksiGB',
       'pengolahanPasokanGB',

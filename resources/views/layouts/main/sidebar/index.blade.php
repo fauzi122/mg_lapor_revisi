@@ -13,13 +13,13 @@
             data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_app_sidebar_secondary_menu, #kt_app_sidebar_secondary_tags" 
             data-kt-scroll-offset="5px">
             <div class="app-sidebar-menu menu menu-sub-indention menu-rounded menu-column" id="kt_app_sidebar_secondary_menu" data-kt-menu="true">
-                <div data-kt-menu-trigger="click" class="menu-item">
-                    <span class="menu-link active">
+                <div class="menu-item">
+                    <a href="{{ route('dashboard') }}" class="menu-link active">
                         <span class="menu-icon">
                             <i class="ki-outline ki-home-2 fs-2"></i>
                         </span>
                         <span class="menu-title">Dashboards</span>
-                    </span>
+                    </a>
                 </div>
             </div>
             <div class="separator"></div>

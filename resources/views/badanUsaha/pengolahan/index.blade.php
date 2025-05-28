@@ -1,49 +1,5 @@
 @extends('layouts.main.master')
 @section('content')
-    <style>
-        /* Remove space between each tab button */
-        .nav-pills .nav-item {
-            margin: 0;
-        }
-        .nav-pills .nav-link {
-            border-radius: 0 !important;
-        }
-        /* Optional: only round first and last tab if needed */
-        .nav-pills .nav-item:first-child .nav-link {
-            border-top-left-radius: 0.5rem !important;
-        }
-        .nav-pills .nav-item:last-child .nav-link {
-            border-top-right-radius: 0.5rem !important;
-        }
-        /* Make nav and pane visually connected */
-        .nav-pills {
-            margin-bottom: 0; /* remove spacing between nav and pane */
-        }
-        .nav-pills .nav-link {
-            border-radius: 0.5rem 0.5rem 0 0; /* top corners only */
-            /* border: 1px solid #0d6efd; */
-            background-color: #f1f1ff;
-            /* color: #0d6efd; */
-            margin-bottom: -1px; /* overlap the top border of tab-pane */
-            z-index: 1;
-            position: relative;
-        }
-        .nav-pills .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
-            font-weight: bold;
-            border-bottom-color: transparent; /* blend into the tab-pane */
-        }
-        .tab-content .tab-pane {
-            /* border: 1px solid #0d6efd; */
-            border-radius: 0 0 0.5rem 0.5rem; /* bottom corners only */
-            padding: 1rem;
-            background-color: #e9f2ff;
-            /* z-index: 0; */
-            position: relative;
-        }
-    </style>
-
     <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-8">
         <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
             <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
