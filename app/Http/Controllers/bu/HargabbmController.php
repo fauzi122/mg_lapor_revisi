@@ -39,7 +39,8 @@ class HargabbmController extends Controller
     ->groupBy('bulan')
     ->get();
 
-    return view('badan_usaha.niaga.harga.index', compact(
+    // return view('badan_usaha.niaga.harga.index', compact(
+    return view('badanUsaha.niaga.harga.index', compact(
       'hargabbmjbu',
       'hargaLPG',
       'pecah'
@@ -104,7 +105,8 @@ class HargabbmController extends Controller
       // dd($harga);
       // die;
 
-      return view('badan_usaha.niaga.harga.show', compact(
+      // return view('badan_usaha.niaga.harga.show', compact(
+      return view('badanUsaha.niaga.harga.show', compact(
         'hargabbmjbu',
         'hargalpg',
         'bulan_ambil_hargabbmjbux',
