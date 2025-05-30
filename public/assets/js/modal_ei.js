@@ -106,7 +106,7 @@ function edit_ekpor(id, produk, negara_tujuan) {
             );
             $.each(response.data.pelabuhan, function (i, value) {
                 let isSelected =
-                    pelabuhanMuatSelect == value.nm_port + `-` + value.lokasi
+                    pelabuhanMuatSelect == value.nm_port + ` - ` + value.lokasi
                         ? "selected"
                         : "";
 

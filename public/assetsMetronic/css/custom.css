@@ -1,0 +1,53 @@
+.modal-body {
+    max-height: 63vh;
+    overflow-y: auto;
+}
+mark.highlight {
+    background-color: yellow;
+    padding: 0 2px;
+}
+mark.current-match {
+    background-color: orange;
+}
+
+
+.nav-pills .nav-item {
+    margin: 0;
+}
+.nav-pills .nav-link {
+    border-radius: 0 !important;
+}
+.nav-pills .nav-item:first-child .nav-link {
+    border-top-left-radius: 0.5rem !important;
+}
+.nav-pills .nav-item:last-child .nav-link {
+    border-top-right-radius: 0.5rem !important;
+}
+.nav-pills {
+    margin-bottom: 0;
+}
+.nav-pills .nav-link {
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: #f1f1ff;
+    margin-bottom: -1px;
+    z-index: 1;
+    position: relative;
+}
+.tab-content .tab-pane {
+    border-radius: 0 0 0.5rem 0.5rem;
+    padding: 1rem;
+    background-color: #e9f2ff;
+    position: relative;
+}
+[data-bs-theme="dark"] .nav-pills .nav-link {
+    background-color: #1f1f2e;
+}
+[data-bs-theme="dark"] .tab-content .tab-pane {
+    background-color: #1f1f2e;
+}
+.nav-pills .nav-link.active {
+    background-color: #0d6efd;
+    color: white;
+    font-weight: bold;
+    border-bottom-color: transparent;
+}

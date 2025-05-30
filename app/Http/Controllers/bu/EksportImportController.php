@@ -38,7 +38,8 @@ class EksportImportController extends Controller
       ->groupBy('bulan_pib')
       ->get();
     // dd($impor);
-    return view('badan_usaha.ekspor_impor.index', compact(
+    // return view('badan_usaha.ekspor_impor.index', compact(
+    return view('badanUsaha.ekspor_impor.index', compact(
       'ekspor',
       'impor',
       'pecah'
@@ -91,7 +92,8 @@ class EksportImportController extends Controller
       'izin_id' => $pecah[2]
     ])->orderBy('status', 'desc')->get();
     // dd($impor);
-    return view('badan_usaha.ekspor_impor.show', compact(
+    // return view('badan_usaha.ekspor_impor.show', compact(
+    return view('badanUsaha.ekspor_impor.show', compact(
       'expor',
       'imporx',
       'bulan_ambil_eksporsx',
