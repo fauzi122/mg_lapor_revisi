@@ -35,7 +35,8 @@ class AuthController extends Controller
 			return redirect('/login')->with('error', 'ID_PERUSAHAAN not found.');
 		}
 
-		return view('badan_usaha.index', compact('perusahaan'));
+		// return view('badan_usaha.index', compact('perusahaan'));
+		return view('badanUsaha.auth.index', compact('perusahaan'));
 	}
 
 

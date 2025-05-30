@@ -26,9 +26,9 @@ class PengolahanController extends Controller
 {
   public function index($id)
   {
-   
+
     $pecah = explode(',', Crypt::decryptString($id));
-  // dd($pecah);
+    // dd($pecah);
     $pengolahanProduksiMB = DB::table('pengolahans')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
       ->where('jenis', 'Minyak Bumi')
@@ -37,7 +37,7 @@ class PengolahanController extends Controller
       ->where('izin_id', $pecah[0])
       ->groupBy('bulan')
       ->get();
-      // dd($pengolahanProduksiMB);
+    // dd($pengolahanProduksiMB);
 
     $pengolahanPasokanMB = DB::table('pengolahans')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
@@ -85,7 +85,8 @@ class PengolahanController extends Controller
       ->groupBy('bulan')
       ->get();
 
-    return view('badan_usaha.pengolahan.minyak_bumi.index', compact(
+    // return view('badan_usaha.pengolahan.minyak_bumi.index', compact(
+      return view('badanUsaha.pengolahan.index', compact(
       'pengolahanProduksiMB',
       'pengolahanPasokanMB',
       'pengolahanDistribusiMB',
@@ -141,24 +142,24 @@ class PengolahanController extends Controller
     } else {
       $filterBy = $pecah[0];
     }
-    
+
     $pengolahanProduksiMB = Pengolahan::where([
-      ['bulan', 'like', "%". $filterBy ."%"],
+      ['bulan', 'like', "%" . $filterBy . "%"],
       'badan_usaha_id' => $pecah[1],
       'izin_id' => $pecah[2],
       'jenis' => 'Minyak Bumi',
       'tipe' => 'Produksi',
     ])->orderBy('status', 'desc')->get();
-    
+
     $pengolahanPasokanMB = Pengolahan::where([
-      ['bulan', 'like', "%". $filterBy ."%"],
+      ['bulan', 'like', "%" . $filterBy . "%"],
       'badan_usaha_id' => $pecah[1],
       'izin_id' => $pecah[2],
       'jenis' => 'Minyak Bumi',
       'tipe' => 'Pasokan',
     ])->orderBy('status', 'desc')->get();
     $pengolahanDistribusiMB = Pengolahan::where([
-      ['bulan', 'like', "%". $filterBy ."%"],
+      ['bulan', 'like', "%" . $filterBy . "%"],
       'badan_usaha_id' => $pecah[1],
       'izin_id' => $pecah[2],
       'jenis' => 'Minyak Bumi',
@@ -168,7 +169,8 @@ class PengolahanController extends Controller
     // exit;
     // echo json_encode($pgb[3]->jenis_moda);exit;
 
-    return view('badan_usaha.pengolahan.minyak_bumi.show', compact(
+    // return view('badan_usaha.pengolahan.minyak_bumi.show', compact(
+    return view('badanUsaha.pengolahan.minyak_bumi.show', compact(
       'jenis',
       'pengolahanProduksiMB',
       'pengolahanPasokanMB',
@@ -231,7 +233,7 @@ class PengolahanController extends Controller
       ->where('izin_id', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
-      
+
     // Mengambil substring dari bulan
     $bulan_ambil_produksix = $bulan_ambil_produksi ? substr($bulan_ambil_produksi->bulan, 0, 7) : '';
     $status_produksix = $bulan_ambil_produksi->status ?? '';
@@ -246,23 +248,23 @@ class PengolahanController extends Controller
     } else {
       $filterBy = $pecah[0];
     }
-    
+
     $pengolahanProduksiGB = Pengolahan::where([
-      ['bulan', 'like', "%". $filterBy ."%"],
+      ['bulan', 'like', "%" . $filterBy . "%"],
       'badan_usaha_id' => $pecah[1],
       'izin_id' => $pecah[2],
       'jenis' => 'Gas Bumi',
       'tipe' => 'Produksi',
     ])->orderBy('status', 'desc')->get();
     $pengolahanPasokanGB = Pengolahan::where([
-      ['bulan', 'like', "%". $filterBy ."%"],
+      ['bulan', 'like', "%" . $filterBy . "%"],
       'badan_usaha_id' => $pecah[1],
       'izin_id' => $pecah[2],
       'jenis' => 'Gas Bumi',
       'tipe' => 'Pasokan',
     ])->orderBy('status', 'desc')->get();
     $pengolahanDistribusiGB = Pengolahan::where([
-      ['bulan', 'like', "%". $filterBy ."%"],
+      ['bulan', 'like', "%" . $filterBy . "%"],
       'badan_usaha_id' => $pecah[1],
       'izin_id' => $pecah[2],
       'jenis' => 'Gas Bumi',
@@ -272,7 +274,8 @@ class PengolahanController extends Controller
     // exit;
     // echo json_encode($pgb[3]->jenis_moda);exit;
 
-    return view('badan_usaha.pengolahan.gas_bumi.show', compact(
+    // return view('badan_usaha.pengolahan.gas_bumi.show', compact(
+    return view('badanUsaha.pengolahan.gas_bumi.show', compact(
       'jenis',
       'pengolahanProduksiGB',
       'pengolahanPasokanGB',
@@ -493,7 +496,7 @@ class PengolahanController extends Controller
     $bulanx = $pecah[0];
     $badan_usaha_id = $pecah[1];
     $izin_id = $pecah[2];
-      
+
     $validatedData = DB::table('pengolahans')
       ->where('bulan', $bulanx)
       ->where('badan_usaha_id', $badan_usaha_id)
@@ -540,12 +543,12 @@ class PengolahanController extends Controller
 
     // Menggunakan parameter binding untuk keamanan
     $validatedData = DB::table('pengolahans')
-        ->where('bulan', $bulanx)
-        ->where('badan_usaha_id', $badan_usaha_id)
-        ->where('jenis', 'Minyak Bumi')
-        ->where('tipe', 'Produksi')
-        ->where('izin_id', $izin_id)
-        ->update(['status' => '1', 'tgl_kirim' => $now]);
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Minyak Bumi')
+      ->where('tipe', 'Produksi')
+      ->where('izin_id', $izin_id)
+      ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -749,7 +752,7 @@ class PengolahanController extends Controller
     $bulanx = $pecah[0];
     $badan_usaha_id = $pecah[1];
     $izin_id = $pecah[2];
-      
+
     $validatedData = DB::table('pengolahans')
       ->where('bulan', $bulanx)
       ->where('badan_usaha_id', $badan_usaha_id)
@@ -796,12 +799,12 @@ class PengolahanController extends Controller
 
     // Menggunakan parameter binding untuk keamanan
     $validatedData = DB::table('pengolahans')
-        ->where('bulan', $bulanx)
-        ->where('badan_usaha_id', $badan_usaha_id)
-        ->where('jenis', 'Minyak Bumi')
-        ->where('tipe', 'Pasokan')
-        ->where('izin_id', $izin_id)
-        ->update(['status' => '1', 'tgl_kirim' => $now]);
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Minyak Bumi')
+      ->where('tipe', 'Pasokan')
+      ->where('izin_id', $izin_id)
+      ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -837,7 +840,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanMBPasokan($bulan,$izin_id), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanMBPasokan($bulan, $izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -1002,7 +1005,7 @@ class PengolahanController extends Controller
     $bulanx = $pecah[0];
     $badan_usaha_id = $pecah[1];
     $izin_id = $pecah[2];
-      
+
     $validatedData = DB::table('pengolahans')
       ->where('bulan', $bulanx)
       ->where('badan_usaha_id', $badan_usaha_id)
@@ -1049,12 +1052,12 @@ class PengolahanController extends Controller
 
     // Menggunakan parameter binding untuk keamanan
     $validatedData = DB::table('pengolahans')
-        ->where('bulan', $bulanx)
-        ->where('badan_usaha_id', $badan_usaha_id)
-        ->where('jenis', 'Minyak Bumi')
-        ->where('tipe', 'Distribusi')
-        ->where('izin_id', $izin_id)
-        ->update(['status' => '1', 'tgl_kirim' => $now]);
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Minyak Bumi')
+      ->where('tipe', 'Distribusi')
+      ->where('izin_id', $izin_id)
+      ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1090,7 +1093,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanMBDistribusi($bulan,$izin_id), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanMBDistribusi($bulan, $izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -1244,7 +1247,7 @@ class PengolahanController extends Controller
     $bulanx = $pecah[0];
     $badan_usaha_id = $pecah[1];
     $izin_id = $pecah[2];
-      
+
     $validatedData = DB::table('pengolahans')
       ->where('bulan', $bulanx)
       ->where('badan_usaha_id', $badan_usaha_id)
@@ -1291,12 +1294,12 @@ class PengolahanController extends Controller
 
     // Menggunakan parameter binding untuk keamanan
     $validatedData = DB::table('pengolahans')
-        ->where('bulan', $bulanx)
-        ->where('badan_usaha_id', $badan_usaha_id)
-        ->where('jenis', 'Gas Bumi')
-        ->where('tipe', 'Produksi')
-        ->where('izin_id', $izin_id)
-        ->update(['status' => '1', 'tgl_kirim' => $now]);
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Gas Bumi')
+      ->where('tipe', 'Produksi')
+      ->where('izin_id', $izin_id)
+      ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1332,7 +1335,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanGBProduksi($bulan,$izin_id), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanGBProduksi($bulan, $izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -1487,7 +1490,7 @@ class PengolahanController extends Controller
     $bulanx = $pecah[0];
     $badan_usaha_id = $pecah[1];
     $izin_id = $pecah[2];
-      
+
     $validatedData = DB::table('pengolahans')
       ->where('bulan', $bulanx)
       ->where('badan_usaha_id', $badan_usaha_id)
@@ -1535,12 +1538,12 @@ class PengolahanController extends Controller
 
     // Menggunakan parameter binding untuk keamanan
     $validatedData = DB::table('pengolahans')
-        ->where('bulan', $bulanx)
-        ->where('badan_usaha_id', $badan_usaha_id)
-        ->where('jenis', 'Gas Bumi')
-        ->where('tipe', 'Pasokan')
-        ->where('izin_id', $izin_id)
-        ->update(['status' => '1', 'tgl_kirim' => $now]);
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Gas Bumi')
+      ->where('tipe', 'Pasokan')
+      ->where('izin_id', $izin_id)
+      ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1576,7 +1579,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanGBPasokan($bulan,$izin_id), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanGBPasokan($bulan, $izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -1734,7 +1737,7 @@ class PengolahanController extends Controller
     $bulanx = $pecah[0];
     $badan_usaha_id = $pecah[1];
     $izin_id = $pecah[2];
-      
+
     $validatedData = DB::table('pengolahans')
       ->where('bulan', $bulanx)
       ->where('badan_usaha_id', $badan_usaha_id)
@@ -1781,12 +1784,12 @@ class PengolahanController extends Controller
 
     // Menggunakan parameter binding untuk keamanan
     $validatedData = DB::table('pengolahans')
-        ->where('bulan', $bulanx)
-        ->where('badan_usaha_id', $badan_usaha_id)
-        ->where('jenis', 'Gas Bumi')
-        ->where('tipe', 'Distribusi')
-        ->where('izin_id', $izin_id)
-        ->update(['status' => '1', 'tgl_kirim' => $now]);
+      ->where('bulan', $bulanx)
+      ->where('badan_usaha_id', $badan_usaha_id)
+      ->where('jenis', 'Gas Bumi')
+      ->where('tipe', 'Distribusi')
+      ->where('izin_id', $izin_id)
+      ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -1822,7 +1825,7 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanGBDistribusi($bulan,$izin_id), request()->file('file'));
+    $import = Excel::import(new ImportPengolahanGBDistribusi($bulan, $izin_id), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses

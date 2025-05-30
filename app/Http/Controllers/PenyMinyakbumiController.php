@@ -29,7 +29,8 @@ class PenyMinyakbumiController extends Controller
         ->groupBy('bulan')
         ->get();
         
-        return view('badan_usaha.penyimpanan.minyak_bumi.index', compact('pm','pecah'));
+        // return view('badan_usaha.penyimpanan.minyak_bumi.index', compact('pm','pecah'));
+        return view('badanUsaha.penyimpanan.minyak_bumi.index', compact('pm','pecah'));
     }
     public function index_pggb($id)
     {
@@ -79,7 +80,8 @@ class PenyMinyakbumiController extends Controller
             'izin_id' => $pecah[2]
         ])->orderBy('status', 'desc')->get();
 
-        return view('badan_usaha.penyimpanan.minyak_bumi.show', compact(
+        // return view('badan_usaha.penyimpanan.minyak_bumi.show', compact(
+        return view('badanUsaha.penyimpanan.minyak_bumi.show', compact(
             'pmb',
             'pggb',
             'bulan_ambilx',
