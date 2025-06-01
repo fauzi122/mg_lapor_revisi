@@ -17,7 +17,8 @@ class ProgresPembangunanController extends Controller
     $pecah = explode(',', Crypt::decryptString($id));
 
     $ProgresPembangunan = ProgresPembangunan::get();
-    return view('badan_usaha.progres_pembangunan.show', compact(
+    // return view('badan_usaha.progres_pembangunan.show', compact(
+    return view('badanUsaha.progres_pembangunan.show', compact(
       'ProgresPembangunan',
       'pecah'
     ));
