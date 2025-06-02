@@ -46,7 +46,8 @@ class PenyMinyakbumiController extends Controller
             ->groupBy('bulan')
             ->get();
 
-        return view('badan_usaha.penyimpanan.gas_bumi.index', compact('pm','pecah'));
+        // return view('badan_usaha.penyimpanan.gas_bumi.index', compact('pm','pecah'));
+        return view('badanUsaha.penyimpanan.gas_bumi.index', compact('pm','pecah'));
     }
     public function show_pmbx($id, $filter = null)
     {
@@ -89,7 +90,8 @@ class PenyMinyakbumiController extends Controller
             'pecah'
         ));
     }
-    public function show_pggbx($filter, $id)
+    public function show_pggbx($id, $filter = null)
+    // public function show_pggbx($filter, $id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
         $pggb = Penygasbumi::get();
@@ -120,7 +122,8 @@ class PenyMinyakbumiController extends Controller
                             ->orderBy('status', 'desc')->get();
         }
 
-        return view('badan_usaha.penyimpanan.gas_bumi.show', compact(
+        // return view('badan_usaha.penyimpanan.gas_bumi.show', compact(
+        return view('badanUsaha.penyimpanan.gas_bumi.show', compact(
             'pggb',
             'bulan_ambilx',
             'statusx',

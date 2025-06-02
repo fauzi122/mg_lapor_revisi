@@ -237,7 +237,8 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::put('/submit_bulan_pmb/{id}', 'submit_bulan_pmbx');
 
 		Route::get('/penyimpanan-gas-bumi/{id}', 'index_pggb');
-		route::get('/penyimpanan-gas-bumi/show/{filter}/{id}', 'show_pggbx');
+		// route::get('/penyimpanan-gas-bumi/show/{filter}/{id}', 'show_pggbx');
+		route::get('/penyimpanan-gas-bumi/show/{id}/{filter?}', 'show_pggbx');
 		Route::post('/simpan_pggb', 'simpan_pggbx');
 		Route::put('/update_pggb/{id}', 'update_pggbx');
 		Route::delete('/hapus_pggb/{id}', 'hapus_pggbx');
