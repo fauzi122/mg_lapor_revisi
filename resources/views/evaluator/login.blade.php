@@ -1,246 +1,145 @@
-<link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
-<!-- swiper css -->
-<link rel="stylesheet" href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}">
-<!-- preloader css -->
-<link rel="stylesheet" href="{{ asset('assets/css/preloader.min.css') }}" type="text/css" />
-<!-- Bootstrap Css -->
-<link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
-<!-- Icons Css -->
-<link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-<!-- App Css-->
-<link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
-<!-- choices css -->
-<link href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet" type="text/css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Login Evaluator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo-esdm.png') }}">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/global/plugins.bundle.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assetsMetronic/css/style.bundle.css') }}" />
+    <link href="{{ asset('assetsMetronic/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assetsMetronic/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
 
 </head>
-  <title>Login Evaluator</title>
-        <div class="auth-page">
-            <div class="container-fluid p-0">
-                <div class="row g-0">
-                    <div class="col-xxl-3 col-lg-4 col-md-5">
-                        <div class="auth-full-page-content d-flex p-sm-5 p-4">
-                            <div class="w-100">
-                                <div class="d-flex flex-column h-100">
-                                    <div class="mb-4 mb-md-5 text-center">
-                                       <a href="">
 
-                                    <img src="{{ asset('assets/images/logo-esdm.png') }}" alt="" height="30"
-
-                                        class="me-1"><span class="logo-txt font-size-22">Pelaporan Migas</span>
-
-                                </a>
-                                    </div>
-                                    <div class="auth-content my-auto">
-                                        <div class="text-center">
-                                            <h5 class="mb-0">Selamat Datang</h5>
-                                            <p class="text-muted mt-2">Untuk Single Sign On Pada Kementrian ESDM, <a href="{{url ('/evaluator/login_sso') }}">klik disini</a></p>
-                                        </div>
-                                      <form method="POST" action="{{ url('/evaluator/login/post-login') }}" enctype="multipart/form-data">
-                                    @csrf
-                                            <div class="mb-3">
-                                                <label class="form-label">Username</label>
-                                                <input type="text" class="form-control" name='email' id="email" placeholder="Enter username">
-                                            </div>
-                                            <div class="mb-3">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="flex-grow-1">
-                                                        <label class="form-label">Password</label>
-                                                    </div>
-                                                    <div class="flex-shrink-0">
-                                                        <div class="">
-                                                            {{-- <a href="auth-recoverpw.html" class="text-muted">Forgot password?</a> --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="input-group auth-pass-inputgroup">
-                                                    <input type="password" class="form-control" name="password" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon" id="password-input">
-                                                    <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon">
-                                                        <i class="mdi mdi-eye-outline" id="toggle-password-icon"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-4">
-                                                <div class="col">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" id="remember-check">
-                                                        <label class="form-check-label" for="remember-check">
-                                                            Remember me
-                                                        </label>
-                                                    </div>  
-                                                </div>
-                                                
-                                            </div>
-                                            <div class="mb-3">
-                                                <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Log In</button>
-                                            </div>
-                                        </form>
-
-                                   @if($errors->has('login_error'))
-                                    <div class="alert alert-danger">
-                                        {{ $errors->first('login_error') }}
-                                    </div>
-                                @endif
-
-                                @if(session('statusLogin'))
-                            <div class="alert alert-success">
-                                {{ session('statusLogin') }}
-                            </div>
-                        @endif
-
-
-                                    </div>
-                                    <div class="mt-4 mt-md-5 text-center">
-                                        <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> by Aplikasi Pelaporan Migas.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end auth full page content -->
-                    </div>
-                    <!-- end col -->
-                    <div class="col-xxl-9 col-lg-8 col-md-7">
-                        <div class="auth-bg pt-md-5 p-4 d-flex">
-                            <div class="bg-overlay bg-primary"></div>
-                            <ul class="bg-bubbles">
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                            </ul>
-                            <!-- end bubble effect -->
-                            <div class="row justify-content-center align-items-center">
-                                <div class="col-xl-7">
-                                    <div class="p-0 p-sm-4 px-xl-0">
-                                        <div id="reviewcarouselIndicators" class="carousel slide" data-bs-ride="carousel">
-                                            <div class="carousel-indicators carousel-indicators-rounded justify-content-start ms-0 mb-0">
-                                                <button type="button" data-bs-target="#reviewcarouselIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                                <button type="button" data-bs-target="#reviewcarouselIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                                <button type="button" data-bs-target="#reviewcarouselIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                            </div>
-                                            <!-- end carouselIndicators -->
-                                            <div class="carousel-inner">
-                                                <div class="carousel-item active">
-                                                    <div class="testi-contain text-white">
-                                                        <i class="bx bxs-quote-alt-left text-success display-6"></i>
-
-                                                        <h4 class="mt-4 fw-medium lh-base text-white">“I feel confident
-                                                            imposing change
-                                                            on myself. It's a lot more progressing fun than looking back.
-                                                            That's why
-                                                            I ultricies enim
-                                                            at malesuada nibh diam on tortor neaded to throw curve balls.”
-                                                        </h4>
-                                                        <div class="mt-4 pt-3 pb-5">
-                                                            <div class="d-flex align-items-start">
-                                                                <div class="flex-shrink-0">
-                                                                </div>
-                                                                <div class="flex-grow-1 ms-3 mb-4">
-                                                                    </h5>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="carousel-item">
-                                                    <div class="testi-contain text-white">
-                                                        <i class="bx bxs-quote-alt-left text-success display-6"></i>
-
-                                                        <h4 class="mt-4 fw-medium lh-base text-white">“Our task must be to
-                                                            free ourselves by widening our circle of compassion to embrace
-                                                            all living
-                                                            creatures and
-                                                            the whole of quis consectetur nunc sit amet semper justo. nature
-                                                            and its beauty.”</h4>
-                                                        <div class="mt-4 pt-3 pb-5">
-                                                            <div class="d-flex align-items-start">
-                                                                <div class="flex-shrink-0">
-                                                                </div>
-                                                                <div class="flex-grow-1 ms-3 mb-4">
-                                                                    </h5>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="carousel-item">
-                                                    <div class="testi-contain text-white">
-                                                        <i class="bx bxs-quote-alt-left text-success display-6"></i>
-
-                                                        <h4 class="mt-4 fw-medium lh-base text-white">“I've learned that
-                                                            people will forget what you said, people will forget what you
-                                                            did,
-                                                            but people will never forget
-                                                            how donec in efficitur lectus, nec lobortis metus you made them
-                                                            feel.”</h4>
-                                                        <div class="mt-4 pt-3 pb-5">
-                                                            <div class="d-flex align-items-start">
-                                                                    class="avatar-md img-fluid rounded-circle" alt="...">
-                                                                <div class="flex-1 ms-3 mb-4">
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- end carousel-inner -->
-                                        </div>
-                                        <!-- end review carousel -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end col -->
-                </div>
-                <!-- end row -->
-            </div>
-            <!-- end container fluid -->
-        </div>
-<!-- swiper js -->
-<script src="{{ asset('assets/libs/swiper/swiper-bundle.min.js') }}"></script>
-<!-- Countdown js -->
-<script src="{{ asset('assets/js/pages/coming-soon.init.js') }}"></script>
-<!-- choices js -->
-<script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
-<!-- init js -->
-<script src="{{ asset('assets/js/pages/form-advanced.init.js') }}"></script>
-
-<!-- Password visibility toggle and Select2 initialization -->
-<script>
-    $(document).ready(function() {
-        // Initialize Select2
-        $('.select2').select2({
-            closeOnSelect: false
-        });
-
-        // Toggle password visibility
-        $('#password-addon').on('click', function() {
-            const passwordInput = $('#password-input');
-            const icon = $('#toggle-password-icon');
+<body id="kt_body" class="app-blank">
+    <div class="d-flex flex-column flex-root" id="kt_app_root">
+        <div class="d-flex flex-column flex-lg-row flex-column-fluid" style="background-color: #e7f0fd;">
             
-            if (passwordInput.attr('type') === 'password') {
-                passwordInput.attr('type', 'text');
-                icon.removeClass('mdi-eye-outline').addClass('mdi-eye-off-outline');
-            } else {
-                passwordInput.attr('type', 'password');
-                icon.removeClass('mdi-eye-off-outline').addClass('mdi-eye-outline');
-            }
-        });
-    });
-</script>
+            <!-- Form Login Panel -->
+            <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1">
+                <div class="d-flex flex-center flex-column flex-lg-row-fluid">
+                    <div class="card shadow mb-5">
+                        <form class="formLoad" method="POST" action="{{ url('/evaluator/login/post-login') }}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="w-lg-500px p-10">
+                                <!-- Header -->
+                                <div class="card-header">
+                                    <div class="text-center mb-11">
+                                        <div class="d-flex justify-content-center align-items-center mb-3">
+                                            <img src="{{ asset('assets/images/logo-esdm.png') }}" alt="Logo ESDM" height="40" class="me-2">
+                                            <h1 class="logo-txt mb-0 fs-1">Pelaporan Migas</h1>
+                                        </div>
+                                        <div class="text-center mt-10">
+                                            <h5 class="mb-0">Selamat Datang</h5>
+                                            <p class="text-muted mt-2">
+                                                Untuk Single Sign On Pada Kementrian ESDM,
+                                                <a href="{{ url('/evaluator/login_sso') }}">klik disini</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Body -->
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="text" class="form-control" name="email" id="email" placeholder="Masukan Email">
+                                    </div>
+
+                                    <div class="mb-3" data-kt-password-meter="true">
+                                        <div class="d-flex align-items-start">
+                                            <div class="flex-grow-1">
+                                                <label class="form-label">Password</label>
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                {{-- <a href="#" class="text-muted">Forgot password?</a> --}}
+                                            </div>
+                                        </div>
+
+                                        <div class="position-relative mb-3">
+											<input class="form-control bg-transparent" type="password" placeholder="Masukan Password" name="password" autocomplete="off" />
+											<span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
+												<i class="ki-outline ki-eye-slash fs-2"></i>
+												<i class="ki-outline ki-eye fs-2 d-none"></i>
+											</span>
+										</div>
+                                    </div>
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="card-footer">
+                                    <div class="d-flex align-items-center justify-content-center w-100 w-sm-auto mt-5">
+                                        <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
+                                            <span class="me-2 btn-text">Login</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Loader Script -->
+                        <script>
+                            document.querySelectorAll(".formLoad").forEach(function (form) {
+                                form.addEventListener("submit", function (event) {
+                                    if (!this.checkValidity()) {
+                                        event.preventDefault();
+                                        return false;
+                                    }
+                                    var submitButton = this.querySelector('button[type="submit"]');
+                                    if (submitButton) {
+                                        submitButton.disabled = true;
+                                        submitButton.innerHTML =
+                                            'Mohon Tunggu... <span class="spinner-border spinner-border-sm align-middle ms-2"></span> ';
+                                    }
+                                    return true;
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-gray-500 text-center fw-semibold fs-6 mt-auto py-4">
+                    <span>&copy; ESDM {{ date('Y') }}</span>
+                </div>
+            </div>
+
+            <!-- Right Side Image Panel -->
+            <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2" style="background-image: url('/assetsMetronic/media/auth/bg4.jpg')">
+                <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
+                    <a href="#" class="mb-0 mb-lg-12">
+                        <img alt="Logo" src="{{ asset('assets/images/logo-esdm.png') }}" class="h-60px h-lg-75px" />
+                    </a>
+                    {{-- <img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="assets/media/misc/auth-screens.png" alt="" /> --}}
+                    <h1 class="d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-5">Sistem Pelaporan Migas</h1>
+                    <p class="d-none d-lg-block text-white fs-5 text-center">
+                        Platform digital untuk pelaporan dan pemantauan kegiatan migas <br>
+                        secara efisien dan terintegrasi.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ asset('assetsMetronic/js/scripts.bundle.js') }}"></script>
+
+    <!-- Custom JS (optional for this page) -->
+    <script src="{{ asset('assetsMetronic/js/widgets.bundle.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/widgets.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/apps/chat/chat.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/upgrade-plan.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/create-campaign.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/new-address.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/users-search.js') }}"></script>
+	<script src="{{ asset('assetsMetronic/js/custom/authentication/sign-in/i18n.js') }}"></script>
 
 </body>
 </html>
