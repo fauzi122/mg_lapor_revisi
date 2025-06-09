@@ -100,7 +100,7 @@ class BadanUsahaController extends BaseController
         }
 
         if ($foundNiaga = true) {
-            $statusNiaga = 'Draft';
+            $statusNiaga = 'Belum Melaporkan';
         } else {
             $statusNiaga = 'Diterima';
         }
@@ -147,7 +147,7 @@ class BadanUsahaController extends BaseController
         }
 
         if ($foundPengolahan = true) {
-            $statusPengolahan = 'Draft';
+            $statusPengolahan = 'Belum Melaporkan';
         } else {
             $statusPengolahan = 'Diterima';
         }
@@ -178,7 +178,7 @@ class BadanUsahaController extends BaseController
         }
 
         if ($foundPenyimpanan = true) {
-            $statusPenyimpanan = 'Draft';
+            $statusPenyimpanan = 'Belum Melaporkan';
         } else {
             $statusPenyimpanan = 'Diterima';
         }
@@ -209,12 +209,12 @@ class BadanUsahaController extends BaseController
         }
 
         if ($foundPengangkutan = true) {
-            $statusPengangkutan = 'Draft';
+            $statusPengangkutan = 'Belum Melaporkan';
         } else {
             $statusPengangkutan = 'Diterima';
         }
         //laporan Pengangkutan
-        
+
         $dataContent = [
             'laporan_rutin' => [
                 [
