@@ -1,7 +1,125 @@
 @extends('layouts.blackand.app')
 
 @section('content')
-    <div class="page-content">
+
+<div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-8">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
+        <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+            <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                <h3 class="text-dark fw-bold">Data Kuota LPG Subsidi Verified</h3>
+            </div>
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                    <li class="breadcrumb-item text-muted">
+                        <a href="{{ url('/master') }}" class="text-muted text-hover-primary">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Subsidi LPG</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Data Kuota LPG Subsidi Verified</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        <div class="card-body p-3">
+            <div class="card mb-5 mb-xl-8 shadow">
+                <div class="card-header bg-light p-5">
+                    <div class="row w-100">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-end mb-3 gap-2">
+                                <button type="button" class="btn btn-primary  btn-rounded waves-effect waves-light"
+                                data-bs-toggle="modal" data-bs-target="#kt_modal_new_target"><i class="bi bi-file-earmark-plus fs-4"></i>Tambah Data
+                                </button>
+
+                                <button type="button" class="btn btn-success btn-rounded waves-effect waves-light" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_new_excel"><i class="bi bi-upload fs-4"></i></i> Import Excel</button>
+                            
+                                <!--  Import Excel Modal dan Tambah Data Modal  -->
+
+                                @include('evaluator.subsidi_lpg.kuota_subsidi.modal_import')
+
+                                @include('evaluator.subsidi_lpg.kuota_subsidi.modalstor')
+
+                                <!-- End Import Excel Modal dan Tambah Data Modal-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-2">
+                    <div class="card">
+                        <div class="card-header align-items-center px-2">
+                            <div class="card-toolbar"></div> 
+                            <div class="card-title flex-row-fluid justify-content-end gap-5">
+                                <input type="hidden" class="export-title" value="Data Kuota LPG Subsidi" />
+                            </div>
+                        </div>
+                        <table class="kt-datatable table table-bordered table-hover">
+                            <thead class="bg-light">
+                                <tr class="fw-bold text-uppercase">
+                                    <th>No</th>
+                                    <th>Bulan</th>
+                                    <th>Tahun</th>
+                                    <th>Provinsi</th>
+                                    <th>Kabupaten/Kota</th>
+                                    <th>Volume</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-semibold text-gray-600">
+                                @foreach ($lpg_subsidi as $data)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ getBulan($data->tahun) }}</td> 
+                                        <td>{{ getTahun($data->tahun) }}</td>
+                                        <td>{{ $data->provinsi }}</td>
+                                        <td>{{ $data->kabupaten_kota }}</td>
+                                        <td>{{ $data->volume }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning btn-rounded edit-button"
+                                                data-id="{{ $data->id }}"
+                                                data-bulan="{{ substr($data->tahun, 0, 7) }}"
+                                                data-provinsi="{{ $data->provinsi }}"
+                                                data-kabkot="{{ $data->kabupaten_kota }}"
+                                                data-volume="{{ $data->volume }}"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_edit">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </button>
+                                            
+                                            @include('evaluator.subsidi_lpg.kuota_subsidi.modaledit')
+                        
+                                            <a href="#" class="btn btn-danger btn-sm btn-rounded delete-btn"
+                                                data-id="{{ $data->id }}" onclick="deleteItem({{ $data->id }})">
+                                                <i class='bi bi-trash3-fill'></i> Hapus
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    {{-- <div class="page-content">
         <div class="container-fluid">
             <!-- Page title -->
             <div class="row">
@@ -99,9 +217,9 @@
                                                             <i class="bx bx-edit"></i> Edit
                                                     </button>
                                                     @include('evaluator.subsidi_lpg.kuota_subsidi.modaledit')
-                                                        {{-- <a href="" class="btn btn-warning btn-sm btn-rounded edit-btn" data-bs-toggle="modal" data-bs-target="#editModal{{ $data->id }}">
+                                                        <a href="" class="btn btn-warning btn-sm btn-rounded edit-btn" data-bs-toggle="modal" data-bs-target="#editModal{{ $data->id }}">
                                                             <i class="bx bx-edit"></i> Edit
-                                                        </a> --}}
+                                                        </a>
 
                                                         <a href="#" class="btn btn-danger btn-sm btn-rounded delete-btn"
                                                            data-id="{{ $data->id }}" onclick="deleteItem({{ $data->id }})">
@@ -121,7 +239,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
 

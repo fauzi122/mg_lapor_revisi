@@ -78,6 +78,7 @@
                             <span class="text-muted mt-1 fw-semibold fs-7">"{{ Auth::user()->name }}"</span>
                         </h3>
                     </div>
+                    {{-- Start --}}
                     <div class="card-body p-3">
                         <div class="card">
                             <div class="card-header align-items-center px-2">
@@ -208,6 +209,7 @@
                             </div>
                         </div>
                     </div>
+                    {{-- Finish --}}
                 </div>
             </div>
         </div>

@@ -1,204 +1,133 @@
-<header id="page-topbar">
-    <div class="navbar-header">
-        <div class="d-flex">
-            <!-- LOGO -->
-            <div class="navbar-brand-box">
-                <a href="index.html" class="logo logo-dark">
-                    <span class="logo-sm">
-                        {{-- <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24"> --}}
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24"> <span class="logo-txt">Pelaporan Migas</span>
-                    </span>
-                </a>
-
-                <a href="index.html" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{ asset('assets/images/logo-esdm.png')}}" alt="" height="24"> <span class="logo-txt">Pelaporan Migas</span>
-                    </span>
-                </a>
+<div id="kt_app_header" class="app-header">
+    <div class="app-header-brand ps-6">
+        <div class="d-flex align-items-center d-lg-none ms-n2 me-2" title="Show sidebar menu">
+            <div class="btn btn-icon btn-color-gray-500 btn-active-color-primary w-35px h-35px" id="kt_app_sidebar_mobile_toggle">
+                <i class="ki-outline ki-abstract-14 fs-2"></i>
             </div>
-
-            <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
-                <i class="fa fa-fw fa-bars"></i>
-            </button>
-
-            <!-- App Search-->
-            {{-- <form class="app-search d-none d-lg-block">
-                <div class="position-relative">
-                    <input type="text" class="form-control" placeholder="Search...">
-                    <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
-                </div>
-            </form> --}}
         </div>
-
-        <div class="d-flex">
-
-            <div class="dropdown d-inline-block d-lg-none ms-2">
-                <button type="button" class="btn header-item" id="page-header-search-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="search" class="icon-lg"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                    aria-labelledby="page-header-search-dropdown">
-
-                    <form class="p-3">
-                        <div class="form-group m-0">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
-
-                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
-                            </div>
+        <a class="app-sidebar-secondary-collapse-d-none" href="{{ route('dashboard') }}">
+            <img alt="Logo" src="{{ asset('assets/images/logo-esdm.png') }}" class="h-25px"/> 
+            <span class="badge badge-light-dark"><h5>Pelaporan Migas</h5></span>
+        </a>
+        <button id="kt_app_sidebar_secondary_toggle" class="btn btn-sm btn-icon bg-body btn-color-gray-400 btn-active-color-primary d-none d-lg-flex ms-2" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-secondary-collapse">
+            <i class="ki-outline ki-menu fs-1"></i>
+        </button>
+    </div>
+    <div class="app-header-wrapper">
+        <div class="app-container container-fluid">
+            <div class="app-navbar-item d-flex align-items-stretch flex-lg-grow-1">
+                <div id="kt_header_search" class="header-search d-flex align-items-center w-lg-275px" data-kt-search-keypress="true" data-kt-search-min-length="2" data-kt-search-enter="enter" data-kt-search-layout="menu" data-kt-search-responsive="true" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                    <div data-kt-search-element="toggle" class="search-toggle-mobile d-flex d-lg-none align-items-center">
+                        <div class="d-flex">
+                            <i class="ki-outline ki-magnifier fs-1"></i>
                         </div>
+                    </div>
+                    <form data-kt-search-element="form" class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+                        <input type="hidden" />
+                        <i class="ki-outline ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
+                        <input type="text" class="search-input form-control form-control-solid ps-13" name="search" value="" placeholder="Search..." data-kt-search-element="input" id="searchInput"/>
+                        <span class="search-spinner position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-5" data-kt-search-element="spinner">
+                            <span class="spinner-border h-15px w-15px align-middle text-gray-400"></span>
+                        </span>
+                        <span class="search-reset btn btn-flush btn-active-color-primary position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-4" data-kt-search-element="clear">
+                            <i class="ki-outline ki-cross fs-2 fs-lg-1 me-0"></i>
+                        </span>
                     </form>
                 </div>
             </div>
-
-            {{--  <div class="dropdown d-none d-sm-inline-block">
-                <button type="button" class="btn header-item"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img id="header-lang-img" src="assets/images/flags/us.jpg" alt="Header Language" height="16">
-                </button>
-                <div class="dropdown-menu dropdown-menu-end">
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
-                        <img src="assets/images/flags/us.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
-                    </a>
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
-                        <img src="assets/images/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
-                        <img src="assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
-                        <img src="assets/images/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
-                        <img src="assets/images/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
-                    </a>
-                </div>
-            </div>  --}}
-
-            <div class="dropdown d-none d-sm-inline-block">
-                <button type="button" class="btn header-item" id="mode-setting-btn">
-                    <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
-                    <i data-feather="sun" class="icon-lg layout-mode-light"></i>
-                </button>
-            </div>
-
-            {{--  <div class="dropdown d-none d-lg-inline-block ms-1">
-                <button type="button" class="btn header-item"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="grid" class="icon-lg"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                    <div class="p-2">
-                        <div class="row g-0">
-                            <div class="col">
-                                <a class="dropdown-icon-item" href="#">
-                                    <img src="assets/images/brands/github.png" alt="Github">
-                                    <span>GitHub</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item" href="#">
-                                    <img src="assets/images/brands/bitbucket.png" alt="bitbucket">
-                                    <span>Bitbucket</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item" href="#">
-                                    <img src="assets/images/brands/dribbble.png" alt="dribbble">
-                                    <span>Dribbble</span>
-                                </a>
-                            </div>
+            
+            <div class="app-navbar flex-shrink-0">
+                <div class="app-navbar-item ms-1 ms-md-3">
+                    <div class="app-navbar-item ms-1 ms-md-3 position-relative" id="calendar_wrapper">
+                        <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" id="calendar_trigger">
+                            <i class="ki-outline ki-calendar fs-1"></i>
                         </div>
-
-                        <div class="row g-0">
-                            <div class="col">
-                                <a class="dropdown-icon-item" href="#">
-                                    <img src="assets/images/brands/dropbox.png" alt="dropbox">
-                                    <span>Dropbox</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item" href="#">
-                                    <img src="assets/images/brands/mail_chimp.png" alt="mail_chimp">
-                                    <span>Mail Chimp</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item" href="#">
-                                    <img src="assets/images/brands/slack.png" alt="slack">
-                                    <span>Slack</span>
-                                </a>
-                            </div>
+                        <div id="calendar_popup">
+                            <div class="calendar_inline"></div>
                         </div>
                     </div>
                 </div>
-            </div>  --}}
-
-            {{-- <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="bell" class="icon-lg"></i>
-                    <span class="badge bg-danger rounded-pill">5</span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                    aria-labelledby="page-header-notifications-dropdown">
-                    <div class="p-3">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h6 class="m-0"> Notifications </h6>
-                            </div>
-                            <div class="col-auto">
-                                <a href="#!" class="small text-reset text-decoration-underline"> Unread (3)</a>
+                <div class="app-navbar-item">
+                    <div class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px ms-1 ms-md-3" id="kt_drawer_chat_toggle">
+                        <i class="ki-outline ki-notification-on fs-1"></i>
+                    </div>
+                </div>
+                <div class="app-navbar-item ms-1 ms-md-3" id="kt_header_user_menu_toggle">
+                    <div class="cursor-pointer symbol symbol-circle symbol-30px symbol-md-40px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                        @if(Auth::user()->role == 'BU')
+                            <img src="{{ asset('assetsMetronic/media/company_img.png')}}" alt="user"/>
+                        @else
+                            <img src="{{ asset('assets/images/users/avatar-1.jpg')}}" alt="user"/>
+                        @endif
+                    </div>
+                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
+                        <div class="menu-item px-3">
+                            <div class="menu-content d-flex align-items-center px-3">
+                                <div class="symbol symbol-50px me-5">
+                                    @if(Auth::user()->role == 'BU')
+                                        <img alt="Logo" src="{{ asset('assetsMetronic/media/company_img.png')}}"/>
+                                    @else
+                                        <img alt="Logo" src="{{ asset('assets/images/users/avatar-1.jpg')}}"/>
+                                    @endif
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <div class="fw-bold d-flex align-items-center fs-5">{{ Auth::user()->name }}
+                                        <span class="badge badge-light-success fw-bold fs-9 px-2 py-1 ms-2">{{ Auth::user()->role }}</span>
+                                    </div>
+                                    <a href="#" class="fw-semibold text-muted text-hover-primary fs-10">{{ Auth::user()->email }}</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                 
-                    <div class="p-2 border-top d-grid">
-                        <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
-                            <i class="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span> 
-                        </a>
+                        <div class="separator my-2"></div>
+                        <div class="menu-item px-5">
+                            <a href="#" class="menu-link px-5">My Profile</a>
+                        </div>
+                        <div class="separator my-2"></div>
+                        <div class="menu-item px-5" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="left-start" data-kt-menu-offset="-15px, 0">
+                            <a href="#" class="menu-link px-5">
+                                <span class="menu-title position-relative">Mode
+                                <span class="ms-5 position-absolute translate-middle-y top-50 end-0">
+                                    <i class="ki-outline ki-night-day theme-light-show fs-2"></i>
+                                    <i class="ki-outline ki-moon theme-dark-show fs-2"></i>
+                                </span></span>
+                            </a>
+                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-title-gray-700 menu-icon-gray-500 menu-active-bg menu-state-color fw-semibold py-4 fs-base w-150px" data-kt-menu="true" data-kt-element="theme-mode-menu">
+                                <div class="menu-item px-3 my-0">
+                                    <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="light">
+                                        <span class="menu-icon" data-kt-element="icon">
+                                            <i class="ki-outline ki-night-day fs-2"></i>
+                                        </span>
+                                        <span class="menu-title">Light</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item px-3 my-0">
+                                    <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="dark">
+                                        <span class="menu-icon" data-kt-element="icon">
+                                            <i class="ki-outline ki-moon fs-2"></i>
+                                        </span>
+                                        <span class="menu-title">Dark</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item px-3 my-0">
+                                    <a href="#" class="menu-link px-3 py-2" data-kt-element="mode" data-kt-value="system">
+                                        <span class="menu-icon" data-kt-element="icon">
+                                            <i class="ki-outline ki-screen fs-2"></i>
+                                        </span>
+                                        <span class="menu-title">System</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-item px-5">
+                            @if (Auth::user()->role == 'BU')
+                                <a class="menu-link px-5" href="{{ url('/logoutBU') }}">Sign Out</a>
+                            @else
+                                <a class="menu-link px-5" href="{{ url('/logout') }}">Sign Out</a>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div> --}}
-
-            <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item right-bar-toggle me-2">
-                    <i data-feather="settings" class="icon-lg"></i>
-                </button>
             </div>
-
-            <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/avatar-1.jpg')}}"
-                        alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ Auth::user()->name }} </span>
-                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <!-- item-->
-                    <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a>
-                    <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{ url('/logout') }}"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
-                </div>
-            </div>
-
         </div>
     </div>
-</header>
+</div>

@@ -1,187 +1,123 @@
 @extends('layouts.blackand.app')
 
 @section('content')
-    <div class="page-content">
-        <div class="container-fluid">
-            <!-- Page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Data LPG Subsidi Verified</h4>
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Tabel</a></li>
-                                <li class="breadcrumb-item active">Data LPG Subsidi Verified</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Success message -->
-            @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
 
-            <!-- Data table -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex justify-content-end mb-3">
+<div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-8">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
+        <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+            <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                <h3 class="text-dark fw-bold">Data LPG Subsidi Verified</h3>
+            </div>
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                    <li class="breadcrumb-item text-muted">
+                        <a href="{{ url('/master') }}" class="text-muted text-hover-primary">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Subsidi LPG</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
+                    <li class="breadcrumb-item text-muted">Data LPG Subsidi Verified</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        <div class="card-body p-3">
+            <div class="card mb-5 mb-xl-8 shadow">
+                <div class="card-header bg-light p-5">
+                    <div class="row w-100">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-end mb-3 gap-2">
                                 <button type="button" class="btn btn-primary  btn-rounded waves-effect waves-light"
-                                        data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl"><i class="bx bx-plus"></i> Tambah Data
+                                data-bs-toggle="modal" data-bs-target="#kt_modal_new_target" data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah Data"><i class="bi bi-file-earmark-plus fs-4"></i>Tambah Data
                                 </button>
 
                                 <button type="button" class="btn btn-success btn-rounded waves-effect waves-light" data-bs-toggle="modal"
-                                                    data-bs-target=".bs-example-modal-lg"><i class="bx bx-import"></i>Import Excel</button>
+                                data-bs-target="#kt_modal_new_excel" data-bs-toggle="tooltip" data-bs-placement="top" title="Import Excel"><i class="bi bi-upload fs-4"></i></i> Import Excel</button>
+                            
+                                <!--  Tambah Data Modal  -->
+                                @include('evaluator.subsidi_lpg.lpg_subsidi.modalstor')
+                                <!-- End Tambah Data Modal-->
+
+                                <!-- Import Excel -->
+                                @include('evaluator.subsidi_lpg.lpg_subsidi.modal_importExcel')
+                                <!-- End Import Excel -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-2">
+                    <div class="card">
+                        <div class="card-header align-items-center px-2">
+                            <div class="card-toolbar"></div> 
+                            <div class="card-title flex-row-fluid justify-content-end gap-5">
+                                <input type="hidden" class="export-title" value="Data LPG Subsidi" />
+                            </div>
+                        </div>
+                        <table class="kt-datatable table table-bordered table-hover">
+                            <thead class="bg-light">
+                                <tr class="fw-bold text-uppercase">
+                                    <th class="text-center">No</th>
+                                    <th class="text-center">Bulan</th>
+                                    <th class="text-center">Tahun</th>
+                                    <th class="text-center">Provinsi</th>
+                                    <th class="text-center">Volume</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-semibold text-gray-600">
+                                @foreach ($lpg_subsidi as $data)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ getBulan($data->bulan) }}</td> 
+                                        <td>{{ getTahun($data->bulan) }}</td>
+                                        
+                                        <td>{{ $data->provinsi }}</td>
+                                        <td>{{ $data->volume }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning btn-rounded edit-button"
+                                            data-id="{{ $data->id }}"
+                                            data-bulan="{{ $data->bulan }}"
+                                            data-provinsi="{{ $data->provinsi }}"
+                                            data-volume="{{ $data->volume }}"
+                                            data-bs-toggle="modal" data-bs-target="#editKuotaModal" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Data">
+                                            <i class="fa fa-edit"></i> Edit
+                                            </button>
+
+                                            <!-- Edit Modal -->
+                                            @include('evaluator.subsidi_lpg.lpg_subsidi.edit-modal')
+
                                             
-                                                <!--  Large modal example -->
-                                                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="myLargeModalLabel">Import Excel Data LPG Subsidi Verified</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <form action="/lpg/storeSubsidi_excel" method="post" id="myform" enctype="multipart/form-data">
-                                                                @csrf
-                                                                <div class="modal-body">
-                                                                    <div class="mb-3">
-                                                                        <label for="bulan">Bulan*</label>
-                                                                        <input class="form-control mb-2" type="month" id="bulan" name="bulan" required>
-                                                                    </div>
-                                                                    <div class="mb-3">
-                                                                        <label for="file">File *</label>
-                                                                        <input class="form-control mb-2" type="file" id="file" name="file" required>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit" class="btn btn-primary btn-rounded">Simpan</button>
-                                                                    <a href="/storage/template/Subsidi_LPG.xlsx" type="button" class="btn btn-success btn-rounded">Download Templet Excel</a>
-                                                                </div>
-                                                            </form>
-                                                        </div><!-- /.modal-content -->
-                                                    </div><!-- /.modal-dialog -->
-                                                </div><!-- /.modal -->                                                
-
-
-                                <div class=" modal fade modal-select bs-example-modal-xl" tabindex="-1" role="dialog"
-                                     aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="myExtraLargeModalLabel">Data LPG Subsidi Verified</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- Form yang diambil dari form sebelumnya -->
-                                                @include('evaluator.subsidi_lpg.lpg_subsidi.modalstor')
-
-                                            </div>
-
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div><!-- /.modal -->
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="tab-content">
-                                <div class="tab-pane fade show active" id="penjualan">
-                                    <div class="table-responsive">
-                                        <table id="datatable-buttons"
-                                               class="table table-bordered dt-responsive nowrap w-100">
-                                            <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Bulan</th>
-                                                <th>Tahun</th>
-                                                <th>Provinsi</th>
-                                                <th>Volume</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach ($lpg_subsidi as $data)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ getBulan($data->bulan) }}</td> 
-                                                    <td>{{ getTahun($data->bulan) }}</td>
-                                                   
-                                                    <td>{{ $data->provinsi }}</td>
-                                                    <td>{{ $data->volume }}</td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-warning btn-rounded edit-button"
-                                                        data-id="{{ $data->id }}"
-                                                        data-bulan="{{ $data->bulan }}"
-                                                        data-provinsi="{{ $data->provinsi }}"
-                                                        data-volume="{{ $data->volume }}"
-                                                        data-bs-toggle="modal" data-bs-target="#editKuotaModal">
-                                                    <i class="bx bx-edit"></i> Edit
-                                                </button>
-                                                 
-                                                <!-- Modal Edit Kuota -->
-                                                <div class="modal fade" id="editKuotaModal" tabindex="-1" role="dialog" aria-labelledby="editKuotaModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <form action="/lpg/subsidi/update/{{ $data->id }}" method="post" id="editKuotaForm">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="editKuotaModalLabel">Edit Data LPG Subsidi </h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="mb-3">
-                                                                        <label for="editBulan">Bulan*</label>
-                                                                        <input class="form-control mb-2" type="month" id="editBulan" name="bulan" value="{{ substr($data->bulan, 0, 7) }}" required>
-                                                                    </div>
-                                                                    <div class="mb-3">
-                                                                        <label for="editProvinsi">Provinsi*</label>
-                                                                        <select name="provinsi" id="editProvinsi" class="form-control" required>
-                                                                            <option value="">--Pilih Provinsi--</option>
-                                                                            @foreach ($provinsi as $prov)
-                                                                                <option value="{{ $prov['name'] }}" {{ ($data->provinsi == $prov['name']) ? 'selected' : '' }}>{{ $prov['name'] }}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="mb-3">
-                                                                        <label for="editVolume">Volume*</label>
-                                                                        <input class="form-control" type="number" min="0" id="editVolume" name="volume" value="{{ $data->volume }}" required>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-
-                                                        <a href="#" class="btn btn-danger btn-sm btn-rounded delete-btn"
-                                                           data-id="{{ $data->id }}" onclick="deleteItem({{ $data->id }})">
-                                                            <i class='bx bx-trash'></i> Hapus
-                                                        </a>
-
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                            <a href="#" class="btn btn-danger btn-sm btn-rounded delete-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus"
+                                                data-id="{{ $data->id }}" onclick="deleteItem({{ $data->id }})">
+                                                <i class='bi bi-trash3-fill'></i> Hapus
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
+</div>
 @endsection
 @section('script')
     <script>

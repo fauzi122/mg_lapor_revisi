@@ -48,8 +48,8 @@
                                 <!-- Body -->
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" placeholder="Masukan Email">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" class="form-control" name="email" id="email" placeholder="Masukan Username" required>
                                     </div>
 
                                     <div class="mb-3" data-kt-password-meter="true">
@@ -63,13 +63,26 @@
                                         </div>
 
                                         <div class="position-relative mb-3">
-											<input class="form-control bg-transparent" type="password" placeholder="Masukan Password" name="password" autocomplete="off" />
+											<input class="form-control bg-transparent" type="password" placeholder="Masukan Password" name="password" autocomplete="off" required/>
 											<span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
 												<i class="ki-outline ki-eye-slash fs-2"></i>
 												<i class="ki-outline ki-eye fs-2 d-none"></i>
 											</span>
 										</div>
                                     </div>
+
+                                    {{-- Peringatan login --}}
+                                    @if($errors->has('login_error'))
+                                    <div class="alert alert-danger" id="status-alert">
+                                        {{ $errors->first('login_error') }}
+                                    </div>
+                                    @endif
+
+                                    @if(session('statusLogin'))
+                                        <div class="alert alert-success" id="status-alert">
+                                            {{ session('statusLogin') }}
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <!-- Footer -->
@@ -140,6 +153,16 @@
     <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/new-address.js') }}"></script>
     <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/users-search.js') }}"></script>
 	<script src="{{ asset('assetsMetronic/js/custom/authentication/sign-in/i18n.js') }}"></script>
+
+    <script>
+        // Setelah 3 detik, sembunyikan alert
+        setTimeout(function() {
+            var alertBox = document.getElementById('status-alert');
+            if (alertBox) {
+                alertBox.style.display = 'none';
+            }
+        }, 3000); // 3000 ms = 3 detik
+    </script>
 
 </body>
 </html>
