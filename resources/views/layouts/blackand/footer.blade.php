@@ -1,14 +1,6 @@
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <script>document.write(new Date().getFullYear())</script> © Aplikasi Pelaporan Migas.
-            </div>
-            <div class="col-sm-6">
-                <div class="text-sm-end d-none d-sm-block">
-                    {{--  Aplikasi Pelaporan Migas <a href="#!" class="text-decoration-underline">Aplikasi Pelaporan Migas</a>  --}}
-                </div>
-            </div>
-        </div>
+<div class="app-container container-xxl d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+    <div class="text-dark order-2 order-md-1">
+        <span class="text-muted fw-semibold me-1">{{ date('Y') }}&copy;</span>
+        <a href="#" class="text-gray-800 text-hover-primary">Aplikasi Pelaporan Migas</a>
     </div>
-</footer>
+</div>
