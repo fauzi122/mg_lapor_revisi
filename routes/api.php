@@ -22,3 +22,5 @@ Route::post('getToken', [RegisterController::class, 'getToken']);
 Route::middleware('auth:api')->group(function () {
 	Route::post('badan-usaha/register', [BadanUsahaController::class, 'registerBU']);
 });
+Route::post('/bu/get-data', [BadanUsahaController::class, 'getDataLaporanBU']);
+
