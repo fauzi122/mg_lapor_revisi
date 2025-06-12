@@ -21,6 +21,7 @@
             </a>
             <!--end:Menu link-->
         </div>
+        @can('user')
         <div class="menu-item menu-accordion">
             <!--begin:Menu link-->
             <a href="{{ url('/user') }}" class="menu-link">
@@ -30,7 +31,9 @@
                 <span class="menu-title">User Evaluator</span>
             </a>
             <!--end:Menu link-->
-        </div>
+        </div>      
+        @endcan
+
         <div class="menu-item menu-accordion">
             <!--begin:Menu link-->
             <a href="{{ url('/role') }}" class="menu-link">
@@ -41,6 +44,8 @@
             </a>
             <!--end:Menu link-->
         </div>
+
+        @can('permission')
         <div class="menu-item menu-accordion">
             <!--begin:Menu link-->
             <a href="{{ url('/permission') }}" class="menu-link">
@@ -51,5 +56,6 @@
             </a>
             <!--end:Menu link-->
         </div>
+        @endcan
     </div>
 </div>

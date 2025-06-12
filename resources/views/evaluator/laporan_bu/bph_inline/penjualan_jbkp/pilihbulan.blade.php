@@ -17,6 +17,9 @@
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
                     </li>
                     <li class="breadcrumb-item text-muted">Niaga BBM</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
                     <li class="breadcrumb-item text-muted">
                         <a href="{{ url('/laporan/penjualan-jbkp') }}" class="text-muted text-hover-primary">Penjualan JBKP</a>
                     </li>

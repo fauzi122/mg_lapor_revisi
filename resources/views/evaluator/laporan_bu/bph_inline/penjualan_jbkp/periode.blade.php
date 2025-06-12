@@ -17,13 +17,16 @@
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
                     </li>
                     <li class="breadcrumb-item text-muted">Niaga BBM</li>
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                    </li>
                     <li class="breadcrumb-item text-muted">
                         <a href="{{ url('/laporan/penjualan-jbkp') }}" class="text-muted text-hover-primary">Penjualan JBKP</a>
                     </li>
                     <li class="breadcrumb-item">
-                    <li class="breadcrumb-item">
-                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
-                    </li>
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                        </li>
                     <li class="breadcrumb-item text-muted">{{ $title }}</li>
                 </ul>
             </div>
@@ -86,10 +89,10 @@
                                         </td>
                                         <td><span class="text-primary">{{ $row->tahun }}</span></td>
 
-                                        <td>
+                                        <td class="text-center">
                                             <a href="{{ url('/laporan/penjualan-jbkp') }}/{{ $params }}"
                                                 class="btn btn-sm btn-primary btn-rounded">
-                                                <i class="bx bx-show"></i> Lihat Detail
+                                                <i class="bi bi-eye fs-3"></i> Lihat Detail
                                             </a>
                                         </td>
                                     </tr>

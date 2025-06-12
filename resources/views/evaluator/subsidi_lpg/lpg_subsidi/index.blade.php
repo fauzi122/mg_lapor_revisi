@@ -89,7 +89,7 @@
                                         
                                         <td>{{ $data->provinsi }}</td>
                                         <td>{{ $data->volume }}</td>
-                                        <td>
+                                        <td class="text-center">
                                             <button class="btn btn-sm btn-warning btn-rounded edit-button"
                                             data-id="{{ $data->id }}"
                                             data-bulan="{{ $data->bulan }}"

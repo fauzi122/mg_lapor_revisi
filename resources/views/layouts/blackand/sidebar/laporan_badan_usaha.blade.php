@@ -14,43 +14,45 @@
 
     <div class="menu-sub menu-sub-accordion">
         <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-            <!--begin:Menu link-->
-            <span class="menu-link">
-                <span class="menu-bullet">
-                    <span class="bullet bullet-dot"></span>
+        @can('Minyak Bumi')
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-bullet">
+                        <span class="bullet bullet-dot"></span>
+                    </span>
+                    <span class="menu-title">Hasil Olahan/Minyak Bumi</span>
+                    <span class="menu-arrow"></span>
                 </span>
-                <span class="menu-title">Hasil Olahan/Minyak Bumi</span>
-                <span class="menu-arrow"></span>
-            </span>
-            <!--end:Menu link-->
-            <!--begin:Menu sub-->
-            <div class="menu-sub menu-sub-accordion">
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="{{ url('/laporan/jual-hasil-olahan') }}">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Penjualan Hasil Olahan/Minyak Bumi</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Pasokan Hasil Olahan/Minyak Bumi</span>
-                    </a>
-                    <!--end:Menu link-->
+                <!--end:Menu link-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/jual-hasil-olahan') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Penjualan Hasil Olahan/Minyak Bumi</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/pasokan-hasil-olahan') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Pasokan Hasil Olahan/Minyak Bumi</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
                 </div>
             </div>
-        </div>
+        @endcan
     </div>
 
     {{-- Harga --}}
@@ -74,311 +76,325 @@
             <!--begin:Menu sub-->
             <div class="menu-sub menu-sub-accordion">
                 <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Harga BBM JBU</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
+                @can('Minyak Bumi')
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/harga-bbm') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Harga BBM JBU</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                @endcan
 
                 {{-- Harga LPG --}}
                 <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Harga LPG</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    {{-- LNG/CNG/BNG --}}
-
-    <!--begin:Menu sub-->
-    <div class="menu-sub menu-sub-accordion">
-        <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-            <!--begin:Menu link-->
-            <span class="menu-link">
-                <span class="menu-bullet">
-                    <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">LNG/CNG/BNG</span>
-                <span class="menu-arrow"></span>
-            </span>
-            <!--end:Menu link-->
-
-            {{-- Penjualan LNG/CNG/BNG --}}
-
-            <!--begin:Menu sub-->
-            <div class="menu-sub menu-sub-accordion">
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Penjualan LNG/CNG/BNG</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
-
-                {{-- Pasokan LNG/CNG/BNG --}}
-                
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Pasokan LNG/CNG/BNG</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
+                @can('LPG/GAS')
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/harga-lpg') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Harga LPG</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                @endcan
             </div>
         </div>
     </div>
     
     
-    {{-- LPG --}}
+    @can('LPG/GAS')
 
-    <!--begin:Menu sub-->
-    <div class="menu-sub menu-sub-accordion">
-        <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-            <!--begin:Menu link-->
-            <span class="menu-link">
-                <span class="menu-bullet">
-                    <span class="bullet bullet-dot"></span>
+        {{-- LNG/CNG/BNG --}}
+
+        <!--begin:Menu sub-->
+        <div class="menu-sub menu-sub-accordion">
+            <!--begin:Menu item-->
+
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-bullet">
+                        <span class="bullet bullet-dot"></span>
+                    </span>
+                    <span class="menu-title">LNG/CNG/BNG</span>
+                    <span class="menu-arrow"></span>
                 </span>
-                <span class="menu-title">LPG</span>
-                <span class="menu-arrow"></span>
-            </span>
-            <!--end:Menu link-->
+                <!--end:Menu link-->
 
-            {{-- Penjualan LPG --}}
+                {{-- Penjualan LNG/CNG/BNG --}}
 
-            <!--begin:Menu sub-->
-            <div class="menu-sub menu-sub-accordion">
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Penjualan LPG</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/jual/lng-cng-bbg') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Penjualan LNG/CNG/BNG</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
 
-                {{-- Pasokan LPG --}}
-                
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Pasokan LPG</span>
-                    </a>
-                    <!--end:Menu link-->
+                    {{-- Pasokan LNG/CNG/BNG --}}
+                    
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/pasok/lng-cng-bbg') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Pasokan LNG/CNG/BNG</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        
+        
+        {{-- LPG --}}
+
+        <!--begin:Menu sub-->
+        <div class="menu-sub menu-sub-accordion">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-bullet">
+                        <span class="bullet bullet-dot"></span>
+                    </span>
+                    <span class="menu-title">LPG</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <!--end:Menu link-->
+
+                {{-- Penjualan LPG --}}
+
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/jual/lpg') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Penjualan LPG</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+
+                    {{-- Pasokan LPG --}}
+                    
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/pasok/lpg') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Pasokan LPG</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {{-- Gas Bumi Melalui Pipa --}}
+
+        <div class="menu-sub menu-sub-accordion">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-bullet">
+                        <span class="bullet bullet-dot"></span>
+                    </span>
+                    <span class="menu-title">Gas Bumi Melalui Pipa</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <!--end:Menu link-->
+
+                {{-- Penjualan Gas Bumi --}}
+
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/jual/gbmp') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Penjualan Gas Bumi</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+
+                    {{-- Pasokan Gas Bumi --}}
+                    
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/pasok/gbmp') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Pasokan Gas Bumi</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endcan
     
-    {{-- Gas Bumi Melalui Pipa --}}
 
-    <div class="menu-sub menu-sub-accordion">
-        <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-            <!--begin:Menu link-->
-            <span class="menu-link">
-                <span class="menu-bullet">
-                    <span class="bullet bullet-dot"></span>
+    @can('Minyak Bumi')
+        {{-- Pengelolaan Minyak Bumi --}}
+
+        <div class="menu-sub menu-sub-accordion">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-bullet">
+                        <span class="bullet bullet-dot"></span>
+                    </span>
+                    <span class="menu-title">Pengelolaan Minyak Bumi</span>
+                    <span class="menu-arrow"></span>
                 </span>
-                <span class="menu-title">Gas Bumi Melalui Pipa</span>
-                <span class="menu-arrow"></span>
-            </span>
-            <!--end:Menu link-->
+                <!--end:Menu link-->
 
-            {{-- Penjualan Gas Bumi --}}
+                {{-- Produksi Kilang --}}
 
-            <!--begin:Menu sub-->
-            <div class="menu-sub menu-sub-accordion">
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Penjualan Gas Bumi</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/produksi/mb') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Produksi Kilang</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
 
-                {{-- Pasokan Gas Bumi --}}
-                
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Pasokan Gas Bumi</span>
-                    </a>
-                    <!--end:Menu link-->
+                    {{-- Pasokan Kilang --}}
+                    
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/pasokan/mb') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Pasokan Kilang</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+
+                    {{-- Distribusi/Penjualan Dosmetik kilang --}}
+
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/distribusi/mb') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Distribusi/Penjualan Dosmetik Kilang</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endcan
+    
 
+    @can('LPG/GAS')
+        {{-- Pengelolaan Gas Bumi --}}
 
-    {{-- Pengelolaan Minyak Bumi --}}
-
-    <div class="menu-sub menu-sub-accordion">
-        <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-            <!--begin:Menu link-->
-            <span class="menu-link">
-                <span class="menu-bullet">
-                    <span class="bullet bullet-dot"></span>
+        <div class="menu-sub menu-sub-accordion">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-bullet">
+                        <span class="bullet bullet-dot"></span>
+                    </span>
+                    <span class="menu-title">Pengelolaan Gas Bumi</span>
+                    <span class="menu-arrow"></span>
                 </span>
-                <span class="menu-title">Pengelolaan Minyak Bumi</span>
-                <span class="menu-arrow"></span>
-            </span>
-            <!--end:Menu link-->
+                <!--end:Menu link-->
 
-            {{-- Produksi Kilang --}}
+                {{-- Produksi Kilang --}}
 
-            <!--begin:Menu sub-->
-            <div class="menu-sub menu-sub-accordion">
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Produksi Kilang</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/produksi/gb') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Produksi Kilang</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
 
-                {{-- Pasokan Kilang --}}
-                
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Pasokan Kilang</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
+                    {{-- Pasokan Kilang --}}
+                    
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/pasokan/gb') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Pasokan Kilang</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
 
-                {{-- Distribusi/Penjualan Dosmetik kilang --}}
+                    {{-- Distribusi/Penjualan Dosmetik kilang --}}
 
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Distribusi/Penjualan Dosmetik Kilang</span>
-                    </a>
-                    <!--end:Menu link-->
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/distribusi/gb') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Distribusi/Penjualan Dosmetik Kilang</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-
-    {{-- Pengelolaan Gas Bumi --}}
-
-    <div class="menu-sub menu-sub-accordion">
-        <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-            <!--begin:Menu link-->
-            <span class="menu-link">
-                <span class="menu-bullet">
-                    <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">Pengelolaan Gas Bumi</span>
-                <span class="menu-arrow"></span>
-            </span>
-            <!--end:Menu link-->
-
-            {{-- Produksi Kilang --}}
-
-            <!--begin:Menu sub-->
-            <div class="menu-sub menu-sub-accordion">
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Produksi Kilang</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
-
-                {{-- Pasokan Kilang --}}
-                
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Pasokan Kilang</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-
-                {{-- Distribusi/Penjualan Dosmetik kilang --}}
-
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Distribusi/Penjualan Dosmetik Kilang</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-            </div>
-        </div>
-    </div>
+    @endcan
+    
 
 
     {{-- Ekspor - Impor --}}
@@ -401,30 +417,35 @@
             <!--begin:Menu sub-->
             <div class="menu-sub menu-sub-accordion">
                 <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Ekspor</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
-
-                {{-- Impor --}}
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Impor</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
+                @can('Minyak Bumi')
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/expor/exim') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Ekspor</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                @endcan
+                
+                @can('LPG/GAS')
+                    {{-- Impor --}}
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/impor/exim') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Impor</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                @endcan
+                
             </div>
         </div>
     </div>
@@ -449,31 +470,36 @@
 
             <!--begin:Menu sub-->
             <div class="menu-sub menu-sub-accordion">
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Minyak Bumi</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
+                @can('Minyak Bumi')
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/penyimpanan/mb') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Minyak Bumi</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                @endcan
 
-                {{-- Impor --}}
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Gas Bumi</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
+                @can('LPG/GAS')
+                    {{-- Gas Bumi --}}
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="{{ url('/laporan/penyimpanan/gb') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Gas Bumi</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                @endcan
+                
             </div>
         </div>
     </div>
@@ -498,31 +524,35 @@
 
             <!--begin:Menu sub-->
             <div class="menu-sub menu-sub-accordion">
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Minyak Bumi</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
+                @can('Minyak Bumi')
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="#">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Minyak Bumi</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                @endcan
 
-                {{-- Impor --}}
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Gas Bumi</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
+                @can('LPG/GAS')
+                    {{-- Gas Bumi --}}
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link" href="#">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Gas Bumi</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                @endcan
             </div>
         </div>
     </div>
