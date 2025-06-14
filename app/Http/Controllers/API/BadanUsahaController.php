@@ -83,7 +83,7 @@ class BadanUsahaController extends BaseController
         $foundNiaga = false;
 
         foreach ($queriesNiaga as $queryNiaga) {
-            $resultNiaga = DB::table("setum_kop.{$queryNiaga['table']}")
+            $resultNiaga = DB::table("{$queryNiaga['table']}")
                 ->where(DB::raw("DATE_FORMAT({$queryNiaga['column']}, '%Y-%m')"), $bulan)
                 ->where('badan_usaha_id', $badanUsahaId)
                 ->where('status', '<>', 1)
@@ -124,7 +124,7 @@ class BadanUsahaController extends BaseController
         $foundPengolahan = false;
 
         foreach ($queriesPengolahan as $queryPengolahan) {
-            $resultPengolahan = DB::table("setum_kop.{$queryPengolahan['table']}")
+            $resultPengolahan = DB::table("{$queryPengolahan['table']}")
                 ->where(DB::raw("DATE_FORMAT({$queryPengolahan['column']}, '%Y-%m')"), $bulan)
                 ->where('badan_usaha_id', $badanUsahaId)
                 ->where('status', '<>', 1);
@@ -162,7 +162,7 @@ class BadanUsahaController extends BaseController
         $found = false;
 
         foreach ($queriesPenyimpanan as $queryPenyimpanan) {
-            $resultPenyimpanan = DB::table("setum_kop.{$queryPenyimpanan['table']}")
+            $resultPenyimpanan = DB::table("{$queryPenyimpanan['table']}")
                 ->where(DB::raw("DATE_FORMAT({$queryPenyimpanan['column']}, '%Y-%m')"), $bulan)
                 ->where('badan_usaha_id', $badanUsahaId)
                 ->where('status', '<>', 1);
@@ -193,7 +193,7 @@ class BadanUsahaController extends BaseController
         $found = false;
 
         foreach ($queriesPengangkutan as $queryPengangkutan) {
-            $resultPengangkutan = DB::table("setum_kop.{$queryPengangkutan['table']}")
+            $resultPengangkutan = DB::table("{$queryPengangkutan['table']}")
                 ->where(DB::raw("DATE_FORMAT({$queryPengangkutan['column']}, '%Y-%m')"), $bulan)
                 ->where('badan_usaha_id', $badanUsahaId)
                 ->where('status', '<>', 1);
