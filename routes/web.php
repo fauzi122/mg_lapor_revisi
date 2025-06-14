@@ -83,6 +83,7 @@ Route::get('/real-time-data', [RealTimeDataController::class, 'getData']);
 Route::get('/real-time-data-view', [RealTimeDataController::class, 'index']);
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login/post-login', [AuthBuController::class, 'postloginIzin']);
+Route::get('badan-usaha/login/{dataNPWP}', [AuthBuController::class, 'postloginIzinByURL']); //Redirect from izin
 
 //auth Evaluator
 Route::get('/evaluator/login', [AuthEvaluatorController::class, 'index']);
