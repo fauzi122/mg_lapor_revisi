@@ -53,6 +53,9 @@ class BadanUsahaController extends BaseController
             return response()->json($response, 200);
         }
 
+        $dataNpwp = encrypt($npwp);
+        $url = 'http://127.0.0.1:8000/badan-usaha/login/' . $dataNpwp;
+
         $message = "Data Pelaporan";
         App::setLocale('id'); // Set locale ke bahasa Indonesia
         Carbon::setLocale('id');
@@ -85,7 +88,7 @@ class BadanUsahaController extends BaseController
         foreach ($queriesNiaga as $queryNiaga) {
             $resultNiaga = DB::table("{$queryNiaga['table']}")
                 ->where(DB::raw("DATE_FORMAT({$queryNiaga['column']}, '%Y-%m')"), $bulan)
-                ->where('badan_usaha_id', $badanUsahaId)
+                ->where('npwp', $badanUsahaId)
                 ->where('status', '<>', 1)
                 ->exists();
 
@@ -126,7 +129,7 @@ class BadanUsahaController extends BaseController
         foreach ($queriesPengolahan as $queryPengolahan) {
             $resultPengolahan = DB::table("{$queryPengolahan['table']}")
                 ->where(DB::raw("DATE_FORMAT({$queryPengolahan['column']}, '%Y-%m')"), $bulan)
-                ->where('badan_usaha_id', $badanUsahaId)
+                ->where('npwp', $npwp)
                 ->where('status', '<>', 1);
 
             // Tambahan filter jika ada 'extra'
@@ -164,7 +167,7 @@ class BadanUsahaController extends BaseController
         foreach ($queriesPenyimpanan as $queryPenyimpanan) {
             $resultPenyimpanan = DB::table("{$queryPenyimpanan['table']}")
                 ->where(DB::raw("DATE_FORMAT({$queryPenyimpanan['column']}, '%Y-%m')"), $bulan)
-                ->where('badan_usaha_id', $badanUsahaId)
+                ->where('npwp', $badanUsahaId)
                 ->where('status', '<>', 1);
 
             if ($resultPenyimpanan->exists()) {
@@ -195,7 +198,7 @@ class BadanUsahaController extends BaseController
         foreach ($queriesPengangkutan as $queryPengangkutan) {
             $resultPengangkutan = DB::table("{$queryPengangkutan['table']}")
                 ->where(DB::raw("DATE_FORMAT({$queryPengangkutan['column']}, '%Y-%m')"), $bulan)
-                ->where('badan_usaha_id', $badanUsahaId)
+                ->where('npwp', $badanUsahaId)
                 ->where('status', '<>', 1);
 
             if ($resultPengangkutan->exists()) {
@@ -220,22 +223,22 @@ class BadanUsahaController extends BaseController
                 [
                     'jenis_pelaporan' => 'Pelaporan Niaga Migas',
                     'batas_akhir_pelaporan' => $eom,
-                    'url' => '',
+                    'url' => $url,
                 ],
                 [
                     'jenis_pelaporan' => 'Pelaporan Pengolahan Migas',
                     'batas_akhir_pelaporan' => $eom,
-                    'url' => '',
+                    'url' => $url,
                 ],
                 [
                     'jenis_pelaporan' => 'Pelaporan Penyimpanan Migas',
                     'batas_akhir_pelaporan' => $eom,
-                    'url' => '',
+                    'url' => $url,
                 ],
                 [
                     'jenis_pelaporan' => 'Pelaporan Pengangkutan Migas',
                     'batas_akhir_pelaporan' => $eom,
-                    'url' => '',
+                    'url' => $url,
                 ]
             ],
             'layanan_penunjang' => [],
