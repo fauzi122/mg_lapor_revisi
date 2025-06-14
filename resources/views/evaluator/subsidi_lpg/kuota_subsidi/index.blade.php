@@ -89,7 +89,7 @@
                                         <td>{{ $data->provinsi }}</td>
                                         <td>{{ $data->kabupaten_kota }}</td>
                                         <td>{{ $data->volume }}</td>
-                                        <td>
+                                        <td class="text-center">
                                             <button class="btn btn-sm btn-warning btn-rounded edit-button"
                                                 data-id="{{ $data->id }}"
                                                 data-bulan="{{ substr($data->tahun, 0, 7) }}"

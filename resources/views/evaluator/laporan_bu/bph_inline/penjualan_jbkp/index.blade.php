@@ -125,7 +125,7 @@
                                                                 <input class="form-control" name="t_akhir" type="month"
                                                                     value="Artisanal kale" id="example-text-input" required>
                                                             </div>
-                                                            <div class="fv-row mb-7">
+                                                            <div class="modal-footer flex-center">
                                                                 <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Proses</button>
                                                             </div>
                                                         </div>
@@ -135,66 +135,6 @@
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->
                                 </div><!-- /.modal -->
-
-                                {{-- <!-- Modal Lama -->
-                                <div class="modal fade modal-select bs-example-modal-center" tabindex="-1" role="dialog"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Cetak</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="cetakForm"
-                                                    action="{{ url('/laporan/penjualan-jbkp/cetak-periode') }}"
-                                                    method="post">
-                                                    @csrf
-                                                    <div>
-                                                        <div class="mb-3">
-                                                            <label for="example-text-input" class="form-label">Nama
-                                                                Perusahaan</label>
-                                                            <select
-                                                                class="form-control select20 select2-hidden-accessible mb-2"
-                                                                style="width: 100%;" tabindex="-1" aria-hidden="true"
-                                                                name="perusahaan" required>
-                                                                <option value="">--Pilih Perusahaan--</option>
-                                                                <option value="all"> Semua Perusahaan </option>
-
-                                                                @foreach ($perusahaan as $p)
-                                                                    <option value="{{ $p->id_badan_usaha }}">
-                                                                        {{ $p->nama_badan_usaha }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label for="example-text-input" class="form-label">Tanggal
-                                                                Awal</label>
-                                                            <input class="form-control" name="t_awal" type="month"
-                                                                id="example-text-input" required>
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label for="example-text-input" class="form-label">Tanggal
-                                                                Akhir</label>
-                                                            <input class="form-control" name="t_akhir" type="month"
-                                                                value="Artisanal kale" id="example-text-input" required>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <button type="submit" data-bs-dismiss="modal"
-                                                                class="btn btn-primary">Proses</button>
-                                                        </div>
-
-
-                                                    </div>
-
-                                                </form>
-                                            </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div><!-- /.modal --> --}}
                             </div>
                         </div>
                     </div>
@@ -237,7 +177,7 @@
                                             @endif
                                         </td>
 
-                                        <td>
+                                        <td class="text-center">
                                             <a href="{{ url('laporan/penjualan-jbkp/periode/' . Crypt::encryptString($per->npwp_badan_usaha)) }}"
                                                 class="btn btn-primary btn-rounded btn-sm">
                                                 <i class="bi bi-eye fs-3"></i> Lihat
