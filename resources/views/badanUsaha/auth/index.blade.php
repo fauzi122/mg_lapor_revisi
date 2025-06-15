@@ -35,7 +35,7 @@
                                         <select name="perusahaan" data-control="select2" class="form-select form-select-solid shadow-lg" required>
                                             <option value="" disabled selected>-- Pilih Nama Perusahaan --</option>
                                             @foreach ($perusahaan as $item)
-                                                <option value="{{ $item->ID_PERUSAHAAN }}">{{ $item->NAMA_PERUSAHAAN }}</option>
+                                                <option value="{{ $item->id_perusahaan }}">{{ $item->nama_perusahaan }}</option>
                                             @endforeach
                                         </select>
                                     </div>

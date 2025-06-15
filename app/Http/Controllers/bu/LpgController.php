@@ -22,7 +22,7 @@ class LpgController extends Controller
   public function index($id)
   {
     $pecah = explode(',', Crypt::decryptString($id));
-
+// dd($pecah);
     $lpgpenjualan = DB::table('penjualan_lpgs')
       ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
       ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
