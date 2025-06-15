@@ -24,51 +24,51 @@ class DashboardController extends Controller
     public function dashboard()
 	{
 
+		$meping = Meping::groupBy('id_template')->get();
+		$sub_page = Meping::get();
+		$sub_menu = Meping::groupBy('id_sub_menu')->get();
 
-	$meping = Meping::select('id_template')->groupBy('id_template')->get();
-	$sub_page = Meping::all(); 
-	$sub_menu = Meping::select('id_sub_menu')->groupBy('id_sub_menu')->get();
+	$result = DB::select("
+		SELECT
+		m.*,
+		i.id AS izin_id,
+		i.npwp,
 
-
-
-$result = DB::select("
-    SELECT
-        m.*,
-        i.id AS izin_id,
-        i.npwp,
-        jt.id_izin,
-        jt.tanggal_izin,
-        jt.id_permohonan,
-        jt.kode_izin_desc,
-        jt.jenis_izin_desc,
-        jt.jenis_pengesahan,
-        jt.status_pengesahan,
-        jt.no_sertifikat_izin,
-        jt.tanggal_pengesahan,
-        jt.sub_page_id,
-        jt.no_sk_izin
-    FROM mepings m
-    JOIN izin_migas i ON TRUE
-    JOIN LATERAL (
-        SELECT
-            (d ->> 'Id_Izin')::int AS id_izin,
-            (d ->> 'Tanggal_izin')::date AS tanggal_izin,
-            (d ->> 'Id_Permohonan')::int AS id_permohonan,
-            (d ->> 'Kode_Izin_Desc') AS kode_izin_desc,
-            (d ->> 'Jenis_Izin_Desc') AS jenis_izin_desc,
-            (d ->> 'Jenis_Pengesahan') AS jenis_pengesahan,
-            (d ->> 'Status_Pengesahan') AS status_pengesahan,
-            (d ->> 'No_Sertifikat_izin') AS no_sertifikat_izin,
-            (d ->> 'No_SK_Izin') AS no_sk_izin,
-            (d ->> 'Tanggal_Pengesahan')::timestamp AS tanggal_pengesahan,
-            (mi ->> 'sub_page_id')::int AS sub_page_id
-        FROM jsonb_array_elements(i.data_izin::jsonb) d
-        LEFT JOIN LATERAL jsonb_array_elements(d -> 'multiple_id') mi ON TRUE
-    ) jt ON m.id_sub_page::int = jt.sub_page_id AND m.id_template::int = jt.id_izin
-    WHERE i.npwp = ?
-", [auth()->user()->npwp]);
-
-
+		jt.id_izin,
+		jt.tanggal_izin,
+		jt.id_permohonan,
+		jt.kode_izin_desc,
+		jt.jenis_izin_desc,
+		jt.jenis_pengesahan,
+		jt.status_pengesahan,
+		jt.no_sertifikat_izin,
+		jt.tanggal_pengesahan,
+		jt.sub_page_id,
+		jt.no_sk_izin
+		
+		FROM mepings m
+		JOIN izin_migas i
+		JOIN JSON_TABLE(
+			i.data_izin,
+			'$[*]'
+			COLUMNS (
+			id_izin INT PATH '$.Id_Izin',
+			tanggal_izin DATE PATH '$.Tanggal_izin',
+			id_permohonan INT PATH '$.Id_Permohonan',
+			kode_izin_desc VARCHAR(255) PATH '$.Kode_Izin_Desc',
+			jenis_izin_desc VARCHAR(255) PATH '$.Jenis_Izin_Desc',
+			jenis_pengesahan VARCHAR(255) PATH '$.Jenis_Pengesahan',
+			status_pengesahan VARCHAR(255) PATH '$.Status_Pengesahan',
+			no_sertifikat_izin VARCHAR(255) PATH '$.No_Sertifikat_izin',
+			no_sk_izin VARCHAR(255) PATH '$.No_SK_Izin',
+			tanggal_pengesahan DATETIME PATH '$.Tanggal_Pengesahan',
+			NESTED PATH '$.multiple_id[*]' COLUMNS (
+				sub_page_id INT PATH '$.sub_page_id'
+			)
+			)
+		) AS jt ON m.id_sub_page = jt.sub_page_id AND m.id_template = jt.id_izin
+		WHERE i.npwp = ?
+	", [auth()->user()->npwp]);
 
 	// dd($result);
 
