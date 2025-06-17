@@ -14,15 +14,6 @@ class EvPenyimpananMinyakBumiController extends Controller
     public function index(){
 
         $perusahaan = DB::table('penyminyakbumis  as a')
-<<<<<<< HEAD
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->leftJoin('r_permohonan_izin as c', 'a.badan_usaha_id', '=', 'c.ID_PERUSAHAAN')
-            ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-            ->groupBy('a.badan_usaha_id')
-            ->whereIn('a.status', [1, 2,3])
-            ->get();
-
-=======
         ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
         ->leftJoin('r_permohonan_izin as c', 'a.izin_id', '=', 'c.ID_PERMOHONAN')
         ->whereIn('a.status', [1, 2, 3])
@@ -48,7 +39,6 @@ class EvPenyimpananMinyakBumiController extends Controller
         )
         ->get();
 // dd($perusahaan_only_bu);
->>>>>>> d43ccfe08769a64150ae4e38d16622e2800fca27
 
         $data = [
             'title'=>'Laporan Penyimpanan Minyak Bumi',

@@ -268,7 +268,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/simpanHargaLPG', 'simpan_harga_lpg');
 		Route::get('/get-harga-lpg/{id}', 'get_harga_lpg');
 		Route::put('/updateHargaLPG/{id}', 'update_harga_lpg');
-		Route::get('/get_kota_lpg/{kabupaten_kota}', 'get_kota');
+		Route::get('/get_kota_lpg_harga/{kabupaten_kota}', 'get_kota');
 		Route::delete('/hapusHargaLPG/{id}', 'hapus_harga_lpg');
 		Route::put('/submitHargaLPG/{id}', 'submit_harga_lpg');
 		Route::delete('/hapusbulanHargaLPG/{id}', 'hapus_bulan_harga_lpg');

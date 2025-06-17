@@ -11,15 +11,21 @@ use Illuminate\Support\Facades\DB;
 
 class EvHargaLpgController extends Controller
 {
-    public function index(){
-
+    public function index()
+    {
         $perusahaan = DB::table('harga_l_p_g_s as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+            ->leftJoin(DB::raw('t_perusahaan as b'), DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+            ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
             ->whereIn('a.status', [1, 2, 3])
-            ->groupBy('a.badan_usaha_id')
-            ->select( 'b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-            ->get();
+            ->groupBy('a.npwp', 'b.id_perusahaan')
+            ->select(
+                'b.id_perusahaan',
+                DB::raw('MIN(b.nama_perusahaan) as nama_perusahaan'),
+                DB::raw('MIN(c.tgl_disetujui) as tgl_disetujui'),
+                DB::raw('MIN(c.nomor_izin) as nomor_izin'),
+                DB::raw('MIN(c.tgl_pengajuan) as tgl_pengajuan')
+            )->get();
+
         $data = [
             'title'=>'Laporan Harga LPG',
             'perusahaan' => $perusahaan,
@@ -35,13 +41,18 @@ class EvHargaLpgController extends Controller
         $p = !empty($kode) ? Crypt::decrypt($kode) : null;
         if ($p) {
             $query = DB::table('harga_l_p_g_s as a')
-                ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-                ->select('a.*', 'b.NAMA_PERUSAHAAN')
-                ->where('a.badan_usaha_id', $p)
-                ->whereIn('a.status', [1, 2,3])
-                ->groupBy('a.bulan')->get();
-
-
+                ->leftJoin('t_perusahaan as b', DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+                ->selectRaw('
+                    MAX(a.npwp) as npwp, 
+                    a.bulan, 
+                    MAX(a.status) as status, 
+                    MAX(a.catatan) as catatan, 
+                    MAX(b.nama_perusahaan) as nama_perusahaan
+                    ')
+                ->where('a.npwp', $p)
+                ->whereIn('a.status', [1, 2, 3])
+                ->groupBy('a.bulan')
+                ->get();
         } else {
             $query = '';
 
@@ -63,17 +74,17 @@ class EvHargaLpgController extends Controller
         if (count($pecah) == 3) {
             $filterBy = substr($pecah[0], 0, 4);
         } else {
-        $filterBy = $pecah[0];
+            $filterBy = $pecah[0];
         }
 
         $query = DB::table('harga_l_p_g_s as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN')
-            ->where('a.badan_usaha_id', $pecah[1])
+            ->leftJoin('t_perusahaan as b', DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->select('a.*', 'b.nama_perusahaan', 'm.nama_opsi')
+            ->where('a.npwp', $pecah[1])
             ->where('a.bulan', 'like', "%". $filterBy ."%")
             ->whereIn('a.status', [1, 2,3])
             ->get();
-
         //        var_dump($query);die();
 
         $data = [
@@ -111,13 +122,13 @@ class EvHargaLpgController extends Controller
         $request->validate([
             'catatan' => 'required',
         ]); 
-        $badan_usaha_id = Crypt::decrypt($request->input('p')) ;
+        $npwp = Crypt::decrypt($request->input('p')) ;
         $bulan = Crypt::decrypt($request->input('b')) ;
 
 
 
         $update = DB::table('harga_l_p_g_s')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan',$bulan)
             ->whereIn('status', [1, 2,3])
             ->update([
@@ -137,12 +148,12 @@ class EvHargaLpgController extends Controller
     {
         try {
 
-            $badan_usaha_id = Crypt::decrypt($request->input('p'));
+            $npwp = Crypt::decrypt($request->input('p'));
             $bulan = Crypt::decrypt($request->input('b'));
 
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
+            // Pastikan bahwa npwp dan bulan ada dalam kondisi where
             $update = DB::table('harga_l_p_g_s')
-                ->where('badan_usaha_id', $badan_usaha_id)
+                ->where('npwp', $npwp)
                 ->where('bulan', $bulan)
                 ->whereIn('status', [1, 2,3])
                 ->update([
@@ -168,7 +179,7 @@ class EvHargaLpgController extends Controller
         try {
             $id = $request->input('id');
 
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
+            // Pastikan bahwa npwp dan bulan ada dalam kondisi where
             $update = DB::table('harga_l_p_g_s')->where('id', $id)
                 ->update([
                     'status' => '3'
@@ -196,16 +207,17 @@ class EvHargaLpgController extends Controller
     
         // Query dasar untuk mendapatkan data harga LPG
         $query = DB::table('harga_l_p_g_s as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
+            ->leftJoin(DB::raw('t_perusahaan as b'), DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+            ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
+            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->select('a.*', 'b.nama_perusahaan','c.tgl_disetujui','c.nomor_izin','c.tgl_pengajuan', 'm.nama_opsi')
             ->whereBetween('bulan', [$t_awal, $t_akhir]);
     
         // Jika perusahaan bukan 'all', tambahkan kondisi filter untuk badan usaha
         if ($perusahaan !== 'all') {
-            $query->where('badan_usaha_id', $perusahaan);
+            $query->where('a.npwp', $perusahaan);
         }
-    
+        
         $result = $query->get();
     
         if ($result->isEmpty()) {
@@ -230,19 +242,20 @@ class EvHargaLpgController extends Controller
         $tgl = Carbon::now();
 
         $query = DB::table('harga_l_p_g_s as a')
-        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
+        ->leftJoin(DB::raw('t_perusahaan as b'), DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+        ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
+        ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+        ->select('a.*', 'b.nama_perusahaan','c.tgl_disetujui','c.nomor_izin','c.tgl_pengajuan')
         ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
         ->whereIn('a.status', [1, 2, 3])
         ->get();
 
         $perusahaan = DB::table('harga_l_p_g_s as a')
-        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->leftJoin('t_perusahaan as b', 'a.npwp', '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+        ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
         ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.badan_usaha_id')
-        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
+        ->groupBy('b.id_perusahaan', 'b.nama_perusahaan', 'c.tgl_disetujui', 'c.nomor_izin', 'c.tgl_pengajuan')
+        ->select('b.id_perusahaan', 'b.nama_perusahaan', 'c.tgl_disetujui', 'c.nomor_izin', 'c.tgl_pengajuan', 'm.nama_opsi')
         ->get();
 
         // return json_decode($query); exit;
@@ -260,20 +273,21 @@ class EvHargaLpgController extends Controller
         $t_akhir = Carbon::parse($request->t_akhir);
 
         $perusahaan = DB::table('harga_l_p_g_s as a')
-        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
+        ->leftJoin('t_perusahaan as b', 'a.npwp', '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+        ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
         ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('a.badan_usaha_id')
-        ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
+        ->groupBy('b.id_perusahaan', 'b.nama_perusahaan', 'c.tgl_disetujui', 'c.nomor_izin', 'c.tgl_pengajuan')
+        ->select('b.id_perusahaan', 'b.nama_perusahaan', 'c.tgl_disetujui', 'c.nomor_izin', 'c.tgl_pengajuan')
         ->get();
 
         $query = DB::table('harga_l_p_g_s as a')
-        ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-        ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-        ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN');
+        ->leftJoin(DB::raw('t_perusahaan as b'), DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+        ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
+        ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+        ->select('a.*', 'b.nama_perusahaan','c.tgl_disetujui','c.nomor_izin','c.tgl_pengajuan', 'm.nama_opsi');
         
         if ($request->perusahaan != 'all') {
-            $query->where('badan_usaha_id', $request->perusahaan);
+            $query->where('a.npwp', $request->perusahaan);
         }
 
         $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])

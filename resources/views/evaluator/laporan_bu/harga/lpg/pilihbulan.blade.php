@@ -23,7 +23,7 @@
                     <div class="card">
                         <div class="card-header">
 
-                            <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
+                            <h4>{{ $per->nama_perusahaan }}</h4>
 
                         </div>
 
@@ -41,7 +41,7 @@
                                     <h4>Periode Bulan {{ dateIndonesia($per->bulan) }}</h4>
 
                                     <div>
-                                        <a href="{{ url('laporan/harga-lpg/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}"
+                                        <a href="{{ url('laporan/harga-lpg/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->npwp) }}"
                                             class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
                                             Kembali</a>
                                         <button type="button" class="btn btn-info btn-sm rounded-pill btn-update-status"
@@ -72,7 +72,7 @@
                                                         method="post" id="updateStatusForm" enctype="multipart/form-data">
                                                         @csrf
                                                         <input type="hidden" name="p"
-                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}">
+                                                            value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->npwp) }}">
                                                         <input type="hidden" name="b"
                                                             value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}">
                                                         <div class="modal-body">
@@ -122,7 +122,7 @@
                                                 <th>Harga Jual</th>
                                                 <th>Tgl Dibuat Laporan</th>
                                                 <th>Tgl Pengajuan Laporan</th>
-
+                                                <th>Jenis Kegiatan Usaha</th>
 
                                             </tr>
                                         </thead>
@@ -226,7 +226,7 @@
                                                     <td>{{ $pgb->harga_jual }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
-
+                                                    <td>{{ $pgb->nama_opsi }}</td>
 
 
 
@@ -266,7 +266,7 @@
                             data: {
                                 _token: '{{ csrf_token() }}',
                                 b: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}',
-                                p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}'
+                                p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->npwp) }}'
                             },
                             success: function(response) {
                                 Swal.fire('Status diperbarui!',

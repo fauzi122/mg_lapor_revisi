@@ -20,7 +20,13 @@
                 <td>
                     @php
                         $show = Crypt::encryptString(
-                            $item->id_permohonan . ',' . $item->no_sk_izin . ',' . $item->id_sub_page
+                            $item->id_permohonan .
+                                ',' .
+                                $item->no_sk_izin .
+                                ',' .
+                                $item->id_sub_page .
+                                ',' .
+                                $item->kategori,
                         );
                     @endphp
 
@@ -53,7 +59,8 @@
                         @if (Session::get('j_pengolahan') > 0)
                             @if ($item->kategori == 1)
                                 <li>
-                                    <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak Bumi</a>
+                                    <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak
+                                        Bumi</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
@@ -64,7 +71,8 @@
                             @endif
                             @if ($kusus)
                                 <li>
-                                    <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas Bumi</a>
+                                    <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas
+                                        Bumi</a>
                                 </li>
                             @endif
                         @endif
@@ -73,7 +81,8 @@
                         @if (Session::get('j_niaga') > 0)
                             @if ($item->kategori == 1)
                                 <li>
-                                    <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak Bumi</a>
+                                    <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan
+                                        Minyak Bumi</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
@@ -92,14 +101,16 @@
                         {{-- Pengangkutan --}}
                         @if (Session::get('j_pengangkutan') > 0 && $kusus)
                             <li>
-                                <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas Bumi</a>
+                                <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas
+                                    Bumi</a>
                             </li>
                         @endif
 
                         {{-- Niaga S --}}
                         @if (Session::get('j_niaga_s') > 0)
                             <li>
-                                <a href="{{ url('/progres-pembangunan/show') }}/{{ $show }}">Progres Pembangunan</a>
+                                <a href="{{ url('/progres-pembangunan/show') }}/{{ $show }}">Progres
+                                    Pembangunan</a>
                             </li>
                         @endif
                     </ul>

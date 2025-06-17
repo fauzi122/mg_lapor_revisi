@@ -69,7 +69,7 @@
                                                                     <option value="all">Semua Perusahaan</option>
                                                                     @foreach ($perusahaan as $p)
                                                                         <option value="{{ $p->id_perusahaan }}">
-                                                                            {{ $p->NAMA_PERUSAHAAN }}</option>
+                                                                            {{ $p->nama_perusahaan }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -130,7 +130,7 @@
                                                 <th>Harga Jual</th>
                                                 <th>Tgl Dibuat Laporan</th>
                                                 <th>Tgl Pengajuan Laporan</th>
-
+                                                <th>Jenis Kegiatan Usaha</th>
 
                                             </tr>
                                         </thead>
@@ -138,11 +138,12 @@
                                             @foreach ($query as $pgb)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $pgb->NAMA_PERUSAHAAN }}</td>
-                                                    <td>{{ $pgb->NOMOR_IZIN }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($pgb->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
+                                                    <td>{{ $pgb->nama_perusahaan }}</td>
+                                                    <td>{{ $pgb->nomor_izin }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($pgb->tgl_pengajuan)->format('Y-m-d') }}
+                                                    </td>
 
-                                                    <td>{{ $pgb->TGL_DISETUJUI }}</td>
+                                                    <td>{{ $pgb->tgl_disetujui }}</td>
                                                     <td>{{ getBulan($pgb->bulan) }}</td>
                                                     <td>{{ getTahun($pgb->bulan) }}</td>
                                                     <td>
@@ -240,7 +241,7 @@
                                                     <td>{{ $pgb->harga_jual }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
-
+                                                    <td>{{ $pgb->nama_opsi }}</td>
 
 
 
