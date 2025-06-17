@@ -1,6 +1,6 @@
 
 // Tentukan apakah situs diakses dari localhost atau duniasakha.com
-var isLocalhost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.hostname.endsWith('duniasakha.com');
+var isLocalhost = window.location.hostname === 'mg_lapor_revisi.test' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.hostname.endsWith('duniasakha.com');
 // Atur baseUrl berdasarkan apakah situs diakses dari localhost atau duniasakha.com
 var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
 
@@ -793,7 +793,8 @@ function edit_hargaLPG(id, kabupaten_kota) {
             });
 
             $.ajax({
-                url: baseUrl + "get_kota_lng/" + kabupaten_kota,
+                // url: baseUrl + "get_kota_lng/" + kabupaten_kota,
+                url: baseUrl + "get_kota_lpg_harga/" + kabupaten_kota,
                 method: "GET",
                 data: {},
                 success: function (response) {
@@ -900,6 +901,7 @@ function lihatHargaLPG(id) {
 }
 
 function produk(jenis_komuditas = "") {
+    
     // alert(jenis_komuditas)
     // $('#satuan_produk').val("")
     // $('#prov').val("11111")

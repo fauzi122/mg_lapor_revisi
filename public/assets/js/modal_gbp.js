@@ -1,5 +1,5 @@
 // Tentukan apakah situs diakses dari localhost atau lapor.duniasakha.com
-var isLocalhost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.hostname.endsWith('duniasakha.com');
+var isLocalhost = window.location.hostname === 'mg_lapor_revisi.test' ||  window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.hostname.endsWith('duniasakha.com');
 // Atur baseUrl berdasarkan apakah situs diakses dari localhost atau lapor.duniasakha.com
 var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
 
