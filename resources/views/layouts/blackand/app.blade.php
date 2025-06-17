@@ -60,6 +60,17 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
+    <style>
+        html[data-bs-theme="light"] .app-sidebar-secondary {
+            background-color: #ffffff !important;
+        }
+
+        html[data-bs-theme="dark"] .app-sidebar-secondary {
+            background-color: #121212 !important;
+        }
+
+    </style>
+
 </head>
 
 <body id="kt_app_body" 

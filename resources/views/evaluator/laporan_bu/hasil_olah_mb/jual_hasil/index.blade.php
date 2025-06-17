@@ -119,18 +119,18 @@
                         <div class="card-header align-items-center px-2">
                             <div class="card-toolbar"></div> 
                             <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                <input type="hidden" class="export-title" value="Keterangan Produk" />
+                                <input type="hidden" class="export-title" value="{{ $title }}" />
                             </div>
                         </div>
                         <table class="kt-datatable table table-bordered table-hover">
                             <thead class="bg-light">
                                 <tr class="fw-bold text-uppercase">
-                                    <th>No</th>
-                                    <th>Nama Perusahaan</th>
-                                    <th>Nomor Izin</th>
-                                    <th>Tanggal Pengajuan Izin</th>
-                                    <th>Tanggal Disetujui Izin</th>
-                                    <th>Aksi</th>
+                                    <th style="text-align: center; vertical-align: middle;">No</th>
+                                    <th style="text-align: center; vertical-align: middle;">Nama Perusahaan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Nomor Izin</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tanggal Pengajuan Izin</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tanggal Disetujui Izin</th>
+                                    <th style="text-align: center; vertical-align: middle;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
@@ -145,7 +145,7 @@
                                         <td>
                                             <a href="{{ url('laporan/jual-hasil-olahan/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"
                                                 class="btn btn-primary btn-rounded btn-sm"><i
-                                                    class="bi-eye"></i> Lihat </a>
+                                                    class="bi-eye fs-3"></i> Lihat </a>
                                         </td>
 
                                     </tr>
