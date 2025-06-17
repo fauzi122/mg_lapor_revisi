@@ -24,20 +24,45 @@ class HargabbmController extends Controller
   {
     // dd($id);
     $pecah = explode(',', Crypt::decryptString($id));
-    
-    $hargabbmjbu = DB::table('harga_bbm_jbus')
-    ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-    ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-    ->where('izin_id', $pecah[0])
-    ->groupBy('bulan')
-    ->get();
+    // dd($pecah);
+    $hargaLPG = [];
+    $hargabbmjbu = [];
 
-    $hargaLPG = DB::table('harga_l_p_g_s')
-    ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-    ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-    ->where('izin_id', $pecah[0])
-    ->groupBy('bulan')
-    ->get();
+    if ($pecah[3] == 1) { // Kategori = Gas
+
+      $sqLpg = DB::table('harga_l_p_g_s')
+      ->select(
+          '*',
+          DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+          DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+          DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+      )
+      ->where('npwp', Auth::user()->badan_usaha_id)
+      ->where('id_permohonan', $pecah[0]);
+
+      $hargaLPG = DB::table(DB::raw("({$sqLpg->toSql()}) as sub"))
+      ->mergeBindings($sqLpg)
+      ->where('rn', 1)
+      ->get();
+    } 
+    
+    if ($pecah[3] == 2) { // Kategori = Minyak
+      
+      $sqJbu = DB::table('harga_bbm_jbus')
+      ->select(
+          '*',
+          DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+          DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+          DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+      )
+      ->where('npwp', Auth::user()->badan_usaha_id)
+      ->where('id_permohonan', $pecah[0]);
+  
+      $hargabbmjbu = DB::table(DB::raw("({$sqJbu->toSql()}) as sub"))
+      ->mergeBindings($sqJbu)
+      ->where('rn', 1)
+      ->get();
+    }
 
     // return view('badan_usaha.niaga.harga.index', compact(
     return view('badanUsaha.niaga.harga.index', compact(
@@ -56,19 +81,19 @@ class HargabbmController extends Controller
       // die;
       $hargax = $harga;
       $pecah = explode(',', Crypt::decryptString($id));
-      $badan_usaha_id = Auth::user()->badan_usaha_id;
+      $npwp = Auth::user()->badan_usaha_id;
 
       $bulan_ambil_hargabbmjbu = DB::table('harga_bbm_jbus')
-              ->where('badan_usaha_id', $badan_usaha_id)
+              ->where('npwp', $npwp)
               ->where('bulan', $pecah[0])
-              ->where('izin_id', $pecah[2])
+              ->where('id_permohonan', $pecah[2])
               ->orderBy('status', 'desc')
               ->first();
 
       $bulan_ambil_hargalpg = DB::table('harga_l_p_g_s')
-              ->where('badan_usaha_id', $badan_usaha_id)
+              ->where('npwp', $npwp)
               ->where('bulan', $pecah[0])
-              ->where('izin_id', $pecah[2])
+              ->where('id_permohonan', $pecah[2])
               ->orderBy('status', 'desc')
               ->first();
       
@@ -92,14 +117,14 @@ class HargabbmController extends Controller
 
       $hargabbmjbu = Harga_bbm_jbu::where([
         ['bulan', 'like', "%". $filterBy ."%"],
-        'badan_usaha_id' => $pecah[1],
-        'izin_id' => $pecah[2]
+        'npwp' => $pecah[1],
+        'id_permohonan' => $pecah[2]
       ])->orderBy('status', 'desc')->get();
 
       $hargalpg = HargaLPG::where([
         ['bulan', 'like', "%". $filterBy ."%"],
-        'badan_usaha_id' => $pecah[1],
-        'izin_id' => $pecah[2]
+        'npwp' => $pecah[1],
+        'id_permohonan' => $pecah[2]
       ])->orderBy('status', 'desc')->get();
 
       // dd($harga);
@@ -127,14 +152,16 @@ class HargabbmController extends Controller
    */
   public function store(Request $request)
   {
+    // dd($request->all());
     // echo json_encode($request->all());exit;
     $request->merge([
       'bulan' => $request->bulan . '-01',
     ]);
 
     $pesan = [
-      'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      'izin_id.required' => 'izin_id masih kosong',
+      'npwp.required' => 'npwp masih kosong',
+      'id_permohonan.required' => 'id_permohonan masih kosong',
+      'id_sub_page.required' => 'id_sub_page masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'produk.required' => 'produk masih kosong',
       'sektor.required' => 'sektor masih kosong',
@@ -153,8 +180,9 @@ class HargabbmController extends Controller
     ];
 
     $validatedData = $request->validate([
-      'badan_usaha_id' => 'required',
-      'izin_id' => 'required',
+      'npwp' => 'required',
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
       'bulan' => 'required',
       'produk' => 'required',
       'sektor' => 'required',
@@ -188,10 +216,10 @@ class HargabbmController extends Controller
     //   'pbbkp' => $request->pbbkp,
     //   'harga_jual' => $request->harga_jual,
     // ]);
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $npwp = Auth::user()->badan_usaha_id;
 
     $cekdb = DB::table('harga_bbm_jbus')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan', $request->bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -244,8 +272,8 @@ class HargabbmController extends Controller
 
     $ekport = $id;
     $pesan = [
-      // 'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      // 'izin_id.required' => 'izin_id masih kosong',
+      // 'npwp.required' => 'npwp masih kosong',
+      // 'id_pemohonan.required' => 'id_pemohonan masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'produk.required' => 'produk masih kosong',
       'sektor.required' => 'sektor masih kosong',
@@ -263,8 +291,8 @@ class HargabbmController extends Controller
     ];
 
     $rules = [
-      // 'badan_usaha_id' => 'required',
-      // 'izin_id' => 'required',
+      // 'npwp' => 'required',
+      // 'id_pemohonan' => 'required',
       'bulan' => 'required',
       'produk' => 'required',
       'sektor' => 'required',
@@ -318,11 +346,12 @@ class HargabbmController extends Controller
 
   public function importhargajbux(Request $request)
   {
-    $izin_id = $request->izin_id;
+    $id_permohonan = $request->id_permohonan;
+    $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $npwp = Auth::user()->badan_usaha_id;
     $cekdb = DB::table('harga_bbm_jbus')
-        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('$npwp', $npwp)
         ->where('bulan', $bulan)
         ->orderBy('status', 'desc')
         ->first();
@@ -333,7 +362,7 @@ class HargabbmController extends Controller
             return back();
         }
     }
-    $import = Excel::import(new Importhargabbmjbu($bulan,$izin_id), request()->file('file'));
+    $import = Excel::import(new Importhargabbmjbu($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -349,11 +378,12 @@ class HargabbmController extends Controller
   }
   public function importhargalpgx(Request $request)
   {
-    $izin_id = $request->izin_id;
+    $id_permohonan = $request->id_permohonan;
+    $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $npwp = Auth::user()->bada_usaha_id;
     $cekdb = DB::table('harga_l_p_g_s')
-        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('npwp', $npwp)
         ->where('bulan', $bulan)
         ->orderBy('status', 'desc')
         ->first();
@@ -364,7 +394,7 @@ class HargabbmController extends Controller
             return back();
         }
     }
-    $import = Excel::import(new Importhargalpg($bulan,$izin_id), request()->file('file'));
+    $import = Excel::import(new Importhargalpg($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -384,7 +414,8 @@ class HargabbmController extends Controller
     $data['produk'] = DB::select("SELECT produks.name FROM produks WHERE produks.jenis_komuditas = 'BBM' GROUP BY produks.name");
     // $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
     $data['sektor'] = DB::select("SELECT sektors.nama_sektor FROM sektors GROUP BY sektors.nama_sektor");
-    $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
+    // $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
+    $data['provinsi'] = DB::select("SELECT DISTINCT ON (name) id, name FROM provinces ORDER BY name, id");
     $data['find'] = Harga_bbm_jbu::find($id);
     return response()->json(['data' => $data]);
   }
@@ -418,8 +449,9 @@ class HargabbmController extends Controller
     ]);
 
     $pesan = [
-      'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      'izin_id.required' => 'izin_id masih kosong',
+      'npwp.required' => 'npwp masih kosong',
+      'id_permohonan.required' => 'id_permohonan masih kosong',
+      'id_sub_page.required' => 'id_sub_page masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'sektor.required' => 'sektor masih kosong',
       'provinsi.required' => 'provinsi masih kosong',
@@ -439,8 +471,9 @@ class HargabbmController extends Controller
     ];
 
     $validatedData = $request->validate([
-      'badan_usaha_id' => 'required',
-      'izin_id' => 'required',
+      'npwp' => 'required',
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
       'bulan' => 'required',
       'sektor' => 'required',
       'provinsi' => 'required',
@@ -459,10 +492,10 @@ class HargabbmController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
-    $badan_usaha_id = Auth::user()->badan_usaha_id;
+    $npwp = Auth::user()->badan_usaha_id;
 
     $cekdb = DB::table('harga_l_p_g_s')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan', $request->bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -491,7 +524,7 @@ class HargabbmController extends Controller
   {
     $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
     $data['sektor'] = DB::select("SELECT sektors.nama_sektor FROM sektors GROUP BY sektors.nama_sektor");
-    $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
+    $data['provinsi'] = DB::select("SELECT DISTINCT ON (name) id, name FROM provinces ORDER BY name, id");
     $data['find'] = HargaLPG::find($id);
     return response()->json(['data' => $data]);
   }
@@ -499,7 +532,13 @@ class HargabbmController extends Controller
   public function get_kota($kabupaten_kota)
   {
     // $data = DB::select("SELECT kotas.nama_kota FROM kotas WHERE kotas.kabupaten_kota = '$kabupaten_kota'");
-    $data = DB::select("SELECT kotas.`nama_kota` FROM  kotas WHERE kotas.`id_prov` = (SELECT kotas.`id_prov` FROM kotas WHERE kotas.`nama_kota` = '$kabupaten_kota')");
+    $data = DB::select(" SELECT nama_kota FROM kotas WHERE id_prov = 
+      (
+        SELECT id_prov 
+        FROM kotas 
+        WHERE nama_kota = :nama_kota
+        LIMIT 1
+      )", ['nama_kota' => $kabupaten_kota]);
     // $data = Produk::get();
     return response()->json(['data' => $data]);
   }
@@ -597,13 +636,13 @@ class HargabbmController extends Controller
       
       $pecah = explode(',', Crypt::decryptString($id));
       $bulanx = $pecah[0];
-      $badan_usaha_id = $pecah[1];
-      $izin_id = $pecah[2];
+      $npwp = $pecah[1];
+      $id_permohonan = $pecah[2];
         
       $validatedData = DB::table('harga_bbm_jbus')
-        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('npwp', $npwp)
         ->where('bulan', $bulanx)
-        ->where('izin_id', $izin_id)
+        ->where('id_permohonan', $id_permohonan)
         ->delete();
       // pengangkutan_minyakbumi::destroy($bulan);
       if ($validatedData) {
@@ -621,13 +660,13 @@ class HargabbmController extends Controller
     {
       $pecah = explode(',', Crypt::decryptString($id));
       $bulanx = $pecah[0];
-      $badan_usaha_id = $pecah[1];
-      $izin_id = $pecah[2];
+      $npwp = $pecah[1];
+      $id_permohonan = $pecah[2];
         
       $validatedData = DB::table('harga_l_p_g_s')
-        ->where('badan_usaha_id', $badan_usaha_id)
+        ->where('npwp', $npwp)
         ->where('bulan', $bulanx)
-        ->where('izin_id', $izin_id)
+        ->where('id_permohonan', $id_permohonan)
         ->delete();
       // pengangkutan_minyakbumi::destroy($bulan);
       if ($validatedData) {
@@ -644,15 +683,15 @@ class HargabbmController extends Controller
     {
       $pecah = explode(',', Crypt::decryptString($id));
       $bulanx = $pecah[0];
-      $badan_usaha_id = $pecah[1];
-      $izin_id = $pecah[2];
+      $npwp = $pecah[1];
+      $id_permohonan = $pecah[2];
       $now = Carbon::now();
   
       // Menggunakan parameter binding untuk keamanan
       $validatedData = DB::table('harga_bbm_jbus')
           ->where('bulan', $bulanx)
-          ->where('badan_usaha_id', $badan_usaha_id)
-          ->where('izin_id', $izin_id)
+          ->where('npwp', $npwp)
+          ->where('id_permohonan', $id_permohonan)
           ->update(['status' => '1', 'tgl_kirim' => $now]);
 
         if ($validatedData) {
@@ -669,15 +708,15 @@ class HargabbmController extends Controller
     {
       $pecah = explode(',', Crypt::decryptString($id));
       $bulanx = $pecah[0];
-      $badan_usaha_id = $pecah[1];
-      $izin_id = $pecah[2];
+      $npwp = $pecah[1];
+      $id_permohonan = $pecah[2];
       $now = Carbon::now();
   
       // Menggunakan parameter binding untuk keamanan
       $validatedData = DB::table('harga_l_p_g_s')
           ->where('bulan', $bulanx)
-          ->where('badan_usaha_id', $badan_usaha_id)
-          ->where('izin_id', $izin_id)
+          ->where('npwp', $npwp)
+          ->where('id_permohonan', $id_permohonan)
           ->update(['status' => '1', 'tgl_kirim' => $now]);
 
         if ($validatedData) {

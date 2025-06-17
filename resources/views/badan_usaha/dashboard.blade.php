@@ -82,9 +82,9 @@
                                             <tbody>
                                                 @foreach ($result as $item)
                                                     <tr>
-                                                        <td>{{ $item->NAMA_TEMPLATE }}
+                                                        <td><b>Jenis Izin Usaha:</b>{{ $item->NAMA_TEMPLATE }}
                                                             <br>
-                                                            <b>Jenis Izin:</b> {{ $item->nama_opsi ?? 'N/A' }}
+                                                            <b>Jenis Kegiatan Usaha:</b> {{ $item->nama_opsi ?? 'N/A' }}
                                                         </td>
 
                                                         <td>{{ $item->TGL_DISETUJUI }}</td>

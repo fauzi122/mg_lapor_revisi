@@ -66,6 +66,37 @@ class AuthBuController extends Controller
 			return redirect('/login')->with('statusLogin', 'Eror Autentikasi');
 		}
 	}
+
+	public function postloginIzinByURL($dataNPWP)
+	{
+
+		$npwp = decrypt($dataNPWP);
+
+
+		$check = User::where('npwp', $npwp)->count();
+
+		if ($check == '0') {
+			return redirect('/login')->with('statusLogin', 'Eror Autentikasi');
+		}
+
+		$user = User::where('npwp', $npwp)->first();
+		// dd($user);
+		$email = $user->email;
+		$password = '-';
+		$credentials = [
+			'email' => $email,
+			'password' => $password
+		];
+
+		$dologin = Auth::attempt($credentials);
+
+		if ($dologin) {
+			return redirect('/');
+		} else {
+			// dd('hai');
+			return redirect('/login')->with('statusLogin', 'Eror Autentikasi');
+		}
+	}
     
     public function logoutBU()
 	{

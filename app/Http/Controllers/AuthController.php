@@ -18,21 +18,21 @@ class AuthController extends Controller
 	public function index()
 	{
 		$perusahaan = DB::table('r_permohonan_izin as a')
-			->join('t_perusahaan as b', 'a.ID_PERUSAHAAN', '=', 'b.ID_PERUSAHAAN')
-			->whereIn('a.ID_TEMPLATE', function ($query) {
-				$query->select('id_template')
-					->from('mepings')
-					->groupBy('id_template');
-			})
-			->where('a.ID_CURR_PROSES', '140')
-			->select('b.NAMA_PERUSAHAAN', 'b.EMAIL_PERUSAHAAN', 'b.ID_PERUSAHAAN')
-			->groupBy('b.ID_PERUSAHAAN')
-			->get();
+		->join('t_perusahaan as b', 'a.id_perusahaan', '=', 'b.id_perusahaan')
+		->whereIn('a.id_template', function ($query) {
+			$query->select(DB::raw('CAST(id_template AS INTEGER)'))
+				->from('mepings')
+				->groupBy('id_template');
+		})
+		->where('a.id_curr_proses', 140)
+		->groupBy('b.id_perusahaan', 'b.nama_perusahaan', 'b.email_perusahaan')
+		->select('b.nama_perusahaan', 'b.email_perusahaan', 'b.id_perusahaan')
+		->get();
 
 		// Check if there are no results
 		if ($perusahaan->count() == 0) {
 			// Redirect back to the login page with a flash message
-			return redirect('/login')->with('error', 'ID_PERUSAHAAN not found.');
+			return redirect('/login')->with('error', 'id_perusahaan not found.');
 		}
 
 		// return view('badan_usaha.index', compact('perusahaan'));

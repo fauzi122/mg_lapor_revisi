@@ -216,7 +216,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
+                                    <h4>{{ $per->nama_perusahaan }}</h4>
                                     <div>
                                         <a href="{{ url('laporan/harga-lpg') }}"
                                             class="btn btn-danger btn-sm btn-rounded"><i class='bx bx-arrow-back'></i>
@@ -244,10 +244,10 @@
                                                     @foreach ($query as $data)
                                                         @php
                                                             $id = Crypt::encryptString(
-                                                                $data->bulan . ',' . $data->badan_usaha_id,
+                                                                $data->bulan . ',' . $data->npwp,
                                                             );
                                                             $idTahun = Crypt::encryptString(
-                                                                $data->bulan . ',' . $data->badan_usaha_id . ', tahun',
+                                                                $data->bulan . ',' . $data->npwp . ', tahun',
                                                             );
                                                         @endphp
                                                         <tr>
@@ -289,7 +289,7 @@
                                                                     @if ($data->status == 1 && $data->catatan)
                                                                         <button
                                                                             class="btn btn-primary btn-rounded btn-sm btn-selesai-status"
-                                                                            data-p="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}"
+                                                                            data-p="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->npwp) }}"
                                                                             data-b="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}"><i
                                                                                 class="bx bx-check"
                                                                                 title="Selesai"></i></button>
@@ -315,7 +315,7 @@
                                                                                     enctype="multipart/form-data">
                                                                                     @csrf
                                                                                     <input type="hidden" name="p"
-                                                                                        value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}">
+                                                                                        value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->npwp) }}">
                                                                                     <input type="hidden" name="b"
                                                                                         value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}">
                                                                                     <div class="modal-body">

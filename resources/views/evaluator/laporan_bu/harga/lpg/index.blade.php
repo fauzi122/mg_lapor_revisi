@@ -227,7 +227,7 @@
                                                                 <!-- Opsi untuk semua perusahaan -->
                                                                 @foreach ($perusahaan as $p)
                                                                     <option value="{{ $p->id_perusahaan }}">
-                                                                        {{ $p->NAMA_PERUSAHAAN }}</option>
+                                                                        {{ $p->nama_perusahaan }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -280,12 +280,12 @@
                                                 @foreach ($perusahaan as $per)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $per->NAMA_PERUSAHAAN }}</td>
-                                                        <td>{{ $per->NOMOR_IZIN }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($per->TGL_PENGAJUAN)->format('Y-m-d') }}
+                                                        <td>{{ $per->nama_perusahaan }}</td>
+                                                        <td>{{ $per->nomor_izin }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($per->tgl_pengajuan)->format('Y-m-d') }}
                                                         </td>
 
-                                                        <td>{{ $per->TGL_DISETUJUI }}</td>
+                                                        <td>{{ $per->tgl_disetujui }}</td>
                                                         <td><a href="{{ url('laporan/harga-lpg/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"
                                                                 class="btn btn-primary btn-rounded btn-sm"><i
                                                                     class="bx bx-show"></i> Lihat </a></td>
