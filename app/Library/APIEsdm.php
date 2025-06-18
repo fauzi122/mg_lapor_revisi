@@ -10,7 +10,7 @@ class APIEsdm
 {
     const CLIENT_ID = '39dc606335d8c4e22ea2c444bf58cecd';
     const CLIENT_SECRET = '9ec10a07e01bb24b9beba125c28cbff1';
-    const BASEURL = 'https://apicdev.esdm.go.id/development/dev-sandbox/perizinan/migas';
+    const BASEURL = 'https://apicdev.esdm.go.id/development/dev-sandbox';
 
     public function post($endpoint, array $data)
     {

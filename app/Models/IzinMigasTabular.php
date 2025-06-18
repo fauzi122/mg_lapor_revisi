@@ -4,20 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class IzinMigas extends Model
+class IzinMigasTabular extends Model
 {
-    protected $table = 'izin_migas';
+    protected $table = 'izin_migas_tabular';
 
     protected $fillable = [
         'npwp',
-        'data_badan_usaha',
-        'data_izin',
-        'status_djp',
+        'id_permohonan',
+        'id_izin',
+        'sub_page_id',
+        'nama_tabel',
+        'description',
+        'data',
     ];
 
+
     protected $casts = [
-        'data_badan_usaha' => 'array',
-        'data_izin' => 'array',
+        'data' => 'array',
     ];
 
     public $incrementing = true; // Pastikan kolom id adalah auto-increment
