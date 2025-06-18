@@ -11,7 +11,7 @@ class CreateIzinMigasTable extends Migration
      */
     public function up(): void
     {
-        Schema::connection('pgsql_migas')->create('izin_migas', function (Blueprint $table) {
+        Schema::create('izin_migas', function (Blueprint $table) {
             $table->id();
             $table->string('npwp', 20)->index();
             $table->jsonb('data_badan_usaha')->nullable();
