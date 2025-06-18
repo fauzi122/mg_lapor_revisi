@@ -5,7 +5,7 @@
                 <i class="ki-outline ki-abstract-14 fs-2"></i>
             </div>
         </div>
-        <a class="app-sidebar-secondary-collapse-d-none" href="{{ route('dashboard') }}">
+        <a class="app-sidebar-secondary-collapse-d-none" href="{{ url('/master') }}">
             <img alt="Logo" src="{{ asset('assets/images/logo-esdm.png') }}" class="h-25px"/> 
             <span class="badge badge-light-dark"><h5>Pelaporan Migas</h5></span>
         </a>

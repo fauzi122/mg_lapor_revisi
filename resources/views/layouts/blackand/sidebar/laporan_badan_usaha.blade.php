@@ -1,6 +1,38 @@
-<div data-kt-menu-trigger="click" class="menu-item menu-accordion mt-2">
+@php
+    $laporanPaths = [
+        'laporan/jual-hasil-olahan',
+        'laporan/pasokan-hasil-olahan',
+        'laporan/harga-bbm',
+        'laporan/harga-lpg',
+        'laporan/jual/lng-cng-bbg',
+        'laporan/pasok/lng-cng-bbg',
+        'laporan/jual/lpg',
+        'laporan/pasok/lpg',
+        'laporan/jual/gbmp',
+        'laporan/pasok/gbmp',
+        'laporan/produksi/mb',
+        'laporan/pasokan/mb',
+        'laporan/distribusi/mb',
+        'laporan/produksi/gb',
+        'laporan/pasokan/gb',
+        'laporan/distribusi/gb',
+        'laporan/expor/exim',
+        'laporan/impor/exim',
+        'laporan/penyimpanan/mb',
+        'laporan/penyimpanan/gb',
+        'laporan/pengangkutan/mb',
+        'laporan/pengangkutan/gb',
+    ];
+    $isLaporanBUActive = request()->is($laporanPaths);
+
+@endphp
+
+
+
+
+<div data-kt-menu-trigger="click" class="menu-item menu-accordion mt-2 {{ $isLaporanBUActive ? 'show here' : '' }}">
     <!--begin:Menu link-->
-    <span class="menu-link active">
+    <span class="menu-link active shadow">
         <span class="menu-icon">
             <i class="bi bi-file-earmark-text-fill"></i>
         </span>
@@ -15,7 +47,7 @@
     <div class="menu-sub menu-sub-accordion">
         <!--begin:Menu item-->
         @can('Minyak Bumi')
-            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/jual-hasil-olahan', 'laporan/pasokan-hasil-olahan') ? 'show here' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-bullet">
@@ -30,7 +62,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/jual-hasil-olahan') }}">
+                        <a class="menu-link {{ request()->is('laporan/jual-hasil-olahan') ? 'active shadow' : '' }}" href="{{ url('/laporan/jual-hasil-olahan') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -42,7 +74,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/pasokan-hasil-olahan') }}">
+                        <a class="menu-link {{ request()->is('laporan/pasokan-hasil-olahan') ? 'active shadow' : '' }}" href="{{ url('/laporan/pasokan-hasil-olahan') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -60,7 +92,7 @@
     <!--begin:Menu sub-->
     <div class="menu-sub menu-sub-accordion">
         <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/harga-bbm', 'laporan/harga-lpg') ? 'show here' : '' }} ">
             <!--begin:Menu link-->
             <span class="menu-link">
                 <span class="menu-bullet">
@@ -79,7 +111,7 @@
                 @can('Minyak Bumi')
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/harga-bbm') }}">
+                        <a class="menu-link {{ request()->is('laporan/harga-bbm') ? 'active shadow' : '' }}" href="{{ url('/laporan/harga-bbm') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -95,7 +127,7 @@
                 @can('LPG/GAS')
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/harga-lpg') }}">
+                        <a class="menu-link {{ request()->is('laporan/harga-lpg') ? 'active shadow' : '' }}" href="{{ url('/laporan/harga-lpg') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -117,7 +149,7 @@
         <div class="menu-sub menu-sub-accordion">
             <!--begin:Menu item-->
 
-            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/jual/lng-cng-bbg', 'laporan/pasok/lng-cng-bbg') ? 'show here' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-bullet">
@@ -135,7 +167,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/jual/lng-cng-bbg') }}">
+                        <a class="menu-link {{ request()->is('laporan/jual/lng-cng-bbg') ? 'active shadow' : '' }}" href="{{ url('/laporan/jual/lng-cng-bbg') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -150,7 +182,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/pasok/lng-cng-bbg') }}">
+                        <a class="menu-link {{ request()->is('laporan/pasok/lng-cng-bbg') ? 'active shadow' : '' }}" href="{{ url('/laporan/pasok/lng-cng-bbg') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -168,7 +200,7 @@
         <!--begin:Menu sub-->
         <div class="menu-sub menu-sub-accordion">
             <!--begin:Menu item-->
-            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/jual/lpg', 'laporan/pasok/lpg') ? 'show here' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-bullet">
@@ -186,7 +218,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/jual/lpg') }}">
+                        <a class="menu-link {{ request()->is('laporan/jual/lpg') ? 'active shadow' : '' }}" href="{{ url('/laporan/jual/lpg') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -201,7 +233,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/pasok/lpg') }}">
+                        <a class="menu-link {{ request()->is('laporan/pasok/lpg') ? 'active shadow' : '' }}" href="{{ url('/laporan/pasok/lpg') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -217,7 +249,7 @@
 
         <div class="menu-sub menu-sub-accordion">
             <!--begin:Menu item-->
-            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/jual/gbmp', 'laporan/pasok/gbmp') ? 'show here' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-bullet">
@@ -235,7 +267,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/jual/gbmp') }}">
+                        <a class="menu-link {{ request()->is('laporan/jual/gbmp') ? 'active shadow' : '' }}" href="{{ url('/laporan/jual/gbmp') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -250,7 +282,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/pasok/gbmp') }}">
+                        <a class="menu-link {{ request()->is('laporan/pasok/gbmp') ? 'active shadow' : '' }}" href="{{ url('/laporan/pasok/gbmp') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -269,7 +301,7 @@
 
         <div class="menu-sub menu-sub-accordion">
             <!--begin:Menu item-->
-            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/produksi/mb', 'laporan/pasokan/mb', 'laporan/distribusi/mb') ? 'show here' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-bullet">
@@ -287,7 +319,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/produksi/mb') }}">
+                        <a class="menu-link {{ request()->is('laporan/produksi/mb') ? 'active shadow' : '' }}" href="{{ url('/laporan/produksi/mb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -302,7 +334,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/pasokan/mb') }}">
+                        <a class="menu-link {{ request()->is('laporan/pasokan/mb') ? 'active shadow' : '' }}" href="{{ url('/laporan/pasokan/mb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -316,7 +348,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/distribusi/mb') }}">
+                        <a class="menu-link {{ request()->is('laporan/distribusi/mb') ? 'active shadow' : '' }}" href="{{ url('/laporan/distribusi/mb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -335,7 +367,7 @@
 
         <div class="menu-sub menu-sub-accordion">
             <!--begin:Menu item-->
-            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/produksi/gb', 'laporan/pasokan/gb', 'laporan/distribusi/gb') ? 'show here' : '' }}">
                 <!--begin:Menu link-->
                 <span class="menu-link">
                     <span class="menu-bullet">
@@ -353,7 +385,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/produksi/gb') }}">
+                        <a class="menu-link {{ request()->is('laporan/produksi/gb') ? 'active shadow' : '' }}" href="{{ url('/laporan/produksi/gb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -368,7 +400,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/pasokan/gb') }}">
+                        <a class="menu-link {{ request()->is('laporan/pasokan/gb') ? 'active shadow' : '' }}" href="{{ url('/laporan/pasokan/gb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -382,7 +414,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/distribusi/gb') }}">
+                        <a class="menu-link {{ request()->is('laporan/distribusi/gb') ? 'active shadow' : '' }}" href="{{ url('/laporan/distribusi/gb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -401,7 +433,7 @@
 
     <div class="menu-sub menu-sub-accordion">
         <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/expor/exim', 'laporan/impor/exim') ? 'show here' : '' }}">
             <!--begin:Menu link-->
             <span class="menu-link">
                 <span class="menu-bullet">
@@ -420,7 +452,7 @@
                 @can('Minyak Bumi')
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/expor/exim') }}">
+                        <a class="menu-link {{ request()->is('laporan/expor/exim') ? 'active shadow' : '' }}" href="{{ url('/laporan/expor/exim') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -436,7 +468,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/impor/exim') }}">
+                        <a class="menu-link {{ request()->is('laporan/impor/exim') ? 'active shadow' : '' }}" href="{{ url('/laporan/impor/exim') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -455,7 +487,7 @@
     
     <div class="menu-sub menu-sub-accordion">
         <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/penyimpanan/mb', 'laporan/penyimpanan/gb') ? 'show here' : '' }}">
             <!--begin:Menu link-->
             <span class="menu-link">
                 <span class="menu-bullet">
@@ -474,7 +506,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/penyimpanan/mb') }}">
+                        <a class="menu-link {{ request()->is('laporan/penyimpanan/mb') ? 'active shadow' : '' }}" href="{{ url('/laporan/penyimpanan/mb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -490,7 +522,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="{{ url('/laporan/penyimpanan/gb') }}">
+                        <a class="menu-link {{ request()->is('laporan/penyimpanan/gb') ? 'active shadow' : '' }}" href="{{ url('/laporan/penyimpanan/gb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -509,7 +541,7 @@
     
     <div class="menu-sub menu-sub-accordion">
         <!--begin:Menu item-->
-        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/pengangkutan/mb', 'laporan/pengangkutan/gb') ? 'show here' : '' }}">
             <!--begin:Menu link-->
             <span class="menu-link">
                 <span class="menu-bullet">
@@ -528,7 +560,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="#">
+                        <a class="menu-link {{ request()->is('laporan/pengangkutan/mb') ? 'active shadow' : '' }}" href="{{ url('/laporan/pengangkutan/mb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -544,7 +576,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item">
                         <!--begin:Menu link-->
-                        <a class="menu-link" href="#">
+                        <a class="menu-link {{ request()->is('laporan/pengangkutan/gb') ? 'active shadow' : '' }}" href="{{ url('/laporan/pengangkutan/gb') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
