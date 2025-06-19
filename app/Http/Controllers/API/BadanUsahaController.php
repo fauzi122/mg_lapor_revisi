@@ -13,37 +13,39 @@ use Illuminate\Support\Facades\DB;
 
 class BadanUsahaController extends BaseController
 {
-    public function registerBU(Request $request){
-		$validator = Validator::make($request->all(), [
+    public function registerBU(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-			'npwp' => 'required',
+            'npwp' => 'required',
         ]);
-		
-		if($validator->fails()){
-            return $this->sendError('Eror Validasi.', $validator->errors());       
+        
+        if ($validator->fails()) {
+            return $this->sendError('Error Validasi.', $validator->errors());       
         }
-		
-		$input = $request->all();
+        
+        $input = $request->all();
         $input['password'] = bcrypt('-');
         $user = User::create([
             'email' => $request->email,
             'name' => $request->name,
-			'npwp' => $request->npwp,
+            'npwp' => $request->npwp,
             'password' => $input['password'],
             'role' => 'Badan Usaha'
         ]);
         $success['token'] =  $user->createToken('pelaporan')->accessToken;
         $success['name'] =  $user->name;
-		$success['npwp'] =  $user->npwp;
-   
-        return $this->sendResponse($success, 'Sukses Registrasi Badan Usaha.');
-	}
+        $success['npwp'] =  $user->npwp;
 
-    public function getDataLaporanBU(Request $request){
+        return $this->sendResponse($success, 'Sukses Registrasi Badan Usaha.');
+    }
+
+    public function getDataLaporanBU(Request $request)
+    {
         $npwp = $request->NPWP;
         
-        //validasi jika npwp null
+        // Validasi jika NPWP kosong
         if ($npwp == 'null' || $npwp == "") {
             $message = "NPWP tidak boleh kosong";
             $response = [
@@ -54,7 +56,16 @@ class BadanUsahaController extends BaseController
         }
 
         $dataNpwp = encrypt($npwp);
-        $url = 'http://127.0.0.1:8000/badan-usaha/login/' . $dataNpwp;
+         if (App::environment('production')) {
+            // Jika di produksi, gunakan URL dari APP_URL di .env dan tambahkan '/pelaporan-hilir'
+            $url = env('APP_URL') . '/pelaporan-hilir/badan-usaha/login/' . $dataNpwp;
+
+        } else {
+            // Jika di lokal, gunakan URL lokal
+            $url = 'http://127.0.0.1:8000/badan-usaha/login/' . $dataNpwp;
+
+        }
+        
 
         $message = "Data Pelaporan";
         App::setLocale('id'); // Set locale ke bahasa Indonesia
@@ -63,7 +74,7 @@ class BadanUsahaController extends BaseController
         $bulan = Carbon::now()->endOfMonth()->translatedFormat('Y-m');
         $badanUsahaId = User::where('npwp', $npwp)->value('badan_usaha_id');
 
-        //Laporan NIAGA
+        // Laporan Niaga
         $queriesNiaga = [
             // MINYAK BUMI
             ['table' => 'jual_hasil_olah_bbms', 'column' => 'bulan'],
@@ -87,7 +98,7 @@ class BadanUsahaController extends BaseController
 
         foreach ($queriesNiaga as $queryNiaga) {
             $resultNiaga = DB::table("{$queryNiaga['table']}")
-                ->where(DB::raw("DATE_FORMAT({$queryNiaga['column']}, '%Y-%m')"), $bulan)
+                ->where(DB::raw("TO_CHAR(CAST({$queryNiaga['column']} AS DATE), 'YYYY-MM')"), $bulan)
                 ->where('npwp', $badanUsahaId)
                 ->where('status', '<>', 1)
                 ->exists();
@@ -95,21 +106,19 @@ class BadanUsahaController extends BaseController
             if ($resultNiaga) {
                 $foundNiaga = true;
                 break;
-            }
-            else{
+            } else {
                 $foundNiaga = false;
                 break;
             }
         }
 
-        if ($foundNiaga = true) {
+        if ($foundNiaga == true) {
             $statusNiaga = 'Belum Melaporkan';
         } else {
             $statusNiaga = 'Diterima';
         }
-        //Laporan NIAGA
 
-        //Laporan Pengolahan
+        // Laporan Pengolahan
         $queriesPengolahan = [
             // MINYAK BUMI
             ['table' => 'harga_bbm_jbus', 'column' => 'bulan'],
@@ -119,7 +128,7 @@ class BadanUsahaController extends BaseController
             ['table' => 'ekspors', 'column' => 'bulan_peb'],
             ['table' => 'impors', 'column' => 'bulan_pib'],
             ['table' => 'penyminyakbumis', 'column' => 'bulan'],
-
+            
             // GAS
             ['table' => 'pengolahans', 'column' => 'bulan', 'extra' => ['jenis' => 'Gas Bumi']],
         ];
@@ -128,7 +137,7 @@ class BadanUsahaController extends BaseController
 
         foreach ($queriesPengolahan as $queryPengolahan) {
             $resultPengolahan = DB::table("{$queryPengolahan['table']}")
-                ->where(DB::raw("DATE_FORMAT({$queryPengolahan['column']}, '%Y-%m')"), $bulan)
+                ->where(DB::raw("TO_CHAR(CAST({$queryPengolahan['column']} AS DATE), 'YYYY-MM')"), $bulan)
                 ->where('npwp', $npwp)
                 ->where('status', '<>', 1);
 
@@ -142,19 +151,17 @@ class BadanUsahaController extends BaseController
             if ($resultPengolahan->exists()) {
                 $foundPengolahan = true;
                 break;
-            }
-            else{
+            } else {
                 $foundPengolahan = false;
                 break;
             }
         }
 
-        if ($foundPengolahan = true) {
+        if ($foundPengolahan == true) {
             $statusPengolahan = 'Belum Melaporkan';
         } else {
             $statusPengolahan = 'Diterima';
         }
-        //Laporan Pengolahan
 
         //laporan Penyimpanan
         $queriesPenyimpanan = [
@@ -162,30 +169,28 @@ class BadanUsahaController extends BaseController
             ['table' => 'penygasbumis', 'column' => 'bulan'],    // GAS BUMI
         ];
 
-        $found = false;
+        $foundPenyimpanan = false;
 
         foreach ($queriesPenyimpanan as $queryPenyimpanan) {
             $resultPenyimpanan = DB::table("{$queryPenyimpanan['table']}")
-                ->where(DB::raw("DATE_FORMAT({$queryPenyimpanan['column']}, '%Y-%m')"), $bulan)
+                ->where(DB::raw("TO_CHAR(CAST({$queryPenyimpanan['column']} AS DATE), 'YYYY-MM')"), $bulan)
                 ->where('npwp', $badanUsahaId)
                 ->where('status', '<>', 1);
 
             if ($resultPenyimpanan->exists()) {
                 $foundPenyimpanan = true;
                 break;
-            }
-            else{
+            } else {
                 $foundPenyimpanan = false;
                 break;
             }
         }
 
-        if ($foundPenyimpanan = true) {
+        if ($foundPenyimpanan == true) {
             $statusPenyimpanan = 'Belum Melaporkan';
         } else {
             $statusPenyimpanan = 'Diterima';
         }
-        //laporan Penyimpanan
 
         //laporan Pengangkutan
         $queriesPengangkutan = [
@@ -193,30 +198,28 @@ class BadanUsahaController extends BaseController
             ['table' => 'pengangkutan_gaskbumis', 'column' => 'bulan'],    // GAS BUMI
         ];
 
-        $found = false;
+        $foundPengangkutan = false;
 
         foreach ($queriesPengangkutan as $queryPengangkutan) {
             $resultPengangkutan = DB::table("{$queryPengangkutan['table']}")
-                ->where(DB::raw("DATE_FORMAT({$queryPengangkutan['column']}, '%Y-%m')"), $bulan)
+                ->where(DB::raw("TO_CHAR(CAST({$queryPengangkutan['column']} AS DATE), 'YYYY-MM')"), $bulan)
                 ->where('npwp', $badanUsahaId)
                 ->where('status', '<>', 1);
 
             if ($resultPengangkutan->exists()) {
                 $foundPengangkutan = true;
                 break;
-            }
-            else{
+            } else {
                 $foundPengangkutan = false;
                 break;
             }
         }
 
-        if ($foundPengangkutan = true) {
+        if ($foundPengangkutan == true) {
             $statusPengangkutan = 'Belum Melaporkan';
         } else {
             $statusPengangkutan = 'Diterima';
         }
-        //laporan Pengangkutan
 
         $dataContent = [
             'laporan_rutin' => [
@@ -261,15 +264,17 @@ class BadanUsahaController extends BaseController
                 [
                     'jenis_layanan'         => 'Pelaporan Pengangkutan Migas',
                     'batas_akhir_pelaporan' => $eom,
-                    'status_laporan'        => $statusNiaga
+                    'status_laporan'        => $statusPengangkutan
                 ],
             ]
         ];
+
         $response = [
-                'status'    => "success",
-                'message'   => $message,
-                'data'      => $dataContent
-            ];
-            return response()->json($response, 200);
+            'status'    => "success",
+            'message'   => $message,
+            'data'      => $dataContent
+        ];
+        
+        return response()->json($response, 200);
     }
 }
