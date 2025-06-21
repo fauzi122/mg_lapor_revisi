@@ -199,43 +199,50 @@ class EvHargaLpgController extends Controller
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);
         }
     }
+
     public function cetakperiode(Request $request)
     {
         $perusahaan = $request->input('perusahaan');
         $t_awal = $request->input('t_awal');
         $t_akhir = $request->input('t_akhir');
-    
-        // Query dasar untuk mendapatkan data harga LPG
-        $query = DB::table('harga_l_p_g_s as a')
-            ->leftJoin(DB::raw('t_perusahaan as b'), DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
-            ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-            ->select('a.*', 'b.nama_perusahaan','c.tgl_disetujui','c.nomor_izin','c.tgl_pengajuan', 'm.nama_opsi')
-            ->whereBetween('bulan', [$t_awal, $t_akhir]);
-    
-        // Jika perusahaan bukan 'all', tambahkan kondisi filter untuk badan usaha
+
+        // Query Eloquent dengan join yang rapi dan aman
+        $query = HargaLPG::query()
+            ->select(
+                'harga_l_p_g_s.*',
+                't_perusahaan.nama_perusahaan',
+                'r_permohonan_izin.tgl_disetujui',
+                'r_permohonan_izin.nomor_izin',
+                'r_permohonan_izin.tgl_pengajuan',
+                'mepings.nama_opsi'
+            )
+            ->leftJoin('t_perusahaan', 'harga_l_p_g_s.npwp', '=', 't_perusahaan.npwp') // asumsi npwp sama tipe
+            ->leftJoin('r_permohonan_izin', 't_perusahaan.id_perusahaan', '=', 'r_permohonan_izin.id_perusahaan')
+            ->leftJoin('mepings', DB::raw('CAST(harga_l_p_g_s.id_sub_page AS TEXT)'), '=', 'mepings.id_sub_page') // cast agar sama tipe
+            ->whereBetween('harga_l_p_g_s.bulan', [$t_awal, $t_akhir]);
+
         if ($perusahaan !== 'all') {
-            $query->where('a.npwp', $perusahaan);
+            $query->where('harga_l_p_g_s.npwp', $perusahaan);
         }
-        
+
+
         $result = $query->get();
-    
+
+        // Cek apakah data kosong
         if ($result->isEmpty()) {
             return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
-        } else {
-            $data = [
-                'title' => 'Laporan Harga LPG',
-                'result' => $result
-            ];
-    
-            $view = view('evaluator.laporan_bu.harga.lpg.cetak', $data);
-    
-            // Menambahkan script JavaScript untuk reload halaman
-            $view->with('reload', true);
-    
-            return response($view);
         }
+
+        $data = [
+            'title' => 'Laporan Harga LPG',
+            'result' => $result
+        ];
+
+        $view = view('evaluator.laporan_bu.harga.lpg.cetak', $data)->with('reload', true);
+
+        return response($view);
     }
+
 
     public function lihatSemuaData()
     {
