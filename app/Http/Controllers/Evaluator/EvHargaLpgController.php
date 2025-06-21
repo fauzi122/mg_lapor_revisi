@@ -13,19 +13,27 @@ class EvHargaLpgController extends Controller
 {
     public function index()
     {
-        $perusahaan = DB::table('harga_l_p_g_s as a')
-            ->leftJoin(DB::raw('t_perusahaan as b'), DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
-            ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
-            ->whereIn('a.status', [1, 2, 3])
-            ->groupBy('a.npwp', 'b.id_perusahaan')
-            ->select(
-                'b.id_perusahaan',
-                DB::raw('MIN(b.nama_perusahaan) as nama_perusahaan'),
-                DB::raw('MIN(c.tgl_disetujui) as tgl_disetujui'),
-                DB::raw('MIN(c.nomor_izin) as nomor_izin'),
-                DB::raw('MIN(c.tgl_pengajuan) as tgl_pengajuan')
-            )->get();
-
+        $perusahaan= DB::table('izin_migas as i')
+                    ->join('harga_l_p_g_s as h', 'h.npwp', '=', 'i.npwp')
+                    ->join('users as u', 'u.npwp', '=', 'i.npwp')
+                    ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+                    ->select(
+                        'u.name as nama_perusahaan',
+                        'i.npwp',
+                        DB::raw("(d ->> 'Id_Permohonan')::int as id_permohonan"),
+                        DB::raw("MIN(d ->> 'No_SK_Izin') as no_sk_izin"),
+                        DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tanggal_izin"),
+                        DB::raw("MIN(d ->> 'Kode_Izin_Desc') as kode_izin_desc"),
+                        DB::raw("MIN(d ->> 'Jenis_Izin_Desc') as jenis_izin_desc"),
+                        DB::raw("MIN(d ->> 'Jenis_Pengesahan') as jenis_pengesahan"),
+                        DB::raw("MIN(d ->> 'Status_Pengesahan') as status_pengesahan"),
+                        DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tanggal_pengesahan"),
+                        DB::raw("MIN((d ->> 'Tanggal_Berakhir_izin')::date) as tanggal_berakhir_izin")
+                    )
+                    ->whereIn(DB::raw('h.status::int'), [1, 2, 3])
+                    ->groupBy('u.name', 'i.npwp', DB::raw("(d ->> 'Id_Permohonan')::int"))
+                    ->get();
+            // dd($perusahaan);
         $data = [
             'title'=>'Laporan Harga LPG',
             'perusahaan' => $perusahaan,
