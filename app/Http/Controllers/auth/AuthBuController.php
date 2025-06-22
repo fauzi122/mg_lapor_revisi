@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Mail\GenOTPMail;
 use App\Models\Meping;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Mail;
 
 class AuthBuController extends Controller
@@ -91,6 +92,10 @@ class AuthBuController extends Controller
 		$dologin = Auth::attempt($credentials);
 
 		if ($dologin) {
+			// Request internal ke route /izin-migas/simpan?npwp=... setelah login berhasil
+            Http::get(url('/izin-migas/simpan'), [
+                'npwp' => $npwp
+            ]);
 			return redirect('/');
 		} else {
 			// dd('hai');
