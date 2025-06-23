@@ -11,6 +11,7 @@ use App\Models\Penygasbumi;
 use Illuminate\Support\Facades\Crypt;
 use App\Imports\Importpenyimpananmb;
 use App\Imports\Importpenyimpanangb;
+use App\Models\Meping;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -22,15 +23,27 @@ class PenyMinyakbumiController extends Controller
         //     ->groupBy('bulan')->get();
         $pecah = explode(',', Crypt::decryptString($id));
         // dd($pecah);
-        $pm = DB::table('penyminyakbumis')
-        ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-        ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-        ->where('izin_id', $pecah[0])
-        ->groupBy('bulan')
-        ->get();
+
+        $query = DB::table('penyminyakbumis')
+            ->select(
+                '*',
+                DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+                DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+                DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+            )
+            ->where('npwp', Auth::user()->npwp)
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2]);
+
+        $pm = DB::table(DB::raw("({$query->toSql()}) as sub"))
+            ->mergeBindings($query)
+            ->where('rn', 1)
+            ->get();
+
+        $sub_page = Meping::select('nama_opsi')->where('id_sub_page', $pecah[2])->first();
         
         // return view('badan_usaha.penyimpanan.minyak_bumi.index', compact('pm','pecah'));
-        return view('badanUsaha.penyimpanan.minyak_bumi.index', compact('pm','pecah'));
+        return view('badanUsaha.penyimpanan.minyak_bumi.index', compact('pm','pecah', 'sub_page'));
     }
     public function index_pggb($id)
     {
@@ -54,13 +67,14 @@ class PenyMinyakbumiController extends Controller
         $pecah = explode(',', Crypt::decryptString($id));
     // dd($pecah);
         $pggb = Penyminyakbumi::get();
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
         // Mengambil bulan dari tabel penyminyakbumis sesuai ID badan usaha dan bulan yang ditemukan
         $bulan_ambil = DB::table('penyminyakbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->orderBy('status', 'desc')
-            ->where('bulan', $pecah[0])
-            ->where('izin_id', $pecah[2])
+            ->where('bulan', $pecah[3])
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
@@ -69,16 +83,17 @@ class PenyMinyakbumiController extends Controller
         $statusx = $bulan_ambil->status;
 
         if ($filter && $filter === "tahun") {
-            $filterBy = substr($pecah[0], 0, 4);
+            $filterBy = substr($pecah[3], 0, 4);
           } else {
-            $filterBy = $pecah[0];
+            $filterBy = $pecah[3];
           }
 
 
         $pmb = Penyminyakbumi::where([
             ['bulan', 'like', "%". $filterBy ."%"],
-            'badan_usaha_id' => $pecah[1],
-            'izin_id' => $pecah[2]
+            'npwp' => $pecah[1],
+            'id_permohonan' => $pecah[0],
+            'id_sub_page' => $pecah[2],
         ])->orderBy('status', 'desc')->get();
 
         // return view('badan_usaha.penyimpanan.minyak_bumi.show', compact(
@@ -134,8 +149,9 @@ class PenyMinyakbumiController extends Controller
     {
         // dd($request->all());
         $pesan = [
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-            'izin_id.required' => 'izin_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
+            'id_permohonan.required' => 'id_permohonan masih kosong',
+            'id_sub_page.required' => 'id_sub_page masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'no_tangki.required' => 'no_tangki masih kosong',
             'kapasitas_tangki.required' => 'kapasitas_tangki masih kosong',
@@ -165,8 +181,9 @@ class PenyMinyakbumiController extends Controller
         ];
 
         $validatedData = $request->validate([
-            'badan_usaha_id' => 'required',
-            'izin_id' => 'required',
+            'npwp' => 'required',
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
             'bulan' => 'required',
             'jenis_fasilitas' => 'required',
             'no_tangki' => 'required',
@@ -195,10 +212,12 @@ class PenyMinyakbumiController extends Controller
             'kontrak_sewa' => 'required|file|mimes:pdf',
         ], $pesan);
 
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('penyminyakbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $request->id_permohonan)
+            ->where('id_sub_page', $request->id_sub_page)
             ->where('bulan', $request->bulan . '-01')
             ->orderBy('status', 'desc')
             ->first();
@@ -212,11 +231,13 @@ class PenyMinyakbumiController extends Controller
 
 
         $validatedData = Penyminyakbumi::create([
-            'badan_usaha_id' => $request->badan_usaha_id,
-            'izin_id' => $request->izin_id,
+            'npwp' => $request->npwp,
+            'id_permohonan' => $request->id_permohonan,
+            'id_sub_page' => $request->id_sub_page,
             'bulan' => $request->bulan . '-01',
             'jenis_fasilitas' => $request->jenis_fasilitas,
             'no_tangki' => $request->no_tangki,
+            'kapasitas_tangki' => $request->kapasitas_tangki,
             'jenis_komoditas' => $request->jenis_komoditas,
             'produk' => $request->produk,
             'provinsi' => $request->provinsi,
@@ -402,8 +423,9 @@ class PenyMinyakbumiController extends Controller
     public function get_pmb($id)
     {
         $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
-        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
+        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name, provinces.id");
         $data['find'] = Penyminyakbumi::find($id);
+
         return response()->json(['data' => $data]);
     }
     public function get_pggb($id)
@@ -546,15 +568,17 @@ class PenyMinyakbumiController extends Controller
     {
         // Dekripsi ID dan pecah menjadi array
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
     
         // Menggunakan query builder untuk menghapus data
         $affected = DB::table('penyminyakbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan', $bulanx)
-            ->where('izin_id', $izin_id)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->delete();
     
         // Cek hasil penghapusan dan tampilkan pesan sesuai
@@ -572,16 +596,18 @@ class PenyMinyakbumiController extends Controller
     {
         // Dekripsi ID dan pecah menjadi array
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
         $now = Carbon::now();
     
-        // Update data penyminyakbumis dengan izin_id
+        // Update data penyminyakbumis dengan id_permohonan
         $affected = DB::table('penyminyakbumis')
             ->where('bulan', $bulanx)
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('izin_id', $izin_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->update(['status' => '1', 'tgl_kirim' => $now]);
     
         if ($affected) {
@@ -597,14 +623,15 @@ class PenyMinyakbumiController extends Controller
      
     public function import_pmbx(Request $request)
     {
-        $izin_id = $request->izin_id;
+        $id_permohonan = $request->id_permohonan;
+        $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
-        //  dd($izin_id);
-
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('penyminyakbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->where('bulan', $bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -616,7 +643,7 @@ class PenyMinyakbumiController extends Controller
             }
         }
 
-        $import = Excel::import(new Importpenyimpananmb($bulan, $izin_id), request()->file('file'));
+        $import = Excel::import(new Importpenyimpananmb($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses
@@ -676,7 +703,14 @@ class PenyMinyakbumiController extends Controller
     public function get_kab_kota_mb($kabupaten_kota)
     {
         // $data = DB::select("SELECT kotas.nama_kota FROM kotas WHERE kotas.kabupaten_kota = '$kabupaten_kota'");
-        $data = DB::select("SELECT kotas.`nama_kota` FROM  kotas WHERE kotas.`id_prov` = (SELECT kotas.`id_prov` FROM kotas WHERE kotas.`nama_kota` = '$kabupaten_kota')");
+        // $data = DB::select("SELECT kotas.`nama_kota` FROM  kotas WHERE kotas.`id_prov` = (SELECT kotas.`id_prov` FROM kotas WHERE kotas.`nama_kota` = '$kabupaten_kota')");
+        $data = DB::select(" SELECT nama_kota FROM kotas WHERE id_prov = 
+            (
+                SELECT id_prov 
+                FROM kotas 
+                WHERE nama_kota = :nama_kota
+                LIMIT 1
+            )", ['nama_kota' => $kabupaten_kota]);
         // $data = Produk::get();
         return response()->json(['data' => $data]);
     }

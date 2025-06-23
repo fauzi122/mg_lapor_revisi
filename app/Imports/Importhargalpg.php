@@ -44,7 +44,7 @@ class Importhargalpg implements ToModel, WithStartRow, WithMultipleSheets
     {
         // echo json_encode($row);exit;
         return new HargaLPG([
-            'npwp' => Auth::user()->badan_usaha_id,
+            'npwp' => Auth::user()->npwp,
             'id_permohonan' => $this->id_permohonan,
             'bulan' => $this->bulan,
             'sektor' => $row[0],
@@ -57,6 +57,8 @@ class Importhargalpg implements ToModel, WithStartRow, WithMultipleSheets
             'margin' => $row[7],
             'ppn' => $row[8],
             'harga_jual' => $row[9],
+            'formula_harga' => $row[10],
+            'keterangan' => $row[11],
             'id_sub_page' => $this->id_sub_page
         ]);
     }

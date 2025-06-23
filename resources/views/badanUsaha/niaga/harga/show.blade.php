@@ -30,7 +30,9 @@
                                     <div class="col-lg-6">
                                         <h5>Harga BBM JBU/Hasil Olahan/Minyak Bumi</h5>
                                         @php
-                                            $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                            $id = Crypt::encryptString(
+                                                $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2] . ',' . $pecah[3],
+                                            );
                                         @endphp
                                     </div>
                                     <div class="col-lg-6">
@@ -231,7 +233,9 @@
                                     <div class="col-lg-6">
                                         <h5>Harga LPG</h5>
                                         @php
-                                            $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                                            $id = Crypt::encryptString(
+                                                $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2] . ',' . $pecah[3],
+                                            );
                                         @endphp
                                     </div>
                                     <div class="col-lg-6">
