@@ -9,6 +9,7 @@ use App\Models\HargaLPG;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\Importhargabbmjbu;
 use App\Imports\Importhargalpg;
+use App\Models\Meping;
 use Carbon\Carbon;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,7 @@ class HargabbmController extends Controller
    */
   public function index($id)
   {
+    // dd(auth()->user()->npwp);
     // dd($id);
     $pecah = explode(',', Crypt::decryptString($id));
     // dd($pecah);
@@ -37,15 +39,16 @@ class HargabbmController extends Controller
           DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
           DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
       )
-      ->where('npwp', Auth::user()->badan_usaha_id)
-      ->where('id_permohonan', $pecah[0]);
+      ->where('npwp', Auth::user()->npwp)
+      ->where('id_permohonan', $pecah[0])
+      ->where('id_sub_page', $pecah[2]);
 
       $hargaLPG = DB::table(DB::raw("({$sqLpg->toSql()}) as sub"))
       ->mergeBindings($sqLpg)
       ->where('rn', 1)
       ->get();
     } 
-    
+
     if ($pecah[3] == 2) { // Kategori = Minyak
       
       $sqJbu = DB::table('harga_bbm_jbus')
@@ -55,8 +58,9 @@ class HargabbmController extends Controller
           DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
           DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
       )
-      ->where('npwp', Auth::user()->badan_usaha_id)
-      ->where('id_permohonan', $pecah[0]);
+      ->where('npwp', Auth::user()->npwp)
+      ->where('id_permohonan', $pecah[0])
+      ->where('id_sub_page', $pecah[2]);
   
       $hargabbmjbu = DB::table(DB::raw("({$sqJbu->toSql()}) as sub"))
       ->mergeBindings($sqJbu)
@@ -64,11 +68,14 @@ class HargabbmController extends Controller
       ->get();
     }
 
+    $sub_page = Meping::select('nama_opsi')->where('id_sub_page', $pecah[2])->first();
+
     // return view('badan_usaha.niaga.harga.index', compact(
     return view('badanUsaha.niaga.harga.index', compact(
       'hargabbmjbu',
       'hargaLPG',
-      'pecah'
+      'pecah',
+      'sub_page'
     ));
   }
 
@@ -81,19 +88,21 @@ class HargabbmController extends Controller
       // die;
       $hargax = $harga;
       $pecah = explode(',', Crypt::decryptString($id));
-      $npwp = Auth::user()->badan_usaha_id;
+      $npwp = Auth::user()->npwp;
 
       $bulan_ambil_hargabbmjbu = DB::table('harga_bbm_jbus')
               ->where('npwp', $npwp)
-              ->where('bulan', $pecah[0])
-              ->where('id_permohonan', $pecah[2])
+              ->where('bulan', $pecah[3])
+              ->where('id_permohonan', $pecah[0])
+              ->where('id_sub_page', $pecah[2])
               ->orderBy('status', 'desc')
               ->first();
 
       $bulan_ambil_hargalpg = DB::table('harga_l_p_g_s')
               ->where('npwp', $npwp)
-              ->where('bulan', $pecah[0])
-              ->where('id_permohonan', $pecah[2])
+              ->where('bulan', $pecah[3])
+              ->where('id_permohonan', $pecah[0])
+              ->where('id_sub_page', $pecah[2])
               ->orderBy('status', 'desc')
               ->first();
       
@@ -110,26 +119,27 @@ class HargabbmController extends Controller
       // die;
 
       if ($filter && $filter === "tahun") {
-        $filterBy = substr($pecah[0], 0, 4);
+        $filterBy = substr($pecah[3], 0, 4);
       } else {
-        $filterBy = $pecah[0];
+        $filterBy = $pecah[3];
       }
 
       $hargabbmjbu = Harga_bbm_jbu::where([
         ['bulan', 'like', "%". $filterBy ."%"],
         'npwp' => $pecah[1],
-        'id_permohonan' => $pecah[2]
+        'id_permohonan' => $pecah[0],
+        'id_sub_page' => $pecah[2],
       ])->orderBy('status', 'desc')->get();
 
       $hargalpg = HargaLPG::where([
         ['bulan', 'like', "%". $filterBy ."%"],
         'npwp' => $pecah[1],
-        'id_permohonan' => $pecah[2]
+        'id_permohonan' => $pecah[0],
+        'id_sub_page' => $pecah[2],
       ])->orderBy('status', 'desc')->get();
 
       // dd($harga);
       // die;
-
       // return view('badan_usaha.niaga.harga.show', compact(
       return view('badanUsaha.niaga.harga.show', compact(
         'hargabbmjbu',
@@ -216,10 +226,12 @@ class HargabbmController extends Controller
     //   'pbbkp' => $request->pbbkp,
     //   'harga_jual' => $request->harga_jual,
     // ]);
-    $npwp = Auth::user()->badan_usaha_id;
+    $npwp = Auth::user()->npwp;
 
     $cekdb = DB::table('harga_bbm_jbus')
             ->where('npwp', $npwp)
+            ->where('id_permohonan', $request->id_permohonan)
+            ->where('id_sub_page', $request->id_sub_page)
             ->where('bulan', $request->bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -349,9 +361,12 @@ class HargabbmController extends Controller
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
-    $npwp = Auth::user()->badan_usaha_id;
+    $npwp = Auth::user()->npwp;
+    
     $cekdb = DB::table('harga_bbm_jbus')
         ->where('$npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
         ->where('bulan', $bulan)
         ->orderBy('status', 'desc')
         ->first();
@@ -381,9 +396,12 @@ class HargabbmController extends Controller
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
-    $npwp = Auth::user()->bada_usaha_id;
+    $npwp = Auth::user()->npwp;
+
     $cekdb = DB::table('harga_l_p_g_s')
         ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
         ->where('bulan', $bulan)
         ->orderBy('status', 'desc')
         ->first();
@@ -492,7 +510,7 @@ class HargabbmController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
-    $npwp = Auth::user()->badan_usaha_id;
+    $npwp = Auth::user()->npwp;
 
     $cekdb = DB::table('harga_l_p_g_s')
             ->where('npwp', $npwp)
@@ -635,14 +653,16 @@ class HargabbmController extends Controller
     {
       
       $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[0];
+      $bulanx = $pecah[3];
       $npwp = $pecah[1];
-      $id_permohonan = $pecah[2];
+      $id_permohonan = $pecah[0];
+      $id_sub_page = $pecah[2];
         
       $validatedData = DB::table('harga_bbm_jbus')
         ->where('npwp', $npwp)
         ->where('bulan', $bulanx)
         ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
         ->delete();
       // pengangkutan_minyakbumi::destroy($bulan);
       if ($validatedData) {
@@ -659,14 +679,16 @@ class HargabbmController extends Controller
   public function hapus_bulan_harga_lpg(Request $request, $id)
     {
       $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[0];
+      $bulanx = $pecah[3];
       $npwp = $pecah[1];
-      $id_permohonan = $pecah[2];
+      $id_permohonan = $pecah[0];
+      $id_sub_page = $pecah[2];
         
       $validatedData = DB::table('harga_l_p_g_s')
         ->where('npwp', $npwp)
         ->where('bulan', $bulanx)
         ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
         ->delete();
       // pengangkutan_minyakbumi::destroy($bulan);
       if ($validatedData) {
@@ -682,9 +704,10 @@ class HargabbmController extends Controller
   public function submit_bulan_harga_bbm_jbux(Request $request, $id)
     {
       $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[0];
+      $bulanx = $pecah[3];
       $npwp = $pecah[1];
-      $id_permohonan = $pecah[2];
+      $id_permohonan = $pecah[0];
+      $id_sub_page = $pecah[2];
       $now = Carbon::now();
   
       // Menggunakan parameter binding untuk keamanan
@@ -692,6 +715,7 @@ class HargabbmController extends Controller
           ->where('bulan', $bulanx)
           ->where('npwp', $npwp)
           ->where('id_permohonan', $id_permohonan)
+          ->where('id_sub_page', $id_sub_page)
           ->update(['status' => '1', 'tgl_kirim' => $now]);
 
         if ($validatedData) {
@@ -707,9 +731,10 @@ class HargabbmController extends Controller
   public function submit_bulan_harga_lpg(Request $request, $id)
     {
       $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[0];
+      $bulanx = $pecah[3];
       $npwp = $pecah[1];
-      $id_permohonan = $pecah[2];
+      $id_permohonan = $pecah[0];
+      $id_sub_page = $pecah[2];
       $now = Carbon::now();
   
       // Menggunakan parameter binding untuk keamanan
@@ -717,6 +742,7 @@ class HargabbmController extends Controller
           ->where('bulan', $bulanx)
           ->where('npwp', $npwp)
           ->where('id_permohonan', $id_permohonan)
+          ->where('id_sub_page', $id_sub_page)
           ->update(['status' => '1', 'tgl_kirim' => $now]);
 
         if ($validatedData) {
