@@ -23,19 +23,52 @@ class LpgController extends Controller
   {
     $pecah = explode(',', Crypt::decryptString($id));
 // dd($pecah);
-    $lpgpenjualan = DB::table('penjualan_lpgs')
-      ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-      ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-      ->where('izin_id', $pecah[0])
-      ->groupBy('bulan')
-      ->get();
 
-    $lpgasok = DB::table('pasokan_l_p_g_s')
-      ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-      ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-      ->where('izin_id', $pecah[0])
-      ->groupBy('bulan')
-      ->get();
+    $qLpgPenjualan = DB::table('penjualan_lpgs')
+        ->select(
+            '*',
+            DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+            DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+            DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+        )
+        ->where('npwp', Auth::user()->npwp)
+        ->where('id_permohonan', $pecah[0])
+        ->where('id_sub_page', $pecah[2]);
+
+    $lpgpenjualan = DB::table(DB::raw("({$qLpgPenjualan->toSql()}) as sub"))
+        ->mergeBindings($qLpgPenjualan)
+        ->where('rn', 1)
+        ->get();
+
+    $qLpgPasok = DB::table('pasokan_l_p_g_s')
+        ->select(
+            '*',
+            DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+            DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+            DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+        )
+        ->where('npwp', Auth::user()->npwp)
+        ->where('id_permohonan', $pecah[0])
+        ->where('id_sub_page', $pecah[2]);
+
+    $lpgasok = DB::table(DB::raw("({$qLpgPasok->toSql()}) as sub"))
+        ->mergeBindings($qLpgPasok)
+        ->where('rn', 1)
+        ->get();
+
+    // $lpgpenjualan = DB::table('penjualan_lpgs')
+    //   ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
+    //   ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+    //   ->where('izin_id', $pecah[0])
+    //   ->groupBy('bulan')
+    //   ->get();
+
+    // $lpgasok = DB::table('pasokan_l_p_g_s')
+    //   ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
+    //   ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
+    //   ->where('izin_id', $pecah[0])
+    //   ->groupBy('bulan')
+    //   ->get();
 
     return view('badan_usaha.niaga.lpg.index', compact(
       'lpgpenjualan',

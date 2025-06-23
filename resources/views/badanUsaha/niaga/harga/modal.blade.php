@@ -10,7 +10,7 @@
             </div>
             <form method="post" action="{{ url('/harga-bbm-jbu') }}" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="npwp" value="{{ Auth::user()->badan_usaha_id }}">
+                <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
                 <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
                 <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
 
@@ -474,7 +474,7 @@
                 <div class="modal-body">
                     <div class="mb-6">
                         <label class="form-label">Bulan </label>
-                        <input class="form-control" type="month" name="bulan" id="bulan_import" required>
+                        <input class="form-control flatpickr" name="bulan" id="bulan_import" required>
                         @error('bulan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -526,7 +526,7 @@
             </div>
             <form method="post" action="{{ url('/simpanHargaLPG') }}" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="npwp" value="{{ Auth::user()->badan_usaha_id }}">
+                <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
                 <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
                 <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
 
@@ -968,7 +968,7 @@
                 <div class="modal-body">
                     <div class="mb-6">
                         <label class="form-label">Bulan </label>
-                        <input class="form-control" type="month" name="bulan" id="bulan_importx" required>
+                        <input class="form-control flatpickr" name="bulan" id="bulan_importx" required>
                         @error('bulan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>

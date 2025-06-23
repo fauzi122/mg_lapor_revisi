@@ -33,6 +33,7 @@
                         <div class="d-flex flex-column">
                             <h4 class="mb-1 text-dark">Informasi</h4>
                             <span>Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b></span>
+                            <span>Jenis kegiatan usaha: <b>{{ $sub_page['nama_opsi'] }}</b></span>
                         </div>
                         <button type="button"
                             class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto"
@@ -88,11 +89,13 @@
                                                 @foreach ($hargaLPG as $data)
                                                     @php
                                                         $id = Crypt::encryptString(
-                                                            $data->bulan .
+                                                            $data->id_permohonan .
                                                                 ',' .
                                                                 $data->npwp .
                                                                 ',' .
-                                                                $data->id_permohonan,
+                                                                $data->id_sub_page .
+                                                                ',' .
+                                                                $data->bulan,
                                                         );
                                                     @endphp
                                                     <tr>
@@ -224,7 +227,9 @@
                                                                 ',' .
                                                                 $data->npwp .
                                                                 ',' .
-                                                                $data->id_permohonan,
+                                                                $data->id_permohonan .
+                                                                ',' .
+                                                                $data->id_sub_page,
                                                         );
                                                     @endphp
                                                     <tr>
