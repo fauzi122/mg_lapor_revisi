@@ -36,7 +36,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-start">
-                                <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
+                                <h4>{{ $per->nama_perusahaan }}</h4>
                             </div>
                             <div class="d-flex justify-content-end gap-2">
                                 <a href="{{ url('laporan/harga-lpg') }}"
@@ -53,7 +53,7 @@
                         <div class="card-header align-items-center px-2">
                             <div class="card-toolbar"></div> 
                             <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                <input type="hidden" class="export-title" value="Laporan Harga LPG {{ $per->NAMA_PERUSAHAAN }}" />
+                                <input type="hidden" class="export-title" value="Laporan Harga LPG {{ $per->nama_perusahaan }}" />
                             </div>
                         </div>
                         <table class="kt-datatable table table-bordered table-hover">

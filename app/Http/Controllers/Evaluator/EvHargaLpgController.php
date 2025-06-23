@@ -49,7 +49,7 @@ class EvHargaLpgController extends Controller
         $p = !empty($kode) ? Crypt::decrypt($kode) : null;
         if ($p) {
             $query = DB::table('harga_l_p_g_s as a')
-                ->leftJoin('t_perusahaan as b', DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+                ->leftJoin('users as u', DB::raw('a.npwp'), '=', )
                 ->selectRaw('
                     MAX(a.npwp) as npwp, 
                     a.bulan, 
@@ -257,21 +257,47 @@ class EvHargaLpgController extends Controller
         $tgl = Carbon::now();
 
         $query = DB::table('harga_l_p_g_s as a')
-        ->leftJoin(DB::raw('t_perusahaan as b'), DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
-        ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
-        ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-        ->select('a.*', 'b.nama_perusahaan','c.tgl_disetujui','c.nomor_izin','c.tgl_pengajuan')
-        ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
-        ->whereIn('a.status', [1, 2, 3])
-        ->get();
+            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
+            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
+            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->where('a.bulan', $tgl->format('Y-m-d'))
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->select(
+                'u.name as nama_perusahaan',
+                'i.npwp',
+                'm.status',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->groupBy('u.name','i.npwp','m.status')
+            ->get();
+        // dd($query);
 
         $perusahaan = DB::table('harga_l_p_g_s as a')
-        ->leftJoin('t_perusahaan as b', 'a.npwp', '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
-        ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
-        ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('b.id_perusahaan', 'b.nama_perusahaan', 'c.tgl_disetujui', 'c.nomor_izin', 'c.tgl_pengajuan')
-        ->select('b.id_perusahaan', 'b.nama_perusahaan', 'c.tgl_disetujui', 'c.nomor_izin', 'c.tgl_pengajuan', 'm.nama_opsi')
-        ->get();
+            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp') 
+            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
+            // ->join('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->groupBy(
+                'u.name',
+                'i.npwp',
+                // 'm.nama_opsi'
+            )
+            ->select(
+                'u.name as nama_perusahaan',
+                'i.npwp',
+                // 'm.nama_opsi',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->get();
+            // dd($perusahaan);
+
+
 
         // return json_decode($query); exit;
         return view('evaluator.laporan_bu.harga.lpg.lihat-semua-data', [
@@ -284,29 +310,84 @@ class EvHargaLpgController extends Controller
 
     public function filterData(Request $request)
     {
-        $t_awal = Carbon::parse($request->t_awal);
-        $t_akhir = Carbon::parse($request->t_akhir);
+        $t_awal = Carbon::parse($request->t_awal)->startOfDay();
+        $t_akhir = Carbon::parse($request->t_akhir)->endOfDay();
 
+        // Data perusahaan (tanpa mepings)
         $perusahaan = DB::table('harga_l_p_g_s as a')
-        ->leftJoin('t_perusahaan as b', 'a.npwp', '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
-        ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
-        ->whereIn('a.status', [1, 2, 3])
-        ->groupBy('b.id_perusahaan', 'b.nama_perusahaan', 'c.tgl_disetujui', 'c.nomor_izin', 'c.tgl_pengajuan')
-        ->select('b.id_perusahaan', 'b.nama_perusahaan', 'c.tgl_disetujui', 'c.nomor_izin', 'c.tgl_pengajuan')
-        ->get();
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->groupBy('u.name','i.npwp')
+            ->select(
+                'u.name as nama_perusahaan',
+                'i.npwp',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->get();
 
+        // Query data utama
         $query = DB::table('harga_l_p_g_s as a')
-        ->leftJoin(DB::raw('t_perusahaan as b'), DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
-        ->leftJoin('r_permohonan_izin as c', 'b.id_perusahaan', '=', 'c.id_perusahaan')
-        ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-        ->select('a.*', 'b.nama_perusahaan','c.tgl_disetujui','c.nomor_izin','c.tgl_pengajuan', 'm.nama_opsi');
-        
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
+            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->select(
+                'a.id',
+                'a.npwp',
+                'a.bulan',
+                'a.status',
+                'a.catatan',
+                'a.provinsi',
+                'a.kabupaten_kota',
+                'a.sektor',
+                'a.volume',
+                'a.biaya_perolehan',
+                'a.biaya_distribusi',
+                'a.biaya_penyimpanan',
+                'a.margin',
+                'a.ppn',
+                'a.harga_jual',
+                'a.created_at',
+                'a.tgl_kirim',
+                'u.name as nama_perusahaan',
+                'm.nama_opsi',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->groupBy(
+                'a.id',
+                'a.npwp',
+                'a.bulan',
+                'a.status',
+                'a.catatan',
+                'a.provinsi',
+                'a.kabupaten_kota',
+                'a.sektor',
+                'a.volume',
+                'a.biaya_perolehan',
+                'a.biaya_distribusi',
+                'a.biaya_penyimpanan',
+                'a.margin',
+                'a.ppn',
+                'a.harga_jual',
+                'a.created_at',
+                'a.tgl_kirim',
+                'u.name',
+                'm.nama_opsi'
+            );
+
         if ($request->perusahaan != 'all') {
             $query->where('a.npwp', $request->perusahaan);
         }
 
         $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                    ->whereIn('a.status', [1, 2, 3])->get();
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->get();
 
         return view('evaluator.laporan_bu.harga.lpg.lihat-semua-data', [
             'title' => 'Laporan Harga LPG',
@@ -315,5 +396,4 @@ class EvHargaLpgController extends Controller
             'perusahaan' => $perusahaan,
         ]);
     }
-    
 }
