@@ -23,7 +23,8 @@ use App\Http\Controllers\{
 	PengolahanController,
 	SubsidilpgController,
 	ProgresPembangunanController,
-	IzinMigasController
+	IzinMigasController,
+    testEmailController
 };
 
 use App\Http\Controllers\Evaluator\{
@@ -78,6 +79,12 @@ use Illuminate\Http\Request;
 
 // Route::get('/redirect-laporan/{q}', [AuthController::class, 'postloginIzin'])->name('post.izin'); //Redirect from izin
 //auth BU
+
+//route test email
+Route::controller(testEmailController::class)->group(function () {
+	Route::get('/test-email', 'index');
+	Route::post('/test-email/send', 'send');
+});
 
 Route::get('/real-time-data', [RealTimeDataController::class, 'getData']);
 Route::get('/real-time-data-view', [RealTimeDataController::class, 'index']);
