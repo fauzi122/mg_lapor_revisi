@@ -9,9 +9,14 @@ trait SentEmailTrait
         //dd('Oji');
         $url = "https://apicdev.esdm.go.id/development/dev-sandbox/api/v1/mail/send";
         $uname = "pelaporan-migas";
-        $password = "";
+        $password = "f9q9b5YbQafj";
         $auth = 'Basic ZGplX2xoZTpMaDNfM2JUa0U=';
-        $request = Http::withBasicAuth($uname,$password)->post($url,[
+        $request = Http::withBasicAuth($uname,$password)
+        ->withOptions([
+            'verify' => false,
+            'allow_redirects' => true
+        ])
+        ->post($url,[
             'headers' => [
                     'Content-Type' => 'application/json',
                     'Authorization' => $auth
@@ -24,6 +29,7 @@ trait SentEmailTrait
         ]);
 
         $jsonResponse = $request->json();
+        dd($jsonResponse);   
         $code = $jsonResponse['code'];
         return $code;
         //dd($jsonResponse['code']);
