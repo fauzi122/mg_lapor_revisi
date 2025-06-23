@@ -69,27 +69,36 @@
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
                                 @foreach ($query as $data)
-                                    @php
+                                    {{-- @php
                                         $id = Crypt::encryptString(
                                             $data->bulan . ',' . $data->badan_usaha_id,
                                         );
                                         $idTahun = Crypt::encryptString(
                                             $data->bulan . ',' . $data->badan_usaha_id . ', tahun',
                                         );
+                                    @endphp --}}
+                                    {{-- {{  }} --}}
+                                    {{-- @php
+                                        $bulan = Crypt::encryptString($data->bulan . ',' . $data->npwp);
+                                        $tahun = Crypt::encryptString($data->bulan . ',' . $data->npwp . ',tahun');
+                                    @endphp --}}
+                                    @php
+                                        $kodeBulan = Crypt::encryptString('bulan,' . $data->bulan . ',' . $data->npwp);
+                                        $kodeTahun = Crypt::encryptString('tahun,' . $data->bulan . ',' . $data->npwp);
                                     @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            <b><a
-                                                    href="{{ url('/laporan/harga-lpg') }}/{{ $id }}">{{ getBulan($data->bulan) }}
-                                                    <i class="bi bi-check"
-                                                        title="lihat data laporan"></i></a><b>
+                                            <b><a href="{{ url('/laporan/harga-lpg') }}/{{ $kodeBulan }}">
+                                                {{ getBulan($data->bulan) }}
+                                                <i class="bi bi-check" title="Lihat laporan per bulan"></i>
+                                            </a></b>
                                         </td>
                                         <td>
-                                            <b><a
-                                                    href="{{ url('/laporan/harga-lpg') }}/{{ $idTahun }}">{{ getTahun($data->bulan) }}
-                                                    <i class="bi bi-check"
-                                                        title="lihat data laporan"></i></a><b>
+                                            <b><a href="{{ url('/laporan/harga-lpg') }}/{{ $kodeTahun }}">
+                                                {{ getTahun($data->bulan) }}
+                                                <i class="bi bi-check" title="Lihat laporan per tahun"></i>
+                                            </a></b>
                                         </td>
                                         <td>
                                             @if ($data->status == 1 && $data->catatan)
