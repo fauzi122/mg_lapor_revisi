@@ -135,8 +135,7 @@ class EvHargaLpgController extends Controller
             ->where('a.bulan', 'like', $like)
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->get();
-            // dd($pecah);
-
+        //        var_dump($query);die();
 
         return view('evaluator.laporan_bu.harga.lpg.pilihbulan', [
             'title' => 'Laporan Harga LPG',
