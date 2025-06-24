@@ -13,60 +13,58 @@ class EvHargaLpgController extends Controller
 {
     public function index()
     {
-        $perusahaan= DB::table('izin_migas as i')
-                    ->join('harga_l_p_g_s as h', 'h.npwp', '=', 'i.npwp')
-                    ->join('users as u', 'u.npwp', '=', 'i.npwp')
-                    ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-                    ->select(
-                        'u.name as nama_perusahaan',
-                        'i.npwp',
-                        DB::raw("(d ->> 'Id_Permohonan')::int as id_permohonan"),
-                        DB::raw("MIN(d ->> 'No_SK_Izin') as no_sk_izin"),
-                        DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tanggal_izin"),
-                        DB::raw("MIN(d ->> 'Kode_Izin_Desc') as kode_izin_desc"),
-                        DB::raw("MIN(d ->> 'Jenis_Izin_Desc') as jenis_izin_desc"),
-                        DB::raw("MIN(d ->> 'Jenis_Pengesahan') as jenis_pengesahan"),
-                        DB::raw("MIN(d ->> 'Status_Pengesahan') as status_pengesahan"),
-                        DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tanggal_pengesahan"),
-                        DB::raw("MIN((d ->> 'Tanggal_Berakhir_izin')::date) as tanggal_berakhir_izin")
-                    )
-                    ->whereIn(DB::raw('h.status::int'), [1, 2, 3])
-                    ->groupBy('u.name', 'i.npwp', DB::raw("(d ->> 'Id_Permohonan')::int"))
-                    ->get();
-            // dd($perusahaan);
+        $perusahaan = DB::table('izin_migas as i')
+            ->join('harga_l_p_g_s as h', 'h.npwp', '=', 'i.npwp')
+            ->join('users as u', 'u.npwp', '=', 'i.npwp')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->select(
+                'u.name as nama_perusahaan',
+                'i.npwp',
+                DB::raw("(d ->> 'Id_Permohonan')::int as id_permohonan"),
+                DB::raw("MIN(d ->> 'No_SK_Izin') as no_sk_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tanggal_izin"),
+                DB::raw("MIN(d ->> 'Kode_Izin_Desc') as kode_izin_desc"),
+                DB::raw("MIN(d ->> 'Jenis_Izin_Desc') as jenis_izin_desc"),
+                DB::raw("MIN(d ->> 'Jenis_Pengesahan') as jenis_pengesahan"),
+                DB::raw("MIN(d ->> 'Status_Pengesahan') as status_pengesahan"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tanggal_pengesahan"),
+                DB::raw("MIN((d ->> 'Tanggal_Berakhir_izin')::date) as tanggal_berakhir_izin")
+            )
+            ->whereIn(DB::raw('h.status::int'), [1, 2, 3])
+            ->groupBy('u.name', 'i.npwp', DB::raw("(d ->> 'Id_Permohonan')::int"))
+            ->get();
+        // dd($perusahaan);
         $data = [
-            'title'=>'Laporan Harga LPG',
+            'title' => 'Laporan Harga LPG',
             'perusahaan' => $perusahaan,
         ];
 
-        return view('evaluator.laporan_bu.harga.lpg.index',$data);
+        return view('evaluator.laporan_bu.harga.lpg.index', $data);
     }
 
     public function periode($kode = '')
     {
-
-
         $p = !empty($kode) ? Crypt::decrypt($kode) : null;
         if ($p) {
             $query = DB::table('harga_l_p_g_s as a')
-                ->leftJoin('users as u', DB::raw('a.npwp'), '=', )
+                ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
                 ->selectRaw('
                     MAX(a.npwp) as npwp, 
                     a.bulan, 
                     MAX(a.status) as status, 
                     MAX(a.catatan) as catatan, 
-                    MAX(b.nama_perusahaan) as nama_perusahaan
+                    MAX(u.name) as nama_perusahaan,
+                    MAX(u.badan_usaha_id) as badan_usaha_id
                     ')
                 ->where('a.npwp', $p)
-                ->whereIn('a.status', [1, 2, 3])
+                ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
                 ->groupBy('a.bulan')
                 ->get();
         } else {
             $query = '';
-
         }
         $data = [
-            'title'=>'Laporan Harga LPG',
+            'title' => 'Laporan Harga LPG',
             'p' => $p,
             'query' => $query,
             'per' => $query->first()
@@ -74,35 +72,77 @@ class EvHargaLpgController extends Controller
         return view('evaluator.laporan_bu.harga.lpg.periode', $data);
     }
 
+    // public function show($id = '')
+    // {
+
+    //     $pecah = explode(',', Crypt::decryptString($id));
+
+    //     if (count($pecah) == 3) {
+    //         $filterBy = substr($pecah[0], 0, 4);
+    //     } else {
+    //         $filterBy = $pecah[0];
+    //     }
+
+    //     $query = DB::table('harga_l_p_g_s as a')
+    //         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+    //         ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+    //         ->select(
+    //             'a.*',
+    //             'u.name as nama_perusahaan',
+    //             'm.nama_opsi'
+    //         )
+    //         ->where('a.npwp', $pecah[1])
+    //         ->where('a.bulan', 'like', "%" . $filterBy . "%")
+    //         ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+    //         ->get();
+    //     // dd($pecah);
+
+    //     //        var_dump($query);die();
+
+    //     $data = [
+    //         'title' => 'Laporan Harga LPG',
+    //         'query' => $query,
+    //         'per' => $query->first()
+
+    //     ];
+    //     return view('evaluator.laporan_bu.harga.lpg.pilihbulan', $data);
+    // }
     public function show($kode = '')
     {
-
         $pecah = explode(',', Crypt::decryptString($kode));
 
-        if (count($pecah) == 3) {
-            $filterBy = substr($pecah[0], 0, 4);
+        if (count($pecah) !== 3) {
+            abort(404, 'Format kode salah');
+        }
+
+        $mode  = $pecah[0]; // 'bulan' atau 'tahun'
+        $bulan = $pecah[1]; // ex: 2025-06-01
+        $npwp  = $pecah[2];
+
+        // Atur filter berdasarkan mode
+        if ($mode === 'tahun') {
+            $filterBy = substr($bulan, 0, 4); // ambil 2025
+            $like = $filterBy . '%'; // like 2025%
         } else {
-            $filterBy = $pecah[0];
+            $like = $bulan; // exact match bulan
         }
 
         $query = DB::table('harga_l_p_g_s as a')
-            ->leftJoin('t_perusahaan as b', DB::raw('a.npwp'), '=', DB::raw("CAST(b.id_perusahaan AS TEXT)"))
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-            ->select('a.*', 'b.nama_perusahaan', 'm.nama_opsi')
-            ->where('a.npwp', $pecah[1])
-            ->where('a.bulan', 'like', "%". $filterBy ."%")
-            ->whereIn('a.status', [1, 2,3])
+            ->select('a.*', 'u.name as nama_perusahaan', 'm.nama_opsi')
+            ->where('a.npwp', $npwp)
+            ->where('a.bulan', 'like', $like)
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->get();
         //        var_dump($query);die();
 
-        $data = [
-            'title'=>'Laporan Harga LPG',
-            'query'=>$query,
-            'per'=>$query->first()
-
-        ];
-        return view('evaluator.laporan_bu.harga.lpg.pilihbulan', $data);
-
+        return view('evaluator.laporan_bu.harga.lpg.pilihbulan', [
+            'title' => 'Laporan Harga LPG',
+            'query' => $query,
+            'per'   => $query->first(),
+            'mode'  => $mode
+        ]);
     }
 
     public function updateRevisionNotes(Request $request)
@@ -129,16 +169,16 @@ class EvHargaLpgController extends Controller
 
         $request->validate([
             'catatan' => 'required',
-        ]); 
-        $npwp = Crypt::decrypt($request->input('p')) ;
-        $bulan = Crypt::decrypt($request->input('b')) ;
+        ]);
+        $npwp = Crypt::decrypt($request->input('p'));
+        $bulan = Crypt::decrypt($request->input('b'));
 
 
 
         $update = DB::table('harga_l_p_g_s')
             ->where('npwp', $npwp)
-            ->where('bulan',$bulan)
-            ->whereIn('status', [1, 2,3])
+            ->where('bulan', $bulan)
+            ->whereIn('status', [1, 2, 3])
             ->update([
                 'catatan' => $request->catatan,
                 'status' => '2'
@@ -163,7 +203,7 @@ class EvHargaLpgController extends Controller
             $update = DB::table('harga_l_p_g_s')
                 ->where('npwp', $npwp)
                 ->where('bulan', $bulan)
-                ->whereIn('status', [1, 2,3])
+                ->whereIn('status', [1, 2, 3])
                 ->update([
                     'status' => '3'
                 ]);
@@ -271,12 +311,12 @@ class EvHargaLpgController extends Controller
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
             )
-            ->groupBy('u.name','i.npwp','m.status')
+            ->groupBy('u.name', 'i.npwp', 'm.status')
             ->get();
         // dd($query);
 
         $perusahaan = DB::table('harga_l_p_g_s as a')
-            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp') 
+            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
             // ->join('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
@@ -295,7 +335,7 @@ class EvHargaLpgController extends Controller
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
             )
             ->get();
-            // dd($perusahaan);
+        // dd($perusahaan);
 
 
 
@@ -319,7 +359,7 @@ class EvHargaLpgController extends Controller
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->groupBy('u.name','i.npwp')
+            ->groupBy('u.name', 'i.npwp')
             ->select(
                 'u.name as nama_perusahaan',
                 'i.npwp',
