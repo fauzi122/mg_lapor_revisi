@@ -292,6 +292,7 @@ class EvHargaLpgController extends Controller
     }
 
 
+
     public function lihatSemuaData()
     {
         $tgl = Carbon::now();
@@ -322,11 +323,13 @@ class EvHargaLpgController extends Controller
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->groupBy(
+                'a.bulan',
                 'u.name',
                 'i.npwp',
                 // 'm.nama_opsi'
             )
             ->select(
+                'a.bulan',
                 'u.name as nama_perusahaan',
                 'i.npwp',
                 // 'm.nama_opsi',

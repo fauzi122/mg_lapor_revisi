@@ -204,15 +204,15 @@
                                         <td>
                                             @if ($pgb->status == 1)
                                                 <button type="button"
-                                                    class="btn btn-info btn-sm rounded-pill btn-update"
+                                                    class="btn btn-icon btn-sm btn-info mb-2 btn-update"
                                                     data-bs-toggle="modal" data-bs-target="#modal-update"
                                                     title="Revisi data">
-                                                    <i class="bi bi-pencil-fill align-middle"></i>
+                                                    <i class="ki-solid ki-pencil align-middle"></i>
                                                 </button>
 
                                                 @if ($pgb->status == 1 && $pgb->catatan)
                                                     <button
-                                                        class="btn btn-primary btn-rounded btn-sm btn-selesai"
+                                                        class="btn btn-icon btn-sm btn-info mb-2 btn-selesai"
                                                         data-id="{{ $pgb->id }}"><i class="bi bi-check"
                                                             title="Selesai"></i></button>
                                                 @endif
