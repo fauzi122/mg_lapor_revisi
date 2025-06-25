@@ -319,25 +319,22 @@ class EvHargaLpgController extends Controller
         $perusahaan = DB::table('harga_l_p_g_s as a')
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            // ->join('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->groupBy(
-                'a.bulan',
                 'u.name',
-                'i.npwp',
-                // 'm.nama_opsi'
+                'i.npwp'
             )
             ->select(
-                'a.bulan',
+                DB::raw("MAX(a.bulan) as bulan_terbaru"),
                 'u.name as nama_perusahaan',
                 'i.npwp',
-                // 'm.nama_opsi',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
             )
             ->get();
+
         // dd($perusahaan);
 
 
@@ -364,6 +361,7 @@ class EvHargaLpgController extends Controller
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->groupBy('u.name', 'i.npwp')
             ->select(
+                DB::raw("MAX(a.bulan) as bulan_terbaru"),
                 'u.name as nama_perusahaan',
                 'i.npwp',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
@@ -424,13 +422,21 @@ class EvHargaLpgController extends Controller
                 'm.nama_opsi'
             );
 
+        // Filter perusahaan
         if ($request->perusahaan != 'all') {
             $query->where('a.npwp', $request->perusahaan);
         }
 
-        $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->get();
+        // 🔥 Gunakan OR filter: bulan ATAU tgl_kirim
+        $query->where(function ($q) use ($t_awal, $t_akhir) {
+            $q->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+                ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
+        });
+
+        // Filter status aktif
+        $query->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
+
+        $result = $query->get();
 
         return view('evaluator.laporan_bu.harga.lpg.lihat-semua-data', [
             'title' => 'Laporan Harga LPG',
