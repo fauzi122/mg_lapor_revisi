@@ -26,7 +26,6 @@ trait SentEmailTrait
         ]);
 
         $jsonResponse = $request->json();
-        dd($jsonResponse);   
         $code = $jsonResponse['code'];
         return $code;
         //dd($jsonResponse['code']);
