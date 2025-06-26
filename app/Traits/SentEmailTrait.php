@@ -15,16 +15,14 @@ trait SentEmailTrait
             'verify' => false,
             'allow_redirects' => true
         ])
-        ->post($url,[
-            'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => $auth
-                ],
-            'body' =>json_encode([
-                    'receiver' => $receiver,
-                    'subject' => $subject,
-                    'content' => $content
-                ])
+        ->withHeaders([
+            'Authorization' => $auth,
+            'Content-Type' => 'application/json'
+        ])
+        ->post($url, [
+            'receiver' => $receiver,
+            'subject' => $subject,
+            'content' => $content
         ]);
 
         $jsonResponse = $request->json();
