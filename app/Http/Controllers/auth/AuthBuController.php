@@ -24,49 +24,56 @@ class AuthBuController extends Controller
     //     // $this->middleware(['permission:permissions.index']);
     // }
 
-    public function postloginIzin(Request $request)
-	{
+public function postloginIzin(Request $request)
+{
+    $bu = $request->perusahaan;
 
-		$bu = $request->perusahaan;
+    // Cek apakah user dengan badan_usaha_id tersebut sudah ada
+    $check = User::where('badan_usaha_id', $bu)->count();
+
+    if ($check == 0) {
+        // Ambil data perusahaan dari tabel t_perusahaan
+        $perusahaan = DB::table('t_perusahaan')
+            ->where('id_perusahaan', $bu)
+            ->first();
+
+        // Pastikan data perusahaan ditemukan
+        if ($perusahaan) {
+            // Tambahkan user baru berdasarkan data perusahaan
+            User::create([
+                'name' => $perusahaan->nama_perusahaan,
+                'email' => $perusahaan->email_perusahaan,
+                'npwp' => $perusahaan->npwp,
+                'password' => bcrypt('-'), // Password dummy, disesuaikan kebutuhan
+                'badan_usaha_id' => $perusahaan->id_perusahaan,
+                'role' => 'BU',
+            ]);
+        } else {
+            return redirect('/login')->with('statusLogin', 'Perusahaan tidak ditemukan');
+        }
+    }
+
+    // Ambil data user berdasarkan badan_usaha_id
+    $user = User::where('badan_usaha_id', $bu)->first();
+
+    if (!$user) {
+        return redirect('/login')->with('statusLogin', 'User tidak ditemukan');
+    }
+
+    $credentials = [
+        'email' => $user->email,
+        'password' => '-' // password dummy sesuai yang diset di atas
+    ];
+
+    // Lakukan proses login
+    if (Auth::attempt($credentials)) {
+        return redirect('/');
+    } else {
+        return redirect('/login')->with('statusLogin', 'Gagal login. Coba lagi.');
+    }
+}
 
 
-		$check = User::where('badan_usaha_id', $bu)->count();
-
-		if ($check == '0') {
-			// dd('hai');
-			//insert ke table user dulu
-			$perusahaan = DB::table('t_perusahaan')
-				->where('ID_PERUSAHAAN', $bu)
-				->first();
-
-			$storeUser = User::create([
-				'name' => $perusahaan->NAMA_PERUSAHAAN,
-				'email' => $perusahaan->EMAIL_PERUSAHAAN,
-				'npwp' => $perusahaan->NPWP,
-				'password' => bcrypt('-'),
-				'badan_usaha_id' => $perusahaan->ID_PERUSAHAAN,
-				'role' => 'BU',
-			]);
-		}
-
-		$user = User::where('badan_usaha_id', $bu)->first();
-		// dd($user);
-		$email = $user->email;
-		$password = '-';
-		$credentials = [
-			'email' => $email,
-			'password' => $password
-		];
-
-		$dologin = Auth::attempt($credentials);
-
-		if ($dologin) {
-			return redirect('/');
-		} else {
-			// dd('hai');
-			return redirect('/login')->with('statusLogin', 'Eror Autentikasi');
-		}
-	}
 
 	public function postloginIzinByURL($dataNPWP)
 	{

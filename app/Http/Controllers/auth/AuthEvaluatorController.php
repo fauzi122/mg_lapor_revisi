@@ -27,73 +27,32 @@ class AuthEvaluatorController extends Controller
 	{
 		return view('evaluator.ssologin');
 	}
-// pindah sementara
-    // public function postloginEvaluator(Request $request)
-	// {
-
-	// 	$token = $request->otp;
-
-	// 	$user = User::where('remember_token', $token)->first();
-	// 	// dd($user);
-	// 	$email = $user->email;
-	// 	$password = '-';
-	// 	$token = $user->remember_token;
-	// 	$credentials = [
-	// 		'email' => $email,
-	// 		'password' => $password,
-	// 		'remember_token' => $token
-	// 	];
-
-	// 	$dologin = Auth::attempt($credentials);
-	// 	if ($dologin) {
-	// 		//update remember token jadi kosong
-	// 		$updateUser = User::where('remember_token', $token)->update([
-	// 			'remember_token'	=> ''
-	// 		]);
-	// 		return redirect('/master');
-	// 	} else {
-	// 		// dd('hai');
-	// 		return redirect('/evaluator/login')->with('statusLogin', 'Eror Autentikasi');
-	// 	}
-	// }
 
 	public function postLogin(Request $request)
 	{
-		// Validasi data permintaan
+		// Validasi data input
 		$request->validate([
 			'email' => 'required|string|email',
 			'password' => 'required|string',
 		]);
-	
-		// Kode yang dikomentari disimpan untuk referensi, tetapi tidak digunakan saat ini.
-		// $url = "https://apicdev.esdm.go.id/development/dev-sandbox/sipeg/sso-info?nip=".$request->email;
-		// $client_id = "39dc606335d8c4e22ea2c444bf58cecd";
-		// $client_secret = "9ec10a07e01bb24b9beba125c28cbff1";
-		// $request = Http::get($url,[
-		//     'headers' => [
-		//         'client-id' => $client_id,
-		//         'client-secret' => $client_secret,
-		//         'APIKey' => 'SIPEG',
-		//     ]
-		// ]);
-	
-		// $jsonResponse = $request->json();
-		// dd($url, $client_id, $client_secret, $jsonResponse);
-		// $code = $jsonResponse['code'];
-	
+
 		$credentials = $request->only('email', 'password');
-	
-		// Mencoba untuk login dengan kredensial yang diberikan
+
+		// Lakukan login
 		if (Auth::attempt($credentials, $request->boolean('remember-check'))) {
-			// Redirect ke halaman yang diinginkan jika login berhasil
+			// Regenerate session untuk keamanan (recommended)
+			$request->session()->regenerate();
+
+			// Redirect ke halaman yang dituju
 			return redirect()->intended('master');
 		}
-	
-		// Redirect kembali dengan pesan kesalahan jika login gagal
+
+		// Gagal login: kirim error kembali ke view
 		return back()->withErrors([
 			'login_error' => 'Username atau password salah.',
-		])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
+		])->withInput($request->except('password'));
 	}
+
 
 	public function logout()
 	{
@@ -243,4 +202,42 @@ class AuthEvaluatorController extends Controller
     {
         return env('CAS_BASE_URL', 'https://auth.esdm.go.id/cas');
     }
+
+		// public function postLogin(Request $request)
+	// {
+	// 	// Validasi data permintaan
+	// 	$request->validate([
+	// 		'email' => 'required|string|email',
+	// 		'password' => 'required|string',
+	// 	]);
+	
+	// 	// Kode yang dikomentari disimpan untuk referensi, tetapi tidak digunakan saat ini.
+	// 	// $url = "https://apicdev.esdm.go.id/development/dev-sandbox/sipeg/sso-info?nip=".$request->email;
+	// 	// $client_id = "39dc606335d8c4e22ea2c444bf58cecd";
+	// 	// $client_secret = "9ec10a07e01bb24b9beba125c28cbff1";
+	// 	// $request = Http::get($url,[
+	// 	//     'headers' => [
+	// 	//         'client-id' => $client_id,
+	// 	//         'client-secret' => $client_secret,
+	// 	//         'APIKey' => 'SIPEG',
+	// 	//     ]
+	// 	// ]);
+	
+	// 	// $jsonResponse = $request->json();
+	// 	// dd($url, $client_id, $client_secret, $jsonResponse);
+	// 	// $code = $jsonResponse['code'];
+	
+	// 	$credentials = $request->only('email', 'password');
+	
+	// 	// Mencoba untuk login dengan kredensial yang diberikan
+	// 	if (Auth::attempt($credentials, $request->boolean('remember-check'))) {
+	// 		// Redirect ke halaman yang diinginkan jika login berhasil
+	// 		return redirect()->intended('master');
+	// 	}
+	
+	// 	// Redirect kembali dengan pesan kesalahan jika login gagal
+	// 	return back()->withErrors([
+	// 		'login_error' => 'Username atau password salah.',
+	// 	])->withInput($request->except('password')); // Simpan input email, tapi hapus field password
+	// }
 }
