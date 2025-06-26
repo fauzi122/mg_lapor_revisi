@@ -13,9 +13,9 @@ class testEmailController extends Controller
     }
 
     public function send(Request $request){
-        $receiver = $request->input('receiver');
-        $subject = $request->input('subject');
-        $content = $request->input('content');
+        $receiver = $request->receiver;
+        $subject = $request->subject;
+        $content = $request->content;
 
         $this->emailNotif($receiver,$subject,$content);
 
