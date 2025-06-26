@@ -125,7 +125,7 @@
                                                 @if ($data->status == 1 && $data->catatan)
                                                     <button
                                                         class="btn btn-primary btn-rounded btn-sm btn-selesai-status"
-                                                        data-p="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}"
+                                                        data-p="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->npwp) }}"
                                                         data-b="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}"><i
                                                             class="bi bi-check"
                                                             title="Selesai"></i></button>
@@ -164,7 +164,7 @@
                 
                                                                          <div class="fv-row mb-7">
                                                                             <input type="hidden" name="p"
-                                                                                value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}">
+                                                                                value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->npwp) }}">
                                                                             <input type="hidden" name="b"
                                                                                 value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}">
                                                                         </div>
