@@ -18,7 +18,7 @@ class EvPenjualanJbkp extends Controller
     public function index()
     {
         $perusahaan = PenjualanJbkp::select('id_badan_usaha', 'izin_usaha','nama_badan_usaha','npwp_badan_usaha') 
-            ->groupBy('id_badan_usaha')
+            ->groupBy('id_badan_usaha','izin_usaha','nama_badan_usaha','npwp_badan_usaha')
             ->get();
 
         // Dekode JSON pada field izin_usaha
@@ -45,7 +45,7 @@ class EvPenjualanJbkp extends Controller
             // Ambil dan group berdasarkan bulan-tahun
             $query = PenjualanJbkp::select('nama_badan_usaha','bulan', 'tahun', 'npwp_badan_usaha',DB::raw('MIN(id) as id')) 
                 ->where('npwp_badan_usaha', $p)
-                ->groupBy('tahun', 'bulan')
+                ->groupBy('tahun', 'bulan', 'nama_badan_usaha', 'npwp_badan_usaha')
                 ->orderBy('tahun', 'desc')
                 ->orderBy('bulan', 'desc')
                 ->get();
@@ -177,9 +177,10 @@ class EvPenjualanJbkp extends Controller
 
         // Query untuk mendapatkan data penjualan berdasarkan perusahaan dan tanggal
         $query = DB::table('bph_penjualan_jbkp')
-                ->whereRaw('(tahun * 100 + bulan) BETWEEN ? AND ?', [$t_awal, $t_akhir])
-                ->orderBy('tahun')
-                ->orderBy('bulan');
+                ->whereRaw('((tahun::int * 100) + bulan::int) BETWEEN ? AND ?', [$t_awal, $t_akhir])
+                ->orderByRaw('tahun::int')
+                ->orderByRaw('bulan::int');
+
     
         // Jika yang dipilih adalah 'all', maka tidak ada filter berdasarkan perusahaan
         if ($perusahaan !== 'all') {
@@ -195,7 +196,7 @@ class EvPenjualanJbkp extends Controller
                 'title' => 'Laporan Penjualan JBKP',
                 'result' => $result
             ];
-    
+            
             $view = view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.cetak', $data);
     
             // Menambahkan script JavaScript untuk reload halaman
@@ -214,7 +215,8 @@ class EvPenjualanJbkp extends Controller
         $query = PenjualanJbkp::where('bulan', $bulan)
                     ->where('tahun', $tahun)
                     ->get();
-        $perusahaan  = PenjualanJbkp::groupBy('npwp_badan_usaha')->get();
+        $perusahaan  = PenjualanJbkp::select('npwp_badan_usaha', 'nama_badan_usaha')
+                    ->groupBy('npwp_badan_usaha', 'nama_badan_usaha')->get();
         $periode = $tgl->translatedFormat('F Y'); // contoh: "Mei 2025"
 
         return view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.lihat-semua-data', [
@@ -232,14 +234,14 @@ class EvPenjualanJbkp extends Controller
         $t_akhir = Carbon::parse($request->t_akhir);
 
         $perusahaan = PenjualanJbkp::select('id_badan_usaha', 'izin_usaha','nama_badan_usaha','npwp_badan_usaha') 
-            ->groupBy('id_badan_usaha')
+            ->groupBy('id_badan_usaha', 'izin_usaha','nama_badan_usaha','npwp_badan_usaha')
             ->get();
 
         // Query untuk mendapatkan data penjualan berdasarkan perusahaan dan tanggal
         $query = DB::table('bph_penjualan_jbkp')
-                ->whereRaw('(tahun * 100 + bulan) BETWEEN ? AND ?', [$t_awal->format('Ym'), $t_akhir->format('Ym')])
-                ->orderBy('tahun')
-                ->orderBy('bulan');
+                ->whereRaw('((tahun::int * 100) + bulan::int) BETWEEN ? AND ?', [$t_awal->format('Ym'), $t_akhir->format('Ym')])
+                ->orderByRaw('tahun::int')
+                ->orderByRaw('bulan::int');
     
         // Jika yang dipilih adalah 'all', maka tidak ada filter berdasarkan perusahaan
         if ($request->input("perusahaan") !== 'all') {

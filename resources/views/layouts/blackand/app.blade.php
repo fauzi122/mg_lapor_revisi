@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>Dashboard Evaluator</title>
@@ -42,13 +43,16 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!-- APP CSS-->
-    <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" />
     <!-- DATATABLE -->
     <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/custom/datatables/datatables.bundle.css') }}" />
     <!-- GLOBAL CSS-->
     <link rel="stylesheet" href="{{ asset('assetsMetronic/plugins/global/plugins.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/style.bundle.css') }}" />
     <link rel="stylesheet" href="{{ asset('assetsMetronic/css/flatpickr.css') }}" />
+    {{-- flatpickr (Untuk data tanggal pada laporan badan usaha) --}}
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
     <!-- CHOICES CSS -->
     <link rel="stylesheet" href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" />
     <!-- CUSTOM CSS-->
@@ -60,6 +64,7 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
+
     <style>
         html[data-bs-theme="light"] .app-sidebar-secondary {
             background-color: #ffffff !important;
@@ -68,16 +73,14 @@
         html[data-bs-theme="dark"] .app-sidebar-secondary {
             background-color: #121212 !important;
         }
-
     </style>
 
 </head>
 
-<body id="kt_app_body" 
-data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true" 
-data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" 
-data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" 
-data-kt-app-sidebar-stacked="true" data-kt-app-sidebar-secondary-enabled="true" class="app-default">
+<body id="kt_app_body" data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true"
+    data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-push-toolbar="true"
+    data-kt-app-sidebar-push-footer="true" data-kt-app-sidebar-stacked="true"
+    data-kt-app-sidebar-secondary-enabled="true" class="app-default">
 
     <!-- <body data-layout="horizontal"> -->
 
@@ -98,7 +101,8 @@ data-kt-app-sidebar-stacked="true" data-kt-app-sidebar-secondary-enabled="true" 
                     </div>
                     <!--Footer-->
                     <div id="kt_app_footer" class="app-footer">
-                        <div class="app-container container-xxl d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+                        <div
+                            class="app-container container-xxl d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
                             <div class="text-dark order-2 order-md-1">
                                 <span class="text-muted fw-semibold me-1">{{ date('Y') }}&copy;</span>
                                 <a href="#" class="text-gray-800 text-hover-primary">Aplikasi Pelaporan Migas</a>
@@ -111,7 +115,7 @@ data-kt-app-sidebar-stacked="true" data-kt-app-sidebar-secondary-enabled="true" 
         {{-- header end --}}
     </div>
 
-    
+
     {{-- <div id="layout-wrapper">
 
 
@@ -133,7 +137,7 @@ data-kt-app-sidebar-stacked="true" data-kt-app-sidebar-secondary-enabled="true" 
 
                 @yield('content')
                 {{--  @include('sweetalert::alert')  --}}
-                {{-- @include('layouts.blackand.footer')
+    {{-- @include('layouts.blackand.footer')
             </div>
         </section>
         <!-- end main content-->
@@ -202,36 +206,36 @@ data-kt-app-sidebar-stacked="true" data-kt-app-sidebar-secondary-enabled="true" 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> --}}
 
     <!--begin::Javascript-->
-        <!--begin::Global Javascript Bundle(mandatory for all pages)-->
-        <script src="{{ asset('assetsMetronic/plugins/global/plugins.bundle.js') }}"></script>
-        <script src="{{ asset('assetsMetronic/js/scripts.bundle.js') }}"></script>
-        <script src="{{ asset('assetsMetronic/js/flatpickr.js') }}"></script>
-        <!--end::Global Javascript Bundle-->
+    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+    <script src="{{ asset('assetsMetronic/plugins/global/plugins.bundle.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/scripts.bundle.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/flatpickr.js') }}"></script>
+    <!--end::Global Javascript Bundle-->
 
-        <!-- Datatable-->
-        <script src="{{ asset('assetsMetronic/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-        <script src="{{ asset('assetsMetronic/js/custom/initdatatable.js') }}"></script>
-        
-        <!-- choices js -->
-        <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
-        
-        <!-- searchInput-->
-        <script src="{{ asset('assetsMetronic/js/custom/searchInput.js') }}"></script>
+    <!-- Datatable-->
+    <script src="{{ asset('assetsMetronic/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/initdatatable.js') }}"></script>
 
-        <!--begin::Vendors Javascript(used for this page only)-->
-        <script src="{{ asset('assetsMetronic/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
-        <!--end::Vendors Javascript-->
+    <!-- choices js -->
+    <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
 
-        <!--begin::Custom Javascript(used for this page only)-->
-        <script src="{{ asset('assetsMetronic/js/widgets.bundle.js') }}"></script>
-        <script src="{{ asset('assetsMetronic/js/custom/widgets.js') }}"></script>
-        <script src="{{ asset('assetsMetronic/js/custom/apps/chat/chat.js') }}"></script>
-        <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/upgrade-plan.js') }}"></script>
-        <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/create-app.js') }}"></script>
-        <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/new-target.js') }}"></script>
-        <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/users-search.js') }}"></script>
-        <!--end::Custom Javascript-->
-        <!--end::Javascript-->
+    <!-- searchInput-->
+    <script src="{{ asset('assetsMetronic/js/custom/searchInput.js') }}"></script>
+
+    <!--begin::Vendors Javascript(used for this page only)-->
+    <script src="{{ asset('assetsMetronic/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
+    <!--end::Vendors Javascript-->
+
+    <!--begin::Custom Javascript(used for this page only)-->
+    <script src="{{ asset('assetsMetronic/js/widgets.bundle.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/widgets.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/apps/chat/chat.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/upgrade-plan.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/create-app.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/new-target.js') }}"></script>
+    <script src="{{ asset('assetsMetronic/js/custom/utilities/modals/users-search.js') }}"></script>
+    <!--end::Custom Javascript-->
+    <!--end::Javascript-->
 
     <script>
         // Pastikan Anda telah memuat library jQuery dan Select2 sebelum menggunakan script ini.
@@ -281,6 +285,22 @@ data-kt-app-sidebar-stacked="true" data-kt-app-sidebar-secondary-enabled="true" 
                 showConfirmButton: false
             });
         @endif
+    </script>
+
+    {{-- flatpickr (Untuk data tanggal pada laporan badan usaha) --}}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+    <script>
+        flatpickr(".flatpickr", {
+            dateFormat: "Y-m",
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true,
+                    dateFormat: "Y-m",
+                    altFormat: "F Y"
+                })
+            ]
+        });
     </script>
 
 
