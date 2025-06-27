@@ -243,10 +243,8 @@
                                                                          data-kt-scroll-offset="300px">
                 
                                                                          <div class="fv-row mb-7">
-                                                                            <input type="hidden" name="p"
-                                                                                value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->npwp) }}">
-                                                                            <input type="hidden" name="b"
-                                                                                value="{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}">
+                                                                            <input type="hidden" name="id"
+                                                                                value="{{ \Illuminate\Support\Facades\Crypt::encrypt($pgb->id) }}">
                                                                         </div>
                                                                         <div class="fv-row mb-7">
                                                                             <label for="catatan" class="d-flex align-items-center fs-6 fw-semibold mb-2">Notes</label>

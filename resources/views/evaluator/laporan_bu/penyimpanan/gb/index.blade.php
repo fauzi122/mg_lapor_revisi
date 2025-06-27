@@ -77,7 +77,7 @@
                                                                 <option value="">--Pilih Perusahaan--</option>
                                                                 <option value="all"> Semua Perusahaan </option>
 
-                                                                @foreach ($perusahaan as $p)
+                                                                @foreach ($perusahaan->unique('npwp') as $p)
                                                                     <option value="{{ $p->id_perusahaan }}">
                                                                         {{ $p->NAMA_PERUSAHAAN }}</option>
                                                                 @endforeach

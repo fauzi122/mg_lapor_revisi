@@ -64,18 +64,101 @@ class EvPenyimpananMinyakBumiController extends Controller
         ]);
 
         $perusahaan = $request->input('perusahaan');
-        $t_awal = $request->input('t_awal');
-        $t_akhir = $request->input('t_akhir');
+        $t_awal = Carbon::parse($request->input('t_awal'));
+        $t_akhir = Carbon::parse($request->input('t_akhir'));
+
 
         $query = DB::table('penyminyakbumis as a')
-            ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-            ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-            ->whereIn('a.status', [1, 2, 3])
-            ->whereBetween('bulan', [$t_awal, $t_akhir]);
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
+            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
+            ->select(
+                'a.id',
+                'a.npwp',
+                'a.id_permohonan',
+                'a.bulan',
+                'a.jenis_fasilitas',
+                'a.no_tangki',
+                'a.kapasitas_tangki',
+                'a.jenis_komoditas',
+                'a.produk',
+                'a.provinsi',
+                'a.kab_kota',
+                'a.kategori_supplai',
+                'a.volume_stok_awal',
+                'a.volume_supply',
+                'a.volume_output',
+                'a.volume_stok_akhir',
+                'a.satuan',
+                'a.utilisasi_tangki',
+                'a.pengguna',
+                'a.tarif_penyimpanan',
+                'a.satuan_tarif',
+                'a.keterangan',
+                'a.tanggal_awal',
+                'a.tanggal_akhir',
+                'a.commingle',
+                'a.jumlah_bu',
+                'a.nama_penyewa',
+                'a.kapasitas_penyewaan',
+                'a.kontrak_sewa',
+                'a.status',
+                'a.tgl_kirim',
+                'a.catatan',
+                'a.created_at',
+                'a.updated_at',
+                'a.id_sub_page',
+                'u.name as nama_perusahaan',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )->groupBy(
+                'a.id',
+                'a.npwp',
+                'a.id_permohonan',
+                'a.bulan',
+                'a.jenis_fasilitas',
+                'a.no_tangki',
+                'a.kapasitas_tangki',
+                'a.jenis_komoditas',
+                'a.produk',
+                'a.provinsi',
+                'a.kab_kota',
+                'a.kategori_supplai',
+                'a.volume_stok_awal',
+                'a.volume_supply',
+                'a.volume_output',
+                'a.volume_stok_akhir',
+                'a.satuan',
+                'a.utilisasi_tangki',
+                'a.pengguna',
+                'a.tarif_penyimpanan',
+                'a.satuan_tarif',
+                'a.keterangan',
+                'a.tanggal_awal',
+                'a.tanggal_akhir',
+                'a.commingle',
+                'a.jumlah_bu',
+                'a.nama_penyewa',
+                'a.kapasitas_penyewaan',
+                'a.kontrak_sewa',
+                'a.status',
+                'a.tgl_kirim',
+                'a.catatan',
+                'a.created_at',
+                'a.updated_at',
+                'a.id_sub_page',
+                'u.name'
+            )
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->where(function ($q) use ($t_awal, $t_akhir) {
+                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+                    ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
+            });
 
         if ($perusahaan != 'all') {
-            $query->where('a.badan_usaha_id', $perusahaan);
+            $query->where('a.npwp', $perusahaan);
         }
 
         $result = $query->get();
@@ -313,9 +396,48 @@ public function lihatSemuaData()
                 'u.name as nama_perusahaan',
                 'i.npwp',
                 'm.status',
-                DB::raw("d ->> 'No_SK_Izin' as nomor_izin"),
-                DB::raw("(d ->> 'Tanggal_Pengesahan')::timestamp as tgl_disetujui"),
-                DB::raw("(d ->> 'Tanggal_izin')::date as tgl_pengajuan")
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )->groupBy(
+            'a.id',
+            'a.npwp',
+            'a.id_permohonan',
+            'a.bulan',
+            'a.jenis_fasilitas',
+            'a.no_tangki',
+            'a.kapasitas_tangki',
+            'a.jenis_komoditas',
+            'a.produk',
+            'a.provinsi',
+            'a.kab_kota',
+            'a.kategori_supplai',
+            'a.volume_stok_awal',
+            'a.volume_supply',
+            'a.volume_output',
+            'a.volume_stok_akhir',
+            'a.satuan',
+            'a.utilisasi_tangki',
+            'a.pengguna',
+            'a.tarif_penyimpanan',
+            'a.satuan_tarif',
+            'a.keterangan',
+            'a.tanggal_awal',
+            'a.tanggal_akhir',
+            'a.commingle',
+            'a.jumlah_bu',
+            'a.nama_penyewa',
+            'a.kapasitas_penyewaan',
+            'a.kontrak_sewa',
+            'a.status',
+            'a.tgl_kirim',
+            'a.catatan',
+            'a.created_at',
+            'a.updated_at',
+            'a.id_sub_page',
+            'u.name', 
+            'i.npwp',
+            'm.status'
             )
             ->get();
 
@@ -372,7 +494,41 @@ public function lihatSemuaData()
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->select(
-                'a.*',
+                'a.id',
+                'a.npwp',
+                'a.id_permohonan',
+                'a.bulan',
+                'a.jenis_fasilitas',
+                'a.no_tangki',
+                'a.kapasitas_tangki',
+                'a.jenis_komoditas',
+                'a.produk',
+                'a.provinsi',
+                'a.kab_kota',
+                'a.kategori_supplai',
+                'a.volume_stok_awal',
+                'a.volume_supply',
+                'a.volume_output',
+                'a.volume_stok_akhir',
+                'a.satuan',
+                'a.utilisasi_tangki',
+                'a.pengguna',
+                'a.tarif_penyimpanan',
+                'a.satuan_tarif',
+                'a.keterangan',
+                'a.tanggal_awal',
+                'a.tanggal_akhir',
+                'a.commingle',
+                'a.jumlah_bu',
+                'a.nama_penyewa',
+                'a.kapasitas_penyewaan',
+                'a.kontrak_sewa',
+                'a.status',
+                'a.tgl_kirim',
+                'a.catatan',
+                'a.created_at',
+                'a.updated_at',
+                'a.id_sub_page',
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
