@@ -91,12 +91,12 @@ header('Pragma: no-cache');
             @foreach ($result as $pgb)
                 <tr>
                     <td style="border: 1px solid black;">{{ $loop->iteration }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->NAMA_PERUSAHAAN }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->NOMOR_IZIN }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->nama_perusahaan }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->nomor_izin }}</td>
                     <td style="border: 1px solid black;">
-                        {{ \Carbon\Carbon::parse($pgb->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
-
-                    <td style="border: 1px solid black;">{{ $pgb->TGL_DISETUJUI }}</td>
+                        {{ \Carbon\Carbon::parse($pgb->tgl_pengajuan)->format('Y-m-d') }}
+                    </td>
+                    <td style="border: 1px solid black;">{{ $pgb->tgl_disetujui }}</td>
                     <td style="border: 1px solid black;">{{ getBulan($pgb->bulan) }}</td>
                     <td style="border: 1px solid black;">{{ getTahun($pgb->bulan) }}</td>
                     <td style="border: 1px solid black;">{{ $pgb->sektor }}</td>
@@ -108,7 +108,6 @@ header('Pragma: no-cache');
                     <td style="border: 1px solid black;">{{ $pgb->biaya_penyimpanan }}</td>
                     <td style="border: 1px solid black;">{{ $pgb->margin }}</td>
                     <td style="border: 1px solid black;">{{ $pgb->ppn }}</td>
-                    {{--			<td  style="border: 1px solid black;">{{ $pgb->pbbkp }}</td> --}}
                     <td style="border: 1px solid black;">{{ $pgb->harga_jual }}</td>
                     <td style="border: 1px solid black;">{{ $pgb->formula_harga }}</td>
                     <td style="border: 1px solid black;">{{ $pgb->keterangan }}</td>
@@ -120,22 +119,22 @@ header('Pragma: no-cache');
                         @elseif ($pgb->status == 2)
                             Revisi
                         @elseif ($pgb->status == 3)
-                            Selesa
+                            Selesai
                         @elseif ($pgb->status == 0)
-                            draf
+                            Draf
                         @endif
-
-
                     </td>
                     <td style="border: 1px solid black;">{{ $pgb->catatan }}</td>
-                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->created_at)->format('Y-m-d') }}
+                    <td style="border: 1px solid black;">
+                        {{ \Carbon\Carbon::parse($pgb->created_at)->format('Y-m-d') }}
                     </td>
-                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('Y-m-d') }}
+                    <td style="border: 1px solid black;">
+                        {{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('Y-m-d') }}
+                    </td>
                     <td style="border: 1px solid black;">{{ $pgb->nama_opsi }}</td>
-                    </td>
-
                 </tr>
             @endforeach
+
 
         </tbody>
     </table>
