@@ -24,6 +24,22 @@
     <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
         <div id="kt_app_content_container" class="app-container container-xxl">
             {{-- Card Total Izin --}}
+            <div class="col-12">
+                    <div class="alert alert-info d-flex align-items-center">
+                        <i class="ki-duotone ki-information fs-2hx text-info me-4"><span class="path1"></span><span
+                                class="path2"></span></i>
+                        <div class="d-flex flex-column">
+                            <h4 class="mb-1 text-dark">Informasi</h4>
+                            <span>Status NPWP {{ Auth::user()->name }}: <b>{{ $firstStatusDjp }}</b></span>
+                        </div>
+                        <button type="button"
+                            class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto"
+                            data-bs-dismiss="alert">
+                            <i class="ki-duotone ki-cross fs-1 text-info"><span class="path1"></span><span
+                                    class="path2"></span></i>
+                        </button>
+                    </div>
+                </div>
             <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
                 @php
                     $cards = [
