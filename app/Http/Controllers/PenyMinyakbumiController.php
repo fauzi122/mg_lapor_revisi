@@ -40,9 +40,11 @@ class PenyMinyakbumiController extends Controller
             ->where('rn', 1)
             ->get();
 
-        $sub_page = Meping::select('nama_opsi')->where('id_sub_page', $pecah[2])->first();
+        $sub_page = Meping::select('nama_opsi')
+        ->where('id_sub_page', $pecah[2])
+        ->where('id_template', $pecah[4])
+        ->first();
         
-        // return view('badan_usaha.penyimpanan.minyak_bumi.index', compact('pm','pecah'));
         return view('badanUsaha.penyimpanan.minyak_bumi.index', compact('pm','pecah', 'sub_page'));
     }
     public function index_pggb($id)

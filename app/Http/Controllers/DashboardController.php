@@ -67,6 +67,7 @@ class DashboardController extends Controller
 		) jt ON m.id_sub_page::int = jt.sub_page_id AND m.id_template::int = jt.id_izin
 		WHERE i.npwp = ?
 	", [auth()->user()->npwp]);
+	// dd($result);
 
  	$firstStatusDjp = $result[0]->status_djp ?? null;
 
