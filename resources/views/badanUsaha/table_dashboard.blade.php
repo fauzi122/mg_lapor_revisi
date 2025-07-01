@@ -26,7 +26,9 @@
                                 ',' .
                                 $item->id_sub_page .
                                 ',' .
-                                $item->kategori,
+                                $item->kategori .
+                                ',' .
+                                $item->id_izin
                         );
                     @endphp
 
