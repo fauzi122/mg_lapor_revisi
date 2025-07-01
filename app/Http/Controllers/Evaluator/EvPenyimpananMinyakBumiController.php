@@ -573,9 +573,9 @@ public function lihatSemuaData()
             );
         // dd($query);
 
-        // if ($request->perusahaan != 'all') {
-        //     $query->where('a.npwp', $request->perusahaan);
-        // }
+        if ($request->perusahaan != 'all') {
+            $query->where('a.npwp', $request->perusahaan);
+        }
 
         // $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
         //         ->whereIn(DB::raw('a.status::int'), [1, 2, 3])->get();

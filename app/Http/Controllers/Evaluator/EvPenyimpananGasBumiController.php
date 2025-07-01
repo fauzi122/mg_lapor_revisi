@@ -470,9 +470,9 @@ class EvPenyimpananGasBumiController extends Controller
                 'u.name'
             );
 
-        // if ($request->perusahaan != 'all') {
-        //     $query->where('badan_usaha_id', $request->perusahaan);
-        // }
+        if ($request->perusahaan != 'all') {
+            $query->where('badan_usaha_id', $request->perusahaan);
+        }
 
         // $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
         //             ->whereIn('a.status', [1, 2, 3])->get();

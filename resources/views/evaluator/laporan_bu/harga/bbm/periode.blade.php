@@ -36,7 +36,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-start">
-                                <h4>{{ $per->NAMA_PERUSAHAAN }}</h4>
+                                <h4>{{ $per->nama_perusahaan }}</h4>
                             </div>
                             <div class="d-flex justify-content-end gap-2">
                                 <a href="{{ url('laporan/harga-bbm') }}"
@@ -53,7 +53,7 @@
                         <div class="card-header align-items-center px-2">
                             <div class="card-toolbar"></div> 
                             <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                <input type="hidden" class="export-title" value="Laporan Harga BBM JBU {{ $per->NAMA_PERUSAHAAN }}" />
+                                <input type="hidden" class="export-title" value="Laporan Harga BBM JBU {{ $per->nama_perusahaan }}" />
                             </div>
                         </div>
                         <table class="kt-datatable table table-bordered table-hover">
@@ -70,24 +70,20 @@
                             <tbody class="fw-semibold text-gray-600">
                                 @foreach ($query as $data)
                                     @php
-                                        $id = Crypt::encryptString(
-                                            $data->bulan . ',' . $data->badan_usaha_id,
-                                        );
-                                        $idTahun = Crypt::encryptString(
-                                            $data->bulan . ',' . $data->badan_usaha_id . ', tahun',
-                                        );
+                                        $kodeBulan = Crypt::encryptString('bulan,' . $data->bulan . ',' . $data->npwp);
+                                        $kodeTahun = Crypt::encryptString('tahun,' . $data->bulan . ',' . $data->npwp);
                                     @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
                                             <b><a
-                                                    href="{{ url('/laporan/harga-bbm') }}/{{ $id }}">{{ getBulan($data->bulan) }}
+                                                    href="{{ url('/laporan/harga-bbm') }}/{{ $kodeBulan }}">{{ getBulan($data->bulan) }}
                                                     <i class="bi bi-check"
                                                         title="lihat data laporan"></i></a><b>
                                         </td>
                                         <td>
                                             <b><a
-                                                    href="{{ url('/laporan/harga-bbm') }}/{{ $idTahun }}">{{ getTahun($data->bulan) }}
+                                                    href="{{ url('/laporan/harga-bbm') }}/{{ $kodeTahun }}">{{ getTahun($data->bulan) }}
                                                     <i class="bi bi-check"
                                                         title="lihat data laporan"></i></a><b>
                                         </td>
@@ -117,7 +113,7 @@
                                                 @if ($data->status == 1 && $data->catatan)
                                                     <button
                                                         class="btn btn-primary btn-rounded btn-sm btn-selesai-status"
-                                                        data-p="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}"
+                                                        data-p="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->npwp) }}"
                                                         data-b="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}"><i
                                                             class="bi bi-check"
                                                             title="Selesai"></i></button>
@@ -156,7 +152,7 @@
                 
                                                                          <div class="fv-row mb-7">
                                                                             <input type="hidden" name="p"
-                                                                                value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->badan_usaha_id) }}">
+                                                                                value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->npwp) }}">
                                                                             <input type="hidden" name="b"
                                                                                 value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data->bulan) }}">
                                                                         </div>
