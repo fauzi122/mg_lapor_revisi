@@ -229,19 +229,19 @@ class HargabbmController extends Controller
     $npwp = Auth::user()->npwp;
 
     $cekdb = DB::table('harga_bbm_jbus')
-            ->where('npwp', $npwp)
-            ->where('id_permohonan', $request->id_permohonan)
-            ->where('id_sub_page', $request->id_sub_page)
-            ->where('bulan', $request->bulan)
-            ->orderBy('status', 'desc')
-            ->first();
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $request->id_permohonan)
+      ->where('id_sub_page', $request->id_sub_page)
+      ->where('bulan', $request->bulan)
+      ->orderBy('status', 'desc')
+      ->first();
 
-        if (isset($cekdb) == 1) {
-            if ($cekdb->status == 1) {
-                Alert::error('Error', 'Bulan yang anda pilih sedang status kirim / revisi');
-                return back();
-            }
+    if (isset($cekdb) == 1) {
+        if ($cekdb->status == 1) {
+            Alert::error('Error', 'Bulan yang anda pilih sedang status kirim / revisi');
+            return back();
         }
+    }
 
     Harga_bbm_jbu::create($validatedData);
 
