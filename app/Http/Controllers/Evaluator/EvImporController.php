@@ -370,7 +370,7 @@ class EvImporController extends Controller
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
             )
             ->get();
-        dd($query);
+        // dd($query);
 
         $perusahaan = DB::table('impors as a')
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
@@ -492,7 +492,7 @@ class EvImporController extends Controller
             $query->where('a.npwp', $request->perusahaan);
         }
 
-        $result = $query->get();;
+        $result = $query->get();
 
         // if ($request->perusahaan != 'all') {
         //     $query->where('badan_usaha_id', $request->perusahaan);

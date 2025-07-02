@@ -11,11 +11,9 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-
-                        <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
-                            value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="{{ $pecah[0] }}">
+                <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
+                <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
+                <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
                         @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -23,10 +21,9 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Bulan</label>
-                        <input class="form-control" type="month" id="bulanx" name="bulan"
-                            value="{{ old('bulan') }}">
+                     <div class="mb-6">
+                        <label class="form-label">Bulan </label>
+                        <input class="form-control flatpickr" id="bulanx" name="bulan" required>
                         @error('bulan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>

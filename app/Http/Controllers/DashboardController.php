@@ -34,6 +34,7 @@ class DashboardController extends Controller
 			m.*,
 			i.id AS izin_id,
 			i.npwp,
+			i.status_djp,
 			jt.id_izin,
 			jt.tanggal_izin,
 			jt.id_permohonan,
@@ -50,6 +51,7 @@ class DashboardController extends Controller
 		JOIN LATERAL (
 			SELECT
 				(d ->> 'Id_Izin')::int AS id_izin,
+				(d ->> 'status_djp')::int AS status_djp,
 				(d ->> 'Tanggal_izin')::date AS tanggal_izin,
 				(d ->> 'Id_Permohonan')::int AS id_permohonan,
 				(d ->> 'Kode_Izin_Desc') AS kode_izin_desc,
@@ -65,9 +67,11 @@ class DashboardController extends Controller
 		) jt ON m.id_sub_page::int = jt.sub_page_id AND m.id_template::int = jt.id_izin
 		WHERE i.npwp = ?
 	", [auth()->user()->npwp]);
-
-
 	// dd($result);
+
+ 	$firstStatusDjp = $result[0]->status_djp ?? null;
+
+	// dd($firstStatusDjp);
 
 		$template_counts = [];
 		$seen_permohonan = [];
@@ -115,7 +119,8 @@ class DashboardController extends Controller
 			'meping',
 			'sub_page',
 			'sub_menu',
-			'kategoriPengolahan'
+			'kategoriPengolahan',
+			'firstStatusDjp'
 		));
 		}
 
@@ -134,58 +139,4 @@ class DashboardController extends Controller
 
 }
 	
-		// $max = 10; // Ini bisa disesuaikan dengan kebutuhan Anda
-
-		// $queries = [];
-		// for($i = 1; $i <= $max; $i++) {
-		// 	$queries[] = "SELECT $i AS n";
-		// }
 		
-		// $unionQuery = implode(" UNION ALL ", $queries);
-		// $numbers = DB::table(DB::raw("($unionQuery) AS numbers"));
-		
-		// $subQuery = DB::table('r_permohonan_izin as a')
-		// 	->join('t_perusahaan as b', 'a.ID_PERUSAHAAN', '=', 'b.ID_PERUSAHAAN')
-		// 	->join('fgen_r_template_izin as c', 'a.ID_TEMPLATE', '=', 'c.ID_TEMPLATE')
-		// 	->joinSub($numbers, 'numbers', function($join) {
-		// 		$join->on(DB::raw('CHAR_LENGTH(REPLACE(a.LIST_SUB_PAGE, "-", ",")) - CHAR_LENGTH(REPLACE(REPLACE(a.LIST_SUB_PAGE, "-", ","), ",", ""))'), '>=', DB::raw('numbers.n - 1'));
-		// 	})
-		// 	->where('a.ID_CURR_PROSES', '=', '140')
-		// 	->where('a.ID_PERUSAHAAN', '=', Auth::user()->badan_usaha_id)
-		// 	->whereIn('a.ID_TEMPLATE', function($query) {
-		// 		$query->select(DB::raw('DISTINCT id_template'))
-		// 			->from('mepings');
-		// 	})
-		// 	->select([
-		// 		'a.ID_PERUSAHAAN',
-		// 		'b.NAMA_PERUSAHAAN',
-		// 		'a.ID_TEMPLATE',
-		// 		'a.TGL_DISETUJUI',
-		// 		'a.NOMOR_IZIN',
-		// 		'a.NO_TRACKING',
-		// 		'c.NAMA_TEMPLATE',
-		// 		'a.ID_PERMOHONAN',
-		// 		DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(a.LIST_SUB_PAGE, "-", ","), ",", numbers.n), ",", -1) AS SUB_PAGE'),
-		// 		'a.ID_CURR_PROSES'
-		// 	]);
-	
-		// 	$result = DB::table(DB::raw("({$subQuery->toSql()}) as k"))
-		// 	->mergeBindings($subQuery) // penting! agar bindings dapat digunakan dengan benar
-		// 	->join('mepings as d', 'k.SUB_PAGE', '=', 'd.id_sub_page')
-		// 	->whereIn('SUB_PAGE', function($query) {
-		// 		$query->select(DB::raw('DISTINCT id_sub_page'))
-		// 			->from('mepings')
-		// 			->where('STATUS', '=', 1);
-		// 	})
-		// 	->select([
-		// 		'k.ID_PERUSAHAAN',
-		// 		'k.NAMA_PERUSAHAAN',
-		// 		'k.NAMA_TEMPLATE',
-		// 		'k.SUB_PAGE',
-		// 		'k.TGL_DISETUJUI',
-		// 		'k.ID_PERMOHONAN',
-		// 		'k.NOMOR_IZIN',
-		// 		'k.NO_TRACKING',
-		// 		'd.nama_opsi'
-		// 	])
-		// 	->get();

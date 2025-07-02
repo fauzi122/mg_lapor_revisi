@@ -130,30 +130,30 @@
                         <table class="kt-datatable table table-bordered table-hover">
                             <thead class="bg-light">
                                 <tr class="fw-bold text-uppercase">
-                                    <th>No</th>
-                                    <th>Bulan</th>
-                                    <th>Tahun</th>
-                                    <th>Status</th>
-                                    <th>Catatan</th>
-                                    <th>Produk</th>
-                                    <th>Aksi</th>
-                                    <th>HS Code</th>
-                                    <th>Volume</th>
-                                    <th>Satuan</th>
-                                    <th>Invoice Pabean</th>
-                                    <th>Invoice Final</th>
-                                    <th>Supplier</th>
-                                    <th>Negara Asal</th>
-                                    <th>Pelabuhan Muat</th>
-                                    <th>Pelabuhan Bongkar</th>
-                                    <th>Vessel Name</th>
-                                    <th>Tgl. BL</th>
-                                    <th>No. BL</th>
-                                    <th>No. Pendaftaran</th>
-                                    <th>Tgl. Pendaftaran</th>
-                                    <th>Incoterms</th>
-                                    <th>Tgl Dibuat Laporan</th>
-                                    <th>Tgl Pengajuan Laporan</th>
+                                    <th style="text-align: center; vertical-align: middle;">No</th>
+                                    <th style="text-align: center; vertical-align: middle;">Bulan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tahun</th>
+                                    <th style="text-align: center; vertical-align: middle;">Status</th>
+                                    <th style="text-align: center; vertical-align: middle;">Catatan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Produk</th>
+                                    <th style="text-align: center; vertical-align: middle;">Aksi</th>
+                                    <th style="text-align: center; vertical-align: middle;">HS Code</th>
+                                    <th style="text-align: center; vertical-align: middle;">Volume</th>
+                                    <th style="text-align: center; vertical-align: middle;">Satuan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Invoice Pabean</th>
+                                    <th style="text-align: center; vertical-align: middle;">Invoice Final</th>
+                                    <th style="text-align: center; vertical-align: middle;">Supplier</th>
+                                    <th style="text-align: center; vertical-align: middle;">Negara Asal</th>
+                                    <th style="text-align: center; vertical-align: middle;">Pelabuhan Muat</th>
+                                    <th style="text-align: center; vertical-align: middle;">Pelabuhan Bongkar</th>
+                                    <th style="text-align: center; vertical-align: middle;">Vessel Name</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tgl. BL</th>
+                                    <th style="text-align: center; vertical-align: middle;">No. BL</th>
+                                    <th style="text-align: center; vertical-align: middle;">No. Pendaftaran</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tgl. Pendaftaran</th>
+                                    <th style="text-align: center; vertical-align: middle;">Incoterms</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tgl Dibuat Laporan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tgl Pengajuan Laporan</th>
                                 </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
@@ -164,15 +164,15 @@
                                         <td>{{ getTahun($pgb->bulan_pib) }}</td>
                                         <td>
                                             @if ($pgb->status == 1 && $pgb->catatan)
-                                                <span class="badge bg-warning">Sudah Diperbaiki</span>
+                                                <span class="badge bg-warning text-white">Sudah Diperbaiki</span>
                                             @elseif ($pgb->status == 1)
-                                                <span class="badge bg-success">Diterima</span>
+                                                <span class="badge bg-success text-white">Diterima</span>
                                             @elseif ($pgb->status == 2)
-                                                <span class="badge bg-danger">Revisi</span>
+                                                <span class="badge bg-danger text-white">Revisi</span>
                                             @elseif ($pgb->status == 3)
-                                                <span class="badge bg-primary">Selesai</span>
+                                                <span class="badge bg-primary text-white">Selesai</span>
                                             @elseif ($pgb->status == 0)
-                                                <span class="badge bg-info">draf</span>
+                                                <span class="badge bg-info text-white">draf</span>
                                             @endif
                                         </td>
                                         <td>{{ $pgb->catatan }}</td>

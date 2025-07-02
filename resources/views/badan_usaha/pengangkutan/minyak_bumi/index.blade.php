@@ -1,148 +1,173 @@
-@extends('layouts.frontand.app')
+@extends('layouts.main.master')
 @section('content')
-    <div class="page-content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18"> Pengangkutan Minyak Bumi</h4>
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Pengangkutan</a></li>
-                                <li class="breadcrumb-item active"> Pengangkutan Minyak Bumi</li>
-                            </ol>
-                        </div>
-                    </div>
-                    <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-3"
-                        role="alert">
-                        <i class="mdi mdi-alert-circle-outline label-icon"></i>
-                        <strong>Informasi:</strong> Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+    <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-8">
+        <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
+            <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <h3 class="text-dark fw-bold">Pengangkutan Minyak Bumi</h3>
+                </div>
+                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                        <li class="breadcrumb-item text-muted">
+                            <a href="{{ route('dashboard') }}" class="text-muted text-hover-primary">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                        </li>
+                        <li class="breadcrumb-item text-muted">Pengangkutan Minyak Bumi</li>
+                    </ul>
                 </div>
             </div>
+        </div>
+    </div>
+
+ @include('badan_usaha.pengangkutan.minyak_bumi.modal')
+
+    <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
+        <div id="kt_app_content_container" class="app-container container-xxl">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Minyak Bumi</h5>
-                                <div>
-                                    <button type="button" class="btn btn-primary waves-effect waves-light"
+                    <div class="alert alert-info d-flex align-items-center">
+                        <i class="ki-duotone ki-information fs-2hx text-info me-4"><span class="path1"></span><span
+                                class="path2"></span></i>
+                        <div class="d-flex flex-column">
+                            <h4 class="mb-1 text-dark">Informasi</h4>
+                            <span>Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b></span>
+                            <span>Jenis kegiatan usaha: <b>{{ $sub_page['nama_opsi'] }}</b></span>
+                        </div>
+                        <button type="button"
+                            class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto"
+                            data-bs-dismiss="alert">
+                            <i class="ki-duotone ki-cross fs-1 text-info"><span class="path1"></span><span
+                                    class="path2"></span></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card mb-5 mb-xl-8 shadow">
+                        <div class="card-header bg-light p-5">
+                            <div class="row w-100">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a type="button" class="btn btn-primary waves-effect waves-light"
                                         onclick="produk(); provinsi();" data-bs-toggle="modal"
-                                        data-bs-target="#myModal">Buat Laporan</button>
-                                    <button type="button" class="btn btn-success waves-effect waves-light"
-                                        data-bs-toggle="modal" data-bs-target="#excelPengangkutanMB">Import Excel</button>
-                                    <!-- Include modal content -->
-                                    @include('badan_usaha.pengangkutan.minyak_bumi.modal')
+                                        data-bs-target="#myModal">
+                                            <i class="fas fa-plus"></i> Buat Laporan
+                                        </a>
+                                        <a type="button" class="btn btn-success waves-effect waves-light"
+                                        data-bs-toggle="modal" data-bs-target="#excelPengangkutanMB">
+                                            <i class="fas fa-upload"></i> Import Excel
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="table1" class="table table-bordered dt-responsive nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Bulan</th>
-                                            <th>Tahun</th>
-                                            <th>Status</th>
-                                            <!-- <th>Catatan</th> -->
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($pm as $data)
-                                            @php
-                                                $id = Crypt::encryptString(
-                                                    $data->bulan . ',' . $data->badan_usaha_id . ',' . $data->izin_id,
-                                                );
-                                                $idTahun = Crypt::encryptString(
-                                                    $data->bulan .
-                                                        ',' .
-                                                        $data->badan_usaha_id .
-                                                        ',' .
-                                                        $data->izin_id .
-                                                        ', tahun',
-                                                );
-                                            @endphp
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td><b><a
-                                                            href="{{ url('pengangkutan-minyak-bumi/show') }}/{{ $id }}">{{ getBulan($data->bulan) }}<i
-                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
-                                                </td>
-                                                <td><b><a
-                                                            href="{{ url('pengangkutan-minyak-bumi/show') }}/{{ $idTahun }}">{{ getTahun($data->bulan) }}<i
-                                                                class="bx bx-check" title="lihat data laporan"></i></a><b>
-                                                </td>
-                                                <td>
-                                                    @if ($data->status_tertinggi == 1 && $data->catatanx)
-                                                        <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                    @elseif ($data->status_tertinggi == 1)
-                                                        <span class="badge bg-success">Diterima</span>
-                                                    @elseif ($data->status_tertinggi == 2)
-                                                        <span class="badge bg-danger">Revisi</span>
-                                                    @elseif ($data->status_tertinggi == 0)
-                                                        <span class="badge bg-info">draf</span>
-                                                    @endif
-                                                </td>
-                                                <!-- <td>{{ $data->catatan }}</td> -->
-                                                @if ($data->status_tertinggi == 1)
+                        <div class="card-body p-3">
+                            <div class="card">
+                                <div class="card-header align-items-center px-2">
+                                    <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
+                                    <div class="card-title flex-row-fluid justify-content-end gap-5">
+                                        <input type="hidden" class="export-title"
+                                            value="Laporan Pengangkutan Minyak Bumi" />
+                                    </div>
+                                </div>
+                                <div class="card-body p-2">
+                                    <table class="kt-datatable table table-bordered table-hover">
+                                        <thead class="bg-light">
+                                            <tr class="fw-bold text-uppercase">
+                                                <th class="text-center">No</th>
+                                                <th>Bulan</th>
+                                                <th>Tahun</th>
+                                                <th>Status</th>
+                                                <th class="text-center">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fw-semibold text-gray-600">
+                                            @foreach ($pm as $data)
+                                                @php
+                                                    $id = Crypt::encryptString(
+                                                        $data->id_permohonan .
+                                                            ',' .
+                                                            $data->npwp .
+                                                            ',' .
+                                                            $data->id_sub_page .
+                                                            ',' .
+                                                            $data->bulan,
+                                                    );
+                                                @endphp
+                                                <tr>
+                                                    <td class="text-center">{{ $loop->iteration }}</td>
                                                     <td>
-                                                        <form action="{{ url('hapus_bulan_pengmb') }}/{{ $id }}"
-                                                            method="post" class="d-inline">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <button type="button" class="btn btn-sm btn-danger"
-                                                                onclick="hapusData($(this).closest('form'))" disabled>
-                                                                <i class="bx bx-trash-alt" title="Hapus data"></i>
-                                                            </button>
-                                                        </form>
-                                                        <form
-                                                            action="{{ url('submit_bulan_pengmb') }}/{{ $id }}"
-                                                            method="post" class="d-inline" data-id="{{ $data->bulan }}">
-                                                            @method('PUT')
-                                                            @csrf
-                                                            <button type="button" class="btn btn-sm btn-success"
-                                                                onclick="kirimData($(this).closest('form'))" disabled>
-                                                                <i class="bx bx-paper-plane" title="Kirim data"></i>
-                                                            </button>
-                                                        </form>
-                                                    </td>
-                                                @else
-                                                    <td>
-                                                        <form action="{{ url('hapus_bulan_pengmb') }}/{{ $id }}"
-                                                            method="post" class="d-inline">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <button type="button" class="btn btn-sm btn-danger"
-                                                                onclick="hapusData($(this).closest('form'))">
-                                                                <i class="bx bx-trash-alt" title="Hapus data"></i>
-                                                            </button>
-                                                        </form>
-                                                        <form
-                                                            action="{{ url('submit_bulan_pengmb') }}/{{ $id }}"
-                                                            method="post" class="d-inline" data-id="{{ $data->bulan }}">
-                                                            @method('PUT')
-                                                            @csrf
-                                                            <button type="button" class="btn btn-sm btn-success"
-                                                                onclick="kirimData($(this).closest('form'))">
-                                                                <i class="bx bx-paper-plane" title="Kirim data"></i>
-                                                            </button>
-                                                        </form>
-                                                        <a href="{{ url('pengangkutan-minyak-bumi/show') }}/{{ $id }}"
-                                                            class="btn btn-sm btn-info"><i class="bx bx-edit"
-                                                                title="Revisi"></i>
+                                                        <a
+                                                            href="{{ url('/pengangkutan-minyak-bumi/show') }}/{{ $id }}">
+                                                            {{ getBulan($data->bulan) }}
+                                                            <i class="ki-solid ki-check" title="lihat data laporan"></i>
                                                         </a>
                                                     </td>
-                                                @endif
-                                            </tr>
-                                        @endforeach
-                                        <!-- Add more rows as needed -->
-                                    </tbody>
-                                </table>
+                                                    <td>
+                                                        <a
+                                                            href="{{ url('/pengangkutan-minyak-bumi/show') }}/{{ $id }}/tahun">
+                                                            {{ getTahun($data->bulan) }}
+                                                            <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        @if ($data->status_tertinggi == 1 && $data->catatanx)
+                                                            <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                        @elseif ($data->status_tertinggi == 1)
+                                                            <span class="badge badge-success">Diterima</span>
+                                                        @elseif ($data->status_tertinggi == 2)
+                                                            <span class="badge badge-danger">Revisi</span>
+                                                        @elseif ($data->status_tertinggi == 0)
+                                                            <span class="badge badge-info">Draf</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if ($data->status_tertinggi == 1)
+                                                            <button type="button"
+                                                                class="btn btn-icon btn-sm btn-danger mb-2" disabled>
+                                                                <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                            </button>
+                                                            <button type="button"
+                                                                class="btn btn-icon btn-sm btn-success mb-2" disabled>
+                                                                <i class="ki-solid ki-send" title="Kirim data"></i>
+                                                            </button>
+                                                        @else
+                                                            <form
+                                                                action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}"
+                                                                method="post" class="d-inline">
+                                                                @method('delete')
+                                                                @csrf
+                                                                <button type="button"
+                                                                    class="btn btn-icon btn-sm btn-danger mb-2"
+                                                                    onclick="hapusData($(this).closest('form'))">
+                                                                    <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                </button>
+                                                            </form>
+                                                            <form
+                                                                action="{{ url('/submit_bulan_pmb') }}/{{ $id }}"
+                                                                method="post" class="d-inline"
+                                                                data-id="{{ $data->bulan }}">
+                                                                @method('PUT')
+                                                                @csrf
+                                                                <button type="button"
+                                                                    class="btn btn-icon btn-sm btn-success mb-2"
+                                                                    onclick="kirimData($(this).closest('form'))">
+                                                                    <i class="ki-solid ki-send" title="Revisi"></i>
+                                                                </button>
+                                                            </form>
+                                                            <a href="{{ url('/pengangkutan-minyak-bumi/show') }}/{{ $id }}"
+                                                                class="btn btn-icon btn-sm btn-info mb-2">
+                                                                <i class="ki-solid ki-pencil"
+                                                                    title="Detail / Edit Data"></i>
+                                                            </a>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

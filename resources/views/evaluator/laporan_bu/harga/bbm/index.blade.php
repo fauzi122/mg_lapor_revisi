@@ -77,8 +77,8 @@
                                                                 <option value="all">Semua Perusahaan </option>
                                                                 <!-- Opsi untuk semua perusahaan -->
                                                                 @foreach ($perusahaan as $p)
-                                                                    <option value="{{ $p->id_perusahaan }}">
-                                                                        {{ $p->NAMA_PERUSAHAAN }}</option>
+                                                                    <option value="{{ $p->npwp }}">
+                                                                        {{ $p->nama_perusahaan }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -134,12 +134,20 @@
                                 @foreach ($perusahaan as $per)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $per->NAMA_PERUSAHAAN }}</td>
-                                        <td>{{ $per->NOMOR_IZIN }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($per->TGL_PENGAJUAN)->format('Y-m-d') }}
+                                        <td>{{ $per->nama_perusahaan }}</td>
+                                        <td>{{ $per->no_sk_izin }}</td>
+                                        <td>
+                                            <center>
+                                                {{ \Carbon\Carbon::parse($per->tanggal_izin)->format('Y-m-d') }}
+                                            </center>
                                         </td>
-                                        <td>{{ $per->TGL_DISETUJUI }}</td>
-                                        <td><a href="{{ url('laporan/harga-bbm/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->id_perusahaan) }}"
+
+                                        <td>
+                                            <center>
+                                                {{ \Carbon\Carbon::parse($per->tanggal_pengesahan)->format('Y-m-d') }}
+                                            </center>
+                                        </td>
+                                        <td><a href="{{ url('laporan/harga-bbm/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->npwp) }}"
                                                 class="btn btn-primary btn-rounded btn-sm"><i
                                                     class="bi-eye fs-3"></i> Lihat </a></td>
 

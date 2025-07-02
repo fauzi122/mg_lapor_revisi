@@ -57,8 +57,11 @@ class EksportImportController extends Controller
       ->where('rn', 1)
       ->get();
 
-    $sub_page = Meping::select('nama_opsi')->where('id_sub_page', $pecah[2])->first();
-    // return view('badan_usaha.ekspor_impor.index', compact(
+           $sub_page = Meping::select('nama_opsi')
+        ->where('id_sub_page', $pecah[2])
+        ->where('id_template', $pecah[4])
+        ->first();
+ 
     return view('badanUsaha.ekspor_impor.index', compact(
       'ekspor',
       'impor',
