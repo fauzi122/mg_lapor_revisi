@@ -134,7 +134,7 @@
                                                             </button>
                                                         @else
                                                             <form
-                                                                action="{{ url('/hapus_bulan_pmb') }}/{{ $id }}"
+                                                                action="{{ url('/hapus_bulan_pengmb') }}/{{ $id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -145,7 +145,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="{{ url('/submit_bulan_pmb') }}/{{ $id }}"
+                                                                action="{{ url('/submit_bulan_pengmb') }}/{{ $id }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $data->bulan }}">
                                                                 @method('PUT')

@@ -4,7 +4,7 @@
         <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
             <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
                 <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
-                    <h3 class="text-dark fw-bold">Laporan Pengangkutan Minyak Bumi</h3>
+                    <h3 class="text-dark fw-bold">Laporan Penyimpanan Minyak Bumi</h3>
                 </div>
                 <div class="d-flex align-items-center gap-2 gap-lg-3">
                     <a href="javascript:history.back()" type="button" class="btn btn-sm btn-secondary">
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-@include('badan_usaha.pengangkutan.minyak_bumi.modal')
+    @include('badan_usaha.pengangkutan.minyak_bumi.modal')
 
     <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
         <div id="kt_app_content_container" class="app-container container-xxl">
@@ -38,18 +38,14 @@
                                         @endphp
 
                                         @if ($statusx == 1)
-                                            <button type="button" class="btn btn-info"
-                                            onclick="kirimData($(this).closest('form'))"></i><span title="Kirim semua data">Kirim
+                                            <button type="button" class="btn btn-sm btn-info" disabled>
+                                                <i class="ki-solid ki-send"></i><span title="Kirim semua data">Kirim
                                                     Semua</span>
                                             </button>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambilx }}' )"
-                                        data-bs-toggle="modal" data-bs-target="#myModal">
+                                            <button type="button" class="btn btn-sm btn-primary" disabled>
                                                 <i class="fas fa-plus"></i> Buat Laporan {{ dateIndonesia($bulan_ambilx) }}
                                             </button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
-                                        onclick="tambahPMB('{{ $bulan_ambilx }}' )" data-bs-toggle="modal"
-                                        data-bs-target="#excelPengangkutanMB">
+                                            <button type="button" class="btn btn-sm btn-success" disabled>
                                                 <i class="fas fa-upload"></i> Import Excel
                                             </button>
                                         @elseif ($statusx == 2)
@@ -107,7 +103,7 @@
                                 <div class="card-body p-2">
                                     <table class="kt-datatable table table-bordered table-hover">
                                         <thead class="bg-light align-top" style="white-space: nowrap;">
-                                        <tr>
+                                           <tr>
                                             <th>No</th>
                                             <th>Bulan</th>
                                             <th>Tahun</th>
@@ -128,116 +124,117 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($pgb as $pgb)
-                                            <tr>
+                                            @foreach ($pgb as $pgb)
+                                                <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ getBulan($pgb->bulan) }}</td>
                                                 <td>{{ getTahun($pgb->bulan) }}</td>
-                                                <td>
-                                                    @if ($pgb->status == 1 && $pgb->catatan)
-                                                        <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                    @elseif ($pgb->status == 1)
-                                                        <span class="badge bg-success">Diterima</span>
-                                                    @elseif ($pgb->status == 2)
-                                                        <span class="badge bg-danger">Revisi</span>
-                                                    @elseif ($pgb->status == 0)
-                                                        <span class="badge bg-info">draf</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $pgb->catatan }}</td>
-                                                <td>{{ $pgb->produk }}</td>
-                                                {{-- <td>{{ $pgb->jenis_moda }}</td> --}}
-                                                <td>
+                                                    <td>
+                                                        @if ($pgb->status == 1 && $pgb->catatan)
+                                                            <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                        @elseif ($pgb->status == 1)
+                                                            <span class="badge badge-success">Diterima</span>
+                                                        @elseif ($pgb->status == 2)
+                                                            <span class="badge badge-danger">Revisi</span>
+                                                        @elseif ($pgb->status == 0)
+                                                            <span class="badge badge-info">Draf</span>
+                                                        @endif
+                                                    </td>
+
+                                                    <td>{{ $pgb->catatan }}</td>
+                                                    <td>{{ $pgb->produk }}</td>
+                                                 <td>
                                                     @foreach (explode('"', json_encode($pgb->jenis_moda)) as $jenis)
                                                         @foreach (explode('\\', $jenis) as $moda)
                                                             {{ $moda }}
                                                         @endforeach
                                                     @endforeach
                                                 </td>
-                                                {{-- <td>{!! json_encode($pgb->jenis_moda) !!}</td> --}}
-                                                <td>{{ $pgb->node_asal }}</td>
-                                                <td>
-                                                    <?php
-                                            $status=$pgb->status;
-                                            if ($status=="0"){ ?>
-                                                    <center>
-                                                        <button type="button" class="btn btn-sm btn-info editPMB"
-                                                            id="editCompany"
+                                                 <td>{{ $pgb->node_asal }}</td>
+                                                                                                  <td class="text-center">
+                                                        @if ($pgb->status == '0')
+                                                            <button type="button" class="btn btn-sm btn-info editPMB mb-2"
+                                                              id="editCompany"
                                                             onclick="editpengmb('{{ $pgb->id }}', '{{ $pgb->produk }}' )"
                                                             data-bs-toggle="modal" data-bs-target="#edit-pengmb"
-                                                            data-id="{{ $pgb->id }}"> <i class="ki-solid ki-pencil" title="Edit Data"></i>
-                                                        </button>
-                                                        <form action="{{ url('hapus_pengmb') }}/{{ $pgb->id }}"
-                                                            method="post" class="d-inline">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <button type="button" class="btn btn-sm btn-danger"
-                                                                onclick="hapusData($(this).closest('form'))">
-                                                                <i class="bx bx-trash-alt" title="Hapus data"></i>
+                                                            data-id="{{ $pgb->id }}">
+                                                                <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                             </button>
-                                                        </form>
-                                                        {{-- <form action="/submit_pengmb/{{ $pgb->id }}" method="post"
-                                                            class="d-inline" data-id="{{ $pgb->id }}">
-                                                            @method('PUT')
-                                                            @csrf
-                                                            <button type="button" class="btn btn-sm btn-success"
-                                                                onclick="kirimData($(this).closest('form'))">
-                                                                <i class="bx bx-paper-plane" title="Kirim data"></i>
-                                                            </button>
-                                                        </form> --}}
-                                                        <button type="button" class="btn btn-sm btn-info " id=""
+                                                            <form action="{{ url('/hapus_pengmb') }}/{{ $pgb->id }}"
+                                                                method="post" class="d-inline">
+                                                                @method('delete')
+                                                                @csrf
+                                                                <button type="button" class="btn btn-sm btn-danger mb-2"
+                                                                    onclick="hapusData($(this).closest('form'))">
+                                                                    <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                </button>
+                                                            </form>
+                                                            <button type="button" class="btn btn-sm btn-info mb-2"
+                                                                id=""
                                                             data-bs-toggle="modal"
                                                             onclick="lihat_pengmb('{{ $pgb->id }}')"
                                                             data-bs-target="#lihat-pengmb" data-id="{{ $pgb->id }}">
-                                                            <i class="ki-solid ki-eye" title="Lihat data"></i>
-                                                        </button>
-                                                    </center>
-                                                    <?php } elseif ($status=="1"){ ?>
-
-                                                    <center><button type="button" class="btn btn-sm btn-info "
-                                                            id="" data-bs-toggle="modal"
-                                                            onclick="lihat_pengmb('{{ $pgb->id }}')"
-                                                            data-bs-target="#lihat-pengmb" data-id="{{ $pgb->id }}">
-                                                            <i class="ki-solid ki-eye" title="Lihat data"></i></button>
-                                                    </center>
-
-                                                    <?php 
-                                            }elseif ($status=="2"){ ?>
-                                                    <center><button type="button" class="btn btn-sm btn-info editPMB"
-                                                            id="editCompany" onclick="editpengmb('{{ $pgb->id }}' )"
-                                                            data-bs-toggle="modal" data-bs-target="#edit-pengmb"
-                                                            data-id="{{ $pgb->id }}"> <i class="bx bx-edit-alt"
-                                                                title="Edit Data"></i></button>
-                                                        {{-- <form action="/submit_pengmb/{{ $pgb->id }}" method="post"
-                                                            class="d-inline">
-                                                            @method('PUT')
-                                                            @csrf
-                                                            <button type="button" class="btn btn-sm btn-success"
-                                                                onclick="kirimData($(this).closest('form'))">
-                                                                <i class="bx bx-paper-plane" title="Kirim data"></i>
+                                                                <i class="ki-solid ki-eye" title="Lihat data"></i>
                                                             </button>
-                                                        </form> --}}
-                                                        <button type="button" class="btn btn-sm btn-info " id=""
-                                                            data-bs-toggle="modal"
-                                                            onclick="lihat_pengmb('{{ $pgb->id }}')"
-                                                            data-bs-target="#lihat-pengmb" data-id="{{ $pgb->id }}">
-                                                            <i class="ki-solid ki-eye" title="Lihat data"></i></button>
-                                                    </center>
+                                                        @elseif($pgb->status == '1')
+                                                            <button type="button" class="btn btn-sm btn-info mb-2"
+                                                                id="" data-bs-toggle="modal"
+                                                                onclick="lihat_pengmb('{{ $pgb->id }}')"
+                                                                data-bs-target="#lihat-pengmb"
+                                                                data-id="{{ $pgb->id }}">
+                                                                <i class="ki-solid ki-eye" title="Lihat data"></i>
+                                                            </button>
+                                                        @elseif($pgb->status == '1')
+                                                            <button type="button" class="btn btn-sm btn-info mb-2"
+                                                                id="" data-bs-toggle="modal"
+                                                                onclick="lihat_pengmb('{{ $pgb->id }}')"
+                                                                data-bs-target="#lihat-pengmb"
+                                                                data-id="{{ $pgb->id }}">
+                                                                <i class="ki-solid ki-eye" title="Lihat data"></i>
+                                                            </button>
+                                                        @elseif($pgb->status == '1')
+                                                            <button type="button" class="btn btn-sm btn-info mb-2"
+                                                                id="" data-bs-toggle="modal"
+                                                                onclick="lihat_pengmb('{{ $pgb->id }}')"
+                                                                data-bs-target="#lihat-pengmb"
+                                                                data-id="{{ $pgb->id }}">
+                                                                <i class="ki-solid ki-eye" title="Lihat data"></i>
+                                                            </button>
+                                                        @elseif($pgb->status == '1')
+                                                            <button type="button" class="btn btn-sm btn-info mb-2"
+                                                                id="" data-bs-toggle="modal"
+                                                                onclick="lihat_pengmb('{{ $pgb->id }}')"
+                                                                data-bs-target="#lihat-pengmb"
+                                                                data-id="{{ $pgb->id }}">
+                                                                <i class="ki-solid ki-eye" title="Lihat data"></i>
+                                                            </button>
+                                                        @elseif($pgb->status == '2')
+                                                            <button type="button"
+                                                                class="btn btn-sm btn-info editPMB mb-2" id="editCompany"
+                                                                onclick="editPMB('{{ $pgb->id }}' , '{{ $pgb->kab_kota }}' , '{{ $pgb->produk }}' )"
+                                                                data-bs-toggle="modal" data-bs-target="#edit-pengmb"
+                                                                data-id="{{ $pgb->id }}">
+                                                                <i class="ki-solid ki-pencil" title="Edit Data"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-info mb-2"
+                                                                id="" data-bs-toggle="modal"
+                                                                onclick="lihat_pengmb('{{ $pgb->id }}')"
+                                                                data-bs-target="#lihat_pengmb"
+                                                                data-id="{{ $pgb->id }}">
+                                                                <i class="ki-solid ki-eye" title="Lihat data"></i>
+                                                            </button>
+                                                        @endif
+                                                    </td>
 
-                                                    <?php 
-                                            } ?>
-                                                </td>
-                                                <td>{{ $pgb->provinsi_asal }}</td>
+                                                    <td>{{ $pgb->provinsi_asal }}</td>
                                                 <td>{{ $pgb->node_tujuan }}</td>
                                                 <td>{{ $pgb->provinsi_tujuan }}</td>
                                                 <td>{{ $pgb->volume_supply }}</td>
                                                 <td>{{ $pgb->satuan_volume_supply }}</td>
                                                 <td>{{ $pgb->volume_angkut }}</td>
                                                 <td>{{ $pgb->satuan_volume_angkut }}</td>
-
-
-                                            </tr>
-                                        @endforeach
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>

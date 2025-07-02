@@ -19,7 +19,7 @@
                 <td>{{ $item->no_sk_izin }} </td>
                 <td>
                     @php
-                        $show = Crypt::encryptString(
+                        $encodedShow = Crypt::encryptString(
                             $item->id_permohonan .
                                 ',' .
                                 $item->no_sk_izin .
@@ -30,13 +30,14 @@
                                 ',' .
                                 $item->id_izin
                         );
-                    @endphp
+                    $encodedShow = urlencode($encodedShow);
 
+                    @endphp
                     <ul class="sub-menu" aria-expanded="false">
                         {{-- URL Dinamis --}}
                         @if (!empty($item->url))
                             <li>
-                                <a href="{{ $item->url }}/{{ $show }}">
+                                <a href="{{ $item->url }}/{{ $encodedShow }}">
                                     {{ $item->nama_menu }}
                                 </a>
                             </li>
@@ -59,21 +60,22 @@
 
                         {{-- Pengolahan --}}
                         @if (Session::get('j_pengolahan') > 0)
-                            @if ($item->kategori == 1)
+                            @if ($item->kategori == 2)
                                 <li>
-                                    <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan Minyak
+                                    <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $encodedShow }}">Penyimpanan Minyak
                                         Bumi</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
+                                    <a href="{{ url('/eksport-import') }}/{{ $encodedShow }}">Ekspor-Impor</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/harga-bbm-jbu') }}/{{ $show }}">Harga</a>
+                                    <a href="{{ url('/harga-bbm-jbu') }}/{{ $encodedShow }}">Harga</a>
                                 </li>
                             @endif
-                            @if ($kusus)
+                            {{-- @if ($kusus) --}}
+                            @if ($item->kategori == 1)
                                 <li>
-                                    <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas
+                                    <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $encodedShow }}">Penyimpanan Gas
                                         Bumi</a>
                                 </li>
                             @endif
@@ -83,27 +85,28 @@
                         @if (Session::get('j_niaga') > 0)
                             @if ($item->kategori == 1)
                                 <li>
-                                    <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $show }}">Penyimpanan
+                                    <a href="{{ url('/penyimpananMinyakBumi') }}/{{ $encodedShow }}">Penyimpanan
                                         Minyak Bumi</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
+                                    <a href="{{ url('/eksport-import') }}/{{ $encodedShow }}">Ekspor-Impor</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/harga-bbm-jbu') }}/{{ $show }}">Harga</a>
+                                    <a href="{{ url('/harga-bbm-jbu') }}/{{ $encodedShow }}">Harga</a>
                                 </li>
                             @endif
                             @if ($item->kategori == 2)
                                 <li>
-                                    <a href="{{ url('/eksport-import') }}/{{ $show }}">Ekspor-Impor</a>
+                                    <a href="{{ url('/eksport-import') }}/{{ $encodedShow }}">Ekspor-Impor</a>
                                 </li>
                             @endif
                         @endif
 
                         {{-- Pengangkutan --}}
-                        @if (Session::get('j_pengangkutan') > 0 && $kusus)
+                        @if (Session::get('j_pengangkutan') > 0 && $item->kategori == 1)
+
                             <li>
-                                <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $show }}">Penyimpanan Gas
+                                <a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $encodedShow }}">Penyimpanan Gas
                                     Bumi</a>
                             </li>
                         @endif
@@ -111,7 +114,7 @@
                         {{-- Niaga S --}}
                         @if (Session::get('j_niaga_s') > 0)
                             <li>
-                                <a href="{{ url('/progres-pembangunan/show') }}/{{ $show }}">Progres
+                                <a href="{{ url('/progres-pembangunan/show') }}/{{ $encodedShow }}">Progres
                                     Pembangunan</a>
                             </li>
                         @endif
