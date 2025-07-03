@@ -68,10 +68,10 @@ class HargabbmController extends Controller
       ->get();
     }
 
-        $sub_page = Meping::select('nama_opsi')
-        ->where('id_sub_page', $pecah[2])
-        ->where('id_template', $pecah[4])
-        ->first();
+    $sub_page = Meping::select('nama_opsi')
+    ->where('id_sub_page', $pecah[2])
+    ->where('id_template', $pecah[4])
+    ->first();
 
     // return view('badan_usaha.niaga.harga.index', compact(
     return view('badanUsaha.niaga.harga.index', compact(

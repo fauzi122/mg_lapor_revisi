@@ -23,7 +23,7 @@ class LpgController extends Controller
   public function index($id)
   {
     $pecah = explode(',', Crypt::decryptString($id));
-// dd($pecah);
+      // dd($pecah);
 
     $qLpgPenjualan = DB::table('penjualan_lpgs')
         ->select(
@@ -57,7 +57,10 @@ class LpgController extends Controller
         ->where('rn', 1)
         ->get();
 
-    $sub_page = Meping::select('nama_opsi')->where('id_sub_page', $pecah[2])->first();
+    $sub_page = Meping::select('nama_opsi')
+    ->where('id_sub_page', $pecah[2])
+    ->where('id_template', $pecah[4])
+    ->first();
 
     return view('badanUsaha.niaga.lpg.index', compact(
       'lpgpenjualan',
@@ -80,17 +83,21 @@ class LpgController extends Controller
 
     $bulan_ambil_penjualan_lpg = DB::table('penjualan_lpgs')
       ->where('npwp', $npwp)
-      ->where('bulan', $pecah[0])
-      ->where('id_permohonan', $pecah[2])
+      ->where('bulan', $pecah[3])
+      ->where('id_permohonan', $pecah[0])
+      ->where('id_sub_page', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
+      
 
     $bulan_ambil_pasok_lpg = DB::table('pasokan_l_p_g_s')
       ->where('npwp', $npwp)
-      ->where('bulan', $pecah[0])
-      ->where('id_permohonan', $pecah[2])
+      ->where('bulan', $pecah[3])
+      ->where('id_permohonan', $pecah[0])
+      ->where('id_sub_page', $pecah[2])
       ->orderBy('status', 'desc')
       ->first();
+      
 
     // Mengambil substring dari bulan
     $bulan_ambil_penjualan_lpgx = $bulan_ambil_penjualan_lpg ? substr($bulan_ambil_penjualan_lpg->bulan, 0, 7) : '';
@@ -100,21 +107,23 @@ class LpgController extends Controller
     $statuspasok_lpgx = $bulan_ambil_pasok_lpg->status ?? '';
 
     if ($filter && $filter === "tahun") {
-      $filterBy = substr($pecah[0], 0, 4);
+      $filterBy = substr($pecah[3], 0, 4);
     } else {
-        $filterBy = $pecah[0];
+      $filterBy = $pecah[3];
     }
     
     $lpgs = Penjualan_lpg::where([
       ['bulan', 'like', "%". $filterBy ."%"],
       'npwp' => $pecah[1],
-      'id_permohonan' => $pecah[2]
+      'id_permohonan' => $pecah[0],
+      'id_sub_page' => $pecah[2],
     ])->orderBy('status', 'desc')->get();
 
     $pasokan = PasokanLPG::where([
       ['bulan', 'like', "%". $filterBy ."%"],
       'npwp' => $pecah[1],
-      'id_permohonan' => $pecah[2]
+      'id_permohonan' => $pecah[0],
+      'id_sub_page' => $pecah[2],
     ])->orderBy('status', 'desc')->get();
 
     $produk = Produk::get();
@@ -233,8 +242,8 @@ class LpgController extends Controller
   public function get_penjualan_lpg($id)
   {
     $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
-    $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
-    $data['sektor'] = DB::select("SELECT sektors.id, sektors.nama_sektor FROM sektors GROUP BY sektors.nama_sektor");
+    $data['provinsi'] = DB::select("SELECT DISTINCT ON (name) id, name FROM provinces ORDER BY name, id");
+    $data['sektor'] = DB::select("SELECT sektors.nama_sektor FROM sektors GROUP BY sektors.nama_sektor");
     $data['find'] = Penjualan_lpg::find($id);
     return response()->json(['data' => $data]);
 
@@ -245,13 +254,14 @@ class LpgController extends Controller
   public function importlpgx(Request $request)
   {
     $id_permohonan = $request->id_permohonan;
+    $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
-    // dd($bulan);
-
     $npwp = Auth::user()->npwp;
 
     $cekdb = DB::table('penjualan_lpgs')
       ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
       ->where('bulan', $bulan)
       ->orderBy('status', 'desc')
       ->first();
@@ -262,7 +272,7 @@ class LpgController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importlpgpenjualan($bulan,$id_permohonan), request()->file('file'));
+    $import = Excel::import(new Importlpgpenjualan($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -277,13 +287,14 @@ class LpgController extends Controller
   public function importlpg_pasokx(Request $request)
   {
     $id_permohonan = $request->id_permohonan;
+    $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
-    // dd($bulan);
-
     $npwp = Auth::user()->npwp;
 
     $cekdb = DB::table('pasokan_l_p_g_s')
       ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
       ->where('bulan', $bulan)
       ->orderBy('status', 'desc')
       ->first();
@@ -294,7 +305,7 @@ class LpgController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importlpgpasok($bulan,$id_permohonan), request()->file('file'));
+    $import = Excel::import(new Importlpgpasok($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
     if ($import) {
       //redirect dengan pesan sukses
@@ -401,8 +412,17 @@ class LpgController extends Controller
 
   public function get_kota($kabupaten_kota)
   {
-    // $data = DB::select("SELECT kotas.nama_kota FROM kotas WHERE kotas.kabupaten_kota = '$kabupaten_kota'");
-    $data = DB::select("SELECT kotas.`nama_kota` FROM  kotas WHERE kotas.`id_prov` = (SELECT kotas.`id_prov` FROM kotas WHERE kotas.`nama_kota` = '$kabupaten_kota')");
+    $data = DB::select(
+      "SELECT nama_kota 
+      FROM kotas 
+      WHERE id_prov = (
+          SELECT id_prov 
+          FROM kotas 
+          WHERE nama_kota = ?
+      )",
+      [$kabupaten_kota]
+    );
+
     // $data = Produk::get();
     return response()->json(['data' => $data]);
   }
@@ -416,12 +436,13 @@ class LpgController extends Controller
     $pesan = [
       'npwp.required' => 'npwp masih kosong',
       'id_permohonan.required' => 'id_permohonan masih kosong',
+      'id_sub_page.required' => 'id_sub_page masih kosong',
       'bulan.required' => 'bulan masih kosong',
       'nama_pemasok.required' => 'nama_pemasok masih kosong',
       'kategori_pemasok.required' => 'kategori_pemasok masih kosong',
       'volume.required' => 'volume masih kosong',
       'satuan.required' => 'satuan masih kosong',
-      'status.required' => 'status masih kosong',
+      // 'status.required' => 'status masih kosong',
       // 'catatan.required' => 'catatan masih kosong',
       // 'petugas.required' => 'petugas masih kosong',
     ];
@@ -429,20 +450,24 @@ class LpgController extends Controller
     $validatedData = $request->validate([
       'npwp' => 'required',
       'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
       'bulan' => 'required',
       'nama_pemasok' => 'required',
       'kategori_pemasok' => 'required',
       'volume' => 'required',
       'satuan' => 'required',
-      'status' => 'required',
+      // 'status' => 'required',
       // 'catatan' => 'required',
       // 'petugas' => 'required',
     ], $pesan);
 
     // echo json_encode($request->all());exit;
     $npwp = Auth::user()->npwp;
+
     $cekdb = DB::table('pasokan_l_p_g_s')
       ->where('npwp', $npwp)
+      ->where('id_permohonan', $request->id_permohonan)
+      ->where('id_sub_page', $request->id_sub_page)
       ->where('bulan', $request->bulan)
       ->orderBy('status', 'desc')
       ->first();
@@ -501,7 +526,7 @@ class LpgController extends Controller
       'kategori_pemasok.required' => 'kategori_pemasok masih kosong',
       'volume.required' => 'volume masih kosong',
       'satuan.required' => 'satuan masih kosong',
-      'status.required' => 'status masih kosong',
+      // 'status.required' => 'status masih kosong',
       // 'catatan.required' => 'catatan masih kosong',
       // 'petugas.required' => 'petugas masih kosong',
     ];
@@ -514,7 +539,7 @@ class LpgController extends Controller
       'kategori_pemasok' => 'required',
       'volume' => 'required',
       'satuan' => 'required',
-      'status' => 'required',
+      // 'status' => 'required',
       // 'catatan' => 'required',
       // 'petugas' => 'required',
     ];
@@ -554,18 +579,20 @@ class LpgController extends Controller
   public function submit_bulan_penjualan_lpgx(Request $request, $id)
   {
     $pecah = explode(',', Crypt::decryptString($id));
-    $bulanx = $pecah[0];
+    $bulanx = $pecah[3];
     $npwp = $pecah[1];
-    $id_permohonan = $pecah[2];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
     $now = Carbon::now();
 
     // $validatedData = DB::update("update penjualan_lpgs set status='1', tgl_kirim='$now' where bulan='$bulanx' and npwp='$npwp'");
 
     $affected = DB::table('penjualan_lpgs')
-          ->where('bulan', $bulanx)
-          ->where('npwp', $npwp)
-          ->where('id_permohonan', $id_permohonan)
-          ->update(['status' => '1', 'tgl_kirim' => $now]);
+        ->where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($affected) {
       //redirect dengan pesan sukses
@@ -597,18 +624,20 @@ class LpgController extends Controller
   public function submit_bulan_pasokan_lpgx(Request $request, $id)
   {
     $pecah = explode(',', Crypt::decryptString($id));
-    $bulanx = $pecah[0];
+    $bulanx = $pecah[3];
     $npwp = $pecah[1];
-    $id_permohonan = $pecah[2];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
     $now = Carbon::now();
 
     // $validatedData = DB::update("update penjualan_lpgs set status='1', tgl_kirim='$now' where bulan='$bulanx' and npwp='$npwp'");
 
     $affected = DB::table('pasokan_l_p_g_s')
-          ->where('bulan', $bulanx)
-          ->where('npwp', $npwp)
-          ->where('id_permohonan', $id_permohonan)
-          ->update(['status' => '1', 'tgl_kirim' => $now]);
+        ->where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->update(['status' => '1', 'tgl_kirim' => $now]);
 
     if ($affected) {
       //redirect dengan pesan sukses
@@ -624,15 +653,17 @@ class LpgController extends Controller
   {
     // Dekripsi ID dan pecah menjadi array
     $pecah = explode(',', Crypt::decryptString($id));
-    $bulanx = $pecah[0];
+    $bulanx = $pecah[3];
     $npwp = $pecah[1];
-    $id_permohonan = $pecah[2];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
 
     // Menggunakan query builder untuk menghapus data
     $affected = DB::table('penjualan_lpgs')
         ->where('npwp', $npwp)
         ->where('bulan', $bulanx)
         ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
         ->delete();
 
     // Cek hasil penghapusan dan tampilkan pesan sesuai
@@ -650,15 +681,17 @@ class LpgController extends Controller
   {
     // Dekripsi ID dan pecah menjadi array
     $pecah = explode(',', Crypt::decryptString($id));
-    $bulanx = $pecah[0];
+    $bulanx = $pecah[3];
     $npwp = $pecah[1];
-    $id_permohonan = $pecah[2];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
 
     // Menggunakan query builder untuk menghapus data
     $affected = DB::table('pasokan_l_p_g_s')
         ->where('npwp', $npwp)
         ->where('bulan', $bulanx)
         ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
         ->delete();
 
     // Cek hasil penghapusan dan tampilkan pesan sesuai

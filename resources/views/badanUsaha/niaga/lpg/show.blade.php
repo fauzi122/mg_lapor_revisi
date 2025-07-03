@@ -5,7 +5,7 @@
         <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
             <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
                 <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
-                    <h3 class="text-dark fw-bold">Laporan Harga</h3>
+                    <h3 class="text-dark fw-bold">Laporan LPG</h3>
                 </div>
                 <div class="d-flex align-items-center gap-2 gap-lg-3">
                     <a href="javascript:history.back()" type="button" class="btn btn-sm btn-secondary">
@@ -21,14 +21,14 @@
     <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
         <div id="kt_app_content_container" class="app-container container-xxl">
             {{-- Harga BBM JBU/Hasil Olahan/Minyak Bumi --}}
-            @if ($statushargabbmjbux != '' and $hargax == 'bbmjbu')
+            @if ($statuspenjualan_lpgx != '' and $lpgx == 'penjualan')
                 <div class="row">
                     <div class="col-12">
                         <div class="card mb-5 mb-xl-8 shadow">
                             <div class="card-header bg-light p-5">
                                 <div class="row w-100">
                                     <div class="col-lg-6">
-                                        <h5>Harga BBM JBU/Hasil Olahan/Minyak Bumi</h5>
+                                        <h5>Penjualan LPG</h5>
                                         @php
                                             $id = Crypt::encryptString(
                                                 $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2] . ',' . $pecah[3],
@@ -43,22 +43,22 @@
                                                 @csrf
                                                 <button type="button" class="btn btn-sm btn-info"
                                                     onclick="kirimData($(this).closest('form'))"
-                                                    {{ $statushargabbmjbux == 1 ? 'disabled' : '' }}>
+                                                    {{ $statuspenjualan_lpgx == 1 ? 'disabled' : '' }}>
                                                     <i class="ki-solid ki-send"></i><span title="Kirim semua data">Kirim
                                                         Semua</span>
                                                 </button>
                                             </form>
                                             <button type="button" class="btn btn-sm btn-primary"
-                                                onclick="produk('BBM'); provinsi(); sektor(); tambahPMB('{{ $bulan_ambil_hargabbmjbux }}');"
-                                                data-bs-toggle="modal" data-bs-target="#input_HargaBBM"
-                                                {{ $statushargabbmjbux == 1 || $statushargabbmjbux == 2 ? 'disabled' : '' }}>
+                                                onclick="produk(); provinsi(); sektor(); tambahPMB('{{ $bulan_ambil_penjualan_lpgx }}');"
+                                                data-bs-toggle="modal" data-bs-target="#input_jualLPG"
+                                                {{ $statuspenjualan_lpgx == 1 || $statuspenjualan_lpgx == 2 ? 'disabled' : '' }}>
                                                 <i class="fas fa-plus"></i> Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_hargabbmjbux) }}
+                                                {{ dateIndonesia($bulan_ambil_penjualan_lpgx) }}
                                             </button>
                                             <button type="button" class="btn btn-sm btn-success"
-                                                onclick="tambahPMB('{{ $bulan_ambil_hargabbmjbux }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#excelhbjbu"
-                                                {{ $statushargabbmjbux == 1 || $statushargabbmjbux == 2 ? 'disabled' : '' }}>
+                                                onclick="tambahPMB('{{ $bulan_ambil_penjualan_lpgx }}' )"
+                                                data-bs-toggle="modal" data-bs-target="#excel_jualLPG"
+                                                {{ $statuspenjualan_lpgx == 1 || $statuspenjualan_lpgx == 2 ? 'disabled' : '' }}>
                                                 <i class="fas fa-upload"></i> Import Excel
                                             </button>
                                         </div>
@@ -81,75 +81,56 @@
                                                     <th class="text-center">No</th>
                                                     <th>Bulan</th>
                                                     <th>Tahun</th>
-                                                    <th>Sektor</th>
-                                                    <th>Produk</th>
-                                                    <th>Provinsi</th>
-                                                    <th>Komponen Harga (Rp/KL)</th>
-                                                    <th>Volume (KL)</th>
-                                                    <th>Harga Jual (Rp/KL)</th>
-                                                    <th>Formula</th>
-                                                    <th>Keterangan</th>
                                                     <th>Status</th>
                                                     <th>Catatan</th>
+                                                    <th>Produk</th>
+                                                    <th>Provinsi</th>
+                                                    <th>Kabupaten/Kota</th>
+                                                    <th>Sektor</th>
+                                                    <th>Kemasan</th>
+                                                    <th>Volume</th>
+                                                    <th>Satuan</th>
                                                     <th class="text-center">Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($hargabbmjbu as $hargabbmjbu)
+                                                @foreach ($lpgs as $lpg)
                                                     <tr>
                                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                                        <td>{{ getBulan($hargabbmjbu->bulan) }}</td>
-                                                        <td>{{ getTahun($hargabbmjbu->bulan) }}</td>
-                                                        <td>{{ $hargabbmjbu->sektor }}</td>
-                                                        <td>{{ $hargabbmjbu->produk }}</td>
-                                                        <td>{{ $hargabbmjbu->provinsi }}</td>
+                                                        <td>{{ getBulan($lpg->bulan) }}</td>
+                                                        <td>{{ getTahun($lpg->bulan) }}</td>
                                                         <td>
-                                                            <h6>Biaya Perolehan : <span
-                                                                    class="text-info">{{ $hargabbmjbu->biaya_perolehan }}</span>
-                                                            </h6>
-                                                            <h6>Biaya Distribusi : <span
-                                                                    class="text-info">{{ $hargabbmjbu->biaya_distribusi }}</span>
-                                                            </h6>
-                                                            <h6>Biaya Penyimpanan : <span
-                                                                    class="text-info">{{ $hargabbmjbu->biaya_penyimpanan }}</span>
-                                                            </h6>
-                                                            <h6>Margin : <span
-                                                                    class="text-info">{{ $hargabbmjbu->margin }}</span>
-                                                            </h6>
-                                                            <h6>PPN : <span
-                                                                    class="text-info">{{ $hargabbmjbu->ppn }}</span></h6>
-                                                            <h6>PBBKP : <span
-                                                                    class="text-info">{{ $hargabbmjbu->pbbkp }}</span></h6>
-                                                        </td>
-                                                        <td>{{ $hargabbmjbu->volume }}</td>
-                                                        <td>{{ $hargabbmjbu->harga_jual }}</td>
-                                                        <td>{{ $hargabbmjbu->formula_harga }}</td>
-                                                        <td>{{ $hargabbmjbu->keterangan }}</td>
-                                                        <td>
-                                                            @if ($hargabbmjbu->status == 1 && $hargabbmjbu->catatan)
-                                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($hargabbmjbu->status == 1)
-                                                                <span class="badge badge-success">Diterima</span>
-                                                            @elseif ($hargabbmjbu->status == 2)
-                                                                <span class="badge badge-danger">Revisi</span>
-                                                            @elseif ($hargabbmjbu->status == 0)
-                                                                <span class="badge badge-info">draf</span>
+                                                            @if ($lpg->status == 1 && $lpg->catatan)
+                                                                <span class="badge bg-warning">Sudah Diperbaiki</span>
+                                                            @elseif ($lpg->status == 1)
+                                                                <span class="badge bg-success">Diterima</span>
+                                                            @elseif ($lpg->status == 2)
+                                                                <span class="badge bg-danger">Revisi</span>
+                                                            @elseif ($lpg->status == 0)
+                                                                <span class="badge bg-info">draf</span>
                                                             @endif
                                                         </td>
-                                                        <td>{{ $hargabbmjbu->catatan }}</td>
+                                                        <td>{{ $lpg->catatan }}</td>
+                                                        <td>{{ $lpg->produk }}</td>
+                                                        <td>{{ $lpg->provinsi }}</td>
+                                                        <td>{{ $lpg->kabupaten_kota }}</td>
+                                                        <td>{{ $lpg->sektor }}</td>
+                                                        <td>{{ $lpg->kemasan }}</td>
+                                                        <td>{{ $lpg->volume }}</td>
+                                                        <td>{{ $lpg->satuan }}</td>
 
                                                         <td class="text-center">
-                                                            @if ($hargabbmjbu->status == '0' || $hargabbmjbu->status == '-' || $hargabbmjbu->status == '')
+                                                            @if ($lpg->status == '0' || $lpg->status == '-' || $lpg->status == '')
                                                                 <button type="button"
-                                                                    class="btn btn-sm btn-info editHarga mb-2"
-                                                                    onclick="edit_hargabbmx('{{ $hargabbmjbu->id }}')"
+                                                                    class="btn btn-sm btn-info editPenjualan mb-2"
+                                                                    onclick="edit_harga('{{ $lpg->id }}', '{{ $lpg->produk }}' , '{{ $lpg->kabupaten_kota }}')"
                                                                     id="editharga" data-bs-toggle="modal"
-                                                                    data-bs-target="#edit-hargabbm"
-                                                                    data-id="{{ $hargabbmjbu->id }}">
+                                                                    data-bs-target="#edit_jualLPG"
+                                                                    data-id="{{ $lpg->id }}">
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="{{ url('/harga-bbm-jbu') }}/{{ $hargabbmjbu->id }}"
+                                                                    action="{{ url('/harga-bbm-jbu') }}/{{ $lpg->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -160,7 +141,7 @@
                                                                     </button>
                                                                 </form>
                                                                 <form
-                                                                    action="{{ url('/submit_harga-bbm-jbu') }}/{{ $hargabbmjbu->id }}"
+                                                                    action="{{ url('/submit_harga-bbm-jbu') }}/{{ $lpg->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -169,25 +150,25 @@
                                                                         <i class="ki-solid ki-send" title="Kirim data"></i>
                                                                     </button>
                                                                 </form>
-                                                            @elseif($hargabbmjbu->status == '1')
+                                                            @elseif($lpg->status == '1')
                                                                 <button type="button" class="btn btn-sm btn-info mb-2"
                                                                     id="" data-bs-toggle="modal"
-                                                                    onclick="lihatHargaBBM('{{ $hargabbmjbu->id }}')"
-                                                                    data-bs-target="#lihat-harga-bbm"
-                                                                    data-id="{{ $hargabbmjbu->id }}">
+                                                                    onclick="lihatPenjualanLPG('{{ $lpg->id }}' )"
+                                                                    data-bs-target="#lihat-jualLPG"
+                                                                    data-id="{{ $lpg->id }}">
                                                                     <i class="ki-solid ki-eye" title="Lihat data"></i>
                                                                 </button>
-                                                            @elseif($hargabbmjbu->status == '2')
+                                                            @elseif($lpg->status == '2')
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-info editHarga mb-2"
-                                                                    onclick="edit_hargabbmx('{{ $hargabbmjbu->id }}')"
+                                                                    onclick="edit_hargabbmx('{{ $lpg->id }}')"
                                                                     id="editharga" data-bs-toggle="modal"
-                                                                    data-bs-target="#edit-hargabbm"
-                                                                    data-id="{{ $hargabbmjbu->id }}">
+                                                                    data-bs-target="#edit_jualLPG"
+                                                                    data-id="{{ $lpg->id }}">
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="{{ url('/submit_harga-bbm-jbu') }}/{{ $hargabbmjbu->id }}"
+                                                                    action="{{ url('/submit_harga-bbm-jbu') }}/{{ $lpg->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -201,13 +182,13 @@
                                                             @endif
 
                                                             <br>
-                                                            @if ($hargabbmjbu->status == 1 && $hargabbmjbu->catatan)
+                                                            @if ($lpg->status == 1 && $lpg->catatan)
                                                                 <span class="badge badge-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($hargabbmjbu->status == 1)
+                                                            @elseif ($lpg->status == 1)
                                                                 <span class="badge badge-success">Diterima</span>
-                                                            @elseif ($hargabbmjbu->status == 2)
+                                                            @elseif ($lpg->status == 2)
                                                                 <span class="badge badge-danger" data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-updateStatus-{{ $hargabbmjbu->id }}">
+                                                                    data-bs-target="#modal-updateStatus-{{ $lpg->id }}">
                                                                     Cek Revisi
                                                                 </span>
                                                             @endif
@@ -224,7 +205,7 @@
                 </div>
             @endif
             {{-- Harga LPG --}}
-            @if ($statushargalpgx != '' and $hargax == 'hargalpg')
+            @if ($statuspasok_lpgx != '' and $lpgx == 'pasok')
                 <div class="row">
                     <div class="col-12">
                         <div class="card mb-5 mb-xl-8 shadow">
@@ -246,22 +227,22 @@
                                                 @csrf
                                                 <button type="button" class="btn btn-sm btn-info"
                                                     onclick="kirimData($(this).closest('form'))"
-                                                    {{ $statushargalpgx == 1 ? 'disabled' : '' }}>
+                                                    {{ $statuspasok_lpgx == 1 ? 'disabled' : '' }}>
                                                     <i class="ki-solid ki-send"></i><span title="Kirim semua data">Kirim
                                                         Semua</span>
                                                 </button>
                                             </form>
                                             <button type="button" class="btn btn-sm btn-primary"
-                                                onclick="produk(); provinsi(); sektor(); tambahPMB('{{ $bulan_ambil_hargalpgx }}');"
-                                                data-bs-toggle="modal" data-bs-target="#inputHargaLPG"
-                                                {{ $statushargalpgx == 1 || $statushargalpgx == 2 ? 'disabled' : '' }}>
+                                                onclick="produk(); provinsi(); sektor(); tambahPMB('{{ $bulan_ambil_pasok_lpgx }}');"
+                                                data-bs-toggle="modal" data-bs-target="#input_pasokanLPG"
+                                                {{ $statuspasok_lpgx == 1 || $statuspasok_lpgx == 2 ? 'disabled' : '' }}>
                                                 <i class="fas fa-plus"></i> Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_hargalpgx) }}
+                                                {{ dateIndonesia($bulan_ambil_pasok_lpgx) }}
                                             </button>
                                             <button type="button" class="btn btn-sm btn-success"
-                                                onclick="tambahPMB('{{ $bulan_ambil_hargalpgx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#excelHargaLPG"
-                                                {{ $statushargalpgx == 1 || $statushargalpgx == 2 ? 'disabled' : '' }}>
+                                                onclick="tambahPMB('{{ $bulan_ambil_pasok_lpgx }}' )"
+                                                data-bs-toggle="modal" data-bs-target="#excel_pasokanLPG"
+                                                {{ $statuspasok_lpgx == 1 || $statuspasok_lpgx == 2 ? 'disabled' : '' }}>
                                                 <i class="fas fa-upload"></i> Import Excel
                                             </button>
                                         </div>
@@ -282,69 +263,52 @@
                                                 <tr class="fw-bold">
                                                     <th class="text-center">No</th>
                                                     <th>Bulan</th>
-                                                    <th>Sektor</th>
-                                                    <th>Provinsi</th>
-                                                    <th>Komponen Harga</th>
-                                                    <th>Kabupaten / Kota</th>
-                                                    <th>Volume</th>
-                                                    <th>Harga Jual</th>
-                                                    <th>Formula</th>
-                                                    <th>Keterangan</th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
+                                                    <th>Catatan</th>
+                                                    <th>Nama Pemasok</th>
+                                                    <th>Kategori Pemasok</th>
+                                                    <th>Volume</th>
+                                                    <th>Satuan</th>
                                                     <th class="text-center">Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($hargalpg as $hargaLPG)
+                                                @foreach ($pasokan as $pasokan)
                                                     <tr>
                                                         <td class="text-center">{{ $loop->iteration }}</td>
-                                                        <td>{{ dateIndonesia($hargaLPG->bulan) }}</td>
-                                                        <td>{{ $hargaLPG->sektor }}</td>
-                                                        <td>{{ $hargaLPG->provinsi }}</td>
+                                                        {{-- <td>{{ dateIndonesia($pasokan->bulan) }}</td> --}}
+
+                                                        <td>{{ getBulan($pasokan->bulan) }}</td>
+                                                        <td>{{ getTahun($pasokan->bulan) }}</td>
                                                         <td>
-                                                            <h6>Biaya Perolehan : <span
-                                                                    class="text-info">{{ $hargaLPG->biaya_perolehan }}</span>
-                                                            </h6>
-                                                            <h6>Biaya Distribusi : <span
-                                                                    class="text-info">{{ $hargaLPG->biaya_distribusi }}</span>
-                                                            </h6>
-                                                            <h6>Biaya Penyimpanan : <span
-                                                                    class="text-info">{{ $hargaLPG->biaya_penyimpanan }}</span>
-                                                            </h6>
-                                                            <h6>Margin : <span
-                                                                    class="text-info">{{ $hargaLPG->margin }}</span></h6>
-                                                            <h6>PPN : <span class="text-info">{{ $hargaLPG->ppn }}</span>
-                                                            </h6>
-                                                        </td>
-                                                        <td>{{ $hargaLPG->kabupaten_kota }}</td>
-                                                        <td>{{ $hargaLPG->volume }}</td>
-                                                        <td>{{ $hargaLPG->harga_jual }}</td>
-                                                        <td>{{ $hargaLPG->formula_harga }}</td>
-                                                        <td>{{ $hargaLPG->keterangan }}</td>
-                                                        <td>
-                                                            @if ($hargaLPG->status == 1 && $hargaLPG->catatan)
-                                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($hargaLPG->status == 1)
-                                                                <span class="badge badge-success">Diterima</span>
-                                                            @elseif ($hargaLPG->status == 2)
-                                                                <span class="badge badge-danger">Revisi</span>
-                                                            @elseif ($hargaLPG->status == 0)
-                                                                <span class="badge badge-info">draf</span>
+                                                            @if ($pasokan->status == 1 && $pasokan->catatan)
+                                                                <span class="badge bg-warning">Sudah Diperbaiki</span>
+                                                            @elseif ($pasokan->status == 1)
+                                                                <span class="badge bg-success">Diterima</span>
+                                                            @elseif ($pasokan->status == 2)
+                                                                <span class="badge bg-danger">Revisi</span>
+                                                            @elseif ($pasokan->status == 0)
+                                                                <span class="badge bg-info">draf</span>
                                                             @endif
-                                                            {{ $hargaLPG->catatan }}
                                                         </td>
+                                                        <td>{{ $pasokan->catatan }}</td>
+                                                        <td>{{ $pasokan->nama_pemasok }}</td>
+                                                        <td>{{ $pasokan->kategori_pemasok }}</td>
+                                                        <td>{{ $pasokan->volume }}</td>
+                                                        <td>{{ $pasokan->satuan }}</td>
                                                         <td class="text-center">
-                                                            @if ($hargaLPG->status == '0' || $hargaLPG->status == '-' || $hargaLPG->status == '')
+                                                            @if ($pasokan->status == '0' || $pasokan->status == '-' || $pasokan->status == '')
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-info editHarga mb-2"
-                                                                    onclick="edit_hargaLPG('{{ $hargaLPG->id }}', '{{ $hargaLPG->kabupaten_kota }}'); tambahPMB('{{ $bulan_ambil_hargalpgx }}');"
+                                                                    onclick="editPasokanLPG('{{ $pasokan->id }}')"
                                                                     id="editharga" data-bs-toggle="modal"
-                                                                    data-bs-target="#editHargaLPG"
-                                                                    data-id="{{ $hargaLPG->id }}">
+                                                                    data-bs-target="#edit_pasokanLPG"
+                                                                    data-id="{{ $pasokan->id }}">
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="{{ url('/hapusHargaLPG') }}/{{ $hargaLPG->id }}"
+                                                                    action="{{ url('/hapusHargaLPG') }}/{{ $pasokan->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -356,7 +320,7 @@
                                                                     </button>
                                                                 </form>
                                                                 <form
-                                                                    action="{{ url('/submitHargaLPG') }}/{{ $hargaLPG->id }}"
+                                                                    action="{{ url('/submitHargaLPG') }}/{{ $pasokan->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -367,25 +331,25 @@
                                                                             title="Kirim data"></i>
                                                                     </button>
                                                                 </form>
-                                                            @elseif($hargaLPG->status == '1')
+                                                            @elseif($pasokan->status == '1')
                                                                 <button type="button" class="btn btn-sm btn-info mb-2"
                                                                     id="" data-bs-toggle="modal"
-                                                                    onclick="lihatHargaLPG('{{ $hargaLPG->id }}')"
+                                                                    onclick="lihatHargaLPG('{{ $pasokan->id }}')"
                                                                     data-bs-target="#lihat-harga-lpg"
-                                                                    data-id="{{ $hargaLPG->id }}">
+                                                                    data-id="{{ $pasokan->id }}">
                                                                     <i class="ki-solid ki-eye" title="Lihat data"></i>
                                                                 </button>
-                                                            @elseif($hargaLPG->status == '2')
+                                                            @elseif($pasokan->status == '2')
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-info editHarga mb-2"
-                                                                    onclick="edit_hargaLPG('{{ $hargaLPG->id }}', '{{ $hargaLPG->kabupaten_kota }}'); tambahPMB('{{ $bulan_ambil_hargalpgx }}');"
+                                                                    onclick="edit_hargaLPG('{{ $pasokan->id }}', '{{ $pasokan->kabupaten_kota }}'); tambahPMB('{{ $bulan_ambil_pasok_lpgx }}');"
                                                                     id="editharga" data-bs-toggle="modal"
                                                                     data-bs-target="#editHargaLPG"
-                                                                    data-id="{{ $hargaLPG->id }}">
+                                                                    data-id="{{ $pasokan->id }}">
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="{{ url('/submitHargaLPG') }}/{{ $hargaLPG->id }}"
+                                                                    action="{{ url('/submitHargaLPG') }}/{{ $pasokan->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -399,13 +363,13 @@
                                                             @endif
 
                                                             <br>
-                                                            @if ($hargaLPG->status == 1 && $hargaLPG->catatan)
+                                                            @if ($pasokan->status == 1 && $pasokan->catatan)
                                                                 <span class="badge badge-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($hargaLPG->status == 1)
+                                                            @elseif ($pasokan->status == 1)
                                                                 <span class="badge badge-success">Diterima</span>
-                                                            @elseif ($hargaLPG->status == 2)
+                                                            @elseif ($pasokan->status == 2)
                                                                 <span class="badge badge-danger" data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-updateStatus-{{ $hargaLPG->id }}">
+                                                                    data-bs-target="#modal-updateStatus-{{ $pasokan->id }}">
                                                                     Cek Revisi
                                                                 </span>
                                                             @endif
@@ -424,6 +388,6 @@
         </div>
     </div>
 
-    @include('badanUsaha.niaga.harga.modal')
+    @include('badanUsaha.niaga.lpg.modal')
 
 @endsection

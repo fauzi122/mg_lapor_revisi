@@ -58,7 +58,7 @@
                                             <i class="fas fa-plus"></i> Buat Laporan
                                         </a>
                                         <a type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#excelHargaLPG">
+                                            data-bs-target="#excel_jualLPG">
                                             <i class="fas fa-upload"></i> Import Excel
                                         </a>
                                     </div>
@@ -185,11 +185,11 @@
                                     <div class="d-flex justify-content-end gap-2">
                                         <a type="button" class="btn btn-sm btn-primary"
                                             onclick="produk('BBM'); provinsi(); sektor();" data-bs-toggle="modal"
-                                            data-bs-target="#input_HargaBBM">
+                                            data-bs-target="#input_pasokanLPG">
                                             <i class="fas fa-plus"></i> Buat Laporan
                                         </a>
                                         <a type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#excelhbjbu">
+                                            data-bs-target="#excel_pasokanLPG">
                                             <i class="fas fa-upload"></i> Import Excel
                                         </a>
                                     </div>
@@ -220,13 +220,13 @@
                                             @foreach ($lpgasok as $data)
                                                 @php
                                                     $id = Crypt::encryptString(
-                                                        $data->bulan .
+                                                        $data->id_permohonan .
                                                             ',' .
                                                             $data->npwp .
                                                             ',' .
-                                                            $data->id_permohonan .
+                                                            $data->id_sub_page .
                                                             ',' .
-                                                            $data->id_sub_page,
+                                                            $data->bulan,
                                                     );
                                                 @endphp
                                                 <tr>
@@ -285,7 +285,7 @@
                                                                 @csrf
                                                                 <button type="button"
                                                                     class="btn btn-icon btn-sm btn-success mb-2"
-                                                                    onclick="kirimData($(this).('form'))">
+                                                                    onclick="kirimData($(this).closest('form'))">
                                                                     <i class="ki-solid ki-send" title="Revisi"></i>
                                                                 </button>
                                                             </form>
