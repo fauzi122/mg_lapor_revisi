@@ -359,7 +359,16 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/master/meping', 'index');
 		Route::get('/master/meping/create', 'create');
 		Route::post('/master/meping', 'store');
+		Route::get('/master/meping/edit/{id}', 'edit');
+		Route::put('/master/meping/update/{id}', 'update');
+		Route::delete('/master/meping/destroy_izin/{id}', 'destroy_Dizin');
+
+
 		Route::get('/master/meping/{id}/show', 'show');
+		Route::get('/master/meping/create/jenis-izin/{id}', 'create_Jizin');
+		Route::post('/master/meping/izin', 'store_JIzin');
+		Route::get('/master/meping/izin/{id}/edit', 'edit_Jizin');
+		Route::put('/master/meping/izin/{id}', 'update_Jizin');
 		Route::post('/update-status', 'updateStatus')->name('update-status');
 		Route::delete('/master/meping/{id}/destroy', 'destroy');
 	});
