@@ -101,6 +101,7 @@ function edit_harga(id, produk, kabupaten_kota) {
                     $.each(response.data, function (i, value) {
                         let isSelected =
                             satuanSelect == value.satuan ? "selected" : "";
+                            
                         $("#satuan_penjualan").append(
                             `<option value="` +
                                 value.satuan +
@@ -138,7 +139,7 @@ function edit_harga(id, produk, kabupaten_kota) {
             });
 
             $.ajax({
-                url: baseUrl + "get_kota_lpg/" + kabupaten_kota,
+                url: baseUrl + "get_kota_penjualan_lpg/" + kabupaten_kota,
                 method: "GET",
                 data: {},
                 success: function (response) {

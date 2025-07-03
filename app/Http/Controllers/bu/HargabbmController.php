@@ -68,10 +68,10 @@ class HargabbmController extends Controller
       ->get();
     }
 
-        $sub_page = Meping::select('nama_opsi')
-        ->where('id_sub_page', $pecah[2])
-        ->where('id_template', $pecah[4])
-        ->first();
+    $sub_page = Meping::select('nama_opsi')
+    ->where('id_sub_page', $pecah[2])
+    ->where('id_template', $pecah[4])
+    ->first();
 
     // return view('badan_usaha.niaga.harga.index', compact(
     return view('badanUsaha.niaga.harga.index', compact(
@@ -232,19 +232,19 @@ class HargabbmController extends Controller
     $npwp = Auth::user()->npwp;
 
     $cekdb = DB::table('harga_bbm_jbus')
-            ->where('npwp', $npwp)
-            ->where('id_permohonan', $request->id_permohonan)
-            ->where('id_sub_page', $request->id_sub_page)
-            ->where('bulan', $request->bulan)
-            ->orderBy('status', 'desc')
-            ->first();
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $request->id_permohonan)
+      ->where('id_sub_page', $request->id_sub_page)
+      ->where('bulan', $request->bulan)
+      ->orderBy('status', 'desc')
+      ->first();
 
-        if (isset($cekdb) == 1) {
-            if ($cekdb->status == 1) {
-                Alert::error('Error', 'Bulan yang anda pilih sedang status kirim / revisi');
-                return back();
-            }
+    if (isset($cekdb) == 1) {
+        if ($cekdb->status == 1) {
+            Alert::error('Error', 'Bulan yang anda pilih sedang status kirim / revisi');
+            return back();
         }
+    }
 
     Harga_bbm_jbu::create($validatedData);
 

@@ -15,12 +15,14 @@ class Importlpgpenjualan implements ToModel, WithStartRow, WithMultipleSheets
      */
 
      protected $bulan; 
-     protected $izin_id;
+        protected $id_permohonan;
+        protected $id_sub_page;
  
-     public function __construct($bulan,$izin_id)
+     public function __construct($bulan, $id_permohonan, $id_sub_page)
      {
-         $this->bulan = $bulan; 
-         $this->izin_id = $izin_id;
+        $this->bulan = $bulan; 
+        $this->id_permohonan = $id_permohonan;
+        $this->id_sub_page = $id_sub_page;
      }
  
  
@@ -45,8 +47,9 @@ class Importlpgpenjualan implements ToModel, WithStartRow, WithMultipleSheets
     public function model(array $row)
     {
         return new Penjualan_lpg([
-            'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'izin_id' => $this->izin_id,
+            'npwp' => Auth::user()->npwp,
+            'id_permohonan' => $this->id_permohonan,
+            'id_sub_page' => $this->id_sub_page,
             'bulan' => $this->bulan,
             'provinsi' => $row[0],
             'kabupaten_kota' => $row[1],
