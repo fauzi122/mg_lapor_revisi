@@ -16,6 +16,7 @@ use App\Models\Impor;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\Importlngpenjualan;
 use App\Imports\Importlngpasok;
+use App\Models\Meping;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
@@ -23,29 +24,53 @@ class LngController extends Controller
 {
     public function index($id)
     {
-        // $pm = Penjualan_lng::where('badan_usaha_id', Auth::user()->badan_usaha_id)
+        // $pm = Penjualan_lng::where('npwp', Auth::user()->npwp)
         //     ->groupBy('bulan')->get();
         $pecah = explode(',', Crypt::decryptString($id));
         
         // dd($pecah);
-        $pm = DB::table('penjualan_lngs')
-            ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-            ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-            ->where('izin_id', $pecah[0])
-            ->groupBy('bulan')
-            ->get();
+        $qLngPenjualan = DB::table('penjualan_lngs')
+            ->select(
+                '*',
+                DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+                DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+                DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+            )
+            ->where('npwp', Auth::user()->npwp)
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2]);
 
-        $pasoklng = DB::table('pasokanlngs')
-            ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-            ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-            ->where('izin_id', $pecah[0])
-            ->groupBy('bulan')
+        $lngpenjualan = DB::table(DB::raw("({$qLngPenjualan->toSql()}) as sub"))
+            ->mergeBindings($qLngPenjualan)
+            ->where('rn', 1)
             ->get();
+        
+        $qLngPasok = DB::table('pasokanlngs')
+            ->select(
+                '*',
+                DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+                DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+                DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+            )
+            ->where('npwp', Auth::user()->npwp)
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2]);
+
+        $pasoklng = DB::table(DB::raw("({$qLngPasok->toSql()}) as sub"))
+            ->mergeBindings($qLngPasok)
+            ->where('rn', 1)
+            ->get();
+            
+        $sub_page = Meping::select('nama_opsi')
+        ->where('id_sub_page', $pecah[2])
+        ->where('id_template', $pecah[4])
+        ->first();
 
         return view('badan_usaha.niaga.lng.index', compact(
-            'pm',
+            'lngpenjualan',
             'pasoklng',
-            'pecah'
+            'pecah',
+            'sub_page'
         ));
     }
     public function show_lngx($id, $lng, $filter = null)
@@ -56,19 +81,21 @@ class LngController extends Controller
         // die;
         $pecah = explode(',', Crypt::decryptString($id));
         // dd($pecah);
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
 
         $bulan_ambil_penjualan_lng = DB::table('penjualan_lngs')
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('bulan', $pecah[0])
-            ->where('izin_id', $pecah[2])
+            ->where('npwp', $npwp)
+            ->where('bulan', $pecah[3])
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
         $bulan_ambil_pasok_lng = DB::table('pasokanlngs')
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('bulan', $pecah[0])
-            ->where('izin_id', $pecah[2])
+            ->where('npwp', $npwp)
+            ->where('bulan', $pecah[3])
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
@@ -80,22 +107,24 @@ class LngController extends Controller
         $statuspasok_lngx = $bulan_ambil_pasok_lng->status ?? '';
 
         if ($filter && $filter === "tahun") {
-            $filterBy = substr($pecah[0], 0, 4);
+            $filterBy = substr($pecah[3], 0, 4);
         } else {
-            $filterBy = $pecah[0];
+            $filterBy = $pecah[3];
         }
 
         $lng = Penjualan_lng::where([
             ['bulan', 'like', "%". $filterBy ."%"],
-            'badan_usaha_id' => $pecah[1],
-            'izin_id' => $pecah[2]
+            'npwp' => $pecah[1],
+            'id_permohonan' => $pecah[0],
+            'id_sub_page' => $pecah[2],
             
         ])->orderBy('status', 'desc')->get();
 
         $pasok_lng = Pasokanlng::where([
             ['bulan', 'like', "%". $filterBy ."%"],
-            'badan_usaha_id' => $pecah[1],
-            'izin_id' => $pecah[2]
+            'npwp' => $pecah[1],
+            'id_permohonan' => $pecah[0],
+            'id_sub_page' => $pecah[2],
         ])->orderBy('status', 'desc')->get();
 
 
@@ -108,15 +137,16 @@ class LngController extends Controller
             'statuspasok_lngx',
             'lngx',
             'pecah'
-        ))->with('izin_id', $pecah[2]);
+        ))->with('id_permohonan', $pecah[2]);
     }
     public function simpan_lngx(Request $request)
     {
         // dd($request->all());
 
         $pesan = [
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-            'izin_id.required' => 'izin_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
+            'id_permohonan.required' => 'id_permohonan masih kosong',
+            'id_sub_page.required' => 'id_sub_page masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'provinsi.required' => 'provinsi masih kosong',
             'kabupaten_kota.required' => 'kabupaten / kota masih kosong',
@@ -143,8 +173,9 @@ class LngController extends Controller
 
         $validatedData = $request->validate([
 
-            'badan_usaha_id' => 'required',
-            'izin_id' => 'required',
+            'npwp' => 'required',
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
             'bulan' => 'required',
             'provinsi' => 'required',
             'kabupaten_kota' => 'required',
@@ -169,11 +200,11 @@ class LngController extends Controller
             'satuan_harga_jual' => 'required',
         ], $pesan);
 
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('penjualan_lngs')
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('izin_id', $request->izin_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $request->id_permohonan)
             ->where('bulan', $request->bulan . '-01')
             ->orderBy('status', 'desc')
             ->first();
@@ -185,8 +216,9 @@ class LngController extends Controller
             }
         }
         $validatedData = Penjualan_lng::create([
-            'badan_usaha_id' =>  $request->badan_usaha_id,
-            'izin_id' =>  $request->izin_id,
+            'npwp' =>  $request->npwp,
+            'id_permohonan' =>  $request->id_permohonan,
+            'id_sub_page' =>  $request->id_sub_page,
             'bulan' => $request->bulan . '-01',
             'provinsi' => $request->provinsi,
             'kabupaten_kota' => $request->kabupaten_kota,
@@ -245,8 +277,8 @@ class LngController extends Controller
     public function get_penjualan_lng($id)
     {
         $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
-        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
-        $data['sektor'] = DB::select("SELECT sektors.id, sektors.nama_sektor FROM sektors GROUP BY sektors.nama_sektor");
+        $data['provinsi'] = DB::select("SELECT DISTINCT ON (name) id, name FROM provinces ORDER BY name, id");
+        $data['sektor'] = DB::select("SELECT sektors.nama_sektor FROM sektors GROUP BY sektors.nama_sektor");
         $data['find'] = Penjualan_lng::find($id);
         return response()->json(['data' => $data]);
 
@@ -258,7 +290,7 @@ class LngController extends Controller
         // echo json_encode($request->all());exit;
         $penjualan_lng = $id;
         $pesan = [
-            // 'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            // 'npwp.required' => 'npwp masih kosong',
             // 'bulan.required' => 'bulan masih kosong',
             'provinsi.required' => 'provinsi masih kosong',
             'kabupaten_kota.required' => 'kabupaten / kota masih kosong',
@@ -284,7 +316,7 @@ class LngController extends Controller
         ];
 
         $rules = [
-            // 'badan_usaha_id' => 'required',
+            // 'npwp' => 'required',
             // 'bulan' => 'required',
             'provinsi' => 'required',
             'kabupaten_kota' => 'required',
@@ -329,8 +361,9 @@ class LngController extends Controller
     {
         // echo json_encode($request->all());exit;
         $pesan = [
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-            'izin_id.required' => 'izin_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
+            'id_permohonan.required' => 'id_permohonan masih kosong',
+            'id_sub_page.required' => 'id_sub_page masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
             'nama_pemasok.required' => 'nama_pemasok masih kosong',
@@ -342,8 +375,9 @@ class LngController extends Controller
         ];
 
         $validatedData = $request->validate([
-            'badan_usaha_id' => 'required',
-            'izin_id' => 'required',
+            'npwp' => 'required',
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
             'bulan' => 'required',
             'produk' => 'required',
             'nama_pemasok' => 'required',
@@ -354,11 +388,11 @@ class LngController extends Controller
             'satuan_harga_gas' => 'required',
         ], $pesan);
 
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('pasokanlngs')
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('izin_id', $request->izin_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $request->id_permohonan)
             ->where('bulan', $request->bulan . '-01')
             ->orderBy('status', 'desc')
             ->first();
@@ -374,8 +408,9 @@ class LngController extends Controller
 
 
         $validatedData = Pasokanlng::create([
-            'badan_usaha_id' =>  $request->badan_usaha_id,
-            'izin_id' =>  $request->izin_id,
+            'npwp' =>  $request->npwp,
+            'id_permohonan' =>  $request->id_permohonan,
+            'id_sub_page' =>  $request->id_sub_page,
             'bulan' => $request->bulan . '-01',
             'produk' => $request->produk,
             'nama_pemasok' => $request->nama_pemasok,
@@ -421,7 +456,7 @@ class LngController extends Controller
         // echo json_encode($request->all());exit;
         $penjualan_lng = $id;
         $pesan = [
-            // 'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            // 'npwp.required' => 'npwp masih kosong',
             // 'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
             'nama_pemasok.required' => 'nama_pemasok masih kosong',
@@ -433,7 +468,7 @@ class LngController extends Controller
         ];
 
         $rules = [
-            // 'badan_usaha_id' => 'required',
+            // 'npwp' => 'required',
             // 'bulan' => 'required',
             'produk' => 'required',
             'nama_pemasok' => 'required',
@@ -462,7 +497,16 @@ class LngController extends Controller
     public function get_kota($kabupaten_kota)
     {
         // $data = DB::select("SELECT kotas.nama_kota FROM kotas WHERE kotas.kabupaten_kota = '$kabupaten_kota'");
-        $data = DB::select("SELECT kotas.`nama_kota` FROM  kotas WHERE kotas.`id_prov` = (SELECT kotas.`id_prov` FROM kotas WHERE kotas.`nama_kota` = '$kabupaten_kota')");
+        $data = DB::select(
+            "SELECT nama_kota 
+            FROM kotas 
+            WHERE id_prov = (
+                SELECT id_prov 
+                FROM kotas 
+                WHERE nama_kota = ?
+            )",
+            [$kabupaten_kota]
+        );
         // $data = Produk::get();
         return response()->json(['data' => $data]);
     }
@@ -500,11 +544,12 @@ class LngController extends Controller
     }
     public function importlngpenx(Request $request)
     {
-        $izin_id = $request->izin_id;
+        $id_permohonan = $request->id_permohonan;
+        $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
         $cekdb = DB::table('penjualan_lngs')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan', $bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -515,7 +560,7 @@ class LngController extends Controller
                 return back();
             }
         }
-        $import = Excel::import(new Importlngpenjualan($bulan,$izin_id), request()->file('file'));
+        $import = Excel::import(new Importlngpenjualan($bulan,$id_permohonan,$id_sub_page), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses
@@ -529,11 +574,12 @@ class LngController extends Controller
     }
     public function importlngpasokx(Request $request)
     {
-        $izin_id = $request->izin_id;
+        $id_permohonan = $request->id_permohonan;
+        $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
         $cekdb = DB::table('pasokanlngs')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan', $bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -544,7 +590,7 @@ class LngController extends Controller
                 return back();
             }
         }
-        $import = Excel::import(new Importlngpasok($bulan,$izin_id), request()->file('file'));
+        $import = Excel::import(new Importlngpasok($bulan,$id_permohonan, $id_sub_page), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses
@@ -559,16 +605,18 @@ class LngController extends Controller
     public function submit_bulan_lngx(Request $request, $id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
         $now = Carbon::now();
     
-        // Update data penjualan_lngs dengan izin_id
+        // Update data penjualan_lngs dengan id_permohonan
         $affected = DB::table('penjualan_lngs')
             ->where('bulan', $bulanx)
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('izin_id', $izin_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->update(['status' => '1', 'tgl_kirim' => $now]);
     
         if ($affected) {
@@ -585,16 +633,18 @@ class LngController extends Controller
     public function submit_bulan_pasok_lngx(Request $request, $id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
         $now = Carbon::now();
     
-        // Update data pasokanlngs dengan izin_id
+        // Update data pasokanlngs dengan id_permohonan
         $affected = DB::table('pasokanlngs')
             ->where('bulan', $bulanx)
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('izin_id', $izin_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->update(['status' => '1', 'tgl_kirim' => $now]);
     
         if ($affected) {
@@ -612,15 +662,17 @@ class LngController extends Controller
     {
         // Dekripsi ID dan pecah menjadi array
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
     
         // Menggunakan query builder untuk menghapus data
         $affected = DB::table('penjualan_lngs')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan', $bulanx)
-            ->where('izin_id', $izin_id)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->delete();
     
         // Cek hasil penghapusan dan tampilkan pesan sesuai
@@ -639,15 +691,17 @@ class LngController extends Controller
     {
         // Dekripsi ID dan pecah menjadi array
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
 
         // Menggunakan query builder untuk menghapus data
         $affected = DB::table('pasokanlngs')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan', $bulanx)
-            ->where('izin_id', $izin_id)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->delete();
 
         // Cek hasil penghapusan dan tampilkan pesan sesuai

@@ -14,7 +14,7 @@
                         <li class="breadcrumb-item">
                             <span class="bullet bg-gray-400 w-5px h-2px"></span>
                         </li>
-                        <li class="breadcrumb-item text-muted">Laporan Harga</li>
+                        <li class="breadcrumb-item text-muted">Laporan LPG</li>
                     </ul>
                 </div>
             </div>
@@ -184,7 +184,7 @@
                                 <div class="col-lg-6">
                                     <div class="d-flex justify-content-end gap-2">
                                         <a type="button" class="btn btn-sm btn-primary"
-                                            onclick="produk('BBM'); provinsi(); sektor();" data-bs-toggle="modal"
+                                            onclick="produk(); provinsi(); sektor();" data-bs-toggle="modal"
                                             data-bs-target="#input_pasokanLPG">
                                             <i class="fas fa-plus"></i> Buat Laporan
                                         </a>
@@ -201,8 +201,7 @@
                                 <div class="card-header align-items-center px-2">
                                     <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                     <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                        <input type="hidden" class="export-title"
-                                            value="Laporan Harga BBM JBU/Hasil Olahan/Minyak Bumi" />
+                                        <input type="hidden" class="export-title" value="Laporan Pasokan LPG" />
                                     </div>
                                 </div>
                                 <div class="card-body p-2">
