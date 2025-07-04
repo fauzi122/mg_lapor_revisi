@@ -20,7 +20,7 @@
 
     <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
         <div id="kt_app_content_container" class="app-container container-xxl">
-            {{-- Harga BBM JBU/Hasil Olahan/Minyak Bumi --}}
+            {{-- Penjualan LPG --}}
             @if ($statuspenjualan_lpgx != '' and $lpgx == 'penjualan')
                 <div class="row">
                     <div class="col-12">
@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="d-flex justify-content-end gap-2">
-                                            <form action="{{ url('/submit_bulan_harga-bbm-jbu') }}/{{ $id }}"
+                                            <form action="{{ url('/submit_bulan_penjualan_lpg') }}/{{ $id }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
@@ -70,8 +70,7 @@
                                     <div class="card-header align-items-center px-2">
                                         <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                         <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                            <input type="hidden" class="export-title"
-                                                value="Laporan Harga BBM JBU/Hasil Olahan/Minyak Bumi" />
+                                            <input type="hidden" class="export-title" value="Laporan Penjualan LPG" />
                                         </div>
                                     </div>
                                     <div class="card-body p-2">
@@ -129,8 +128,7 @@
                                                                     data-id="{{ $lpg->id }}">
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
-                                                                <form
-                                                                    action="{{ url('/harga-bbm-jbu') }}/{{ $lpg->id }}"
+                                                                <form action="{{ url('/hapus_lpg') }}/{{ $lpg->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -141,7 +139,7 @@
                                                                     </button>
                                                                 </form>
                                                                 <form
-                                                                    action="{{ url('/submit_harga-bbm-jbu') }}/{{ $lpg->id }}"
+                                                                    action="{{ url('/submit_penjualan_lpg') }}/{{ $lpg->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -161,14 +159,14 @@
                                                             @elseif($lpg->status == '2')
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-info editHarga mb-2"
-                                                                    onclick="edit_hargabbmx('{{ $lpg->id }}')"
+                                                                    onclick="edit_harga('{{ $lpg->id }}', '{{ $lpg->produk }}' , '{{ $lpg->kabupaten_kota }}')"
                                                                     id="editharga" data-bs-toggle="modal"
                                                                     data-bs-target="#edit_jualLPG"
                                                                     data-id="{{ $lpg->id }}">
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="{{ url('/submit_harga-bbm-jbu') }}/{{ $lpg->id }}"
+                                                                    action="{{ url('/submit_penjualan_lpg') }}/{{ $lpg->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -204,7 +202,7 @@
                     </div>
                 </div>
             @endif
-            {{-- Harga LPG --}}
+            {{-- Pasokan LPG --}}
             @if ($statuspasok_lpgx != '' and $lpgx == 'pasok')
                 <div class="row">
                     <div class="col-12">
@@ -212,7 +210,7 @@
                             <div class="card-header bg-light p-5">
                                 <div class="row w-100">
                                     <div class="col-lg-6">
-                                        <h5>Harga LPG</h5>
+                                        <h5>Pasokan LPG</h5>
                                         @php
                                             $id = Crypt::encryptString(
                                                 $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2] . ',' . $pecah[3],
@@ -221,7 +219,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="d-flex justify-content-end gap-2">
-                                            <form action="{{ url('/submitbulanHargaLPG') }}/{{ $id }}"
+                                            <form action="{{ url('/submit_bulan_pasokan_lpg') }}/{{ $id }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
@@ -254,7 +252,7 @@
                                     <div class="card-header align-items-center px-2">
                                         <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                         <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                            <input type="hidden" class="export-title" value="Laporan Harga LPG" />
+                                            <input type="hidden" class="export-title" value="Laporan Pasokan LPG" />
                                         </div>
                                     </div>
                                     <div class="card-body p-2">
@@ -308,7 +306,7 @@
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="{{ url('/hapusHargaLPG') }}/{{ $pasokan->id }}"
+                                                                    action="{{ url('/hapus_pasokanLPG') }}/{{ $pasokan->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
@@ -320,7 +318,7 @@
                                                                     </button>
                                                                 </form>
                                                                 <form
-                                                                    action="{{ url('/submitHargaLPG') }}/{{ $pasokan->id }}"
+                                                                    action="{{ url('/submit_pasokan_lpg') }}/{{ $pasokan->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
@@ -334,22 +332,22 @@
                                                             @elseif($pasokan->status == '1')
                                                                 <button type="button" class="btn btn-sm btn-info mb-2"
                                                                     id="" data-bs-toggle="modal"
-                                                                    onclick="lihatHargaLPG('{{ $pasokan->id }}')"
-                                                                    data-bs-target="#lihat-harga-lpg"
+                                                                    onclick="lihatPasokanLPG('{{ $pasokan->id }}' )"
+                                                                    data-bs-target="#lihat-pasokanLPG"
                                                                     data-id="{{ $pasokan->id }}">
                                                                     <i class="ki-solid ki-eye" title="Lihat data"></i>
                                                                 </button>
                                                             @elseif($pasokan->status == '2')
                                                                 <button type="button"
-                                                                    class="btn btn-sm btn-info editHarga mb-2"
-                                                                    onclick="edit_hargaLPG('{{ $pasokan->id }}', '{{ $pasokan->kabupaten_kota }}'); tambahPMB('{{ $bulan_ambil_pasok_lpgx }}');"
-                                                                    id="editharga" data-bs-toggle="modal"
-                                                                    data-bs-target="#editHargaLPG"
+                                                                    class="btn btn-sm btn-info editPasokan mb-2"
+                                                                    onclick="editPasokanLPG('{{ $pasokan->id }}')"
+                                                                    id="editpasokan" data-bs-toggle="modal"
+                                                                    data-bs-target="#edit_pasokanLPG"
                                                                     data-id="{{ $pasokan->id }}">
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
                                                                 <form
-                                                                    action="{{ url('/submitHargaLPG') }}/{{ $pasokan->id }}"
+                                                                    action="{{ url('/submit_pasokan_lpg') }}/{{ $pasokan->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('PUT')
                                                                     @csrf
