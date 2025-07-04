@@ -38,17 +38,17 @@
     <div id="kt_app_content_container" class="app-container container-xxl">
         <div class="card-body p-3">
             <div class="card mb-5 mb-xl-8 shadow">
-                {{-- <div class="card-header bg-light p-5">
+                <div class="card-header bg-light p-5">
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Negara">
-                                    <i class="ki-duotone ki-plus"></i> Input Kintake Kilang
+                                <a href="{{ url('/master/meping/create/jenis-izin/' . $id) }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Jenis Izin">
+                                    <i class="ki-duotone ki-plus"></i> Input Jenis Izin
                                 </a>
                             </div>
                         </div>
                     </div>
-                </div> --}}
+                </div>
                 <div class="card-body p-2">
                     <div class="card">
                         <div class="card-header align-items-center px-2">
@@ -67,6 +67,7 @@
                                     <th class="text-center">Nama Opsi</th>
                                     <th class="text-center">Nama Menu</th>
                                     <th class="text-center">Kategori</th>
+                                    <th class="text-center">Url</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -114,13 +115,15 @@
                                         @endif
                                     </td>
 
+                                    <td>{{ $meping->url }}</td>
+
                                     <td class="text-nowrap" align="center">
-                                        <a href="/master/meping/{{ $meping->id }}/edit">
+                                        <a href="/master/meping/izin/{{ $meping->id }}/edit">
                                             <button type="button" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fa fa-edit"></i>
                                             </button>
                                         </a>
-                                        <form action="/master/meping/{{ $meping->id }}" method="post" class="d-inline">
+                                        <form action="/master/meping/{{ $meping->id }}/destroy" method="post" class="d-inline">
                                             @method('delete')
                                             @csrf
                                             <button class="btn btn-icon btn-sm btn-danger mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus" onclick="return confirm('Yakin ingin menghapus data?')">

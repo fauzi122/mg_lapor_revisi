@@ -4,7 +4,7 @@
         <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
             <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
                 <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
-                    <h3 class="text-dark fw-bold">Laporan Niaga LNG/CNG/BBG</h3>
+                    <h3 class="text-dark fw-bold">LPG</h3>
                 </div>
                 <div class="d-flex align-items-center gap-2 gap-lg-3">
                     <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
@@ -14,14 +14,14 @@
                         <li class="breadcrumb-item">
                             <span class="bullet bg-gray-400 w-5px h-2px"></span>
                         </li>
-                        <li class="breadcrumb-item text-muted">Laporan Niaga LNG/CNG/BBG</li>
+                        <li class="breadcrumb-item text-muted">Laporan LPG</li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    @include('badan_usaha.niaga.lng.modal')
+    @include('badanUsaha.niaga.lpg.modal')
 
     <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
         <div id="kt_app_content_container" class="app-container container-xxl">
@@ -48,17 +48,17 @@
                         <div class="card-header bg-light p-5">
                             <div class="row w-100">
                                 <div class="col-lg-6">
-                                    <h5>Penjualan LNG/CNG/BBG</h5>
+                                    <h5>Penjualan LPG</h5>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="d-flex justify-content-end gap-2">
                                         <a type="button" class="btn btn-sm btn-primary"
                                             onclick="produk(); provinsi(); sektor();" data-bs-toggle="modal"
-                                            data-bs-target="#input_jualLNG">
+                                            data-bs-target="#input_jualLPG">
                                             <i class="fas fa-plus"></i> Buat Laporan
                                         </a>
                                         <a type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#excel_jualLNG">
+                                            data-bs-target="#excel_jualLPG">
                                             <i class="fas fa-upload"></i> Import Excel
                                         </a>
                                     </div>
@@ -70,7 +70,7 @@
                                 <div class="card-header align-items-center px-2">
                                     <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                     <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                        <input type="hidden" class="export-title" value="Laporan Penjualan LNG/CNG/BBG" />
+                                        <input type="hidden" class="export-title" value="Laporan Penjualan LPG" />
                                     </div>
                                 </div>
                                 <div class="card-body p-2">
@@ -85,7 +85,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class="fw-semibold text-gray-600">
-                                            @foreach ($lngpenjualan as $data)
+                                            @foreach ($lpgpenjualan as $data)
                                                 @php
                                                     $id = Crypt::encryptString(
                                                         $data->id_permohonan .
@@ -100,14 +100,15 @@
                                                 <tr>
                                                     <td class="text-center">{{ $loop->iteration }}</td>
                                                     <td>
-                                                        <a href="{{ url('/lng/cng/show') }}/{{ $id }}/penjualan">
+                                                        <a
+                                                            href="{{ url('/niaga/lpg/show') }}/{{ $id }}/penjualan">
                                                             {{ getBulan($data->bulan) }}
                                                             <i class="ki-solid ki-check" title="lihat data laporan"></i>
                                                         </a>
                                                     </td>
                                                     <td>
                                                         <a
-                                                            href="{{ url('/lng/cng/show') }}/{{ $id }}/penjualan/tahun">
+                                                            href="{{ url('/niaga/lpg/show') }}/{{ $id }}/penjualan/tahun">
                                                             {{ getTahun($data->bulan) }}
                                                             <i class="ki-solid ki-check" title="lihat data laporan"></i>
                                                         </a>
@@ -135,7 +136,7 @@
                                                             </button>
                                                         @else
                                                             <form
-                                                                action="{{ url('/hapus_bulan_lng') }}/{{ $id }}"
+                                                                action="{{ url('/hapus_bulan_lpg') }}/{{ $id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -146,7 +147,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="{{ url('/submit_bulan_lng') }}/{{ $id }}"
+                                                                action="{{ url('/submit_bulan_penjualan_lpg') }}/{{ $id }}"
                                                                 method="post" class="d-inline"
                                                                 data-id="{{ $data->bulan }}">
                                                                 @method('PUT')
@@ -157,7 +158,7 @@
                                                                     <i class="ki-solid ki-send" title="Revisi"></i>
                                                                 </button>
                                                             </form>
-                                                            <a href="{{ url('/lng/cng/show') }}/{{ $id }}/penjualan"
+                                                            <a href="{{ url('/niaga/lpg/show') }}/{{ $id }}/penjualan"
                                                                 class="btn btn-icon btn-sm btn-info mb-2">
                                                                 <i class="ki-solid ki-pencil"
                                                                     title="Detail / Edit Data"></i>
@@ -178,17 +179,17 @@
                         <div class="card-header bg-light p-5">
                             <div class="row w-100">
                                 <div class="col-lg-6">
-                                    <h5>Pasokan LNG/CNG/BBG</h5>
+                                    <h5>Pasokan LPG</h5>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="d-flex justify-content-end gap-2">
                                         <a type="button" class="btn btn-sm btn-primary"
                                             onclick="produk(); provinsi(); sektor();" data-bs-toggle="modal"
-                                            data-bs-target="#input_pasokanLNG">
+                                            data-bs-target="#input_pasokanLPG">
                                             <i class="fas fa-plus"></i> Buat Laporan
                                         </a>
                                         <a type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#excel_pasokanLNG">
+                                            data-bs-target="#excel_pasokanLPG">
                                             <i class="fas fa-upload"></i> Import Excel
                                         </a>
                                     </div>
@@ -200,7 +201,7 @@
                                 <div class="card-header align-items-center px-2">
                                     <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                     <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                        <input type="hidden" class="export-title" value="Laporan Pasokan LNG/CNG/BBG" />
+                                        <input type="hidden" class="export-title" value="Laporan Pasokan LPG" />
                                     </div>
                                 </div>
                                 <div class="card-body p-2">
@@ -215,7 +216,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class="fw-semibold text-gray-600">
-                                            @foreach ($pasoklng as $data)
+                                            @foreach ($lpgasok as $data)
                                                 @php
                                                     $id = Crypt::encryptString(
                                                         $data->id_permohonan .
@@ -230,14 +231,14 @@
                                                 <tr>
                                                     <td class="text-center">{{ $loop->iteration }}</td>
                                                     <td>
-                                                        <a href="{{ url('/lng/cng/show') }}/{{ $id }}/pasok">
+                                                        <a href="{{ url('/niaga/lpg/show') }}/{{ $id }}/pasok">
                                                             {{ getBUlan($data->bulan) }}
                                                             <i class="ki-solid ki-check" title="lihat data laporan"></i>
                                                         </a>
                                                     </td>
                                                     <td>
                                                         <a
-                                                            href="{{ url('/lng/cng/show') }}/{{ $id }}/pasok/tahun">
+                                                            href="{{ url('/niaga/lpg/show') }}/{{ $id }}/pasok/tahun">
                                                             {{ getTahun($data->bulan) }}
                                                             <i class="ki-solid ki-check" title="lihat data laporan"></i>
                                                         </a>
@@ -265,7 +266,7 @@
                                                             </button>
                                                         @else
                                                             <form
-                                                                action="{{ url('/hapus_bulan_pasok_lng') }}/{{ $id }}"
+                                                                action="{{ url('/hapus_bulan_pasokanLPG') }}/{{ $id }}"
                                                                 method="post" class="d-inline">
                                                                 @method('delete')
                                                                 @csrf
@@ -276,7 +277,7 @@
                                                                 </button>
                                                             </form>
                                                             <form
-                                                                action="{{ url('/submit_bulan_pasok_lng') }}/{{ $id }}"
+                                                                action="{{ url('/submit_bulan_pasokan_lpg') }}/{{ $id }}"
                                                                 method="post" class="d-inline" {{-- data-id="{{ $data->bulan_peb }}"> --}}
                                                                 data-id="{{ $data->bulan }}">
                                                                 @method('PUT')
@@ -287,7 +288,7 @@
                                                                     <i class="ki-solid ki-send" title="Revisi"></i>
                                                                 </button>
                                                             </form>
-                                                            <a href="{{ url('/lng/cng/show') }}/{{ $id }}/pasok"
+                                                            <a href="{{ url('/niaga/lpg/show') }}/{{ $id }}/pasok"
                                                                 class="btn btn-icon btn-sm btn-info mb-2">
                                                                 <i class="ki-solid ki-pencil"
                                                                     title="Detail / Edit Data"></i>
