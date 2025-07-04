@@ -31,17 +31,17 @@
     <div id="kt_app_content_container" class="app-container container-xxl">
         <div class="card-body p-3">
             <div class="card mb-5 mb-xl-8 shadow">
-                {{-- <div class="card-header bg-light p-5">
+                <div class="card-header bg-light p-5">
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Data Izin">
+                                <a href="/master/meping/create" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Data Izin">
                                     <i class="ki-duotone ki-plus"></i> Input Data Izin
                                 </a>
                             </div>
                         </div>
                     </div>
-                </div> --}}
+                </div>
                 <div class="card-body p-2">
                     <div class="card">
                         <div class="card-header align-items-center px-2">
@@ -68,9 +68,23 @@
                                     <td class="text-nowrap" align="center">
                                         <a href="/master/meping/{{ $izin->izin }}/show">
                                             <button type="button" class="btn btn-info waves-effect waves-light" title="show jenis izin" data-bs-toggle="tooltip" data-bs-placement="top" title="Jenis Izin">
-                                                Jenis Izin
+                                                <i class="bi bi-file-earmark-text fs-4"></i>Jenis Izin
                                             </button>
                                         </a>
+                                        <a href="/master/meping/edit/{{ $izin->id }}">
+                                            <button type="button" class="btn btn-warning waves-effect waves-light" title="edit" data-bs-toggle="tooltip" data-bs-placement="top" title="edit">
+                                                <i class="fa fa-edit"></i>Edit
+                                            </button>
+                                        </a>
+                                        <form action="/master/meping/destroy_izin/{{ $izin->id }}" method="post"
+                                            class="d-inline">
+                                            @method('delete')
+                                            @csrf
+                                            <button class="btn btn-danger waves-effect waves-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus"
+                                                onclick="return confirm('Yakin ingin menghapus data?')">
+                                                <i class="bi bi-trash3-fill"></i></i>Hapus
+                                            </button>
+                                        </form>
                                         {{-- <a href="/master/meping/{{ $izin->izin }}/show">
                                             <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Menu Izin">
                                                 Menu Izin
