@@ -50,25 +50,39 @@ class PengangkutanmgController extends Controller
     }
     public function index_pgb($id)
     {
-        // $pm = pengangkutan_gaskbumi::where('badan_usaha_id', Auth::user()->badan_usaha_id)
+        // $pm = pengangkutan_gaskbumi::where('npwp', Auth::user()->npwp)
         //     ->groupBy('bulan')->get();
 
         $pecah = explode(',', Crypt::decryptString($id));
 
-        $pm = DB::table('pengangkutan_gaskbumis')
-            ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-            ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-            ->where('izin_id', $pecah[0])
-            ->groupBy('bulan')
-            ->get();
+        $query = DB::table('pengangkutan_gaskbumis')
+            ->select(
+                '*',
+                DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+                DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+                DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+            )
+            ->where('npwp', Auth::user()->npwp)
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2]);
 
-        return view('badan_usaha.pengangkutan.gas_bumi.index', compact('pm', 'pecah'));
+        $pm = DB::table(DB::raw("({$query->toSql()}) as sub"))
+            ->mergeBindings($query)
+            ->where('rn', 1)
+            ->get();
+        
+        $sub_page = Meping::select('nama_opsi')
+        ->where('id_sub_page', $pecah[2])
+        ->where('id_template', $pecah[4])
+        ->first();
+
+        return view('badan_usaha.pengangkutan.gas_bumi.index', compact('pm', 'pecah', 'sub_page'));
     }
 
     public function show_pengmbx($id, $filter = null)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-        // dd($pecah);
+
         $npwp = Auth::user()->npwp;
         // Mengambil bulan dari tabel pengangkutan_minyakbumis sesuai ID badan usaha dan bulan yang ditemukan
         $bulan_ambil = DB::table('pengangkutan_minyakbumis')
@@ -84,11 +98,11 @@ class PengangkutanmgController extends Controller
         $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
         $statusx = $bulan_ambil->status;
 
-       if ($filter && $filter === "tahun") {
+        if (count($pecah) == 5) {
             $filterBy = substr($pecah[3], 0, 4);
-          } else {
-            $filterBy = $pecah[3];
-          }
+        } else {
+        $filterBy = $pecah[3];
+        }
 
         $pgb = pengangkutan_minyakbumi::where([
             ['bulan', 'like', "%". $filterBy ."%"],
@@ -213,7 +227,7 @@ class PengangkutanmgController extends Controller
     public function get_pengmb($id)
     {
         $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
-        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
+        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name, provinces.id");
         $data['find'] = pengangkutan_minyakbumi::find($id);
         return response()->json(['data' => $data]);
     }
@@ -222,7 +236,7 @@ class PengangkutanmgController extends Controller
     {
         $pmb = $id;
         $pesan = [
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
             'produk.required' => 'produk masih kosong',
             'jenis_moda.required' => 'jenis moda masih kosong',
             'node_asal.required' => 'node asal masih kosong',
@@ -237,7 +251,7 @@ class PengangkutanmgController extends Controller
         ];
 
         $rules = [
-            'badan_usaha_id' => 'required',
+            'npwp' => 'required',
             'produk' => 'required',
             'jenis_moda' => 'required',
             'node_asal' => 'required',
@@ -269,12 +283,15 @@ class PengangkutanmgController extends Controller
 
     public function importPengangkutanMB(Request $request)
     {
-        $izin_id = $request->izin_id;
+        $id_permohonan = $request->id_permohonan;
+        $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
+        $npwp = Auth::user()->npwp;
 
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
         $cekdb = DB::table('pengangkutan_minyakbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->where('bulan', $bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -288,7 +305,7 @@ class PengangkutanmgController extends Controller
             }
         }
 
-        $import = Excel::import(new ImportPengangkutanMB($bulan,$izin_id), request()->file('file'));
+        $import = Excel::import(new ImportPengangkutanMB($bulan,$id_permohonan, $id_sub_page), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses
@@ -304,12 +321,13 @@ class PengangkutanmgController extends Controller
     public function show_pgbx($id)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
         // Mengambil bulan dari tabel pengangkutan_minyakbumis sesuai ID badan usaha dan bulan yang ditemukan
         $bulan_ambil = DB::table('pengangkutan_gaskbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('bulan', $pecah[0])
-            ->where('izin_id', $pecah[2])
+            ->where('npwp', $npwp)
+            ->where('bulan', $pecah[3])
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
@@ -317,16 +335,17 @@ class PengangkutanmgController extends Controller
         $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
         $statusx = $bulan_ambil->status;
 
-        if (count($pecah) == 4) {
-            $filterBy = substr($pecah[0], 0, 4);
+        if (count($pecah) == 5) {
+            $filterBy = substr($pecah[3], 0, 4);
         } else {
-        $filterBy = $pecah[0];
+        $filterBy = $pecah[3];
         }
 
         $pgb = pengangkutan_gaskbumi::where([
             ['bulan', 'like', "%". $filterBy ."%"],
-            'badan_usaha_id' => $pecah[1],
-            'izin_id' => $pecah[2]
+            'npwp' => $pecah[1],
+            'id_permohonan' => $pecah[0],
+            'id_sub_page' => $pecah[2],
         ])->orderBy('status', 'desc')->get();
 
         return view('badan_usaha.pengangkutan.gas_bumi.show', compact(
@@ -344,8 +363,9 @@ class PengangkutanmgController extends Controller
             'bulan' => $request->bulan . '-01',
         ]);
         $pesan = [
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-            'izin_id.required' => 'izin_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
+            'id_permohonan.required' => 'id_permohonan masih kosong',
+            'id_sub_page.required' => 'id_sub_page masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
             'node_asal.required' => 'node asal masih kosong',
@@ -359,8 +379,9 @@ class PengangkutanmgController extends Controller
         ];
 
         $validatedData = $request->validate([
-            'badan_usaha_id' => 'required',
-            'izin_id' => 'required',
+            'npwp' => 'required',
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
             'bulan' => 'required',
             'produk' => 'required',
             'node_asal' => 'required',
@@ -374,10 +395,12 @@ class PengangkutanmgController extends Controller
 
         ], $pesan);
 
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('pengangkutan_gaskbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $request->id_permohonan)
+            ->where('id_sub_page', $request->id_sub_page)
             ->where('bulan', $request->bulan)
             // ->where('bulan', '2023-09-01')
             ->orderBy('status', 'desc')
@@ -441,7 +464,7 @@ class PengangkutanmgController extends Controller
     public function get_pgb($id)
     {
         $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
-        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
+        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name, provinces.id");
         $data['find'] = pengangkutan_gaskbumi::find($id);
         return response()->json(['data' => $data]);
     }
@@ -450,28 +473,28 @@ class PengangkutanmgController extends Controller
     {
         $pmb = $id;
         $pesan = [
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
             'produk.required' => 'produk masih kosong',
             'node_asal.required' => 'node asal masih kosong',
             'provinsi_asal.required' => 'provinsi asal masih kosong',
             'node_tujuan.required' => 'node tujuan masih kosong',
             'provinsi_tujuan.required' => 'provinsi tujuan masih kosong',
             'volume_supply.required' => 'volume supply masih kosong',
-            'satuan_volume_supply.required' => 'satuan volume_supply masih kosong',
-            'volume_angkut.required' => 'volume angkut masih kosong',
+            // 'satuan_volume_supply.required' => 'satuan volume_supply masih kosong',
+            // 'volume_angkut.required' => 'volume angkut masih kosong',
             'satuan_volume_angkut.required' => 'satuan volume angkut masih kosong',
             'status.required' => 'status masih kosong',
         ];
 
         $rules = [
-            'badan_usaha_id' => 'required',
+            'npwp' => 'required',
             'produk' => 'required',
             'node_asal' => 'required',
             'provinsi_asal' => 'required',
             'node_tujuan' => 'required',
             'provinsi_tujuan' => 'required',
-            'volume_supply' => 'required',
-            'satuan_volume_supply' => 'required',
+            // 'volume_supply' => 'required',
+            // 'satuan_volume_supply' => 'required',
             'volume_angkut' => 'required',
             'satuan_volume_angkut' => 'required',
             'status' => 'required',
@@ -495,12 +518,15 @@ class PengangkutanmgController extends Controller
 
     public function importPengangkutanGB(Request $request)
     {
-        $izin_id = $request->izin_id;
+        $id_permohonan = $request->id_permohonan;
+        $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
 
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
         $cekdb = DB::table('pengangkutan_gaskbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->where('bulan', $bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -514,7 +540,7 @@ class PengangkutanmgController extends Controller
             }
         }
 
-        $import = Excel::import(new ImportPengangkutanGB($bulan,$izin_id), request()->file('file'));
+        $import = Excel::import(new ImportPengangkutanGB($bulan,$id_permohonan, $id_sub_page), request()->file('file'));
 
         if ($import) {
             //redirect dengan pesan sukses
@@ -532,14 +558,16 @@ class PengangkutanmgController extends Controller
         // dd($bulan);
         // die;
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
             
         $validatedData = DB::table('pengangkutan_minyakbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan', $bulanx)
-            ->where('izin_id', $izin_id)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->delete();
         // pengangkutan_minyakbumi::destroy($bulan);
         if ($validatedData) {
@@ -555,28 +583,30 @@ class PengangkutanmgController extends Controller
 
     public function submit_bulan_pengmbx(Request $request, $id)
     {
-      $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[0];
-      $badan_usaha_id = $pecah[1];
-      $izin_id = $pecah[2];
-      $now = Carbon::now();
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
+        $now = Carbon::now();
   
-      // Menggunakan parameter binding untuk keamanan
-      $validatedData = DB::table('pengangkutan_minyakbumis')
-          ->where('bulan', $bulanx)
-          ->where('badan_usaha_id', $badan_usaha_id)
-          ->where('izin_id', $izin_id)
-          ->update(['status' => '1', 'tgl_kirim' => $now]);
+        // Menggunakan parameter binding untuk keamanan
+        $validatedData = DB::table('pengangkutan_minyakbumis')
+            ->where('bulan', $bulanx)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
+            ->update(['status' => '1', 'tgl_kirim' => $now]);
 
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('Success', 'Data berhasil dikirim');
-            return back();
-        } else {
-            //redirect dengan pesan error
-            Alert::error('Error', 'Data gagal dikirim');
-            return back();
-        }
+            if ($validatedData) {
+                //redirect dengan pesan sukses
+                Alert::success('Success', 'Data berhasil dikirim');
+                return back();
+            } else {
+                //redirect dengan pesan error
+                Alert::error('Error', 'Data gagal dikirim');
+                return back();
+            }
     }
 
     public function hapus_bulan_pgbx(Request $request, $id)
@@ -584,14 +614,16 @@ class PengangkutanmgController extends Controller
         // dd($bulan);
         // die;
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
             
         $validatedData = DB::table('pengangkutan_gaskbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
             ->where('bulan', $bulanx)
-            ->where('izin_id', $izin_id)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->delete();
         // pengangkutan_minyakbumi::destroy($bulan);
         if ($validatedData) {
@@ -607,18 +639,20 @@ class PengangkutanmgController extends Controller
 
     public function submit_bulan_pgbx(Request $request, $id)
     {
-      $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[0];
-      $badan_usaha_id = $pecah[1];
-      $izin_id = $pecah[2];
-      $now = Carbon::now();
-  
-      // Menggunakan parameter binding untuk keamanan
-      $validatedData = DB::table('pengangkutan_gaskbumis')
-          ->where('bulan', $bulanx)
-          ->where('badan_usaha_id', $badan_usaha_id)
-          ->where('izin_id', $izin_id)
-          ->update(['status' => '1', 'tgl_kirim' => $now]);
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
+        $now = Carbon::now();
+    
+        // Menggunakan parameter binding untuk keamanan
+        $validatedData = DB::table('pengangkutan_gaskbumis')
+        ->where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->update(['status' => '1', 'tgl_kirim' => $now]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
