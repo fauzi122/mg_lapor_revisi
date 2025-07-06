@@ -84,7 +84,7 @@ class PengangkutanmgController extends Controller
         $pecah = explode(',', Crypt::decryptString($id));
 
         $npwp = Auth::user()->npwp;
-        // Mengambil bulan dari tabel pengangkutan_minyakbumis sesuai ID badan usaha dan bulan yang ditemukan
+    
         $bulan_ambil = DB::table('pengangkutan_minyakbumis')
             ->where('npwp', $npwp)
             ->orderBy('status', 'desc')
@@ -195,6 +195,7 @@ class PengangkutanmgController extends Controller
 
     public function hapus_pengmbx(Request $request, $id)
     {
+        // dd($id);
         pengangkutan_minyakbumi::destroy($id);
         if ($id) {
             //redirect dengan pesan sukses
@@ -569,7 +570,7 @@ class PengangkutanmgController extends Controller
             ->where('id_permohonan', $id_permohonan)
             ->where('id_sub_page', $id_sub_page)
             ->delete();
-        // pengangkutan_minyakbumi::destroy($bulan);
+       
         if ($validatedData) {
             //redirect dengan pesan sukses
             Alert::success('Success', 'Data berhasil dihapus');
@@ -583,15 +584,17 @@ class PengangkutanmgController extends Controller
 
     public function submit_bulan_pengmbx(Request $request, $id)
     {
-        $pecah = explode(',', Crypt::decryptString($id));
+
         $bulanx = $pecah[3];
         $npwp = $pecah[1];
         $id_permohonan = $pecah[0];
         $id_sub_page = $pecah[2];
         $now = Carbon::now();
-  
+
+
+      // Menggunakan parameter binding untuk keamanan
+      $validatedData = DB::table('pengangkutan_minyakbumis')
         // Menggunakan parameter binding untuk keamanan
-        $validatedData = DB::table('pengangkutan_minyakbumis')
             ->where('bulan', $bulanx)
             ->where('npwp', $npwp)
             ->where('id_permohonan', $id_permohonan)
