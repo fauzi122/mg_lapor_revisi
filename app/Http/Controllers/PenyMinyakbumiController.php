@@ -54,26 +54,39 @@ class PenyMinyakbumiController extends Controller
         // $pm = Penygasbumi::where('badan_usaha_id', Auth::user()->badan_usaha_id)
         //     ->groupBy('bulan')->get();
 
-        $pm = DB::table('penygasbumis')
-            ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-            ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-            ->where('izin_id', $pecah[0])
-            ->groupBy('bulan')
+        $query = DB::table('penygasbumis')
+            ->select(
+                '*',
+                DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+                DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+                DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+            )
+            ->where('npwp', Auth::user()->npwp)
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2]);
+
+        $pm = DB::table(DB::raw("({$query->toSql()}) as sub"))
+            ->mergeBindings($query)
+            ->where('rn', 1)
             ->get();
 
+        $sub_page = Meping::select('nama_opsi')
+        ->where('id_sub_page', $pecah[2])
+        ->where('id_template', $pecah[4])
+        ->first();
+
         // return view('badan_usaha.penyimpanan.gas_bumi.index', compact('pm','pecah'));
-        return view('badanUsaha.penyimpanan.gas_bumi.index', compact('pm','pecah'));
+        return view('badanUsaha.penyimpanan.gas_bumi.index', compact('pm','pecah', 'sub_page'));
     }
     public function show_pmbx($id, $filter = null)
     {
         $pecah = explode(',', Crypt::decryptString($id));
-    // dd($pecah);
+        // dd($pecah);
         $pggb = Penyminyakbumi::get();
         $npwp = Auth::user()->npwp;
         // Mengambil bulan dari tabel penyminyakbumis sesuai ID badan usaha dan bulan yang ditemukan
         $bulan_ambil = DB::table('penyminyakbumis')
             ->where('npwp', $npwp)
-            ->orderBy('status', 'desc')
             ->where('bulan', $pecah[3])
             ->where('id_permohonan', $pecah[0])
             ->where('id_sub_page', $pecah[2])

@@ -1,29 +1,32 @@
-<!-- input simpan_pengangkutan -->
+<!-- input simpan_PGB -->
 <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Pengangkutan Minyak Bumi</h5>
+                <h5 class="modal-title" id="myModalLabel">Pengangkutan Gas Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('simpan_pengmb') }}" class="form-material m-t-40"
+            <form method="post" action="{{ url('/simpan_pgb') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
-                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
-                        <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
-                        @error('npwp')
+
+                        <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
+                            value="{{ Auth::user()->badan_usaha_id }}">
+
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                            value="{{ $pecah[0] }}">
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
-
-                    <div class="mb-6">
-                        <label class="form-label">Bulan </label>
-                        <input class="form-control flatpickr" id="bulanx" name="bulan" required>
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Bulan</label>
+                        <input class="form-control" type="month" id="bulanx" name="bulan"
+                            value="{{ old('bulan') }}">
                         @error('bulan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -32,7 +35,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Produk</label>
-                        <select class="form-select produk name_produk" name="produk" id="name_produk">
+                        <select class="form-select produk name_produk" name="produk" id="produk_pggb">
                             <option>Pilih Produk</option>
                         </select>
                         @error('produk')
@@ -42,50 +45,15 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Jenis Moda</label>
-                        <div class="col-lg-12 d-flex flex-wrap gap-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="darat" name="jenis_moda[]"
-                                    value="Darat">
-                                <label class="form-check-label" for="darat">
-                                    Darat
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="laut" name="jenis_moda[]"
-                                    value="Laut">
-                                <label class="form-check-label" for="laut">
-                                    Laut
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="sungai_danau" name="jenis_moda[]"
-                                    value="Sungai/Danau">
-                                <label class="form-check-label" for="sungai_danau">
-                                    Sungai/Danau
-                                </label>
-                            </div>
-                        </div>
-
-
-                        {{-- <input class="form-control" type="text" id="" name="jenis_moda"
-                            value="{{ old('jenis_moda') }}"> --}}
-                        @error('jenis_moda')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
                         <label for="example-text-input" class="form-label">Node Asal</label>
-                        <input class="form-control" type="text" id="" name="node_asal"
-                            value="{{ old('node_asal') }}">
-                        @error('node_asal')
+                        <input class="form-control" type="text" id="example-text-input" name="node_asal">
+                        @error('kab_kota')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi Asal</label>
                         <select class="form-select provinsi name_provinsi" name="provinsi_asal" id="name_provinsi">
@@ -100,14 +68,13 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Node Tujuan</label>
-                        <input class="form-control" type="text" id="" name="node_tujuan">
+                        <input class="form-control" type="text" id="example-text-input" name="node_tujuan">
                         @error('node_tujuan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
-
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi Tujuan</label>
                         <select class="form-select provinsi name_provinsi" name="provinsi_tujuan" id="name_provinsi">
@@ -120,42 +87,41 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="number" id="" name="volume_supply">
-                        @error('volume_supply')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Satuan Volume Supply</label>
-                        {{-- <input class="form-control" type="text" id="" name="satuan_volume_supply"> --}}
-                        <select class="form-select satuan" name="satuan_volume_supply" id="">
-                            <option>Pilih Satuan</option>
-                        </select>
-                        @error('satuan_volume_supply')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
+                    {{-- <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Volume Supply</label>
+                    <input class="form-control" type="number" id="" name="volume_supply" step=".01">
+                    @error('volume_supply')
+                        <div class="form-group has-danger mb-0">
+                            <div class="form-control-feedback">{{ $message }}</div>
+                        </div>
+                    @enderror
+                </div> --}}
+
+                    {{-- <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Satuan Volume Supply</label>
+                    <input class="form-control" type="text" id="" name="satuan_volume_supply">
+                    <select class="form-select satuan" name="satuan_volume_supply" id="">
+                        <option>Pilih Satuan</option>
+                    </select>
+                    @error('satuan_volume_supply')
+                        <div class="form-group has-danger mb-0">
+                            <div class="form-control-feedback">{{ $message }}</div>
+                        </div>
+                    @enderror
+                </div> --}}
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Angkut</label>
-                        <input class="form-control" type="number" id="" name="volume_angkut">
+                        <input class="form-control" type="number" id="" name="volume_angkut" step="0.01">
                         @error('volume_angkut')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
-
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Satuan Volume Angkut</label>
-                        {{-- <input class="form-control" type="text" id="example-text-input"
-                            name="satuan_volume_angkut"> --}}
+                        {{-- <input class="form-control" type="text" id="" name="satuan_volume_angkut"> --}}
                         <select class="form-select satuan" name="satuan_volume_angkut" id="">
                             <option>Pilih Satuan</option>
                         </select>
@@ -179,35 +145,37 @@
 </div><!-- /.modal -->
 
 
-<!-- edit simpan_pengangkutan -->
-<div id="edit-pengmb" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+<!-- edit simpan_pgb -->
+<div id="modal-edit-pgb" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
     data-bs-scroll="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Edit Pengangkutan Minyak Bumi</h5>
+                <h5 class="modal-title" id="myModalLabel">Edit Pengangkutan Gas Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pengmb" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_pengmb">
+            <form method="post" action="{{ url('/update_pgb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_pgb">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
 
-                        <input class="form-control" type="hidden" id="example-text-input" name="npwp"
-                            value="{{ Auth::user()->npwp }}">
-                        <input class="form-control" type="hidden" id="example-text-input" name="id_permohonan">
-                        @error('npwp')
+                        <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
+                            value="{{ Auth::user()->badan_usaha_id }}">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                            value="1">
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
 
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Bulan</label>
-                        <input class="form-control flatpickr" id="bulan_pengmb" name="bulan"
+                        <input class="form-control" type="month" id="bulan_gb" name="bulan"
                             value="{{ old('bulan') }}" readonly>
                         @error('bulan')
                             <div class="form-group has-danger mb-0">
@@ -215,9 +183,10 @@
                             </div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Produk</label>
-                        <select class="form-select produk name_produk" name="produk" id="produk_pengmb">
+                        <select class="form-select produk name_produk" name="produk" id="produk_pgb">
                             <option>Pilih Produk</option>
                         </select>
                         @error('produk')
@@ -227,51 +196,25 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Jenis Moda</label>
-                        <div class="col-lg-12 d-flex flex-wrap gap-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="edit-darat" name="jenis_moda[]"
-                                    value="Darat">
-                                <label class="form-check-label" for="edit-darat">
-                                    Darat
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="edit-laut" name="jenis_moda[]"
-                                    value="Laut">
-                                <label class="form-check-label" for="edit-laut">
-                                    Laut
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="edit-sungai-danau"
-                                    name="jenis_moda[]" value="Sungai/Danau">
-                                <label class="form-check-label" for="edit-sungai-danau">
-                                    Sungai/Danau
-                                </label>
-                            </div>
-                        </div>
-
-                        {{-- <input class="form-control" type="text" id="jenis_moda_pengmb" name="jenis_moda"> --}}
-                        @error('jenis_moda')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
                         <label for="example-text-input" class="form-label">Node Asal</label>
-                        <input class="form-control" type="text" id="node_asal_pengmb" name="node_asal">
-                        @error('node_asal')
+                        <input class="form-control" type="text" id="node_asal_pgb" name="node_asal">
+                        <input class="form-control" type="hidden" id="example-text-input" name="status"
+                            value="0">
+                        <input class="form-control" type="hidden" id="example-text-input" name="catatan"
+                            value="-">
+                        <input class="form-control" type="hidden" id="example-text-input" name="petugas"
+                            value="jjp">
+                        @error('kab_kota')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi Asal</label>
                         <select class="form-select provinsi name_provinsi" name="provinsi_asal"
-                            id="provinsi_asal_pengmb">
+                            id="provinsi_asal_pgb">
                             <option>Pilih Provinsi</option>
                         </select>
                         @error('provinsi_asal')
@@ -283,24 +226,17 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Node Tujuan</label>
-                        <input class="form-control" type="text" id="node_tujuan_pengmb" name="node_tujuan">
-                        <input class="form-control" type="hidden" id="example-text-input" name="status"
-                            value="0">
-                        <input class="form-control" type="hidden" id="example-text-input" name="catatan"
-                            value="-">
-                        <input class="form-control" type="hidden" id="example-text-input" name="petugas"
-                            value="jjp">
+                        <input class="form-control" type="text" id="node_tujuan_pgb" name="node_tujuan">
                         @error('node_tujuan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
-
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi Tujuan</label>
                         <select class="form-select provinsi name_provinsi" name="provinsi_tujuan"
-                            id="provinsi_tujuan_pengmb">
+                            id="provinsi_tujuan_pgb">
                             <option>Pilih Provinsi</option>
                         </select>
                         @error('provinsi_tujuan')
@@ -310,46 +246,43 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="text" id="volume_supply_pengmb" name="volume_supply">
-                        @error('volume_supply')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Satuan Volume Supply</label>
-                        {{-- <input class="form-control" type="text" id="satuan_volume_supply_pengmb"
-                            name="satuan_volume_supply"> --}}
-                        <select class="form-select satuan" name="satuan_volume_supply"
-                            id="satuan_volume_supply_pengmb">
-                            <option>Pilih Satuan</option>
-                        </select>
-                        @error('satuan_volume_supply')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
+                    {{-- <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Volume Supply</label>
+                    <input class="form-control" type="text" id="volume_supply_pgb" name="volume_supply">
+                    @error('volume_supply')
+                        <div class="form-group has-danger mb-0">
+                            <div class="form-control-feedback">{{ $message }}</div>
+                        </div>
+                    @enderror
+                </div> --}}
+
+                    {{-- <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Satuan Volume Supply</label>
+                    <input class="form-control" type="text" id="satuan_volume_supply_pgb" name="satuan_volume_supply">
+                    <select class="form-select satuan" name="satuan_volume_supply" id="satuan_volume_supply_pgb">
+                        <option>Pilih Satuan</option>
+                    </select>
+                    @error('satuan_volume_supply')
+                        <div class="form-group has-danger mb-0">
+                            <div class="form-control-feedback">{{ $message }}</div>
+                        </div>
+                    @enderror
+                </div> --}}
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Angkut</label>
-                        <input class="form-control" type="text" id="volume_angkut_pengmb" name="volume_angkut">
+                        <input class="form-control" type="number" id="volume_angkut_pgb" name="volume_angkut"
+                            step="0.01">
                         @error('volume_angkut')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
-
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Satuan Volume Angkut</label>
-                        {{-- <input class="form-control" type="text" id="satuan_volume_angkut_pengmb"
-                            name="satuan_volume_angkut"> --}}
-                        <select class="form-select satuan" name="satuan_volume_supply"
-                            id="satuan_volume_angkut_pengmb">
+                        {{-- <input class="form-control" type="text" id="satuan_volume_angkut_pgb" name="satuan_volume_angkut"> --}}
+                        <select class="form-select satuan" name="satuan_volume_angkut" id="satuan_volume_angkut_pgb">
                             <option>Pilih Satuan</option>
                         </select>
                         @error('satuan_volume_angkut')
@@ -358,8 +291,6 @@
                             </div>
                         @enderror
                     </div>
-
-
 
                 </div>
                 <div class="modal-footer">
@@ -374,26 +305,27 @@
 </div><!-- /.modal -->
 
 
-<!-- lihat pgb -->
-<div id="lihat-pengmb" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+<!-- lihat simpan_pgb -->
+<div id="lihat-pgb" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
     data-bs-scroll="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Lihat Pengangkutan Minyak Bumi</h5>
+                <h5 class="modal-title" id="myModalLabel">Lihat Pengangkutan Gas Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pmb" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_pmb">
-                @method('PUT')
+            <form method="post" action="{{ url('/simpan_pggb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
 
-                        <input class="form-control" type="hidden" id="example-text-input" name="npwp"
-                            value="{{ Auth::user()->npwp }}">
-                        <input class="form-control" type="hidden" id="example-text-input" name="id_permohonan">
-                        @error('npwp')
+                        <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
+                            value="{{ Auth::user()->badan_usaha_id }}">
+
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
+                            value="1">
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -402,12 +334,13 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Bulan</label>
-                        <input class="form-control flatpickr" id="lihat_bulan_pengmb" name="bulan" value=""
-                            readonly>
+                        <input class="form-control" type="month" id="lihat_bulan_gb" name="bulan"
+                            value="" readonly>
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Produk</label>
-                        <input class="form-control" type="text" id="lihat_produk_pengmb" name="produk" readonly>
+                        <input class="form-control" type="text" id="lihat_produk_pgb" name="produk" readonly>
                         @error('produk')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -415,50 +348,20 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Jenis Moda</label>
-                        <div class="col-lg-12 d-flex flex-wrap gap-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="lihat-darat" disabled>
-                                <label class="form-check-label" for="lihat-darat">
-                                    Darat
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="lihat-laut" disabled>
-                                <label class="form-check-label" for="lihat-laut">
-                                    Laut
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="lihat-sungai-danau" disabled>
-                                <label class="form-check-label" for="lihat-sungai-danau">
-                                    Sungai/Danau
-                                </label>
-                            </div>
-                        </div>
-
-                        {{-- <input class="form-control" type="text" id="lihat_jenis_moda_pengmb" name="jenis_moda"
-                            readonly> --}}
-                        @error('jenis_moda')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
                         <label for="example-text-input" class="form-label">Node Asal</label>
-                        <input class="form-control" type="text" id="lihat_node_asal_pengmb" name="node_asal"
+                        <input class="form-control" type="text" id="lihat_node_asal_pgb" name="node_asal"
                             readonly>
-                        @error('node_asal')
+                        @error('kab_kota')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi Asal</label>
-                        <input class="form-control" type="text" id="lihat_provinsi_asal_pengmb"
-                            name="provinsi_asal" readonly>
+                        <input class="form-control" type="text" id="lihat_provinsi_asal_pgb" name="provinsi_asal"
+                            readonly>
                         @error('provinsi_asal')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -468,24 +371,17 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Node Tujuan</label>
-                        <input class="form-control" type="text" id="lihat_node_tujuan_pengmb" name="node_tujuan"
+                        <input class="form-control" type="text" id="lihat_node_tujuan_pgb" name="node_tujuan"
                             readonly>
-                        <input class="form-control" type="hidden" id="example-text-input" name="status"
-                            value="0">
-                        <input class="form-control" type="hidden" id="example-text-input" name="catatan"
-                            value="-">
-                        <input class="form-control" type="hidden" id="example-text-input" name="petugas"
-                            value="jjp">
                         @error('node_tujuan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
-
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi Tujuan</label>
-                        <input class="form-control" type="text" id="lihat_provinsi_tujuan_pengmb"
+                        <input class="form-control" type="text" id="lihat_provinsi_tujuan_pgb"
                             name="provinsi_tujuan" readonly>
                         @error('provinsi_tujuan')
                             <div class="form-group has-danger mb-0">
@@ -496,17 +392,18 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Supply</label>
-                        <input class="form-control" type="text" id="lihat_volume_supply_pengmb"
-                            name="volume_supply" readonly>
+                        <input class="form-control" type="text" id="lihat_volume_supply_pgb" name="volume_supply"
+                            readonly>
                         @error('volume_supply')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Satuan Volume Supply</label>
-                        <input class="form-control" type="text" id="lihat_satuan_volume_supply_pengmb"
+                        <input class="form-control" type="text" id="lihat_satuan_volume_supply_pgb"
                             name="satuan_volume_supply" readonly>
                         @error('satuan_volume_supply')
                             <div class="form-group has-danger mb-0">
@@ -517,18 +414,17 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume Angkut</label>
-                        <input class="form-control" type="text" id="lihat_volume_angkut_pengmb"
-                            name="volume_angkut" readonly>
+                        <input class="form-control" type="text" id="lihat_volume_angkut_pgb" name="volume_angkut"
+                            readonly>
                         @error('volume_angkut')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
                         @enderror
                     </div>
-
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Satuan Volume Angkut</label>
-                        <input class="form-control" type="text" id="lihat_satuan_volume_angkut_pengmb"
+                        <input class="form-control" type="text" id="lihat_satuan_volume_angkut_pgb"
                             name="satuan_volume_angkut" readonly>
                         @error('satuan_volume_angkut')
                             <div class="form-group has-danger mb-0">
@@ -549,29 +445,29 @@
 </div><!-- /.modal -->
 
 
-<!-- import Pengangkutan Minyak Bumi -->
-<div id="excelPengangkutanMB" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+<!-- import Pengangkutan Gas Bumi -->
+<div id="excelPengangkutanGB" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
     data-bs-scroll="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Import Laporan Pengangkutan Minyak Bumi</h5>
+                <h5 class="modal-title" id="myModalLabel">Import Laporan Pengangkutan Gas Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importPengangkutanMB" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importPengangkutanGB') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <input class="form-control" type="hidden" id="example-text-input" name="id_permohonan"
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
                             value="{{ $pecah[0] }}">
-                        <input class="form-control flatpickr" name="bulan" id="bulan_import">
+                        <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="/storage/template/pengangkutanMinyakBumi.xlsx" id="tombol"
+                    <a href="/storage/template/pengangkutanGasBumi.xlsx" id="tombol"
                         class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>

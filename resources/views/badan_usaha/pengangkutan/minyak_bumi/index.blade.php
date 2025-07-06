@@ -21,7 +21,7 @@
         </div>
     </div>
 
- @include('badan_usaha.pengangkutan.minyak_bumi.modal')
+    @include('badan_usaha.pengangkutan.minyak_bumi.modal')
 
     <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
         <div id="kt_app_content_container" class="app-container container-xxl">
@@ -50,12 +50,12 @@
                                 <div class="col-12">
                                     <div class="d-flex justify-content-end gap-2">
                                         <a type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="produk(); provinsi();" data-bs-toggle="modal"
-                                        data-bs-target="#myModal">
+                                            onclick="produk(); provinsi();" data-bs-toggle="modal"
+                                            data-bs-target="#myModal">
                                             <i class="fas fa-plus"></i> Buat Laporan
                                         </a>
                                         <a type="button" class="btn btn-success waves-effect waves-light"
-                                        data-bs-toggle="modal" data-bs-target="#excelPengangkutanMB">
+                                            data-bs-toggle="modal" data-bs-target="#excelPengangkutanMB">
                                             <i class="fas fa-upload"></i> Import Excel
                                         </a>
                                     </div>
@@ -94,6 +94,17 @@
                                                             ',' .
                                                             $data->bulan,
                                                     );
+                                                    $idTahun = Crypt::encryptString(
+                                                        $data->id_permohonan .
+                                                            ',' .
+                                                            $data->npwp .
+                                                            ',' .
+                                                            $data->id_sub_page .
+                                                            ',' .
+                                                            $data->bulan .
+                                                            ',' .
+                                                            'tahun',
+                                                    );
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">{{ $loop->iteration }}</td>
@@ -106,7 +117,7 @@
                                                     </td>
                                                     <td>
                                                         <a
-                                                            href="{{ url('/pengangkutan-minyak-bumi/show') }}/{{ $id }}/tahun">
+                                                            href="{{ url('/pengangkutan-minyak-bumi/show') }}/{{ $idTahun }}">
                                                             {{ getTahun($data->bulan) }}
                                                             <i class="ki-solid ki-check" title="lihat data laporan"></i>
                                                         </a>

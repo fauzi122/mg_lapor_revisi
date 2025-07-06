@@ -11,13 +11,11 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
+                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
+                        <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
 
-                        <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
-                            value="{{ Auth::user()->badan_usaha_id }}">
-
-                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="{{ $pecah[0] }}">
-                        @error('badan_usaha_id')
+                        @error('npwp')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -25,8 +23,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Bulan</label>
-                        <input class="form-control" type="month" id="bulanx" name="bulan"
-                            value="{{ old('bulan') }}">
+                        <input class="form-control flatpickr" id="bulanx" name="bulan" value="{{ old('bulan') }}">
                         @error('bulan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -161,11 +158,10 @@
                 <div class="modal-body">
                     <div class="mb-3">
 
-                        <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
-                            value="{{ Auth::user()->badan_usaha_id }}">
-                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
-                        @error('badan_usaha_id')
+                        <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
+                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
+
+                        @error('npwp')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -175,7 +171,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Bulan</label>
-                        <input class="form-control" type="month" id="bulan_gb" name="bulan"
+                        <input class="form-control flatpickr" id="bulan_gb" name="bulan"
                             value="{{ old('bulan') }}" readonly>
                         @error('bulan')
                             <div class="form-group has-danger mb-0">
@@ -320,12 +316,12 @@
                 <div class="modal-body">
                     <div class="mb-3">
 
-                        <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
-                            value="{{ Auth::user()->badan_usaha_id }}">
+                        <input class="form-control" type="hidden" id="example-text-input" name="npwp"
+                            value="{{ Auth::user()->npwp }}">
 
-                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="1">
-                        @error('badan_usaha_id')
+                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
+
+                        @error('npwp')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -334,8 +330,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Bulan</label>
-                        <input class="form-control" type="month" id="lihat_bulan_gb" name="bulan"
-                            value="" readonly>
+                        <input class="form-control" id="lihat_bulan_gb" name="bulan" value="" readonly>
                     </div>
 
                     <div class="mb-3">
@@ -459,9 +454,10 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
-                            value="{{ $pecah[0] }}">
-                        <input class="form-control" type="month" name="bulan" id="bulan_import">
+                        <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
+                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
+                        <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
+                        <input class="form-control flatpickr" name="bulan" id="bulan_import">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">
                     </div>
