@@ -80,11 +80,11 @@ header('Pragma: no-cache');
             @foreach ($result as $pgb)
                 <tr>
                     <td style="border: 1px solid black;">{{ $loop->iteration }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->NAMA_PERUSAHAAN }}</td>
-                    <td style="border: 1px solid black;">{{ $pgb->NOMOR_IZIN }}</td>
-                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->nama_perusahaan }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->nomor_izin }}</td>
+                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->tgl_pengajuan)->format('Y-m-d') }}</td>
 
-                    <td style="border: 1px solid black;">{{ $pgb->TGL_DISETUJUI }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->tgl_disetujui }}</td>
                     <td style="border: 1px solid black;">{{ getBulan($pgb->bulan) }}</td>
                     <td style="border: 1px solid black;">{{ getTahun($pgb->bulan) }}</td>
                     <td style="border: 1px solid black;">{{ $pgb->nama_pemasok }}</td>
