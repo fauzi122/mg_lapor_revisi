@@ -180,15 +180,16 @@
                                         <td>{{ getTahun($pgb->bulan) }}</td>
                                         <td>
                                             @if ($pgb->status == 1 && $pgb->catatan)
-                                                <span class="badge bg-warning">Sudah Diperbaiki</span>
+                                                <span class="badge bg-warning text-white">Sudah Diperbaiki</span>
                                             @elseif ($pgb->status == 1)
-                                                <span class="badge bg-success">Diterima</span>
+                                                <span class="badge bg-success text-white">Diterima</span>
                                             @elseif ($pgb->status == 2)
-                                                <span class="badge bg-danger">Revisi</span>
+                                                <span class="badge bg-danger text-white">Revisi</span>
                                             @elseif ($pgb->status == 3)
-                                                <span class="badge bg-primary">Selesai</span>
+                                                <span class="badge bg-primary text-white">Selesai</span>
                                             @elseif ($pgb->status == 0)
-                                                <span class="badge bg-info">draf</span>
+                                                <span class="badge bg-info text-white">draf</span>
+                                            @endif
                                             @endif
                                         </td>
                                         <td>{{ $pgb->catatan }}</td>
@@ -200,7 +201,7 @@
                                         <td>
                                             @if ($pgb->status == 1)
                                                 <button type="button"
-                                                    class="btn btn-info btn-sm rounded-pill btn-update"
+                                                    class="btn btn-icon btn-sm btn-info btn-update"
                                                     data-bs-toggle="modal" data-bs-target="#modal-update"
                                                     title="Revisi data">
                                                     <i class="bi bi-pencil-fill align-middle"></i>
