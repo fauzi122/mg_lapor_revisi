@@ -594,11 +594,7 @@ class PengangkutanmgController extends Controller
 
       // Menggunakan parameter binding untuk keamanan
       $validatedData = DB::table('pengangkutan_minyakbumis')
-=======
-  
         // Menggunakan parameter binding untuk keamanan
-        $validatedData = DB::table('pengangkutan_minyakbumis')
->>>>>>> 3a4f1b09c4763a8a5b4d340118944d37511fa077
             ->where('bulan', $bulanx)
             ->where('npwp', $npwp)
             ->where('id_permohonan', $id_permohonan)
