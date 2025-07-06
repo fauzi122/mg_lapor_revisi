@@ -94,8 +94,8 @@
                                                                 </option>
                                                                 <option value="all">Semua Perusahaan</option>
                                                                 @foreach ($perusahaan as $p)
-                                                                    <option value="{{ $p->id_perusahaan }}">
-                                                                        {{ $p->NAMA_PERUSAHAAN }}</option>
+                                                                    <option value="{{ $p->npwp }}">
+                                                                        {{ $p->nama_perusahaan }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -162,11 +162,11 @@
                                 @foreach ($query as $pgb)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $pgb->NAMA_PERUSAHAAN }}</td>
-                                        <td>{{ $pgb->NOMOR_IZIN }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($pgb->TGL_PENGAJUAN)->format('Y-m-d') }}</td>
+                                        <td>{{ $pgb->nama_perusahaan }}</td>
+                                        <td>{{ $pgb->nomor_izin }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($pgb->tgl_pengajuan)->format('Y-m-d') }}</td>
 
-                                        <td>{{ $pgb->TGL_DISETUJUI }}</td>
+                                        <td>{{ $pgb->tgl_disetujui }}</td>
                                         <td>{{ getBulan($pgb->bulan) }}</td>
                                         <td>{{ getTahun($pgb->bulan) }}</td>
                                         <td>
@@ -194,7 +194,7 @@
                                             <td>
                                             @if ($pgb->status == 1)
                                                 <button type="button"
-                                                    class="btn btn-info btn-sm rounded-pill btn-update"
+                                                    class="btn btn-icon btn-sm btn-info btn-update"
                                                     data-bs-toggle="modal" data-bs-target="#modal-update"
                                                     title="Revisi data">
                                                     <i class="bi bi-pencil-fill align-middle"></i>

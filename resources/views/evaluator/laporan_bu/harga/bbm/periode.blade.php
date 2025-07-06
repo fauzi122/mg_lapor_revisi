@@ -102,9 +102,9 @@
                                         </td>
 
                                         @if ($data->status == 1)
-                                            <td>
+                                            <td class="text-center">
                                                 <button type="button"
-                                                    class="btn btn-info btn-sm rounded-pill btn-update"
+                                                    class="btn btn-icon btn-sm btn-info btn-update"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_update" title="Revisi data">
                                                     <i class="bi bi-pencil-fill align-middle"></i>
