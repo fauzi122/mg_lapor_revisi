@@ -517,6 +517,8 @@ class HargabbmController extends Controller
 
     $cekdb = DB::table('harga_l_p_g_s')
             ->where('npwp', $npwp)
+            ->where('id_permohonan', $request->id_permohonan)
+            ->where('id_sub_page', $request->id_sub_page)
             ->where('bulan', $request->bulan)
             ->orderBy('status', 'desc')
             ->first();

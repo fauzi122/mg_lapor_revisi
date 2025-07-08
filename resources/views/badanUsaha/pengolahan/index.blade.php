@@ -31,11 +31,13 @@
                         <div class="d-flex flex-column">
                             <h4 class="mb-1 text-dark">Informasi</h4>
                             <span>Nomor izin yang anda laporkan adalah <b>{{ $pecah[1] }}</b></span>
+                            <span>Jenis kegiatan usaha: <b>{{ $sub_page['nama_opsi'] }}</b></span>
                         </div>
                         <button type="button"
                             class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto"
                             data-bs-dismiss="alert">
-                            <i class="ki-duotone ki-cross fs-1 text-info"><span class="path1"></span><span class="path2"></span></i>
+                            <i class="ki-duotone ki-cross fs-1 text-info"><span class="path1"></span><span
+                                    class="path2"></span></i>
                         </button>
                     </div>
                 </div>
@@ -44,13 +46,16 @@
                 <div class="col-12">
                     <ul class="nav nav-pills nav-justified" role="tablist">
                         <li class="nav-item h3">
-                            <a class="nav-link active py-4" data-bs-toggle="tab" href=".minyak-bumi" role="tab" aria-selected="true">
+                            <a class="nav-link active py-4" data-bs-toggle="tab" href=".minyak-bumi" role="tab"
+                                aria-selected="true">
                                 <span class="d-block d-sm-none"><i class="fas fa-oil-can"></i> Minyak Bumi</span>
-                                <span class="d-none d-sm-block"><i class="fas fa-oil-can"></i> Minyak Bumi/Hasil Olahan</span>
+                                <span class="d-none d-sm-block"><i class="fas fa-oil-can"></i> Minyak Bumi/Hasil
+                                    Olahan</span>
                             </a>
                         </li>
                         <li class="nav-item h3">
-                            <a class="nav-link py-4" data-bs-toggle="tab" href=".gas-bumi" role="tab" aria-selected="false" tabindex="-1">
+                            <a class="nav-link py-4" data-bs-toggle="tab" href=".gas-bumi" role="tab"
+                                aria-selected="false" tabindex="-1">
                                 <span class="d-block d-sm-none"><i class="fas fa-gas-pump"></i> Gas Bumi</span>
                                 <span class="d-none d-sm-block"><i class="fas fa-gas-pump"></i> Gas Bumi</span>
                             </a>
@@ -73,10 +78,13 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="d-flex justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-sm btn-primary" onclick="produk(); provinsi();" data-bs-toggle="modal" data-bs-target="#buat-pengolahan-produksi-mb">
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        onclick="produk(); provinsi();" data-bs-toggle="modal"
+                                                        data-bs-target="#buat-pengolahan-produksi-mb">
                                                         <i class="fas fa-plus"></i> Buat Laporan
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#excelPengolahanMBProduksi">
+                                                    <button type="button" class="btn btn-sm btn-success"
+                                                        data-bs-toggle="modal" data-bs-target="#excelPengolahanMBProduksi">
                                                         <i class="fas fa-upload"></i> Import Excel
                                                     </button>
                                                 </div>
@@ -88,7 +96,8 @@
                                             <div class="card-header align-items-center px-2">
                                                 <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                                 <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                                    <input type="hidden" class="export-title" value="Laporan Produksi Kilang [Minyak Bumi/Hasil Olahan]" />
+                                                    <input type="hidden" class="export-title"
+                                                        value="Laporan Produksi Kilang [Minyak Bumi/Hasil Olahan]" />
                                                 </div>
                                             </div>
                                             <div class="card-body p-2">
@@ -105,25 +114,38 @@
                                                     <tbody>
                                                         @foreach ($pengolahanProduksiMB as $ppmb)
                                                             @php
-                                                                $id = Crypt::encryptString($ppmb->bulan . ',' . $ppmb->badan_usaha_id . ',' . $ppmb->izin_id);
+                                                                $id = Crypt::encryptString(
+                                                                    $ppmb->id_permohonan .
+                                                                        ',' .
+                                                                        $ppmb->npwp .
+                                                                        ',' .
+                                                                        $ppmb->id_sub_page .
+                                                                        ',' .
+                                                                        $ppmb->bulan,
+                                                                );
                                                             @endphp
                                                             <tr>
                                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/produksi">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/produksi">
                                                                         {{ getBulan($ppmb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/produksi/tahun">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/produksi/tahun">
                                                                         {{ getTahun($ppmb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td>
                                                                     @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
-                                                                        <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                                        <span class="badge badge-warning">Sudah
+                                                                            Diperbaiki</span>
                                                                     @elseif ($ppmb->status_tertinggi == 1)
                                                                         <span class="badge badge-success">Diterima</span>
                                                                     @elseif ($ppmb->status_tertinggi == 2)
@@ -135,25 +157,38 @@
                                                                     @endif
                                                                 </td>
                                                                 <td class="text-center">
-                                                                    <form action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $id }}" method="post" class="d-inline">
+                                                                    <form
+                                                                        action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $id }}"
+                                                                        method="post" class="d-inline">
                                                                         @method('delete')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-danger mb-2" onclick="hapusData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-danger mb-2"
+                                                                            onclick="hapusData($(this).closest('form'))"
                                                                             {{ $ppmb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                            <i class="ki-solid ki-trash"
+                                                                                title="Hapus data"></i>
                                                                         </button>
                                                                     </form>
-                                                                    <form action="{{ url('/submit_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $ppmb->bulan }}">
+                                                                    <form
+                                                                        action="{{ url('/submit_bulan_pengolahan_minyak_bumi_produksi') }}/{{ $id }}"
+                                                                        method="post" class="d-inline"
+                                                                        data-id="{{ $ppmb->bulan }}">
                                                                         @method('PUT')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-success mb-2" onclick="kirimData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-success mb-2"
+                                                                            onclick="kirimData($(this).closest('form'))"
                                                                             {{ $ppmb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-send" title="Kirim data"></i>
+                                                                            <i class="ki-solid ki-send"
+                                                                                title="Kirim data"></i>
                                                                         </button>
                                                                     </form>
                                                                     @if ($ppmb->status_tertinggi != 1)
-                                                                        <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/produksi" class="btn btn-icon btn-sm btn-info mb-2">
-                                                                            <i class="ki-solid ki-pencil" title="Detail / Edit Data"></i>
+                                                                        <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/produksi"
+                                                                            class="btn btn-icon btn-sm btn-info mb-2">
+                                                                            <i class="ki-solid ki-pencil"
+                                                                                title="Detail / Edit Data"></i>
                                                                         </a>
                                                                     @endif
                                                                 </td>
@@ -176,10 +211,13 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="d-flex justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-sm btn-primary" onclick="intake_kilang(); provinsi();" data-bs-toggle="modal" data-bs-target="#buat-pengolahan-pasokan-mb">
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        onclick="intake_kilang(); provinsi();" data-bs-toggle="modal"
+                                                        data-bs-target="#buat-pengolahan-pasokan-mb">
                                                         <i class="fas fa-plus"></i> Buat Laporan
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#excelPengolahanMBPasokan">
+                                                    <button type="button" class="btn btn-sm btn-success"
+                                                        data-bs-toggle="modal" data-bs-target="#excelPengolahanMBPasokan">
                                                         <i class="fas fa-upload"></i> Import Excel
                                                     </button>
                                                 </div>
@@ -191,7 +229,8 @@
                                             <div class="card-header align-items-center px-2">
                                                 <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                                 <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                                    <input type="hidden" class="export-title" value="Laporan Pasokan Kilang [Minyak Bumi/Hasil Olahan]" />
+                                                    <input type="hidden" class="export-title"
+                                                        value="Laporan Pasokan Kilang [Minyak Bumi/Hasil Olahan]" />
                                                 </div>
                                             </div>
                                             <div class="card-body p-2">
@@ -208,25 +247,38 @@
                                                     <tbody>
                                                         @foreach ($pengolahanPasokanMB as $ppmb)
                                                             @php
-                                                                $id = Crypt::encryptString($ppmb->bulan . ',' . $ppmb->badan_usaha_id . ',' . $ppmb->izin_id);
+                                                                $id = Crypt::encryptString(
+                                                                    $ppmb->id_permohonan .
+                                                                        ',' .
+                                                                        $ppmb->npwp .
+                                                                        ',' .
+                                                                        $ppmb->id_sub_page .
+                                                                        ',' .
+                                                                        $ppmb->bulan,
+                                                                );
                                                             @endphp
                                                             <tr>
                                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/pasokan">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/pasokan">
                                                                         {{ getBulan($ppmb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/pasokan/tahun">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/pasokan/tahun">
                                                                         {{ getTahun($ppmb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td>
                                                                     @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
-                                                                        <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                                        <span class="badge badge-warning">Sudah
+                                                                            Diperbaiki</span>
                                                                     @elseif ($ppmb->status_tertinggi == 1)
                                                                         <span class="badge badge-success">Diterima</span>
                                                                     @elseif ($ppmb->status_tertinggi == 2)
@@ -238,25 +290,38 @@
                                                                     @endif
                                                                 </td>
                                                                 <td class="text-center">
-                                                                    <form action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $id }}" method="post" class="d-inline">
+                                                                    <form
+                                                                        action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $id }}"
+                                                                        method="post" class="d-inline">
                                                                         @method('delete')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-danger mb-2" onclick="hapusData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-danger mb-2"
+                                                                            onclick="hapusData($(this).closest('form'))"
                                                                             {{ $ppmb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                            <i class="ki-solid ki-trash"
+                                                                                title="Hapus data"></i>
                                                                         </button>
                                                                     </form>
-                                                                    <form action="{{ url('/submit_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $ppmb->bulan }}">
+                                                                    <form
+                                                                        action="{{ url('/submit_bulan_pengolahan_minyak_bumi_pasokan') }}/{{ $id }}"
+                                                                        method="post" class="d-inline"
+                                                                        data-id="{{ $ppmb->bulan }}">
                                                                         @method('PUT')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-success mb-2" onclick="kirimData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-success mb-2"
+                                                                            onclick="kirimData($(this).closest('form'))"
                                                                             {{ $ppmb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-send" title="Kirim data"></i>
+                                                                            <i class="ki-solid ki-send"
+                                                                                title="Kirim data"></i>
                                                                         </button>
                                                                     </form>
                                                                     @if ($ppmb->status_tertinggi != 1)
-                                                                        <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/pasokan" class="btn btn-icon btn-sm btn-info mb-2">
-                                                                            <i class="ki-solid ki-pencil" title="Detail / Edit Data"></i>
+                                                                        <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/pasokan"
+                                                                            class="btn btn-icon btn-sm btn-info mb-2">
+                                                                            <i class="ki-solid ki-pencil"
+                                                                                title="Detail / Edit Data"></i>
                                                                         </a>
                                                                     @endif
                                                                 </td>
@@ -279,10 +344,14 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="d-flex justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-sm btn-primary" onclick="produk(); provinsi(); sektor();" data-bs-toggle="modal" data-bs-target="#buat-pengolahan-distribusi-mb">
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        onclick="produk(); provinsi(); sektor();" data-bs-toggle="modal"
+                                                        data-bs-target="#buat-pengolahan-distribusi-mb">
                                                         <i class="fas fa-plus"></i> Buat Laporan
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#excelPengolahanMBDistribusi">
+                                                    <button type="button" class="btn btn-sm btn-success"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#excelPengolahanMBDistribusi">
                                                         <i class="fas fa-upload"></i> Import Excel
                                                     </button>
                                                 </div>
@@ -294,7 +363,8 @@
                                             <div class="card-header align-items-center px-2">
                                                 <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                                 <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                                    <input type="hidden" class="export-title" value="Laporan Distribusi/Penjualan Domestik Kilang [Minyak Bumi/Hasil Olahan]" />
+                                                    <input type="hidden" class="export-title"
+                                                        value="Laporan Distribusi/Penjualan Domestik Kilang [Minyak Bumi/Hasil Olahan]" />
                                                 </div>
                                             </div>
                                             <div class="card-body p-2">
@@ -311,25 +381,38 @@
                                                     <tbody>
                                                         @foreach ($pengolahanDistribusiMB as $ppmb)
                                                             @php
-                                                                $id = Crypt::encryptString($ppmb->bulan . ',' . $ppmb->badan_usaha_id . ',' . $ppmb->izin_id);
+                                                                $id = Crypt::encryptString(
+                                                                    $ppmb->id_permohonan .
+                                                                        ',' .
+                                                                        $ppmb->npwp .
+                                                                        ',' .
+                                                                        $ppmb->id_sub_page .
+                                                                        ',' .
+                                                                        $ppmb->bulan,
+                                                                );
                                                             @endphp
                                                             <tr>
                                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/distribusi">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/distribusi">
                                                                         {{ getBulan($ppmb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/distribusi/tahun">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/distribusi/tahun">
                                                                         {{ getTahun($ppmb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td>
                                                                     @if ($ppmb->status_tertinggi == 1 && $ppmb->catatanx)
-                                                                        <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                                        <span class="badge badge-warning">Sudah
+                                                                            Diperbaiki</span>
                                                                     @elseif ($ppmb->status_tertinggi == 1)
                                                                         <span class="badge badge-success">Diterima</span>
                                                                     @elseif ($ppmb->status_tertinggi == 2)
@@ -341,25 +424,38 @@
                                                                     @endif
                                                                 </td>
                                                                 <td class="text-center">
-                                                                    <form action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $id }}" method="post" class="d-inline">
+                                                                    <form
+                                                                        action="{{ url('/hapus_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $id }}"
+                                                                        method="post" class="d-inline">
                                                                         @method('delete')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-danger mb-2" onclick="hapusData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-danger mb-2"
+                                                                            onclick="hapusData($(this).closest('form'))"
                                                                             {{ $ppmb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                            <i class="ki-solid ki-trash"
+                                                                                title="Hapus data"></i>
                                                                         </button>
                                                                     </form>
-                                                                    <form action="{{ url('/submit_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $ppmb->bulan }}">
+                                                                    <form
+                                                                        action="{{ url('/submit_bulan_pengolahan_minyak_bumi_distribusi') }}/{{ $id }}"
+                                                                        method="post" class="d-inline"
+                                                                        data-id="{{ $ppmb->bulan }}">
                                                                         @method('PUT')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-success mb-2" onclick="kirimData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-success mb-2"
+                                                                            onclick="kirimData($(this).closest('form'))"
                                                                             {{ $ppmb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-send" title="Kirim data"></i>
+                                                                            <i class="ki-solid ki-send"
+                                                                                title="Kirim data"></i>
                                                                         </button>
                                                                     </form>
                                                                     @if ($ppmb->status_tertinggi != 1)
-                                                                        <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/distribusi" class="btn btn-icon btn-sm btn-info mb-2">
-                                                                            <i class="ki-solid ki-pencil" title="Detail / Edit Data"></i>
+                                                                        <a href="{{ url('/pengolahan-minyak-bumi-hasil-olah/show') }}/{{ $id }}/distribusi"
+                                                                            class="btn btn-icon btn-sm btn-info mb-2">
+                                                                            <i class="ki-solid ki-pencil"
+                                                                                title="Detail / Edit Data"></i>
                                                                         </a>
                                                                     @endif
                                                                 </td>
@@ -387,10 +483,14 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="d-flex justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-sm btn-primary" onclick="produk(); provinsi();" data-bs-toggle="modal" data-bs-target="#buat-pengolahan-produksi-gb">
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        onclick="produk(); provinsi();" data-bs-toggle="modal"
+                                                        data-bs-target="#buat-pengolahan-produksi-gb">
                                                         <i class="fas fa-plus"></i> Buat Laporan
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#excelPengolahanGBProduksi">
+                                                    <button type="button" class="btn btn-sm btn-success"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#excelPengolahanGBProduksi">
                                                         <i class="fas fa-upload"></i> Import Excel
                                                     </button>
                                                 </div>
@@ -402,7 +502,8 @@
                                             <div class="card-header align-items-center px-2">
                                                 <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                                 <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                                    <input type="hidden" class="export-title" value="Laporan Produksi Kilang [Gas Bumi]" />
+                                                    <input type="hidden" class="export-title"
+                                                        value="Laporan Produksi Kilang [Gas Bumi]" />
                                                 </div>
                                             </div>
                                             <div class="card-body p-2">
@@ -419,25 +520,38 @@
                                                     <tbody>
                                                         @foreach ($pengolahanProduksiGB as $ppgb)
                                                             @php
-                                                                $id = Crypt::encryptString($ppgb->bulan . ',' . $ppgb->badan_usaha_id . ',' . $ppgb->izin_id);
+                                                                $id = Crypt::encryptString(
+                                                                    $ppgb->id_permohonan .
+                                                                        ',' .
+                                                                        $ppgb->npwp .
+                                                                        ',' .
+                                                                        $ppgb->id_sub_page .
+                                                                        ',' .
+                                                                        $ppgb->bulan,
+                                                                );
                                                             @endphp
                                                             <tr>
                                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/produksi">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/produksi">
                                                                         {{ getBulan($ppgb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/produksi/tahun">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/produksi/tahun">
                                                                         {{ getTahun($ppgb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td>
                                                                     @if ($ppgb->status_tertinggi == 1 && $ppgb->catatanx)
-                                                                        <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                                        <span class="badge badge-warning">Sudah
+                                                                            Diperbaiki</span>
                                                                     @elseif ($ppgb->status_tertinggi == 1)
                                                                         <span class="badge badge-success">Diterima</span>
                                                                     @elseif ($ppgb->status_tertinggi == 2)
@@ -449,25 +563,38 @@
                                                                     @endif
                                                                 </td>
                                                                 <td class="text-center">
-                                                                    <form action="{{ url('/hapus_bulan_pengolahan_gas_bumi_produksi') }}/{{ $id }}" method="post" class="d-inline">
+                                                                    <form
+                                                                        action="{{ url('/hapus_bulan_pengolahan_gas_bumi_produksi') }}/{{ $id }}"
+                                                                        method="post" class="d-inline">
                                                                         @method('delete')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-danger mb-2" onclick="hapusData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-danger mb-2"
+                                                                            onclick="hapusData($(this).closest('form'))"
                                                                             {{ $ppgb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                            <i class="ki-solid ki-trash"
+                                                                                title="Hapus data"></i>
                                                                         </button>
                                                                     </form>
-                                                                    <form action="{{ url('/submit_bulan_pengolahan_gas_bumi_produksi') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $ppgb->bulan }}">
+                                                                    <form
+                                                                        action="{{ url('/submit_bulan_pengolahan_gas_bumi_produksi') }}/{{ $id }}"
+                                                                        method="post" class="d-inline"
+                                                                        data-id="{{ $ppgb->bulan }}">
                                                                         @method('PUT')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-success mb-2" onclick="kirimData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-success mb-2"
+                                                                            onclick="kirimData($(this).closest('form'))"
                                                                             {{ $ppgb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-send" title="Kirim data"></i>
+                                                                            <i class="ki-solid ki-send"
+                                                                                title="Kirim data"></i>
                                                                         </button>
                                                                     </form>
                                                                     @if ($ppgb->status_tertinggi != 1)
-                                                                        <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/produksi" class="btn btn-icon btn-sm btn-info mb-2">
-                                                                            <i class="ki-solid ki-pencil" title="Detail / Edit Data"></i>
+                                                                        <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/produksi"
+                                                                            class="btn btn-icon btn-sm btn-info mb-2">
+                                                                            <i class="ki-solid ki-pencil"
+                                                                                title="Detail / Edit Data"></i>
                                                                         </a>
                                                                     @endif
                                                                 </td>
@@ -490,10 +617,13 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="d-flex justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-sm btn-primary" onclick="intake_kilang(); provinsi();" data-bs-toggle="modal" data-bs-target="#buat-pengolahan-pasokan-gb">
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        onclick="intake_kilang(); provinsi();" data-bs-toggle="modal"
+                                                        data-bs-target="#buat-pengolahan-pasokan-gb">
                                                         <i class="fas fa-plus"></i> Buat Laporan
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#excelPengolahanGBPasokan">
+                                                    <button type="button" class="btn btn-sm btn-success"
+                                                        data-bs-toggle="modal" data-bs-target="#excelPengolahanGBPasokan">
                                                         <i class="fas fa-upload"></i> Import Excel
                                                     </button>
                                                 </div>
@@ -505,7 +635,8 @@
                                             <div class="card-header align-items-center px-2">
                                                 <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                                 <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                                    <input type="hidden" class="export-title" value="Laporan Pasokan Kilang [Gas Bumi]" />
+                                                    <input type="hidden" class="export-title"
+                                                        value="Laporan Pasokan Kilang [Gas Bumi]" />
                                                 </div>
                                             </div>
                                             <div class="card-body p-2">
@@ -522,25 +653,38 @@
                                                     <tbody>
                                                         @foreach ($pengolahanPasokanGB as $ppgb)
                                                             @php
-                                                                $id = Crypt::encryptString($ppgb->bulan . ',' . $ppgb->badan_usaha_id . ',' . $ppgb->izin_id);
+                                                                $id = Crypt::encryptString(
+                                                                    $ppgb->id_permohonan .
+                                                                        ',' .
+                                                                        $ppgb->npwp .
+                                                                        ',' .
+                                                                        $ppgb->id_sub_page .
+                                                                        ',' .
+                                                                        $ppgb->bulan,
+                                                                );
                                                             @endphp
                                                             <tr>
                                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/pasokan">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/pasokan">
                                                                         {{ getBulan($ppgb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/pasokan/tahun">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/pasokan/tahun">
                                                                         {{ getTahun($ppgb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td>
                                                                     @if ($ppgb->status_tertinggi == 1 && $ppgb->catatanx)
-                                                                        <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                                        <span class="badge badge-warning">Sudah
+                                                                            Diperbaiki</span>
                                                                     @elseif ($ppgb->status_tertinggi == 1)
                                                                         <span class="badge badge-success">Diterima</span>
                                                                     @elseif ($ppgb->status_tertinggi == 2)
@@ -552,25 +696,38 @@
                                                                     @endif
                                                                 </td>
                                                                 <td class="text-center">
-                                                                    <form action="{{ url('/hapus_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $id }}" method="post" class="d-inline">
+                                                                    <form
+                                                                        action="{{ url('/hapus_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $id }}"
+                                                                        method="post" class="d-inline">
                                                                         @method('delete')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-danger mb-2" onclick="hapusData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-danger mb-2"
+                                                                            onclick="hapusData($(this).closest('form'))"
                                                                             {{ $ppgb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                            <i class="ki-solid ki-trash"
+                                                                                title="Hapus data"></i>
                                                                         </button>
                                                                     </form>
-                                                                    <form action="{{ url('/submit_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $ppgb->bulan }}">
+                                                                    <form
+                                                                        action="{{ url('/submit_bulan_pengolahan_gas_bumi_pasokan') }}/{{ $id }}"
+                                                                        method="post" class="d-inline"
+                                                                        data-id="{{ $ppgb->bulan }}">
                                                                         @method('PUT')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-success mb-2" onclick="kirimData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-success mb-2"
+                                                                            onclick="kirimData($(this).closest('form'))"
                                                                             {{ $ppgb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-send" title="Kirim data"></i>
+                                                                            <i class="ki-solid ki-send"
+                                                                                title="Kirim data"></i>
                                                                         </button>
                                                                     </form>
                                                                     @if ($ppgb->status_tertinggi != 1)
-                                                                        <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/pasokan" class="btn btn-icon btn-sm btn-info mb-2">
-                                                                            <i class="ki-solid ki-pencil" title="Detail / Edit Data"></i>
+                                                                        <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/pasokan"
+                                                                            class="btn btn-icon btn-sm btn-info mb-2">
+                                                                            <i class="ki-solid ki-pencil"
+                                                                                title="Detail / Edit Data"></i>
                                                                         </a>
                                                                     @endif
                                                                 </td>
@@ -593,10 +750,14 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="d-flex justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-sm btn-primary" onclick="produk(); provinsi(); sektor();" data-bs-toggle="modal" data-bs-target="#buat-pengolahan-distribusi-gb">
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        onclick="produk(); provinsi(); sektor();" data-bs-toggle="modal"
+                                                        data-bs-target="#buat-pengolahan-distribusi-gb">
                                                         <i class="fas fa-plus"></i> Buat Laporan
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#excelPengolahanGBDistribusi">
+                                                    <button type="button" class="btn btn-sm btn-success"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#excelPengolahanGBDistribusi">
                                                         <i class="fas fa-upload"></i> Import Excel
                                                     </button>
                                                 </div>
@@ -608,7 +769,8 @@
                                             <div class="card-header align-items-center px-2">
                                                 <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
                                                 <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                                    <input type="hidden" class="export-title" value="Laporan Distribusi/Penjualan Domestik Kilang [Gas Bumi]" />
+                                                    <input type="hidden" class="export-title"
+                                                        value="Laporan Distribusi/Penjualan Domestik Kilang [Gas Bumi]" />
                                                 </div>
                                             </div>
                                             <div class="card-body p-2">
@@ -625,25 +787,38 @@
                                                     <tbody>
                                                         @foreach ($pengolahanDistribusiGB as $ppgb)
                                                             @php
-                                                                $id = Crypt::encryptString($ppgb->bulan . ',' . $ppgb->badan_usaha_id . ',' . $ppgb->izin_id);
+                                                                $id = Crypt::encryptString(
+                                                                    $ppgb->id_permohonan .
+                                                                        ',' .
+                                                                        $ppgb->npwp .
+                                                                        ',' .
+                                                                        $ppgb->id_sub_page .
+                                                                        ',' .
+                                                                        $ppgb->bulan,
+                                                                );
                                                             @endphp
                                                             <tr>
                                                                 <td class="text-center">{{ $loop->iteration }}</td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/distribusi">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/distribusi">
                                                                         {{ getBulan($ppgb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td class="fw-bold">
-                                                                    <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/distribusi/tahun">
+                                                                    <a
+                                                                        href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/distribusi/tahun">
                                                                         {{ getTahun($ppgb->bulan) }}
-                                                                        <i class="ki-solid ki-check" title="lihat data laporan"></i>
+                                                                        <i class="ki-solid ki-check"
+                                                                            title="lihat data laporan"></i>
                                                                     </a>
                                                                 </td>
                                                                 <td>
                                                                     @if ($ppgb->status_tertinggi == 1 && $ppgb->catatanx)
-                                                                        <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                                        <span class="badge badge-warning">Sudah
+                                                                            Diperbaiki</span>
                                                                     @elseif ($ppgb->status_tertinggi == 1)
                                                                         <span class="badge badge-success">Diterima</span>
                                                                     @elseif ($ppgb->status_tertinggi == 2)
@@ -655,25 +830,38 @@
                                                                     @endif
                                                                 </td>
                                                                 <td class="text-center">
-                                                                    <form action="{{ url('/hapus_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $id }}" method="post" class="d-inline">
+                                                                    <form
+                                                                        action="{{ url('/hapus_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $id }}"
+                                                                        method="post" class="d-inline">
                                                                         @method('delete')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-danger mb-2" onclick="hapusData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-danger mb-2"
+                                                                            onclick="hapusData($(this).closest('form'))"
                                                                             {{ $ppgb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                            <i class="ki-solid ki-trash"
+                                                                                title="Hapus data"></i>
                                                                         </button>
                                                                     </form>
-                                                                    <form action="{{ url('/submit_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $id }}" method="post" class="d-inline" data-id="{{ $ppgb->bulan }}">
+                                                                    <form
+                                                                        action="{{ url('/submit_bulan_pengolahan_gas_bumi_distribusi') }}/{{ $id }}"
+                                                                        method="post" class="d-inline"
+                                                                        data-id="{{ $ppgb->bulan }}">
                                                                         @method('PUT')
                                                                         @csrf
-                                                                        <button type="button" class="btn btn-icon btn-sm btn-success mb-2" onclick="kirimData($(this).closest('form'))"
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-sm btn-success mb-2"
+                                                                            onclick="kirimData($(this).closest('form'))"
                                                                             {{ $ppgb->status_tertinggi == 1 ? 'disabled' : '' }}>
-                                                                            <i class="ki-solid ki-send" title="Kirim data"></i>
+                                                                            <i class="ki-solid ki-send"
+                                                                                title="Kirim data"></i>
                                                                         </button>
                                                                     </form>
                                                                     @if ($ppgb->status_tertinggi != 1)
-                                                                        <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/distribusi" class="btn btn-icon btn-sm btn-info mb-2">
-                                                                            <i class="ki-solid ki-pencil" title="Detail / Edit Data"></i>
+                                                                        <a href="{{ url('/pengolahan-gas-bumi/show') }}/{{ $id }}/distribusi"
+                                                                            class="btn btn-icon btn-sm btn-info mb-2">
+                                                                            <i class="ki-solid ki-pencil"
+                                                                                title="Detail / Edit Data"></i>
                                                                         </a>
                                                                     @endif
                                                                 </td>
