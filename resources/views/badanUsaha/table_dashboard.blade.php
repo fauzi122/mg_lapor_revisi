@@ -42,9 +42,10 @@
                         {{-- Menu utama --}}
                         @if (!empty($item->url))
                             <li>
-                                <a href="{{ $item->url }}/{{ $encodedShow }}">
-                                    {{ $item->nama_menu }}
-                                </a>
+                            <a href="{{ url($item->url) }}/{{ $encodedShow }}">
+                                {{ $item->nama_menu }}
+                            </a>
+
                             </li>
                         @endif
 

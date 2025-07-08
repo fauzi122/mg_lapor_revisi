@@ -309,7 +309,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/import_klpgs', 'import_klpgsx');
 	});
 
-	// Progress Pembangunan
+	// Progress Pembangunan tes
 	Route::controller(ProgresPembangunanController::class)->group(function () {
 		route::get('/progres-pembangunan/show/{id}', 'show_izinSementara');
 		Route::post('/simpan_izinSementara', 'simpan_izinSementara');
