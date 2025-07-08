@@ -124,12 +124,14 @@
                                                                             collect($result)->pluck('SUB_PAGE'),
                                                                         )
                                                                         ->firstWhere('kategori', 2);
+
                                                                     $matchedSubPage1 = collect($sub_page)
                                                                         ->whereIn(
                                                                             'id_sub_page',
                                                                             collect($result)->pluck('SUB_PAGE'),
                                                                         )
                                                                         ->firstWhere('kategori', 1);
+                                                                        
                                                                     $kusus = collect($sub_page)
                                                                         ->whereIn(
                                                                             'id_sub_page',

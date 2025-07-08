@@ -109,7 +109,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 
 	// bu hasil olahan penjualan
 	Route::controller(HasilolahController::class)->group(function () {
-		Route::get('/hasil-olahan/minyak-bumi', 'index');
+		Route::get('/hasil-olahan/minyak-bumi/{id}', 'index');
 		Route::post('/simpan_jholb', 'simpan_jholbx');
 		Route::put('/update_jholb/{id}', 'update_jholbx');
 		Route::get('/show/hasil-olahan/minyak-bumi/{id}/{hasilolah}', 'show_jholbx');
@@ -309,7 +309,7 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 		Route::post('/import_klpgs', 'import_klpgsx');
 	});
 
-	// Progress Pembangunan tes
+	// Progress Pembangunan
 	Route::controller(ProgresPembangunanController::class)->group(function () {
 		route::get('/progres-pembangunan/show/{id}', 'show_izinSementara');
 		Route::post('/simpan_izinSementara', 'simpan_izinSementara');
@@ -421,7 +421,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 
 	Route::controller(EvHasilOlahController::class)->group(function () {
 
-		Route::get('/laporan/jual-hasil-olahan', 'index');
+		Route::get('/laporan/jual-hasil-olahan/', 'index');
 		Route::get('/laporan/jual-hasil-olahan/periode/{kode}', 'periode');
 		Route::get('/laporan/jual-hasil-olahan/{kode}', 'show');
 		Route::get('/laporan/jual-hasil-olahan-cek/', 'test');

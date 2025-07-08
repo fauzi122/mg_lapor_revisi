@@ -23,6 +23,7 @@ class HasilolahController extends Controller
 
     public function index()
     {
+        // tes
         $penjualan = DB::table('jual_hasil_olah_bbms')
         ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
         ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
