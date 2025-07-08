@@ -9,6 +9,7 @@ Route::controller(PengolahanController::class)->group(function () {
   Route::get('/pengolahan-minyak-bumi-hasil-olah/{id}', 'index');
   route::get('/pengolahan-minyak-bumi-hasil-olah/show/{id}/{pengolahan}/{filter?}', 'show_mb_ho');
   // Route::get('/pengolahan-gas-bumi', 'show_gb');
+   Route::get('/pengolahan-gas-bumi/{id}', 'index');
   route::get('/pengolahan-gas-bumi/show/{id}/{pengolahan}/{filter?}', 'show_gb');
 
   // Fungsi AJAX

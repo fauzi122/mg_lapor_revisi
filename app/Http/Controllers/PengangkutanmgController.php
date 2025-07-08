@@ -51,7 +51,7 @@ class PengangkutanmgController extends Controller
     public function index_pgb($id)
     {
         // $pm = pengangkutan_gaskbumi::where('npwp', Auth::user()->npwp)
-        //     ->groupBy('bulan')->get();...
+        //     ->groupBy('bulan')->get();
 
         $pecah = explode(',', Crypt::decryptString($id));
 
