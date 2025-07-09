@@ -13,7 +13,8 @@
         <!--begin:Menu item-->
         <div class="menu-item menu-accordion">
             <!--begin:Menu link-->
-            <a href="#" class="menu-link">
+            <a href="{{ url('/laporan/kuota-jbt') }}"
+                class="menu-link {{ request()->is('laporan/kuota-jbt') ? 'active shadow' : '' }}">
                 <span class="menu-bullet">
                     <span class="bullet bullet-dot"></span>
                 </span>
@@ -23,7 +24,8 @@
         </div>
         <div class="menu-item menu-accordion">
             <!--begin:Menu link-->
-            <a href="#" class="menu-link">
+            <a href="{{ url('/laporan/kuota-jbkp') }}"
+                class="menu-link {{ request()->is('laporan/kuota-jbkp') ? 'active shadow' : '' }}">
                 <span class="menu-bullet">
                     <span class="bullet bullet-dot"></span>
                 </span>

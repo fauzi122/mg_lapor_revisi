@@ -55,6 +55,8 @@ use App\Http\Controllers\Evaluator\{
     EvBphPasokanGasBumi,
     EvBphPengangkutanGas,
     EvBphPenjualanGasBumi,
+    EvKuotaJbkp,
+    EvKuotaJbt,
     EvPenjualanBbm,
     EvPenjualanJbkp,
     EvPenjualanJbt,
@@ -848,7 +850,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
         Route::post('/laporan/penjualan-jbt/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/penjualan-jbt', 'sinkronisasiData');
 	});
-	//Penjualan JBu
+	//Penjualan JBU
 	Route::controller(EvPenjualanJbu::class)->group(function () {
 		Route::get('/laporan/penjualan-jbu', 'index');
 		Route::get('/laporan/penjualan-jbu/{kode}', 'show');
@@ -867,6 +869,28 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/penjualan-bbm/periode/{kode}', 'periode');
         Route::post('/laporan/penjualan-bbm/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/penjualan-bbm', 'sinkronisasiData');
+
+	});
+	//Kuota JBT
+	Route::controller(EvKuotaJbt::class)->group(function () {
+		Route::get('/laporan/kuota-jbt', 'index');
+		Route::get('/laporan/kuota-jbt/{kode}', 'show');
+		Route::get('/laporan/kuota-jbt-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/kuota-jbt-lihat-semua-data', 'filterData');
+		Route::get('/laporan/kuota-jbt/periode/{kode}', 'periode');
+        Route::post('/laporan/kuota-jbt/cetak-periode', 'cetakperiode');
+		Route::get('/laporan/sinkronisasi-data/kuota-jbt', 'sinkronisasiData');
+
+	});
+	//Kuota JBKP
+	Route::controller(EvKuotaJbkp::class)->group(function () {
+		Route::get('/laporan/kuota-jbkp', 'index');
+		Route::get('/laporan/kuota-jbkp/{kode}', 'show');
+		Route::get('/laporan/kuota-jbkp-lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/kuota-jbkp-lihat-semua-data', 'filterData');
+		Route::get('/laporan/kuota-jbkp/periode/{kode}', 'periode');
+        Route::post('/laporan/kuota-jbkp/cetak-periode', 'cetakperiode');
+		Route::get('/laporan/sinkronisasi-data/kuota-jbkp', 'sinkronisasiData');
 
 	});
 	//Penjualan Gas Bumi
