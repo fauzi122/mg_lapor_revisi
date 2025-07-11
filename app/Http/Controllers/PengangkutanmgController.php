@@ -95,8 +95,9 @@ class PengangkutanmgController extends Controller
             ->first();
 
         // Mengambil substring dari bulan
-        $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
-        $statusx = $bulan_ambil->status;
+        // $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
+        $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) . '-01' : '0000-00-00';
+        $statusx = $bulan_ambil->status ?? '';
 
         if (count($pecah) == 5) {
             $filterBy = substr($pecah[3], 0, 4);
@@ -333,8 +334,9 @@ class PengangkutanmgController extends Controller
             ->first();
 
         // Mengambil substring dari bulan
-        $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
-        $statusx = $bulan_ambil->status;
+        // $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
+        $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) . '-01' : '0000-00-00';
+        $statusx = $bulan_ambil->status ?? '';
 
         if (count($pecah) == 5) {
             $filterBy = substr($pecah[3], 0, 4);
@@ -584,16 +586,18 @@ class PengangkutanmgController extends Controller
 
     public function submit_bulan_pengmbx(Request $request, $id)
     {
+        $pecah = explode(',', Crypt::decryptString($id));
 
         $bulanx = $pecah[3];
         $npwp = $pecah[1];
         $id_permohonan = $pecah[0];
         $id_sub_page = $pecah[2];
         $now = Carbon::now();
+        // dd($bulanx, $npwp, $id_permohonan, $id_sub_page);
 
 
-      // Menggunakan parameter binding untuk keamanan
-      $validatedData = DB::table('pengangkutan_minyakbumis')
+        // Menggunakan parameter binding untuk keamanan
+        $validatedData = DB::table('pengangkutan_minyakbumis')
         // Menggunakan parameter binding untuk keamanan
             ->where('bulan', $bulanx)
             ->where('npwp', $npwp)

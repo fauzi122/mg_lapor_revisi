@@ -112,7 +112,7 @@
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
-                    <input type="hidden" id="id_permohonan" name="id_permohonan" value="">
+                    {{-- <input type="hidden" id="id_permohonan" name="id_permohonan" value=""> --}}
 
                     <div class="mb-6">
                         <label for="example-text-input" class="form-label">Bulan</label>

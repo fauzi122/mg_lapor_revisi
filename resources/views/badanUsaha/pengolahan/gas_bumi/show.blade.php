@@ -7,7 +7,7 @@
             <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
                 <h3 class="text-dark fw-bold">Laporan Pengolahan Gas Bumi</h3>
                 @php
-                    $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                    $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]. ',' . $pecah[3]);
                 @endphp
             </div>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
@@ -118,7 +118,7 @@
                                                                     <i class="ki-solid ki-trash" title="Hapus data"></i>
                                                                 </button>
                                                             </form>
-                                                        @elseif($pmb->status == "2")
+                                                        @elseif($ppgb->status == "2")
                                                             <button type="button" class="btn btn-sm btn-info edit-pengolahan-produksi-gb mb-2"
                                                                 onclick="editPengolahan('{{ $ppgb->id }}', '{{ $ppgb->produk }}', '{{ $ppgb->kabupaten_kota }}', '{{ $ppgb->status }}' )" 
                                                                 data-bs-toggle="modal" data-bs-target="#edit-pengolahan-produksi-gb" data-id="{{ $ppgb->id }}">

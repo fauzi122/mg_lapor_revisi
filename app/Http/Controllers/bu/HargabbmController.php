@@ -87,74 +87,74 @@ class HargabbmController extends Controller
    */
   public function show_niagahargax($id, $harga, $filter = null)
   {
-      // dd($harga);
-      // die;
-      $hargax = $harga;
-      $pecah = explode(',', Crypt::decryptString($id));
-      $npwp = Auth::user()->npwp;
+    $hargax = $harga;
+    $pecah = explode(',', Crypt::decryptString($id));
+    $npwp = Auth::user()->npwp;
 
-      $bulan_ambil_hargabbmjbu = DB::table('harga_bbm_jbus')
-              ->where('npwp', $npwp)
-              ->where('bulan', $pecah[3])
-              ->where('id_permohonan', $pecah[0])
-              ->where('id_sub_page', $pecah[2])
-              ->orderBy('status', 'desc')
-              ->first();
+    // Mapping nilai
+    $bulan = $pecah[3];
+    $npwp_decrypted = $pecah[1];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
 
-      $bulan_ambil_hargalpg = DB::table('harga_l_p_g_s')
-              ->where('npwp', $npwp)
-              ->where('bulan', $pecah[3])
-              ->where('id_permohonan', $pecah[0])
-              ->where('id_sub_page', $pecah[2])
-              ->orderBy('status', 'desc')
-              ->first();
-      
-      
+    // Cek data utama dari DB
+    $bulan_ambil_hargabbmjbu = DB::table('harga_bbm_jbus')
+      ->where('npwp', $npwp)
+      ->where('bulan', $bulan)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->orderBy('status', 'desc')
+      ->first();
 
-      // Mengambil substring dari bulan
-      $bulan_ambil_hargabbmjbux = $bulan_ambil_hargabbmjbu ? substr($bulan_ambil_hargabbmjbu->bulan, 0, 7) : '';
-      $statushargabbmjbux = $bulan_ambil_hargabbmjbu->status ?? '';
+    $bulan_ambil_hargalpg = DB::table('harga_l_p_g_s')
+      ->where('npwp', $npwp)
+      ->where('bulan', $bulan)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->orderBy('status', 'desc')
+      ->first();
 
-      $bulan_ambil_hargalpgx = $bulan_ambil_hargalpg ? substr($bulan_ambil_hargalpg->bulan, 0, 7) : '';
-      $statushargalpgx = $bulan_ambil_hargalpg->status ?? '';
+    $bulan_ambil_hargabbmjbux = $bulan_ambil_hargabbmjbu ? substr($bulan_ambil_hargabbmjbu->bulan, 0, 7) : '';
+    $statushargabbmjbux = $bulan_ambil_hargabbmjbu->status ?? '';
 
-      // dd($harga);
-      // die;
+    $bulan_ambil_hargalpgx = $bulan_ambil_hargalpg ? substr($bulan_ambil_hargalpg->bulan, 0, 7) : '';
+    $statushargalpgx = $bulan_ambil_hargalpg->status ?? '';
 
-      if ($filter && $filter === "tahun") {
-        $filterBy = substr($pecah[3], 0, 4);
-      } else {
-        $filterBy = $pecah[3];
-      }
+    // Cek filter
+    if ($filter && $filter === "tahun") {
+      $filterBy = substr($bulan, 0, 4); // ambil dari bulan
+    } else {
+      $filterBy = substr($bulan, 0, 7); // ambil tahun-bulan saja
+    }
 
-      $hargabbmjbu = Harga_bbm_jbu::where([
-        ['bulan', 'like', "%". $filterBy ."%"],
-        'npwp' => $pecah[1],
-        'id_permohonan' => $pecah[0],
-        'id_sub_page' => $pecah[2],
-      ])->orderBy('status', 'desc')->get();
+    // Ambil data utama
+    $hargabbmjbu = Harga_bbm_jbu::where([
+      ['bulan', 'like', "%" . $filterBy . "%"],
+      'npwp' => $npwp_decrypted,
+      'id_permohonan' => $id_permohonan,
+      'id_sub_page' => $id_sub_page,
+    ])->orderBy('status', 'desc')->get();
 
-      $hargalpg = HargaLPG::where([
-        ['bulan', 'like', "%". $filterBy ."%"],
-        'npwp' => $pecah[1],
-        'id_permohonan' => $pecah[0],
-        'id_sub_page' => $pecah[2],
-      ])->orderBy('status', 'desc')->get();
+    $hargalpg = HargaLPG::where([
+      ['bulan', 'like', "%" . $filterBy . "%"],
+      'npwp' => $npwp_decrypted,
+      'id_permohonan' => $id_permohonan,
+      'id_sub_page' => $id_sub_page,
+    ])->orderBy('status', 'desc')->get();
 
-      // dd($harga);
-      // die;
-      // return view('badan_usaha.niaga.harga.show', compact(
-      return view('badanUsaha.niaga.harga.show', compact(
-        'hargabbmjbu',
-        'hargalpg',
-        'bulan_ambil_hargabbmjbux',
-        'bulan_ambil_hargalpgx',
-        'statushargabbmjbux',
-        'statushargalpgx',
-        'hargax',
-        'pecah'
+    // return view kalau sudah jalan semua
+    return view('badanUsaha.niaga.harga.show', compact(
+      'hargabbmjbu',
+      'hargalpg',
+      'bulan_ambil_hargabbmjbux',
+      'bulan_ambil_hargalpgx',
+      'statushargabbmjbux',
+      'statushargalpgx',
+      'hargax',
+      'pecah'
     ));
   }
+
   public function create()
   {
     //
@@ -233,9 +233,9 @@ class HargabbmController extends Controller
 
     $cekdb = DB::table('harga_bbm_jbus')
       ->where('npwp', $npwp)
-      ->where('id_permohonan', $request->id_permohonan)
-      ->where('id_sub_page', $request->id_sub_page)
       ->where('bulan', $request->bulan)
+      ->where('id_sub_page', $request->id_sub_page)
+      ->where('id_permohonan', $request->id_permohonan)
       ->orderBy('status', 'desc')
       ->first();
 

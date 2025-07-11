@@ -690,8 +690,8 @@ class EksportImportController extends Controller
       // Siapkan query untuk menghapus data
       $affected = DB::table('ekspors')
           ->where('npwp', $pecah[1])
-          ->where('bulan_peb', $pecah[0])
-          ->where('id_permohonan', $pecah[2])
+          ->where('bulan_peb', $pecah[3])
+          ->where('id_permohonan', $pecah[0])
           ->delete();
 
       // Cek hasil penghapusan dan tampilkan pesan sesuai
@@ -709,9 +709,9 @@ class EksportImportController extends Controller
   {
       // Dekripsi ID dan pecah menjadi array
       $pecah = explode(',', Crypt::decryptString($id));
-      $bulan_pib = $pecah[0];
+      $bulan_pib = $pecah[3];
       $npwp = $pecah[1];
-      $id_permohonan = $pecah[2];
+      $id_permohonan = $pecah[0];
   
       // Menggunakan query builder untuk menghapus data
       $affected = DB::table('impors')

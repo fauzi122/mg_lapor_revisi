@@ -1319,16 +1319,16 @@ class PengolahanController extends Controller
 
     $rules = [
       'npwp' => 'required',
-      'id_permohonan' => 'required',
+      // 'id_permohonan' => 'required',
       'bulan' => 'required',
       'produk' => 'required',
       'satuan' => 'required',
       'provinsi' => 'required',
       'kabupaten_kota' => 'required',
       'volume' => 'required',
-      'status' => 'required',
-      'catatan' => 'required',
-      'petugas' => 'required',
+      // 'status' => 'required',
+      // 'catatan' => 'required',
+      // 'petugas' => 'required',
     ];
 
     $validatedData = $request->validate($rules, $pesan);
