@@ -94,8 +94,10 @@ class PenyMinyakbumiController extends Controller
             ->first();
 
         // Mengambil substring dari bulan
-        $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
-        $statusx = $bulan_ambil->status;
+        // $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) : '';
+        $bulan_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 7) . '-01' : '0000-00-00';
+
+        $statusx = $bulan_ambil->status ?? '';
 
         if ($filter && $filter === "tahun") {
             $filterBy = substr($pecah[3], 0, 4);

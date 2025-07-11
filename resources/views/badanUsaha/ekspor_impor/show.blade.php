@@ -79,7 +79,7 @@
                                                     </button>
                                                 </form>
                                                 <button type="button" class="btn btn-sm btn-primary"
-                                                    onclick="produk(); provinsi(); negara();" data-bs-toggle="modal"
+                                                    onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms();" data-bs-toggle="modal"
                                                     data-bs-target="#myModal">
                                                     <i class="fas fa-plus"></i> Buat Laporan
                                                     {{ dateIndonesia($bulan_ambil_eksporsx) }}
@@ -280,7 +280,7 @@
                                                     </button>
                                                 </form>
                                                 <button type="button" class="btn btn-sm btn-primary"
-                                                    onclick="produk(); provinsi(); negara();" data-bs-toggle="modal"
+                                                    onclick="produk(); provinsi(); negara(); pelabuhan(); incoterms();" data-bs-toggle="modal"
                                                     data-bs-target="#inputimpor">
                                                     <i class="fas fa-plus"></i> Buat Laporan
                                                     {{ dateIndonesia($bulan_ambil_imporsx) }}

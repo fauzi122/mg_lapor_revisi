@@ -223,13 +223,13 @@
                                                 @foreach ($hargabbmjbu as $data)
                                                     @php
                                                         $id = Crypt::encryptString(
-                                                            $data->bulan .
+                                                            $data->id_permohonan .
                                                                 ',' .
                                                                 $data->npwp .
                                                                 ',' .
-                                                                $data->id_permohonan .
+                                                                $data->id_sub_page .
                                                                 ',' .
-                                                                $data->id_sub_page,
+                                                                $data->bulan,
                                                         );
                                                     @endphp
                                                     <tr>
@@ -285,14 +285,14 @@
                                                                     </button>
                                                                 </form>
                                                                 <form
-                                                                    action="{{ url('/submit_bulan_harga') }}/{{ $id }}"
+                                                                    action="{{ url('/submit_bulan_harga-bbm-jbu') }}/{{ $id }}"
                                                                     method="post" class="d-inline" {{-- data-id="{{ $data->bulan_peb }}"> --}}
                                                                     data-id="{{ $data->bulan }}">
                                                                     @method('PUT')
                                                                     @csrf
                                                                     <button type="button"
                                                                         class="btn btn-icon btn-sm btn-success mb-2"
-                                                                        onclick="kirimData($(this).('form'))">
+                                                                        onclick="kirimData($(this).closest('form'))">
                                                                         <i class="ki-solid ki-send" title="Revisi"></i>
                                                                     </button>
                                                                 </form>

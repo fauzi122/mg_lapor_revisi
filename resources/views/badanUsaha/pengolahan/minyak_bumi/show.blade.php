@@ -7,7 +7,7 @@
                 <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
                     <h3 class="text-dark fw-bold">Laporan Pengolahan Minyak Bumi/Hasil Olahan</h3>
                     @php
-                        $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]);
+                        $id = Crypt::encryptString($pecah[0] . ',' . $pecah[1] . ',' . $pecah[2]. ',' . $pecah[3]);
                     @endphp
                 </div>
                 <div class="d-flex align-items-center gap-2 gap-lg-3">
@@ -286,7 +286,7 @@
                                                                             title="Hapus data"></i>
                                                                     </button>
                                                                 </form>
-                                                            @elseif($pmb->status == '2')
+                                                            @elseif($ppmb->status == '2')
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-info edit-pengolahan-pasokan-mb mb-2"
                                                                     onclick="editPengolahan('{{ $ppmb->id }}', '{{ $ppmb->intake_kilang }}', '{{ $ppmb->kabupaten_kota }}', '{{ $ppmb->status }}' )"
@@ -436,7 +436,7 @@
                                                                             title="Hapus data"></i>
                                                                     </button>
                                                                 </form>
-                                                            @elseif($pmb->status == '2')
+                                                            @elseif($ppmb->status == '2')
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-info edit-pengolahan-distribusi-mb mb-2"
                                                                     onclick="editPengolahan('{{ $ppmb->id }}', '{{ $ppmb->produk }}', '{{ $ppmb->kabupaten_kota }}', '{{ $ppmb->status }}' )"

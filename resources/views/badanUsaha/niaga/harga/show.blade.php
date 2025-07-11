@@ -33,7 +33,14 @@
                                             $id = Crypt::encryptString(
                                                 $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2] . ',' . $pecah[3],
                                             );
+                                            // $decrypted = explode(',', Crypt::decryptString($id));
                                         @endphp
+                                        {{-- <div class="d-flex justify-content-end gap-2 flex-wrap">
+                                            <div><strong>ID Permohonan:</strong> {{ $decrypted[0] }}</div>
+                                            <div><strong>NPWP:</strong> {{ $decrypted[1] }}</div>
+                                            <div><strong>ID Sub Page:</strong> {{ $decrypted[2] }}</div>
+                                            <div><strong>Bulan:</strong> {{ $decrypted[3] }}</div>
+                                        </div> --}}
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="d-flex justify-content-end gap-2">
