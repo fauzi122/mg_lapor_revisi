@@ -11,42 +11,21 @@ class APIBph
 {
     const BASEURL = 'https://ngembangin.esdm.go.id/inline/hilir/internal/api/dev/pelaporan-migas';
 
-    /**
-     * Mendapatkan atau mengupdate token BPH API
-     */
     public function tokenBphApi()
-    {
-        // Cek apakah ada token yang disimpan di cache
-        $token = Cache::get('access_token');
-        $tokenExpiry = Cache::get('token_expiry');
-
-        // Jika token ada dan belum kadaluarsa
-        if ($token && $tokenExpiry && now()->lessThan($tokenExpiry)) {
-            return $token;  // Token masih valid
-        }
-
-        // Jika token tidak ada atau sudah kadaluarsa, ambil token baru
-        return $this->refreshToken();
-    }
-
-    /**
-     * Melakukan refresh token
-     */
-    private function refreshToken()
     {
         $url = self::BASEURL . "/login";
 
         try {
-            // Request untuk mendapatkan token baru
+
             $response = Http::withBasicAuth('ditjenmigas', 'P@ssw0rd')->post($url, [
                 'Username' => "ditjenmigas",
                 'Password' => "P@ssw0rd"
             ]);
 
             if ($response->successful()) {
-                $responseBody = $response->json();
-                $token = $responseBody['access_token'];
-                $expiresIn = $responseBody['expires_in'];
+                $response = $response->json();
+                $token = $response['access_token'];
+                $expiresIn = $response['expires_in'];
 
                 // Simpan token dan waktu kadaluarsa
                 Cache::put('access_token', $token, now()->addSeconds($expiresIn));
@@ -55,7 +34,7 @@ class APIBph
                 return $token;
             } else {
                 Log::error('Gagal mendapatkan token.', ["message" => $response["error"]]);
-                throw new Exception("Gagal mendapatkan token baru.");
+                return;
             }
         } catch (\Throwable $th) {
             log::error('Gagal mendapatkan token.', ["message" => $th->getMessage()]);
@@ -63,12 +42,9 @@ class APIBph
         }
     }
 
-    /**
-     * Melakukan POST request ke API dengan token yang valid
-     */
     public function post($endpoint, $year, $page)
     {
-        $token = $this->tokenBphApi(); // Mendapatkan token yang valid
+        $token = Cache::get('access_token');
 
         try {
             $response = Http::timeout(180)
@@ -78,11 +54,14 @@ class APIBph
                     "page" => $page
                 ]);
 
-            // Jika status 401 (Unauthorized), refresh token dan coba lagi
+            // Unauthorized (Token expired)
             if ($response->status() === 401) {
-                $this->refreshToken();  // Refresh token
+                // Refresh token
+                $this->tokenBphApi();
+
+                // Retry sekali
                 $response = Http::timeout(180)
-                    ->withToken(Cache::get('access_token')) // Gunakan token baru
+                    ->withToken(Cache::get('access_token'))
                     ->post(self::BASEURL . $endpoint, [
                         "tahun" => $year,
                         "page" => $page

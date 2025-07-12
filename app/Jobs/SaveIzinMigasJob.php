@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Library\APIEsdm;
 use App\Models\IzinMigas;
 use App\Models\IzinMigasTabular;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -72,7 +73,11 @@ class SaveIzinMigasJob
                     'data_izin' => $data['data_izin'],
                 ]
             );
-
+            if (isset($data['data_badan_usaha']['Nama_perusahaan'])) {
+                User::where('npwp', $this->npwp)->update([
+                    'name' => $data['data_badan_usaha']['Nama_perusahaan']
+                ]);
+            }
             // Iterasi data_izin untuk setiap sub_page_id
             foreach ($data['data_izin'] as $izin) {
                 foreach ($izin['multiple_id'] as $subPage) {
