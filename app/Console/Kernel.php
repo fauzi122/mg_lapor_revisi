@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
+use App\Jobs\SyncPenjualanJbt;
 use App\Jobs\SyncJbtJob;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,10 +15,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function () {
-            $startYear = 2024; // Hanya menjalankan job untuk tahun 2020
-            SyncJbtJob::dispatch($startYear);
+            $startYear = 2023; // Hanya menjalankan job untuk tahun 2020
+            SyncJbtJob::dispatchSync($startYear);
         })->dailyAt('15:15'); // Menjadwalkan job setiap hari pukul 01:00 AM
         // $schedule->command('inspire')->hourly();
+
     }
 
     /**
