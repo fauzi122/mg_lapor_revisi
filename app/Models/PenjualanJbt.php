@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class PenjualanJbt extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'bph_penjualan_jbt';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
 }
