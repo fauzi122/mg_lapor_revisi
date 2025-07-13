@@ -49,6 +49,12 @@
             </a>
         </div>
         <div class="menu-item">
+            <a href="{{ url('/master/izin-usaha') }}" class="menu-link {{ request()->is('master/izin-usaha') ? 'active shadow' : '' }}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Izin Usaha</span>
+            </a>
+        </div>
+        <div class="menu-item">
             <a href="{{ url('/master/meping') }}" class="menu-link {{ request()->is('master/meping') ? 'active shadow' : '' }}">
                 <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                 <span class="menu-title">Meping</span>
