@@ -6,7 +6,8 @@
                 <h5 class="modal-title" id="myModalLabel">Penjualan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/simpan_jholb') }}" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/simpan_jholb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -130,7 +131,8 @@
                 <h5 class="modal-title" id="myModalLabel">Penjualan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/importjholb') }}" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/importjholb') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -173,8 +175,8 @@
                 <h5 class="modal-title" id="editjholbxLabel">Edit Penjualan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/update_jholb/') }}" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_penjualan">
+            <form method="post" action="{{ url('/update_jholb/') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_penjualan">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -296,8 +298,8 @@
                 <h5 class="modal-title" id="editjholbxLabel">Lihat Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/update_jholb/') }}" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_penjualan">
+            <form method="post" action="{{ url('/update_jholb/') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_penjualan">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -406,7 +408,8 @@
                 <h5 class="modal-title" id="myModalLabel">Pasokan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/pasokan-olah') }}" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/pasokan-olah') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -503,7 +506,8 @@
                 <h5 class="modal-title" id="myModalLabel">Pasokan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/importpasokan') }}" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/importpasokan') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -546,8 +550,8 @@
                 <h5 class="modal-title" id="editjholbxLabel">Edit Pasokan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/update_lng/') }}" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_pasokan">
+            <form method="post" action="{{ url('/update_pasokan/') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_pasokan">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
@@ -642,42 +646,41 @@
                 <h5 class="modal-title" id="editjholbxLabel">Lihat Pasokan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/update_lng/') }}" class="form-material m-t-40" enctype="multipart/form-data"
-                id="form_pasokan">
+            {{-- <form method="post" action="{{ url('/update_lng/') }}" class="form-material m-t-40"
+                enctype="multipart/form-data" id="form_pasokan">
                 @method('PUT')
-                @csrf
-                <div class="modal-body">
+                @csrf --}}
+            <div class="modal-body">
 
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Bulan</label>
-                        <input class="form-control" type="month" name="bulan" id="lihat_bulan_pasokan" readonly>
-                        @error('bulan')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Produk</label>
-                        <input class="form-control" type="text" name="produk" id="lihat_produk_pasokan"
-                            readonly>
-                        @error('produk')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Nama Pemasok</label>
-                        <input class="form-control" type="text" name="" id="lihat_nama_pemasok_pasokan"
-                            readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Kategori Pemasok</label>
-                        <input class="form-control" type="text" name=""
-                            id="lihat_kategori_pemasok_pasokan" readonly>
-                    </div>
-                    {{-- <div class="mb-3">
+                <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Bulan</label>
+                    <input class="form-control" type="month" name="bulan" id="lihat_bulan_pasokan" readonly>
+                    @error('bulan')
+                        <div class="form-group has-danger mb-0">
+                            <div class="form-control-feedback">{{ $message }}</div>
+                        </div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Produk</label>
+                    <input class="form-control" type="text" name="produk" id="lihat_produk_pasokan" readonly>
+                    @error('produk')
+                        <div class="form-group has-danger mb-0">
+                            <div class="form-control-feedback">{{ $message }}</div>
+                        </div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Nama Pemasok</label>
+                    <input class="form-control" type="text" name="" id="lihat_nama_pemasok_pasokan"
+                        readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Kategori Pemasok</label>
+                    <input class="form-control" type="text" name="" id="lihat_kategori_pemasok_pasokan"
+                        readonly>
+                </div>
+                {{-- <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi</label>
                         <input class="form-control" type="text" name="provinsi" id="lihat_provinsi_pasokan"
                             readonly>
@@ -707,17 +710,16 @@
                             </div>
                         @enderror
                     </div> --}}
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="text" name="volume" id="lihat_volume_pasokan"
-                            readonly>
-                        @error('volume')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    {{-- <div class="mb-3">
+                <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Volume</label>
+                    <input class="form-control" type="text" name="volume" id="lihat_volume_pasokan" readonly>
+                    @error('volume')
+                        <div class="form-group has-danger mb-0">
+                            <div class="form-control-feedback">{{ $message }}</div>
+                        </div>
+                    @enderror
+                </div>
+                {{-- <div class="mb-3">
                         <label for="example-text-input" class="form-label">Satuan</label>
                         <input class="form-control" type="text" name="satuan" id="lihat_satuan_pasokan"
                             readonly>
@@ -729,13 +731,12 @@
                     </div> --}}
 
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect"
-                        data-bs-dismiss="modal">Close</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
 
-            </form>
+            {{-- </form> --}}
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -751,7 +752,8 @@
                 <h5 class="modal-title" id="myModalLabel">Harga BBM JBU</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/harga-bbm-jbu') }}" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/harga-bbm-jbu') }}" class="form-material m-t-40"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
