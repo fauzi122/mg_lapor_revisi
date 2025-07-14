@@ -48,12 +48,24 @@ class SyncJbtJob implements ShouldQueue
                 do {
                     // Membuat URL berdasarkan tahun dan halaman
                     $response = $apiBph->post('/bbm/penjualan-jbt', $year, $page);
+
+                    // Cek apakah request berhasil
+                    if (!$response->successful()) {
+                        // Jika request gagal, log error dan lanjut ke halaman berikutnya
+                        Log::error("Gagal mendapatkan data pada halaman $page untuk tahun $year. Error: " . $response->body());
+                        // Lanjutkan ke halaman berikutnya
+                        $page++;
+                        continue;
+                    }
+
                     $data = $response->json()['data'];
 
-                    // Jika data kosong, berhenti
+                    // Jika data kosong, berhenti dan lanjutkan ke halaman berikutnya
                     if (empty($data)) {
                         Log::info("Tidak ada data pada page $page untuk tahun $year.");
-                        break;
+                        // Lanjutkan ke halaman berikutnya
+                        $page++;
+                        continue;
                     }
 
                     // Proses setiap data di halaman
