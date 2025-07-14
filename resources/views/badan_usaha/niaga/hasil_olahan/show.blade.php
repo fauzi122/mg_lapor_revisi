@@ -126,7 +126,8 @@
                                                                     data-id="{{ $data->id }}"> <i
                                                                         class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
-                                                                <form action="/hapus_jholb/{{ $data->id }}"
+                                                                <form
+                                                                    action="{{ url('/hapus_jholb') }}/{{ $data->id }}"
                                                                     method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf

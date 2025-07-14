@@ -117,11 +117,11 @@ class PasokanHasilolahController extends Controller
      */
     public function update_pasokan(Request $request, $id)
     {
-        // dd($id);
+        // dd($request->all());
         $pasokan_olah = $id;
         $pesan = [
             // 'id.required' => 'id masih kosong',
-            'npwp.required' => 'npwp masih kosong',
+            // 'npwp.required' => 'npwp masih kosong',
             // 'id_permohonan.required' => 'id_permohonan masih kosong',
             // 'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
@@ -139,7 +139,7 @@ class PasokanHasilolahController extends Controller
 
         $rules = [
             // 'id' => 'required',
-            'npwp' => 'required',
+            // 'npwp' => 'required',
             // 'id_permohonan' => 'required',
             // 'bulan' => 'required',
             'produk' => 'required',
