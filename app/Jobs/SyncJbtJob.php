@@ -42,40 +42,38 @@ class SyncJbtJob implements ShouldQueue
             try {
                 $apiBph = new APIBph();
                 $page = 1;
-                $lanjut = true;
 
-                // Looping halaman berdasarkan total halaman yang ada
+                // Mendapatkan informasi total halaman dan total record dari API
                 do {
                     // Membuat URL berdasarkan tahun dan halaman
                     $response = $apiBph->post('/bbm/penjualan-jbt', $year, $page);
                     $data = $response->json()['data'];
 
-                    // Jika data kosong, berhenti dan lanjutkan ke halaman berikutnya
+                    // Jika data kosong, lanjutkan ke halaman berikutnya
                     if (empty($data)) {
                         Log::info("Tidak ada data pada page $page untuk tahun $year.");
-                        break;  // Keluar dari loop jika tidak ada data pada halaman
-                    }
-
-                    // Proses setiap data di halaman
-                    foreach ($data as $item) {
-                        PenjualanJbt::updateOrCreate(
-                            [
-                                'id_badan_usaha'   => $item['id_badan_usaha'],
-                                'npwp_badan_usaha' => $item['npwp_badan_usaha'],
-                                'tahun'            => $item['tahun'],
-                                'bulan'            => $item['bulan'],
-                                'produk'           => $item['produk'],
-                                'provinsi'         => $item['provinsi'],
-                                'kabupaten_kota'   => $item['kabupaten_kota'],
-                                'sektor'           => $item['sektor'],
-                            ],
-                            [
-                                'nama_badan_usaha' => $item['nama_badan_usaha'],
-                                'izin_usaha'       => json_encode($item['izin_usaha']),
-                                'volume'           => $item['volume'],
-                                'satuan'           => $item['satuan'],
-                            ]
-                        );
+                    } else {
+                        // Proses setiap data di halaman
+                        foreach ($data as $item) {
+                            PenjualanJbt::updateOrCreate(
+                                [
+                                    'id_badan_usaha'   => $item['id_badan_usaha'],
+                                    'npwp_badan_usaha' => $item['npwp_badan_usaha'],
+                                    'tahun'            => $item['tahun'],
+                                    'bulan'            => $item['bulan'],
+                                    'produk'           => $item['produk'],
+                                    'provinsi'         => $item['provinsi'],
+                                    'kabupaten_kota'   => $item['kabupaten_kota'],
+                                    'sektor'           => $item['sektor'],
+                                ],
+                                [
+                                    'nama_badan_usaha' => $item['nama_badan_usaha'],
+                                    'izin_usaha'       => json_encode($item['izin_usaha']),
+                                    'volume'           => $item['volume'],
+                                    'satuan'           => $item['satuan'],
+                                ]
+                            );
+                        }
                     }
 
                     // Memeriksa apakah ada halaman berikutnya menggunakan 'last_page'
@@ -86,9 +84,9 @@ class SyncJbtJob implements ShouldQueue
                     if ($page < $lastPage) {
                         $page++;  // Lanjutkan ke halaman berikutnya
                     } else {
-                        $lanjut = false;  // Berhenti jika sudah mencapai halaman terakhir
+                        break;  // Berhenti jika sudah mencapai halaman terakhir
                     }
-                } while ($lanjut);  // Lanjutkan loop selama masih ada halaman
+                } while ($page <= $lastPage);  // Lanjutkan loop selama masih ada halaman
             } catch (\Exception $e) {
                 Log::error("Error pada tahun $year: " . $e->getMessage());
             }
