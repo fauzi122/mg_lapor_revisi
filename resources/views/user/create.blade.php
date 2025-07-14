@@ -41,6 +41,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error:</strong> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="card-body mt-4">
             <div class="card mb-5 mb-xl-8 shadow">
                 <div class="card-header bg-light p-5">
@@ -61,7 +68,7 @@
                 </div>
                 <div class="card-body p-2">
                     <div class="card">
-                        <form action="/user-admin-store" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url('/user-admin-store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row p-4">
                                 <!-- Left Column -->
@@ -199,12 +206,17 @@
                                     @foreach ($roles as $role)
                                         <div class="col-md-4">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="role[]" value="{{ $role->name }}" id="check-{{ $role->id }}">
+                                                <input class="form-check-input {{ $errors->has('role') ? 'is-invalid' : '' }}" type="checkbox" name="role[]" value="{{ $role->name }}" id="check-{{ $role->id }}"
+                                                {{ in_array($role->name, old('role', [])) ? 'checked' : '' }}>
+
                                                 <label class="form-check-label" for="check-{{ $role->id }}">{{ $role->name }}</label>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
+                                 @error('role')
+                                        <div class="text-danger mt-2">{{ $message }}</div>
+                                 @enderror
                             </div>
 
                             <!-- Submit and Reset Buttons -->

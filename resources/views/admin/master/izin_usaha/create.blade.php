@@ -140,7 +140,7 @@
                             <div class="mt-3 mt-lg-0">
                                 <div class="mb-3">
                                     <label for="example-date-input" class="d-flex align-items-center fs-6 fw-semibold mb-2">Kategori</label>
-                                    <input class="form-control form-control-solid" placeholder="Masukan Kategori" type="text" id="example-text-input" name="kategori_izin" value="{{ old('kategori_izin') }}">
+                                    <input class="form-control form-control-solid" placeholder="Masukan Kategori" type="number" id="example-text-input" name="kategori_izin" value="{{ old('kategori_izin') }}">
                                     @error('kategori_izin')
                                         <div class="form-group has-danger mb-0">
                                             <div class="form-control-feedback text-danger">{{ $message }}</div>

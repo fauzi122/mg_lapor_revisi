@@ -112,7 +112,7 @@
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="fs-6 fw-semibold mb-2">Kategori Izin</label>
-                                <input type="text" name="kategori_izin" class="form-control form-control-solid" value="{{ old('kategori_izin', $IzinUsaha->kategori_izin) }}">
+                                <input type="number" name="kategori_izin" class="form-control form-control-solid" value="{{ old('kategori_izin', $IzinUsaha->kategori_izin) }}">
                                 @error('kategori_izin')
                                     <div class="form-control-feedback text-danger">{{ $message }}</div>
                                 @enderror

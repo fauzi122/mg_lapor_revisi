@@ -37,9 +37,10 @@ class IzinUsahaController extends Controller
             'nama_opsi.required' => 'Nama Opsi masih kosong',
             'id_ref.required' => 'Id Ref masih kosong',
             'jenis.required' => 'Jenis masih kosong',
+            'kategori_izin.max' => 'Jenis maksimal 1 karakter',
             'kategori_izin.required' => 'Kategori Izin masih kosong',
-
         ];
+
         $validatedData = $request->validate([
             'id_sub_page' => 'required|unique:izin_usaha,id_sub_page',
             'id_template' => 'required',
@@ -47,12 +48,14 @@ class IzinUsahaController extends Controller
             'nama_opsi' => 'required',
             'id_ref' => 'required',
             'jenis' => 'required',
-            'kategori_izin' => 'required',
+            'kategori_izin' => 'required|max:1',
         ], $pesan);
+
         IzinUsaha::create($validatedData);
 
         return redirect('/master/izin-usaha')->with(['success' => 'Data berhasil ditambahkan']);
     }
+
 
     /**
      * Display the specified resource.
@@ -85,6 +88,7 @@ class IzinUsahaController extends Controller
             'nama_opsi.required' => 'Nama Opsi masih kosong',
             'id_ref.required' => 'Id Ref masih kosong',
             'jenis.required' => 'Jenis masih kosong',
+            'kategori_izin.max' => 'Jenis maksimal 1 karakter',
             'kategori_izin.required' => 'Kategori Izin masih kosong',
         ];
 
@@ -95,7 +99,7 @@ class IzinUsahaController extends Controller
             'nama_opsi' => 'required',
             'id_ref' => 'required',
             'jenis' => 'required',
-            'kategori_izin' => 'required',
+            'kategori_izin' => 'required|max:1',
         ];
 
         $validatedData = $request->validate($rules, $pesan);

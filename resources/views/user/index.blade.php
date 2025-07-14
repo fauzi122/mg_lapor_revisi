@@ -94,11 +94,11 @@
                                             @endphp
                                             {{-- {{ $id }} --}}
 
-                                            <a href="/user/edit/admin/{{$id}}" class="btn btn-sm btn-info">
+                                            <a href="{{ url('/user/edit/admin/' . $id) }}" class="btn btn-sm btn-info">
                                                 <i class="bi bi-pencil-fill"></i> Edit
                                             </a>
 
-                                            <form name="form1" id="form1" action="/hapus-user/admin/{{$id}}" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                            <form name="form1" id="form1" action="{{ url('/hapus-user/admin/' . $id) }}" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                                 @method('delete')
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-danger">

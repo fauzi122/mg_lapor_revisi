@@ -56,7 +56,11 @@ class UserController extends Controller
             'id_jabatan' => 'required|string|max:10',
             'tte'        => 'required|string|in:iya,tidak',
             'sso'        => 'required|string|in:non sso,sso',
-            'password'   => 'required|string|min:6'
+            'password'   => 'required|string|min:6',
+
+            
+            'role'       => 'required|array',
+            'role.*'     => 'string|exists:roles,name',
         ]);
     
         // Periksa keunikan email di kedua tabel secara manual
@@ -81,17 +85,17 @@ class UserController extends Controller
                 'created_at'=> now(),
                 'updated_at'=> now(),
             ]);
-    
+
             // Insert ke tabel users dengan referensi profil_adm ke ID Profil_admins
-            DB::table('users')->insert([
-                'name'      => $validatedData['name'],
-                'email'     => $request->email,
-                'password'  => bcrypt($validatedData['password']),
-                'role'      => 'ADM', 
-                'profil_adm'=> $profilAdminId,
-                'created_at'=> now(),
-                'updated_at'=> now(),
+            $user = User::create([
+                'name'       => $validatedData['name'],
+                'email'      => $request->email,
+                'password'   => bcrypt($validatedData['password']),
+                'role'       => 'ADM',
+                'profil_adm' => $profilAdminId,
             ]);
+            $user->assignRole($request->input('role')); // ini penting!
+
     
             DB::commit();
             return redirect()->route('user.index')->with('sweet_success', 'Data User Berhasil Ditambah!');
