@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\bph;
+namespace App\Jobs;
 
 use App\Library\APIBph;
 use App\Models\PenjualanJbt;
