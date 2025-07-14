@@ -24,7 +24,9 @@ use App\Http\Controllers\{
 	SubsidilpgController,
 	ProgresPembangunanController,
 	IzinMigasController,
-    testEmailController
+    testEmailController,
+	IzinController,
+    IzinUsahaController
 };
 
 use App\Http\Controllers\Evaluator\{
@@ -419,6 +421,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	Route::resource('/master/intake_kilangs', IntakeController::class);
 	Route::resource('/master/produk', ProdukController::class);
 	Route::resource('/master/jabatan', JabatanController::class);
+	Route::resource('/master/izin-usaha', IzinUsahaController::class);
 	//Evaluator hasil olahan bbm
 
 	Route::controller(EvHasilOlahController::class)->group(function () {
