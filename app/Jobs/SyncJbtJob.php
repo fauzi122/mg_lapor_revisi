@@ -48,12 +48,20 @@ class SyncJbtJob implements ShouldQueue
                 do {
                     // Membuat URL berdasarkan tahun dan halaman
                     $response = $apiBph->post('/bbm/penjualan-jbt', $year, $page);
+
+                    // Cek apakah request berhasil
+                    if (!$response->successful()) {
+                        // Jika request gagal, log error dan lanjut ke halaman berikutnya
+                        Log::error("Gagal mendapatkan data pada halaman $page untuk tahun $year. Error: " . $response->body());
+                        break;  // Jika gagal, keluar dari loop
+                    }
+
                     $data = $response->json()['data'];
 
-                    // Jika data kosong, berhenti
+                    // Jika data kosong, berhenti dan lanjutkan ke halaman berikutnya
                     if (empty($data)) {
                         Log::info("Tidak ada data pada page $page untuk tahun $year.");
-                        break;  // Jika tidak ada data, keluar dari loop
+                        break;  // Keluar dari loop jika tidak ada data pada halaman
                     }
 
                     // Proses setiap data di halaman
@@ -78,15 +86,17 @@ class SyncJbtJob implements ShouldQueue
                         );
                     }
 
-                    // Periksa apakah ada halaman berikutnya
-                    // Jika tidak ada "pageCount" atau halaman lebih dari 1, lanjutkan
-                    $pageCount = $response->json()['sp']['pageCount'] ?? 0; // Cek apakah ada 'pageCount'
-                    if ($page >= $pageCount || $pageCount == 0) {
-                        $lanjut = false; // Berhenti jika tidak ada halaman berikutnya
+                    // Memeriksa apakah API mengirimkan informasi halaman berikutnya
+                    $pageCount = $response->json()['sp']['pageCount'] ?? 0; // Cek jika ada pageCount
+                    Log::info("Halaman $page untuk tahun $year: pageCount = $pageCount");
+
+                    // Tentukan apakah kita harus lanjut ke halaman berikutnya
+                    if ($page < $pageCount) {
+                        $page++;  // Lanjutkan ke halaman berikutnya
                     } else {
-                        $page++; // Lanjutkan ke halaman berikutnya
+                        $lanjut = false;  // Berhenti jika sudah mencapai halaman terakhir
                     }
-                } while ($lanjut); // Lanjutkan loop jika masih ada halaman
+                } while ($lanjut);  // Lanjutkan selama masih ada halaman
             } catch (\Exception $e) {
                 Log::error("Error pada tahun $year: " . $e->getMessage());
             }
