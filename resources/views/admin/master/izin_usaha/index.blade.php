@@ -36,7 +36,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="/master/izin-usaha/create" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Izin Usaha">
+                                <a href="{{ url('/master/izin-usaha/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Izin Usaha">
                                     <i class="ki-duotone ki-plus"></i> Input Izin Usaha
                                 </a>
                             </div>
