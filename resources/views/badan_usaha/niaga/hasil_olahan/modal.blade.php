@@ -6,7 +6,7 @@
                 <h5 class="modal-title" id="myModalLabel">Penjualan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url('/simpan_jholb') }}class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/simpan_jholb') }}" class="form-material m-t-40" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
