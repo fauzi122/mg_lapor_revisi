@@ -44,7 +44,7 @@ class SyncJbtJob implements ShouldQueue
                 $page = 1;
                 $lanjut = true;
 
-                // Mendapatkan informasi total halaman dan total record dari API
+                // Looping halaman berdasarkan total halaman yang ada
                 do {
                     // Membuat URL berdasarkan tahun dan halaman
                     $response = $apiBph->post('/bbm/penjualan-jbt', $year, $page);
@@ -78,12 +78,12 @@ class SyncJbtJob implements ShouldQueue
                         );
                     }
 
-                    // Periksa jika masih ada halaman berikutnya
-                    $pageCount = $response->json()['sp']['pageCount'] ?? 0; // Cek apakah ada 'pageCount'
-                    Log::info("Halaman $page untuk tahun $year: pageCount = $pageCount");
+                    // Memeriksa apakah ada halaman berikutnya menggunakan 'last_page'
+                    $lastPage = $response->json()['last_page'] ?? 0; // Cek apakah ada 'last_page'
+                    Log::info("Halaman $page untuk tahun $year: last_page = $lastPage");
 
                     // Tentukan apakah kita harus lanjut ke halaman berikutnya
-                    if ($page < $pageCount) {
+                    if ($page < $lastPage) {
                         $page++;  // Lanjutkan ke halaman berikutnya
                     } else {
                         $lanjut = false;  // Berhenti jika sudah mencapai halaman terakhir
