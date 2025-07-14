@@ -44,18 +44,10 @@ class SyncJbtJob implements ShouldQueue
                 $page = 1;
                 $lanjut = true;
 
-                // Looping halaman berdasarkan total halaman yang ada
+                // Mendapatkan informasi total halaman dan total record dari API
                 do {
                     // Membuat URL berdasarkan tahun dan halaman
                     $response = $apiBph->post('/bbm/penjualan-jbt', $year, $page);
-
-                    // Cek apakah request berhasil
-                    if (!$response->successful()) {
-                        // Jika request gagal, log error dan lanjut ke halaman berikutnya
-                        Log::error("Gagal mendapatkan data pada halaman $page untuk tahun $year. Error: " . $response->body());
-                        break;  // Jika gagal, keluar dari loop
-                    }
-
                     $data = $response->json()['data'];
 
                     // Jika data kosong, berhenti dan lanjutkan ke halaman berikutnya
@@ -86,8 +78,8 @@ class SyncJbtJob implements ShouldQueue
                         );
                     }
 
-                    // Memeriksa apakah API mengirimkan informasi halaman berikutnya
-                    $pageCount = $response->json()['sp']['pageCount'] ?? 0; // Cek jika ada pageCount
+                    // Periksa jika masih ada halaman berikutnya
+                    $pageCount = $response->json()['sp']['pageCount'] ?? 0; // Cek apakah ada 'pageCount'
                     Log::info("Halaman $page untuk tahun $year: pageCount = $pageCount");
 
                     // Tentukan apakah kita harus lanjut ke halaman berikutnya
@@ -96,7 +88,7 @@ class SyncJbtJob implements ShouldQueue
                     } else {
                         $lanjut = false;  // Berhenti jika sudah mencapai halaman terakhir
                     }
-                } while ($lanjut);  // Lanjutkan selama masih ada halaman
+                } while ($lanjut);  // Lanjutkan loop selama masih ada halaman
             } catch (\Exception $e) {
                 Log::error("Error pada tahun $year: " . $e->getMessage());
             }
