@@ -130,10 +130,9 @@ Route::middleware(['auth', 'checkRoleBu'])->group(function () {
 	});
 
 	// bu hasil olahan Pasokan 
-	// Route::resource('/pasokan-olah', PasokanHasilolahController::class);
+	Route::resource('/pasokan-olah', PasokanHasilolahController::class);
 	Route::controller(PasokanHasilolahController::class)->group(function () {
 		Route::post('/importpasokan', 'importpasokanx');
-		Route::post('/pasokan-olah', 'store');
 		Route::get('/get-pasokan-ho/{id}', 'get_pasokan_ho');
 		Route::put('/update_pasokan/{id}', 'update_pasokan');
 		Route::put('/submit_pasokan-olah/{id}', 'submit_pasokan_olahx');

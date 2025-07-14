@@ -6,7 +6,7 @@
                 <h5 class="modal-title" id="myModalLabel">Penjualan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/simpan_jholb" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/simpan_jholb') }}class="form-material m-t-40" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -130,7 +130,7 @@
                 <h5 class="modal-title" id="myModalLabel">Penjualan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importjholb" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/importjholb') }}" class="form-material m-t-40" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -173,7 +173,7 @@
                 <h5 class="modal-title" id="editjholbxLabel">Edit Penjualan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_jholb/" class="form-material m-t-40" enctype="multipart/form-data"
+            <form method="post" action="{{ url('/update_jholb/') }}" class="form-material m-t-40" enctype="multipart/form-data"
                 id="form_penjualan">
                 @method('PUT')
                 @csrf
@@ -296,7 +296,7 @@
                 <h5 class="modal-title" id="editjholbxLabel">Lihat Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_jholb/" class="form-material m-t-40" enctype="multipart/form-data"
+            <form method="post" action="{{ url('/update_jholb/') }}" class="form-material m-t-40" enctype="multipart/form-data"
                 id="form_penjualan">
                 @method('PUT')
                 @csrf
@@ -406,7 +406,7 @@
                 <h5 class="modal-title" id="myModalLabel">Pasokan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/pasokan-olah" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/pasokan-olah') }}" class="form-material m-t-40" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -503,7 +503,7 @@
                 <h5 class="modal-title" id="myModalLabel">Pasokan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importpasokan" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/importpasokan') }}" class="form-material m-t-40" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -546,7 +546,7 @@
                 <h5 class="modal-title" id="editjholbxLabel">Edit Pasokan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_lng/" class="form-material m-t-40" enctype="multipart/form-data"
+            <form method="post" action="{{ url('/update_lng/') }}" class="form-material m-t-40" enctype="multipart/form-data"
                 id="form_pasokan">
                 @method('PUT')
                 @csrf
@@ -642,7 +642,7 @@
                 <h5 class="modal-title" id="editjholbxLabel">Lihat Pasokan Hasil Olahan/Minyak Bumi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_lng/" class="form-material m-t-40" enctype="multipart/form-data"
+            <form method="post" action="{{ url('/update_lng/') }}" class="form-material m-t-40" enctype="multipart/form-data"
                 id="form_pasokan">
                 @method('PUT')
                 @csrf
@@ -751,7 +751,7 @@
                 <h5 class="modal-title" id="myModalLabel">Harga BBM JBU</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/harga-bbm-jbu" class="form-material m-t-40" enctype="multipart/form-data">
+            <form method="post" action="{{ url('/harga-bbm-jbu') }}" class="form-material m-t-40" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -924,7 +924,7 @@
                 <h5 class="modal-title" id="myModalLabel">Import Harga BBM JBU</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/importhargajbu" class="form-material m-t-40"
+            <form method="post" action="{{ url('/importhargajbu') }}" class="form-material m-t-40"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
@@ -965,7 +965,7 @@
                 <h5 class="modal-title" id="editjholbxLabel">Harga BBM JBU</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="/update_pasok_lng/" class="form-material m-t-40"
+            <form method="post" action="{{ url('/update_hargabbm/') }}" class="form-material m-t-40"
                 enctype="multipart/form-data" id="form_hargabbm">
                 @method('PUT')
                 @csrf
