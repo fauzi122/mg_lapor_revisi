@@ -11,11 +11,10 @@
                 <div class="modal-body">
                     <div class="mb-3">
 
-                        <input class="form-control" type="hidden" id="" name="npwp"
-                            value="{{ Auth::user()->npwp }}">
-                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
-                        <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
-                        @error('npwp')
+                        <input class="form-control" type="hidden" id="" name="badan_usaha_id"
+                            value="{{ Auth::user()->badan_usaha_id }}">
+                        <input class="form-control" type="hidden" id="" name="izin_id" value="1">
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -25,7 +24,8 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Bulan</label>
-                        <input class="form-control flatpickr" id="bulanx" name="bulan" value="{{ old('bulan') }}">
+                        <input class="form-control" type="month" id="bulanx" name="bulan"
+                            value="{{ old('bulan') }}">
                         @error('bulan')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -111,8 +111,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect"
-                        data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
                 </div>
 
@@ -134,15 +133,12 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-
-                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
-                        <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
-                        <input class="form-control flatpickr" name="bulan" id="bulan_import">
+                        <input class="form-control" type="month" name="bulan" id="bulan_import">
                         <br>
 
                         <input type="file" name="file" required="required">
 
-                        @error('npwp')
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -152,8 +148,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="{{ url('/storage') }}/template/niagaHasilOlahan_Penjualan.xlsx" id="tombol"
-                        class="btn btn-success waves-effect waves-light">Download Template</a>
+                    <a href="{{ url('/storage') }}/template/niagaHasilOlahan_Penjualan.xlsx"
+                        id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
@@ -181,10 +177,10 @@
                     <div class="mb-3">
 
                         <input class="form-control" type="hidden" name="id" id="id_penjualan">
-                        <input class="form-control" type="hidden" name="npwp" id="npwp_penjualan">
-                        <input class="form-control" type="hidden" name="id_permohonan"
-                            id="id_permohonan_penjualan">
-                        @error('npwp')
+                        <input class="form-control" type="hidden" name="badan_usaha_id"
+                            id="badan_usaha_id_penjualan">
+                        <input class="form-control" type="hidden" name="izin_id" id="izin_id_penjualan">
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -304,10 +300,10 @@
                     <div class="mb-3">
 
                         <input class="form-control" type="hidden" name="id" id="id_penjualan">
-                        <input class="form-control" type="hidden" name="npwp" id="npwp_penjualan">
-                        <input class="form-control" type="hidden" name="id_permohonan"
-                            id="id_permohonan_penjualan">
-                        @error('npwp')
+                        <input class="form-control" type="hidden" name="badan_usaha_id"
+                            id="badan_usaha_id_penjualan">
+                        <input class="form-control" type="hidden" name="izin_id" id="izin_id_penjualan">
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -411,11 +407,10 @@
                 <div class="modal-body">
                     <div class="mb-3">
 
-                        <input class="form-control" type="hidden" id="" name="npwp"
-                            value="{{ Auth::user()->npwp }}">
-                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
-                        <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
-                        @error('npwp')
+                        <input class="form-control" type="hidden" id="" name="badan_usaha_id"
+                            value="{{ Auth::user()->badan_usaha_id }}">
+                        <input class="form-control" type="hidden" id="" name="izin_id" value="1">
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -424,7 +419,7 @@
 
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Bulan</label>
-                        <input class="form-control flatpickr" id="bulanxx" name="bulan"
+                        <input class="form-control" type="month" id="bulanxx" name="bulan"
                             value="{{ old('bulan') }}">
                         @error('bulan')
                             <div class="form-group has-danger mb-0">
@@ -507,15 +502,12 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-
-                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
-                        <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
-                        <input class="form-control flatpickr" name="bulan" id="bulan_importx">
+                        <input class="form-control" type="month" name="bulan" id="bulan_importx">
                         <br>
 
                         <input type="file" name="file" required="required">
 
-                        @error('npwp')
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -525,8 +517,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="{{ url('/storage') }}/template/niagaHasilOlahan_Pasokan.xlsx" id="tombol"
-                        class="btn btn-success waves-effect waves-light">Download Template</a>
+                    <a href="{{ url('/storage') }}/template/niagaHasilOlahan_Pasokan.xlsx"
+                        id="tombol" class="btn btn-success waves-effect waves-light">Download Template</a>
                     <button type="button" class="btn btn-secondary waves-effect"
                         data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button>
@@ -554,9 +546,10 @@
                     <div class="mb-3">
 
                         <input class="form-control" type="hidden" name="id" id="id_pasokan">
-                        <input class="form-control" type="hidden" name="npwp" id="npwp_pasokan">
-                        <input class="form-control" type="hidden" name="id_permohonan" id="id_permohonan_pasokan">
-                        @error('npwp')
+                        <input class="form-control" type="hidden" name="badan_usaha_id"
+                            id="badan_usaha_id_pasokan">
+                        <input class="form-control" type="hidden" name="izin_id" id="izin_id_pasokan">
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -583,7 +576,7 @@
                             </div>
                         @enderror
                     </div>
-
+                   
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Nama Pemasok</label>
                         <input class="form-control" type="text" id="nama_pemasok_pasokan" name="nama_pemasok"
@@ -610,7 +603,7 @@
                             </div>
                         @enderror
                     </div>
-
+                    
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Volume</label>
                         <input class="form-control" type="number" name="volume" id="volume_pasokan">
@@ -674,8 +667,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Kategori Pemasok</label>
-                        <input class="form-control" type="text" name=""
-                            id="lihat_kategori_pemasok_pasokan" readonly>
+                        <input class="form-control" type="text" name="" id="lihat_kategori_pemasok_pasokan"
+                            readonly>
                     </div>
                     {{-- <div class="mb-3">
                         <label for="example-text-input" class="form-label">Provinsi</label>
@@ -756,11 +749,11 @@
                 <div class="modal-body">
                     <div class="mb-3">
 
-                        <input class="form-control" type="hidden" id="example-text-input" name="npwp"
-                            value="{{ Auth::user()->npwp }}">
-                        <input class="form-control" type="hidden" id="example-text-input" name="id_permohonan"
+                        <input class="form-control" type="hidden" id="example-text-input" name="badan_usaha_id"
+                            value="{{ Auth::user()->badan_usaha_id }}">
+                        <input class="form-control" type="hidden" id="example-text-input" name="izin_id"
                             value="1">
-                        @error('npwp')
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -934,7 +927,7 @@
 
                         <input type="file" name="file" required="required">
 
-                        @error('npwp')
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -973,9 +966,10 @@
                     <div class="mb-3">
 
                         <input class="form-control" type="hidden" name="id" id="id_hargabbm">
-                        <input class="form-control" type="hidden" name="npwp" id="npwp_hargabbm">
-                        <input class="form-control" type="hidden" name="id_permohonan" id="id_permohonan_hargabbm">
-                        @error('npwp')
+                        <input class="form-control" type="hidden" name="badan_usaha_id"
+                            id="badan_usaha_id_hargabbm">
+                        <input class="form-control" type="hidden" name="izin_id" id="izin_id_hargabbm">
+                        @error('badan_usaha_id')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>

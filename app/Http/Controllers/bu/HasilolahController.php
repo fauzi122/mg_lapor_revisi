@@ -15,30 +15,61 @@ use App\Models\Harga_bbm_jbu;
 use App\Models\Produk;
 use App\Models\Izin;
 use App\Model\province;
+use App\Models\Meping;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
 class HasilolahController extends Controller
 {
 
-    public function index()
+    public function index($id)
     {
-        // tes
-        $penjualan = DB::table('jual_hasil_olah_bbms')
-        ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-        ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-        ->groupBy('bulan')
-        ->get();
+        $pecah = explode(',', Crypt::decryptString($id));
+      // dd($pecah);
 
-        $pasok = DB::table('pasokan_hasil_olah_bbms')
-        ->select('*', DB::raw('MAX(status) as status_tertinggi'), DB::raw('MAX(catatan) as catatanx'))
-        ->where('badan_usaha_id', Auth::user()->badan_usaha_id)
-        ->groupBy('bulan')
-        ->get();
+        $sqPenjualan = DB::table('jual_hasil_olah_bbms')
+            ->select(
+                '*',
+                DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+                DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+                DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+            )
+            ->where('npwp', Auth::user()->npwp)
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2]);
 
+        $penjualan = DB::table(DB::raw("({$sqPenjualan->toSql()}) as sub"))
+            ->mergeBindings($sqPenjualan)
+            ->where('rn', 1)
+            ->get();
+
+        $sqPasok = DB::table('pasokan_hasil_olah_bbms')
+            ->select(
+                '*',
+                DB::raw('ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY status DESC) as rn'),
+                DB::raw('MAX(status) OVER (PARTITION BY bulan) as status_tertinggi'),
+                DB::raw('MAX(catatan) OVER (PARTITION BY bulan) as catatanx')
+            )
+            ->where('npwp', Auth::user()->npwp)
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2]);
+
+        $pasok = DB::table(DB::raw("({$sqPasok->toSql()}) as sub"))
+            ->mergeBindings($sqPasok)
+            ->where('rn', 1)
+            ->get();
+
+        $sub_page = Meping::select('nama_opsi')
+            ->where('id_sub_page', $pecah[2])
+            ->where('id_template', $pecah[4])
+            ->first();
+        
         return view('badan_usaha.niaga.hasil_olahan.index', compact(
             'penjualan',
-            'pasok'));
+            'pasok', 
+            'pecah', 
+            'sub_page'
+        ));
     }
 
     public function simpan_Penjualan_Ho()
@@ -46,20 +77,27 @@ class HasilolahController extends Controller
         // Implementasi fungsi simpan_Penjualan_Ho()
     }
 
-    public function show_jholbx($id,$hasilolah)
+    public function show_jholbx($id, $hasilolah)
     {
-        $hasilolahx=$hasilolah;
+        $hasilolahx = $hasilolah;
         $pecah = explode(',', Crypt::decryptString($id));
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
 
         $bulan_ambil_penjualan_hasilolah = DB::table('jual_hasil_olah_bbms')
-        ->where('badan_usaha_id', $badan_usaha_id)
-        ->where('bulan', $pecah[0])
+        ->where('npwp', $npwp)
+        ->where('bulan', $pecah[3])
+        ->where('id_permohonan', $pecah[0])
+        ->where('id_sub_page', $pecah[2])
+        ->orderBy('status', 'desc')
         ->first();
+        
 
         $bulan_ambil_pasok_hasilolah = DB::table('pasokan_hasil_olah_bbms')
-        ->where('badan_usaha_id', $badan_usaha_id)
-        ->where('bulan', $pecah[0])
+        ->where('npwp', $npwp)
+        ->where('bulan', $pecah[3])
+        ->where('id_permohonan', $pecah[0])
+        ->where('id_sub_page', $pecah[2])
+        ->orderBy('status', 'desc')
         ->first();
 
         // Mengambil substring dari bulan
@@ -69,17 +107,27 @@ class HasilolahController extends Controller
         $bulan_ambil_pasok_hasilolahx = $bulan_ambil_pasok_hasilolah ? substr($bulan_ambil_pasok_hasilolah->bulan, 0, 7) : '';
         $statuspasok_hsilolahx = $bulan_ambil_pasok_hasilolah->status ?? '';
 
+        if (count($pecah) > 4) {
+            $filterBy = substr($pecah[3], 0, 4);
+        } else {
+            $filterBy = $pecah[3];
+        }
+
         $show_jholbx = Jual_hasil_olah_bbm::where([
-            'bulan' => $pecah[0],
-            'badan_usaha_id' => $pecah[1]
+            ['bulan', 'like', "%". $filterBy ."%"],
+            'npwp' => $pecah[1],
+            'id_permohonan' => $pecah[0],
+            'id_sub_page' => $pecah[2],
         ])->orderBy('status', 'desc')->get();
 
         $pasokan = Pasokan_hasil_olah_bbm::where([
-            'bulan' => $pecah[0],
-            'badan_usaha_id' => $pecah[1]
+            ['bulan', 'like', "%". $filterBy ."%"],
+            'npwp' => $pecah[1],
+            'id_permohonan' => $pecah[0],
+            'id_sub_page' => $pecah[2],
         ])->orderBy('status', 'desc')->get();
 
-        $hargabbmjbu = Harga_bbm_jbu::where('badan_usaha_id',Auth::user()->badan_usaha_id)->get();
+        $hargabbmjbu = Harga_bbm_jbu::where('npwp',Auth::user()->npwp)->get();
 
         return view('badan_usaha.niaga.hasil_olahan.show', compact(
             'show_jholbx',
@@ -89,15 +137,17 @@ class HasilolahController extends Controller
             'bulan_ambil_pasok_hasilolahx',
             'statuspenjualan_hasilolahx',
             'statuspasok_hsilolahx',
-            'hasilolahx'
+            'hasilolahx',
+            'pecah'
         ));
     }
 
     public function simpan_jholbx(Request $request)
     {
         $pesan = [
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-            'izin_id.required' => 'izin_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
+            'id_permohonan.required' => 'id_permohonan masih kosong',
+            'id_sub_page.required' => 'id_sub_page masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
             'provinsi.required' => 'provinsi masih kosong',
@@ -109,8 +159,9 @@ class HasilolahController extends Controller
         ];
 
         $validatedData = $request->validate([
-            'badan_usaha_id' => 'required',
-            'izin_id' => 'required',
+            'npwp' => 'required',
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
             'bulan' => 'required',
             'produk' => 'required',
             'provinsi' => 'required',
@@ -123,10 +174,12 @@ class HasilolahController extends Controller
 
         // var_dump($request->bulan.'01');
         // die;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('jual_hasil_olah_bbms')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $request->id_permohonan)
+            ->where('id_sub_page', $request->id_sub_page)
             ->where('bulan', $request->bulan . '-01')
             ->orderBy('status', 'desc')
             ->first();
@@ -139,8 +192,9 @@ class HasilolahController extends Controller
         }
 
         $validatedData = Jual_hasil_olah_bbm::create([
-            'badan_usaha_id' =>  $request->badan_usaha_id,
-            'izin_id' => $request->izin_id,
+            'npwp' =>  $request->npwp,
+            'id_permohonan' => $request->id_permohonan,
+            'id_sub_page' => $request->id_sub_page,
             'bulan' => $request->bulan.'-01',
             'produk' => $request->produk,
             'provinsi' => $request->provinsi,
@@ -187,10 +241,14 @@ class HasilolahController extends Controller
     public function importjholbx(Request $request)
     {
         $bulan = $request->bulan . "-01";
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
+        $id_permohonan = $request->id_permohonan;
+        $id_sub_page = $request->id_sub_page;
 
         $cekdb = DB::table('jual_hasil_olah_bbms')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->where('bulan', $bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -217,8 +275,8 @@ class HasilolahController extends Controller
     public function get_penjualan_ho($id)
     {
         $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
-        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
-        $data['sektor'] = DB::select("SELECT sektors.id, sektors.nama_sektor FROM sektors GROUP BY sektors.nama_sektor");
+        $data['provinsi'] = DB::select("SELECT DISTINCT ON (name) id, name FROM provinces ORDER BY name, id");
+        $data['sektor'] = DB::select("SELECT sektors.nama_sektor FROM sektors GROUP BY sektors.nama_sektor");
         $data['find'] = Jual_hasil_olah_bbm::find($id);
         return response()->json(['data' => $data]);
         // $data = Jual_hasil_olah_bbm::find($id);
@@ -230,8 +288,8 @@ class HasilolahController extends Controller
         $Jual_hasil_olah_bbm = $id;
         $pesan = [
             // 'id.required' => 'id masih kosong',
-            // 'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-            // 'izin_id.required' => 'izin_id masih kosong',
+            // 'npwp.required' => 'npwp masih kosong',
+            // 'id_permohonan.required' => 'id_permohonan masih kosong',
             // 'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
             'provinsi.required' => 'provinsi masih kosong',
@@ -246,8 +304,8 @@ class HasilolahController extends Controller
 
         $rules = [
             // 'id' => 'required',
-            // 'badan_usaha_id' => 'required',
-            // 'izin_id' => 'required',
+            // 'npwp' => 'required',
+            // 'id_permohonan' => 'required',
             // 'bulan' => 'required',
             'produk' => 'required',
             'provinsi' => 'required',
@@ -323,41 +381,60 @@ class HasilolahController extends Controller
         }
     }
 
-    public function submit_bulan_jholbx(Request $request, $bulan)
+    public function submit_bulan_jholbx(Request $request, $id)
     {
-        $bulanx = $bulan;
-        // dd($bulanx);
-        // die;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
         $now = Carbon::now();
-        $validatedData = DB::update("UPDATE jual_hasil_olah_bbms SET status='1', tgl_kirim='$now' WHERE bulan='$bulanx' AND badan_usaha_id='$badan_usaha_id'");
 
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dikirim');
-            return back();
+        $affected = DB::table('jual_hasil_olah_bbms')
+            ->where('bulan', $bulanx)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
+            ->update(['status' => '1', 'tgl_kirim' => $now]);
+
+        if ($affected) {
+        //redirect dengan pesan sukses
+        Alert::success('success', 'Data berhasil dikirim');
+        return back();
         } else {
-            //redirect dengan pesan error
-            Alert::error('error', 'Data gagal dikirim');
-            return back();
+        //redirect dengan pesan error
+        Alert::error('error', 'Data gagal dikirim');
+        return back();
         }
     }
 
-    public function hapus_bulan_jholbx(Request $request, $bulan)
+    public function hapus_bulan_jholbx(Request $request, $id)
     {
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("DELETE FROM jual_hasil_olah_bbms WHERE badan_usaha_id='$badan_usaha_id' AND bulan='$bulanx'");
-        // pengangkutan_minyakbumi::destroy($bulan);
-        if ($validatedData) {
-            //redirect dengan pesan sukses
+        // Dekripsi ID dan pecah menjadi array
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
+
+        // Menggunakan query builder untuk menghapus data
+        $affected = DB::table('jual_hasil_olah_bbms')
+            ->where('npwp', $npwp)
+            ->where('bulan', $bulanx)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
+            ->delete();
+
+        // Cek hasil penghapusan dan tampilkan pesan sesuai
+        if ($affected) {
+            // Redirect dengan pesan sukses
             Alert::success('Success', 'Data berhasil dihapus');
-            return back();
         } else {
-            //redirect dengan pesan error
+            // Redirect dengan pesan error
             Alert::error('Error', 'Data gagal dihapus');
-            return back();
         }
+
+        return back();
     }
     
     
