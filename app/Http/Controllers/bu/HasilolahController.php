@@ -142,6 +142,7 @@ class HasilolahController extends Controller
         ));
     }
 
+    // Fungsi untuk menyimpan data penjualan hasil olahan BBM
     public function simpan_jholbx(Request $request)
     {
         $pesan = [
