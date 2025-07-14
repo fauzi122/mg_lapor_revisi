@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class PasokanHasilolahController extends Controller
 {
@@ -36,8 +37,9 @@ class PasokanHasilolahController extends Controller
     public function store(Request $request)
     {
         $pesan = [
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-            'izin_id.required' => 'izin_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
+            'id_permohonan.required' => 'id_permohonan masih kosong',
+            'id_sub_page.required' => 'id_sub_page masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
             'nama_pemasok.required' => 'provinsi masih kosong',
@@ -46,18 +48,21 @@ class PasokanHasilolahController extends Controller
         ];
 
         $validatedData = $request->validate([
-            'badan_usaha_id' => 'required',
-            'izin_id' => 'required',
+            'npwp' => 'required',
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
             'bulan' => 'required',
             'produk' => 'required',
             'nama_pemasok' => 'required',
             'kategori_pemasok' => 'required',
             'volume' => 'required',
         ], $pesan);
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('pasokan_hasil_olah_bbms')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $request->id_permohonan)
+            ->where('id_sub_page', $request->id_sub_page)
             ->where('bulan', $request->bulan . '-01')
             ->orderBy('status', 'desc')
             ->first();
@@ -69,8 +74,9 @@ class PasokanHasilolahController extends Controller
             }
         }
         $validatedData = Pasokan_hasil_olah_bbm::create([
-            'badan_usaha_id' =>  $request->badan_usaha_id,
-            'izin_id' => $request->izin_id,
+            'npwp' =>  $request->npwp,
+            'id_permohonan' => $request->id_permohonan,
+            'id_sub_page' => $request->id_sub_page,
             'bulan' => $request->bulan.'-01',
             'produk' => $request->produk,
             'nama_pemasok' => $request->nama_pemasok,
@@ -115,8 +121,8 @@ class PasokanHasilolahController extends Controller
         $pasokan_olah = $id;
         $pesan = [
             // 'id.required' => 'id masih kosong',
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-            // 'izin_id.required' => 'izin_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
+            // 'id_permohonan.required' => 'id_permohonan masih kosong',
             // 'bulan.required' => 'bulan masih kosong',
             'produk.required' => 'produk masih kosong',
             'nama_pemasok.required' => 'nama_pemasok masih kosong',
@@ -133,8 +139,8 @@ class PasokanHasilolahController extends Controller
 
         $rules = [
             // 'id' => 'required',
-            'badan_usaha_id' => 'required',
-            // 'izin_id' => 'required',
+            'npwp' => 'required',
+            // 'id_permohonan' => 'required',
             // 'bulan' => 'required',
             'produk' => 'required',
             'nama_pemasok' => 'required',
@@ -185,9 +191,14 @@ class PasokanHasilolahController extends Controller
     public function importpasokanx(Request $request)
     {
         $bulan = $request->bulan . "-01";
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
+        $id_permohonan = $request->id_permohonan;
+        $id_sub_page = $request->id_sub_page;
+
         $cekdb = DB::table('pasokan_hasil_olah_bbms')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->where('bulan', $bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -216,13 +227,14 @@ class PasokanHasilolahController extends Controller
     public function get_pasokan_ho($id)
     {
         $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
-        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
+        $data['provinsi'] = DB::select("SELECT DISTINCT ON (name) id, name FROM provinces ORDER BY name, id");
         $data['find'] = Pasokan_hasil_olah_bbm::find($id);
         return response()->json(['data' => $data]);
     }
     public function submit_pasokan_olahx(Request $request, $id)
     {
        $idx=$id;
+       
        $now = Carbon::now();
         $validatedData = DB::update("update pasokan_hasil_olah_bbms set status='1', tgl_kirim='$now' where id='$idx'");
 
@@ -236,38 +248,59 @@ class PasokanHasilolahController extends Controller
             return back();
         }
     }
-    public function submit_bulan_pasokan_olahx(Request $request, $bulan)
+    public function submit_bulan_pasokan_olahx(Request $request, $id)
     {
-        $bulanx = $bulan;
-        // dd($bulanx);
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
         $now = Carbon::now();
-        $validatedData = DB::update("update pasokan_hasil_olah_bbms set status='1', tgl_kirim='$now' where bulan='$bulanx' and badan_usaha_id='$badan_usaha_id'");
 
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dikirim');
-            return back();
+        $affected = DB::table('pasokan_hasil_olah_bbms')
+            ->where('bulan', $bulanx)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
+            ->update(['status' => '1', 'tgl_kirim' => $now]);
+
+        if ($affected) {
+        //redirect dengan pesan sukses
+        Alert::success('success', 'Data berhasil dikirim');
+        return back();
         } else {
-            //redirect dengan pesan error
-            Alert::error('error', 'Data gagal dikirim');
-            return back();
+        //redirect dengan pesan error
+        Alert::error('error', 'Data gagal dikirim');
+        return back();
         }
     }
-    public function hapus_bulan_pasokanx(Request $request, $bulan)
+
+    public function hapus_bulan_pasokanx(Request $request, $id)
     {
-        $bulanx = $bulan;
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
-        $validatedData = DB::update("DELETE FROM pasokan_hasil_olah_bbms WHERE badan_usaha_id='$badan_usaha_id' AND bulan='$bulanx'");
-        // pengangkutan_minyakbumi::destroy($bulan);
-        if ($validatedData) {
-            //redirect dengan pesan sukses
+        // Dekripsi ID dan pecah menjadi array
+        $pecah = explode(',', Crypt::decryptString($id));
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
+
+        // Menggunakan query builder untuk menghapus data
+        $affected = DB::table('pasokan_hasil_olah_bbms')
+            ->where('npwp', $npwp)
+            ->where('bulan', $bulanx)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
+            ->delete();
+
+        // Cek hasil penghapusan dan tampilkan pesan sesuai
+        if ($affected) {
+            // Redirect dengan pesan sukses
             Alert::success('Success', 'Data berhasil dihapus');
-            return back();
         } else {
-            //redirect dengan pesan error
+            // Redirect dengan pesan error
             Alert::error('Error', 'Data gagal dihapus');
-            return back();
         }
+
+        return back();
     }
 }

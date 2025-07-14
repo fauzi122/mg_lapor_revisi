@@ -81,7 +81,7 @@ function editPenjualan(id, produk, kabupaten_kota) {
             });
 
             $.ajax({
-                url: baseUrl + "/get-satuan/" + produk,
+                url: baseUrl + "get-satuan/" + produk,
                 method: "GET",
                 data: {},
                 success: function (response) {

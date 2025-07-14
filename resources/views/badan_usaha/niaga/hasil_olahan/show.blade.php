@@ -1,502 +1,382 @@
-@extends('layouts.frontand.app')
-
+@extends('layouts.main.master')
 @section('content')
-    <div class="page-content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Laporan Hasil Olahan/Minyak Bumi</h4>
-                    </div>
+
+    <div id="kt_app_toolbar" class="app-toolbar py-4 py-lg-8">
+        <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
+            <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <h3 class="text-dark fw-bold">Laporan Hasil Olahan/Minyak Bumi</h3>
+                </div>
+                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <a href="javascript:history.back()" type="button" class="btn btn-sm btn-secondary">
+                        <i class="ki-duotone ki-left-square">
+                            <span class="path1"></span><span class="path2"></span>
+                        </i> Kembali
+                    </a>
                 </div>
             </div>
-            {{-- penjualan --}}
+        </div>
+    </div>
+
+    <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
+        <div id="kt_app_content_container" class="app-container container-xxl">
+            {{-- Penjualan data --}}
             @if ($statuspenjualan_hasilolahx != '' and $hasilolahx == 'penjualan')
                 <div class="row">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">Penjualan Hasil Olahan/Minyak Bumi</h5>
-                                    <div>
-                                        <a href="/hasil-olahan/minyak-bumi"
-                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                        @if ($statuspenjualan_hasilolahx == 1)
-                                            <form
-                                                action="/submit_bulan_jholb/{{ $bulan_ambil_penjualan_hasilolahx . '-01' }}"
+                        <div class="card mb-5 mb-xl-8 shadow">
+                            <div class="card-header bg-light p-5">
+                                <div class="row w-100">
+                                    <div class="col-lg-6">
+                                        <h5>Penjualan Hasil Olahan/Minyak Bumi</h5>
+                                        @php
+                                            $id = Crypt::encryptString(
+                                                $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2] . ',' . $pecah[3],
+                                            );
+                                        @endphp
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <form action="{{ url('/submit_bulan_jholb') }}/{{ $id }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
-                                                <button type="button" class="btn btn-info"
-                                                    onclick="kirimData($(this).closest('form'))" disabled>
-                                                    <span title="Kirim semua data">Kirim Semua</span>
+                                                <button type="button" class="btn btn-sm btn-info"
+                                                    onclick="kirimData($(this).closest('form'))"
+                                                    {{ $statuspenjualan_hasilolahx == 1 ? 'disabled' : '' }}>
+                                                    <i class="ki-solid ki-send"></i><span title="Kirim semua data">Kirim
+                                                        Semua</span>
                                                 </button>
                                             </form>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambil_penjualan_hasilolahx }}' ); sektor();"
-                                                data-bs-toggle="modal" data-bs-target="#myModal" disabled>Buat Laporan
+                                            <button type="button" class="btn btn-sm btn-primary"
+                                                onclick="produk(); provinsi(); sektor(); tambahPMB('{{ $bulan_ambil_penjualan_hasilolahx }}');"
+                                                data-bs-toggle="modal" data-bs-target="#myModal"
+                                                {{ $statuspenjualan_hasilolahx == 1 || $statuspenjualan_hasilolahx == 2 ? 'disabled' : '' }}>
+                                                <i class="fas fa-plus"></i> Buat Laporan
                                                 {{ dateIndonesia($bulan_ambil_penjualan_hasilolahx) }}
                                             </button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
+                                            <button type="button" class="btn btn-sm btn-success"
                                                 onclick="tambahPMB('{{ $bulan_ambil_penjualan_hasilolahx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#excelpho" disabled>Import
-                                                Excel
+                                                data-bs-toggle="modal" data-bs-target="#excelpho"
+                                                {{ $statuspenjualan_hasilolahx == 1 || $statuspenjualan_hasilolahx == 2 ? 'disabled' : '' }}>
+                                                <i class="fas fa-upload"></i> Import Excel
                                             </button>
-                                        @elseif ($statuspenjualan_hasilolahx == 2)
-                                            <form
-                                                action="/submit_bulan_jholb/{{ $bulan_ambil_penjualan_hasilolahx . '-01' }}"
-                                                method="post" class="d-inline">
-                                                @method('put')
-                                                @csrf
-                                                <button type="button" class="btn btn-info"
-                                                    onclick="kirimData($(this).closest('form'))">
-                                                    <span title="Kirim semua data">Kirim Semua</span>
-                                                </button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                onclick="produk(); provinsi(); sektor(); tambahPMB('{{ $bulan_ambil_penjualan_hasilolahx }}' );"
-                                                data-bs-toggle="modal" data-bs-target="#myModal" disabled>Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_penjualan_hasilolahx) }}
-                                            </button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
-                                                onclick="tambahPMB('{{ $bulan_ambil_penjualan_hasilolahx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#excelpho" disabled>Import
-                                                Excel
-                                            </button>
-                                        @else
-                                            <form
-                                                action="/submit_bulan_jholb/{{ $bulan_ambil_penjualan_hasilolahx . '-01' }}"
-                                                method="post" class="d-inline">
-                                                @method('put')
-                                                @csrf
-                                                <button type="button" class="btn btn-info"
-                                                    onclick="kirimData($(this).closest('form'))">
-                                                    <span title="Kirim semua data">Kirim Semua</span>
-                                                </button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                onclick="produk(); provinsi(); sektor(); tambahPMB('{{ $bulan_ambil_penjualan_hasilolahx }}' );"
-                                                data-bs-toggle="modal" data-bs-target="#myModal">Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_penjualan_hasilolahx) }}
-                                            </button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
-                                                onclick="tambahPMB('{{ $bulan_ambil_penjualan_hasilolahx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#excelpho">Import Excel
-                                            </button>
-                                        @endif
-                                        <!-- Include modal content -->
-                                        @include('badan_usaha.niaga.hasil_olahan.modal')
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table id="table1" class="table table-bordered dt-responsive nowrap w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Bulan</th>
-                                                <th>Status</th>
-                                                <th>Catatan</th>
-                                                <th>Produk</th>
-                                                <th>Provinsi</th>
-                                                <th>Aksi</th>
-                                                <th>Kabupaten/Kota</th>
-                                                <th>Sektor</th>
-                                                <th>Volume</th>
-                                                <th>Satuan</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($show_jholbx as $show_jholbx)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ dateIndonesia($show_jholbx->bulan) }}</td>
-                                                    <td>
-                                                        @if ($show_jholbx->status == 1 && $show_jholbx->catatan)
-                                                            <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                        @elseif ($show_jholbx->status == 1)
-                                                            <span class="badge bg-success">Diterima</span>
-                                                        @elseif ($show_jholbx->status == 2)
-                                                            <span class="badge bg-danger">Revisi</span>
-                                                        @elseif ($show_jholbx->status == 0)
-                                                            <span class="badge bg-info">draf</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $show_jholbx->catatan }}</td>
-                                                    <td>{{ $show_jholbx->produk }}</td>
-                                                    <td>{{ $show_jholbx->provinsi }}</td>
-                                                    <td>
-                                                        <?php $status=$show_jholbx->status;
-                                                        if ($status=="0") { ?>
-                                                        <center>
-                                                            <button type="button" class="btn btn-sm btn-info editPenjualan"
-                                                                id="editCompany"
-                                                                onclick="editPenjualan('{{ $show_jholbx->id }}', '{{ $show_jholbx->produk }}' , '{{ $show_jholbx->kabupaten_kota }}')"
-                                                                data-bs-toggle="modal" data-bs-target="#modal-edit"
-                                                                data-id="{{ $show_jholbx->id }}"> <i class="bx bx-edit-alt"
-                                                                    title="Edit data"></i>
-                                                            </button>
-                                                            <form action="/hapus_jholb/{{ $show_jholbx->id }}"
-                                                                method="post" class="d-inline">
-                                                                @method('delete')
-                                                                @csrf
-                                                                <button type="button" class="btn btn-sm btn-danger"
-                                                                    onclick="hapusData($(this).closest('form'))">
-                                                                    <i class="bx bx-trash-alt" title="Hapus data"></i>
-                                                                </button>
-                                                            </form>
-                                                            <button type="button" class="btn btn-sm btn-info "
-                                                                id="" data-bs-toggle="modal"
-                                                                onclick="lihat_jholb('{{ $show_jholbx->id }}', '{{ $show_jholbx->produk }}' , '{{ $show_jholbx->kabupaten_kota }}')"
-                                                                data-bs-target="#lihat-penjualan"
-                                                                data-id="{{ $show_jholbx->id }}"> <i class="bx bx-show-alt"
-                                                                    title="Lihat data"></i>
-                                                            </button>
-                                                        </center>
-                                                        <?php } elseif ($status=="1") { ?>
-                                                        <center>
-                                                            <button type="button" class="btn btn-sm btn-info "
-                                                                id="" data-bs-toggle="modal"
-                                                                onclick="lihat_jholb('{{ $show_jholbx->id }}', '{{ $show_jholbx->produk }}' , '{{ $show_jholbx->kabupaten_kota }}')"
-                                                                data-bs-target="#lihat-penjualan"
-                                                                data-id="{{ $show_jholbx->id }}"> <i
-                                                                    class="bx bx-show-alt" title="Lihat data"></i>
-                                                            </button>
-                                                        </center>
-                                                        <?php } elseif ($status=="2") { ?>
-                                                        <center>
-                                                            <button type="button"
-                                                                class="btn btn-sm btn-info editPenjualan" id="editCompany"
-                                                                onclick="editPenjualan('{{ $show_jholbx->id }}', '{{ $show_jholbx->produk }}' , '{{ $show_jholbx->kabupaten_kota }}')"
-                                                                data-bs-toggle="modal" data-bs-target="#modal-edit"
-                                                                data-id="{{ $show_jholbx->id }}"> <i
-                                                                    class="bx bx-edit-alt" title="Edit data"></i>
-                                                            </button>
-                                                            {{-- <form action="/submit_jholb/{{ $show_jholbx->id }}"
-                                                                method="post" class="d-inline">
-                                                                @method('PUT')
-                                                                @csrf
-                                                                <button type="button" class="btn btn-sm btn-success"
-                                                                    onclick="kirimData($(this).closest('form'))">
-                                                                    <i class="bx bx-paper-plane" title="Kirim data"></i>
-                                                                </button>
-                                                            </form> --}}
-                                                            <button type="button" class="btn btn-sm btn-info "
-                                                                id="" data-bs-toggle="modal"
-                                                                onclick="lihat_jholb('{{ $show_jholbx->id }}', '{{ $show_jholbx->produk }}' , '{{ $show_jholbx->kabupaten_kota }}')"
-                                                                data-bs-target="#lihat-penjualan"
-                                                                data-id="{{ $show_jholbx->id }}"> <i
-                                                                    class="bx bx-show-alt" title="Lihat data"></i>
-                                                            </button>
-                                                        </center>
-                                                        <?php } ?>
-                                                        {{-- <center>
-                                                            @if ($show_jholbx->status == 1 && $show_jholbx->catatan)
+                            <div class="card-body p-3">
+                                <div class="card">
+                                    <div class="card-header align-items-center px-2">
+                                        <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
+                                        <div class="card-title flex-row-fluid justify-content-end gap-5">
+                                            <input type="hidden" class="export-title" value="Laporan Penjualan data" />
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-2">
+                                        <table class="kt-datatable table table-bordered table-hover">
+                                            <thead class="bg-light align-top" style="white-space: nowrap;">
+                                                <tr class="fw-bold">
+                                                    <th class="text-center">No</th>
+                                                    <th>No</th>
+                                                    <th>Bulan</th>
+                                                    <th>Status</th>
+                                                    <th>Catatan</th>
+                                                    <th>Produk</th>
+                                                    <th>Provinsi</th>
+                                                    <th>Kabupaten/Kota</th>
+                                                    <th>Sektor</th>
+                                                    <th>Volume</th>
+                                                    <th>Satuan</th>
+                                                    <th class="text-center">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($show_jholbx as $data)
+                                                    <tr>
+                                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                                        <td>{{ getBulan($data->bulan) }}</td>
+                                                        <td>{{ getTahun($data->bulan) }}</td>
+                                                        <td>
+                                                            @if ($data->status == 1 && $data->catatan)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($show_jholbx->status == 1)
+                                                            @elseif ($data->status == 1)
                                                                 <span class="badge bg-success">Diterima</span>
-                                                            @elseif ($show_jholbx->status == 2)
-                                                                <span class="badge bg-danger" data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-updateStatus-{{ $show_jholbx->id }}">
+                                                            @elseif ($data->status == 2)
+                                                                <span class="badge bg-danger">Revisi</span>
+                                                            @elseif ($data->status == 0)
+                                                                <span class="badge bg-info">draf</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $data->catatan }}</td>
+                                                        <td>{{ $data->produk }}</td>
+                                                        <td>{{ $data->provinsi }}</td>
+                                                        <td>{{ $data->kabupaten_kota }}</td>
+                                                        <td>{{ $data->sektor }}</td>
+                                                        <td>{{ $data->volume }}</td>
+                                                        <td>{{ $data->satuan }}</td>
+
+                                                        <td class="text-center">
+                                                            @if ($data->status == '0' || $data->status == '-' || $data->status == '')
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-info editPenjualan"
+                                                                    id="editCompany"
+                                                                    onclick="editPenjualan('{{ $data->id }}', '{{ $data->produk }}' , '{{ $data->kabupaten_kota }}')"
+                                                                    data-bs-toggle="modal" data-bs-target="#modal-edit"
+                                                                    data-id="{{ $data->id }}"> <i
+                                                                        class="ki-solid ki-pencil" title="Edit Data"></i>
+                                                                </button>
+                                                                <form action="/hapus_jholb/{{ $data->id }}"
+                                                                    method="post" class="d-inline">
+                                                                    @method('delete')
+                                                                    @csrf
+                                                                    <button type="button" class="btn btn-sm btn-danger"
+                                                                        onclick="hapusData($(this).closest('form'))">
+                                                                        <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                    </button>
+                                                                </form>
+                                                                <button type="button" class="btn btn-sm btn-info "
+                                                                    id="" data-bs-toggle="modal"
+                                                                    onclick="lihat_jholb('{{ $data->id }}', '{{ $data->produk }}' , '{{ $data->kabupaten_kota }}')"
+                                                                    data-bs-target="#lihat-penjualan"
+                                                                    data-id="{{ $data->id }}"> <i
+                                                                        class="ki-solid ki-eye" title="Lihat data"></i>
+                                                                </button>
+                                                            @elseif($data->status == '1')
+                                                                <button type="button" class="btn btn-sm btn-info "
+                                                                    id="" data-bs-toggle="modal"
+                                                                    onclick="lihat_jholb('{{ $data->id }}', '{{ $data->produk }}' , '{{ $data->kabupaten_kota }}')"
+                                                                    data-bs-target="#lihat-penjualan"
+                                                                    data-id="{{ $data->id }}"> <i
+                                                                        class="ki-solid ki-eye" title="Lihat data"></i>
+                                                                </button>
+                                                            @elseif($data->status == '2')
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-info editPenjualan"
+                                                                    id="editCompany"
+                                                                    onclick="editPenjualan('{{ $data->id }}', '{{ $data->produk }}' , '{{ $data->kabupaten_kota }}')"
+                                                                    data-bs-toggle="modal" data-bs-target="#modal-edit"
+                                                                    data-id="{{ $data->id }}"> <i
+                                                                        class="ki-solid ki-pencil" title="Edit Data"></i>
+                                                                </button>
+                                                                <form
+                                                                    action="{{ url('/submit_jholb') }}/{{ $data->id }}"
+                                                                    method="post" class="d-inline">
+                                                                    @method('PUT')
+                                                                    @csrf
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-info mb-2"
+                                                                        onclick="kirimData($(this).closest('form'))">
+                                                                        <i class="ki-solid ki-send"
+                                                                            title="Kirim data"></i>
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+
+                                                            <br>
+                                                            @if ($data->status == 1 && $data->catatan)
+                                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                            @elseif ($data->status == 1)
+                                                                <span class="badge badge-success">Diterima</span>
+                                                            @elseif ($data->status == 2)
+                                                                <span class="badge badge-danger" data-bs-toggle="modal"
+                                                                    data-bs-target="#modal-updateStatus-{{ $data->id }}">
                                                                     Cek Revisi
                                                                 </span>
-
-                                                                <div class="modal fade"
-                                                                    id="modal-updateStatus-{{ $show_jholbx->id }}"
-                                                                    data-bs-backdrop="static" data-bs-keyboard="false"
-                                                                    tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                                                    aria-hidden="true">
-                                                                    <div class="modal-dialog modal-lg">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h5 class="modal-title"
-                                                                                    id="staticBackdropLabel">Catatan Revisi
-                                                                                </h5>
-                                                                                <button type="button" class="btn-close"
-                                                                                    data-bs-dismiss="modal"
-                                                                                    aria-label="Close">
-                                                                                </button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                <label for="notes">Notes</label>
-                                                                                <textarea id="notes" cols="5" rows="5" class="form-control" disabled>{{ $show_jholbx->catatan }}</textarea>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                    class="btn btn-secondary"
-                                                                                    data-bs-dismiss="modal">Close</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                             @endif
-                                                        </center> --}}
-                                                        <div class="modal fade" id="revisiModal" tabindex="-1"
-                                                            aria-labelledby="revisiModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="revisiModalLabel">
-                                                                            Catatan Revisi</h5>
-                                                                        <button type="button" class="btn-close"
-                                                                            data-bs-dismiss="modal"
-                                                                            aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body" id="revisiCatatan">
-                                                                        <!-- Catatan revisi akan ditampilkan di sini -->
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </td>
-                                                    <td>{{ $show_jholbx->kabupaten_kota }}</td>
-                                                    <td>{{ $show_jholbx->sektor }}</td>
-                                                    <td>{{ $show_jholbx->volume }}</td>
-                                                    <td>{{ $show_jholbx->satuan }}</td>
-
-                                                </tr>
-                                            @endforeach
-                                            <!-- Add more rows as needed -->
-                                        </tbody>
-                                    </table>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            @else
-                <div class="row"></div>
             @endif
-
-            {{-- pasokan --}}
+            {{-- Pasokan data --}}
             @if ($statuspasok_hsilolahx != '' and $hasilolahx == 'pasok')
                 <div class="row">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">Pasokan Hasil Olahan/Minyak Bumi</h5>
-                                    <div>
-                                        <a href="/hasil-olahan/minyak-bumi"
-                                            class="btn btn-secondary waves-effect waves-light">Kembali</a>
-                                        @if ($statuspasok_hsilolahx == 1)
-                                            <form
-                                                action="/submit_bulan_pasokan-olah/{{ $bulan_ambil_pasok_hasilolahx . '-01' }}"
+                        <div class="card mb-5 mb-xl-8 shadow">
+                            <div class="card-header bg-light p-5">
+                                <div class="row w-100">
+                                    <div class="col-lg-6">
+                                        <h5>Pasokan Hasil Olahan/Minyak Bumi</h5>
+                                        @php
+                                            $id = Crypt::encryptString(
+                                                $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2] . ',' . $pecah[3],
+                                            );
+                                        @endphp
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <form action="{{ url('/submit_bulan_pasokan-olah') }}/{{ $id }}"
                                                 method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
-                                                <button type="button" class="btn btn-info"
-                                                    onclick="kirimData($(this).closest('form'))" disabled>
-                                                    <span title="Kirim semua data">Kirim Semua</span>
+                                                <button type="button" class="btn btn-sm btn-info"
+                                                    onclick="kirimData($(this).closest('form'))"
+                                                    {{ $statuspasok_hsilolahx == 1 ? 'disabled' : '' }}>
+                                                    <i class="ki-solid ki-send"></i><span title="Kirim semua data">Kirim
+                                                        Semua</span>
                                                 </button>
                                             </form>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambil_pasok_hasilolahx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#inputpho" disabled>Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_pasok_hasilolahx) }}</button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
+                                            <button type="button" class="btn btn-sm btn-primary"
+                                                onclick="produk(); provinsi(); sektor(); tambahPMB('{{ $bulan_ambil_pasok_hasilolahx }}');"
+                                                data-bs-toggle="modal" data-bs-target="#inputpho"
+                                                {{ $statuspasok_hsilolahx == 1 || $statuspasok_hsilolahx == 2 ? 'disabled' : '' }}>
+                                                <i class="fas fa-plus"></i> Buat Laporan
+                                                {{ dateIndonesia($bulan_ambil_pasok_hasilolahx) }}
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-success"
                                                 onclick="tambahPMB('{{ $bulan_ambil_pasok_hasilolahx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#excelpholb" disabled>Import
-                                                Excel</button>
-                                        @elseif ($statuspasok_hsilolahx == 2)
-                                            <form
-                                                action="/submit_bulan_pasokan-olah/{{ $bulan_ambil_pasok_hasilolahx . '-01' }}"
-                                                method="post" class="d-inline">
-                                                @method('put')
-                                                @csrf
-                                                <button type="button" class="btn btn-info"
-                                                    onclick="kirimData($(this).closest('form'))">
-                                                    <span title="Kirim semua data">Kirim Semua</span>
-                                                </button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambil_pasok_hasilolahx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#inputpho" disabled>Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_pasok_hasilolahx) }}</button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
-                                                onclick="tambahPMB('{{ $bulan_ambil_pasok_hasilolahx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#excelpholb" disabled>Import
-                                                Excel</button>
-                                        @else
-                                            <form
-                                                action="/submit_bulan_pasokan-olah/{{ $bulan_ambil_pasok_hasilolahx . '-01' }}"
-                                                method="post" class="d-inline">
-                                                @method('put')
-                                                @csrf
-                                                <button type="button" class="btn btn-info"
-                                                    onclick="kirimData($(this).closest('form'))">
-                                                    <span title="Kirim semua data">Kirim Semua</span>
-                                                </button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary waves-effect waves-light"
-                                                onclick="produk(); provinsi(); tambahPMB('{{ $bulan_ambil_pasok_hasilolahx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#inputpho">Buat Laporan
-                                                {{ dateIndonesia($bulan_ambil_pasok_hasilolahx) }}</button>
-                                            <button type="button" class="btn btn-success waves-effect waves-light"
-                                                onclick="tambahPMB('{{ $bulan_ambil_pasok_hasilolahx }}' )"
-                                                data-bs-toggle="modal" data-bs-target="#excelpholb">Import Excel</button>
-                                        @endif
-                                        @include('badan_usaha.niaga.hasil_olahan.modal')
+                                                data-bs-toggle="modal" data-bs-target="#excelpholb"
+                                                {{ $statuspasok_hsilolahx == 1 || $statuspasok_hsilolahx == 2 ? 'disabled' : '' }}>
+                                                <i class="fas fa-upload"></i> Import Excel
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table id="table2" class="table table-bordered dt-responsive nowrap w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Bulan</th>
-                                                <th>Status</th>
-                                                <th>Catatan</th>
-                                                <th>Produk</th>
-                                                <th>Nama Pemasok</th>
-                                                <th>Kategori Pemasok</th>
-                                                <th>Aksi</th>
-                                                <th>Volume</th>
+                            <div class="card-body p-3">
+                                <div class="card">
+                                    <div class="card-header align-items-center px-2">
+                                        <div class="card-toolbar"></div> <!-- Export & Col Visible Table -->
+                                        <div class="card-title flex-row-fluid justify-content-end gap-5">
+                                            <input type="hidden" class="export-title" value="Laporan Pasokan data" />
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-2">
+                                        <table class="kt-datatable table table-bordered table-hover">
+                                            <thead class="bg-light align-top" style="white-space: nowrap;">
+                                                <tr class="fw-bold">
+                                                    <th class="text-center">No</th>
+                                                    <th>Bulan</th>
+                                                    <th>Tahun</th>
+                                                    <th>Status</th>
+                                                    <th>Catatan</th>
+                                                    <th>Nama Pemasok</th>
+                                                    <th>Kategori Pemasok</th>
+                                                    <th>Volume</th>
+                                                    <th class="text-center">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($pasokan as $pasokan)
+                                                    <tr>
+                                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                                        {{-- <td>{{ dateIndonesia($pasokan->bulan) }}</td> --}}
 
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($pasokan as $pasokan)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ dateIndonesia($pasokan->bulan) }}</td>
-                                                    <td>
-                                                        @if ($pasokan->status == 1 && $pasokan->catatan)
-                                                            <span class="badge bg-warning">Sudah Diperbaiki</span>
-                                                        @elseif ($pasokan->status == 1)
-                                                            <span class="badge bg-success">Diterima</span>
-                                                        @elseif ($pasokan->status == 2)
-                                                            <span class="badge bg-danger">Revisi</span>
-                                                        @elseif ($pasokan->status == 0)
-                                                            <span class="badge bg-info">draf</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $pasokan->catatan }}</td>
-                                                    <td>{{ $pasokan->produk }}</td>
-                                                    <td>{{ $pasokan->nama_pemasok }}</td>
-                                                    <td>{{ $pasokan->kategori_pemasok }}</td>
-                                                    <td>
-                                                        <?php
-                                            $status=$pasokan->status;
-                                            if ($status=="0"){ ?>
-                                                        <center><button type="button"
-                                                                class="btn btn-sm btn-info editPasokan" id="editpasokan"
-                                                                data-bs-toggle="modal" data-bs-target="#edit-pasokan"
-                                                                onclick="editPasokan('{{ $pasokan->id }}', '{{ $pasokan->produk }}' , '{{ $pasokan->kabupaten_kota }}')"
-                                                                data-id="{{ $pasokan->id }}"> <i class="bx bx-edit-alt"
-                                                                    title="Edit data"></i></button>
-                                                            <form action="/pasokan-olah/{{ $pasokan->id }}"
-                                                                method="post" class="d-inline">
-                                                                @method('delete')
-                                                                @csrf
-                                                                <button type="button" class="btn btn-sm btn-danger"
-                                                                    onclick="hapusData($(this).closest('form'))">
-                                                                    <i class="bx bx-trash-alt" title="Hapus data"></i>
-                                                                </button>
-                                                            </form>
-                                                            <button type="button" class="btn btn-sm btn-info"
-                                                                id="" data-bs-toggle="modal"
-                                                                data-bs-target="#lihat-pasokan-olah"
-                                                                onclick="lihatPasokan('{{ $pasokan->id }}', '{{ $pasokan->produk }}' , '{{ $pasokan->kabupaten_kota }}')"
-                                                                data-id="{{ $pasokan->id }}"> <i class="bx bx-show-alt"
-                                                                    title="Lihat data"></i></button>
-                                                        </center>
-
-
-                                                        <?php 
-                                            }elseif ($status=="1"){ ?>
-
-                                                        <center><button type="button" class="btn btn-sm btn-info"
-                                                                id="" data-bs-toggle="modal"
-                                                                data-bs-target="#lihat-pasokan-olah"
-                                                                onclick="lihatPasokan('{{ $pasokan->id }}', '{{ $pasokan->produk }}' , '{{ $pasokan->kabupaten_kota }}')"
-                                                                data-id="{{ $pasokan->id }}"> <i class="bx bx-show-alt"
-                                                                    title="Lihat data"></i></button></center>
-
-                                                        <?php 
-                                            }elseif ($status=="2"){ ?>
-                                                        <center><button type="button"
-                                                                class="btn btn-sm btn-info editPasokan" id="editpasokan"
-                                                                data-bs-toggle="modal" data-bs-target="#edit-pasokan"
-                                                                data-id="{{ $pasokan->id }}"> <i class="bx bx-edit-alt"
-                                                                    title="Edit data"></i></button>
-                                                            <button type="button" class="btn btn-sm btn-info"
-                                                                id="" data-bs-toggle="modal"
-                                                                data-bs-target="#lihat-pasokan-olah"
-                                                                onclick="lihatPasokan('{{ $pasokan->id }}', '{{ $pasokan->produk }}' , '{{ $pasokan->kabupaten_kota }}')"
-                                                                data-id="{{ $pasokan->id }}"> <i class="bx bx-show-alt"
-                                                                    title="Lihat data"></i></button>
-                                                        </center>
-                                                        <?php 
-                                            } ?>
-                                                        <center>
+                                                        <td>{{ getBulan($pasokan->bulan) }}</td>
+                                                        <td>{{ getTahun($pasokan->bulan) }}</td>
+                                                        <td>
                                                             @if ($pasokan->status == 1 && $pasokan->catatan)
                                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
                                                             @elseif ($pasokan->status == 1)
                                                                 <span class="badge bg-success">Diterima</span>
                                                             @elseif ($pasokan->status == 2)
-                                                                <span class="badge bg-danger" data-bs-toggle="modal"
+                                                                <span class="badge bg-danger">Revisi</span>
+                                                            @elseif ($pasokan->status == 0)
+                                                                <span class="badge bg-info">draf</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $pasokan->catatan }}</td>
+                                                        <td>{{ $pasokan->nama_pemasok }}</td>
+                                                        <td>{{ $pasokan->kategori_pemasok }}</td>
+                                                        <td>{{ $pasokan->volume }}</td>
+                                                        <td class="text-center">
+                                                            @if ($pasokan->status == '0' || $pasokan->status == '-' || $pasokan->status == '')
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-info editPasokan mb-2"
+                                                                    onclick="editPasokan('{{ $pasokan->id }}', '{{ $pasokan->produk }}' , '{{ $pasokan->kabupaten_kota }}')"
+                                                                    id="editpasokan" data-bs-toggle="modal"
+                                                                    data-bs-target="#edit-pasokan"
+                                                                    data-id="{{ $pasokan->id }}">
+                                                                    <i class="ki-solid ki-pencil" title="Edit Data"></i>
+                                                                </button>
+                                                                <form
+                                                                    action="{{ url('/pasokan-olah') }}/{{ $pasokan->id }}"
+                                                                    method="post" class="d-inline">
+                                                                    @method('delete')
+                                                                    @csrf
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-danger mb-2"
+                                                                        onclick="hapusData($(this).closest('form'))">
+                                                                        <i class="ki-solid ki-trash"
+                                                                            title="Hapus data"></i>
+                                                                    </button>
+                                                                </form>
+                                                                <form {{-- action="{{ url('/submit_pasokan-olah') }}/{{ $pasokan->id }}" --}} method="post"
+                                                                    class="d-inline">
+                                                                    @method('PUT')
+                                                                    @csrf
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-info mb-2"
+                                                                        onclick="kirimData($(this).closest('form'))">
+                                                                        <i class="ki-solid ki-send"
+                                                                            title="Kirim data"></i>
+                                                                    </button>
+                                                                </form>
+                                                            @elseif($pasokan->status == '1')
+                                                                <button type="button" class="btn btn-sm btn-info mb-2"
+                                                                    id="" data-bs-toggle="modal"
+                                                                    onclick="lihatPasokan('{{ $pasokan->id }}', '{{ $pasokan->produk }}' , '{{ $pasokan->kabupaten_kota }}')"
+                                                                    data-bs-target="#lihat-pasokan-olah"
+                                                                    data-id="{{ $pasokan->id }}">
+                                                                    <i class="ki-solid ki-eye" title="Lihat data"></i>
+                                                                </button>
+                                                            @elseif($pasokan->status == '2')
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-info editPasokan mb-2"
+                                                                    onclick="editPasokan('{{ $pasokan->id }}', '{{ $pasokan->produk }}' , '{{ $pasokan->kabupaten_kota }}')"
+                                                                    id="editpasokan" data-bs-toggle="modal"
+                                                                    data-bs-target="#edit-pasokan"
+                                                                    data-id="{{ $pasokan->id }}">
+                                                                    <i class="ki-solid ki-pencil" title="Edit Data"></i>
+                                                                </button>
+                                                                <form
+                                                                    action="{{ url('/submit_pasokan-olah') }}/{{ $pasokan->id }}"
+                                                                    method="post" class="d-inline">
+                                                                    @method('PUT')
+                                                                    @csrf
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-info mb-2"
+                                                                        onclick="kirimData($(this).closest('form'))">
+                                                                        <i class="ki-solid ki-send"
+                                                                            title="Kirim data"></i>
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+
+                                                            <br>
+                                                            @if ($pasokan->status == 1 && $pasokan->catatan)
+                                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
+                                                            @elseif ($pasokan->status == 1)
+                                                                <span class="badge badge-success">Diterima</span>
+                                                            @elseif ($pasokan->status == 2)
+                                                                <span class="badge badge-danger" data-bs-toggle="modal"
                                                                     data-bs-target="#modal-updateStatus-{{ $pasokan->id }}">
                                                                     Cek Revisi
                                                                 </span>
-
-                                                                <div class="modal fade"
-                                                                    id="modal-updateStatus-{{ $pasokan->id }}"
-                                                                    data-bs-backdrop="static" data-bs-keyboard="false"
-                                                                    tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                                                    aria-hidden="true">
-                                                                    <div class="modal-dialog modal-lg">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h5 class="modal-title"
-                                                                                    id="staticBackdropLabel">Catatan Revisi
-                                                                                </h5>
-                                                                                <button type="button" class="btn-close"
-                                                                                    data-bs-dismiss="modal"
-                                                                                    aria-label="Close"></button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                <label for="notes">Notes</label>
-                                                                                <textarea id="notes" cols="5" rows="5" class="form-control" disabled>{{ $pasokan->catatan }}</textarea>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                    class="btn btn-secondary"
-                                                                                    data-bs-dismiss="modal">Close</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                             @endif
-                                                        </center>
-                                                    </td>
-                                                    <td>{{ $pasokan->volume }}</td>
-
-                                                </tr>
-                                            @endforeach
-                                            <!-- Add more rows as needed -->
-                                        </tbody>
-                                    </table>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            @else
-                <div class="row"></div>
             @endif
         </div>
     </div>
-    {{--  <script>
-    document.querySelector('.btn-primary').addEventListener('click', function() {
-        const url = this.getAttribute('data-url');
-        window.location.href = url;
-    });
-</script>  --}}
+
+    @include('badan_usaha.niaga.hasil_olahan.modal')
 
 @endsection

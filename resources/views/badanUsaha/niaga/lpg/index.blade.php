@@ -4,7 +4,7 @@
         <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
             <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
                 <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
-                    <h3 class="text-dark fw-bold">LPG</h3>
+                    <h3 class="text-dark fw-bold">Laporan LPG</h3>
                 </div>
                 <div class="d-flex align-items-center gap-2 gap-lg-3">
                     <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
