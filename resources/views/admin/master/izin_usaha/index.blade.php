@@ -81,14 +81,31 @@
                                         <td>{{ $izinusaha->nama_opsi }}</td>
                                         <td>{{ $izinusaha->id_ref }}</td>
                                         <td>{{ $izinusaha->jenis }}</td>
-                                        <td>{{ $izinusaha->kategori_izin }}</td>
+                                        <td>
+                                            @php
+                                        $kategoriList = [
+                                            1 => 'Niaga',
+                                            2 => 'Pengolahan',
+                                            3 => 'Penyimpanan',
+                                            4 => 'Pengangkutan',
+                                        ];
+
+                                        $kategoriValues = explode(',', $izinusaha->kategori_izin);
+                                    @endphp
+
+                                    @foreach ($kategoriValues as $val)
+                                        {{ $kategoriList[(int)trim($val)] ?? 'Tidak diketahui' }}
+                                        @if (!$loop->last), @endif
+                                    @endforeach
+
+                                        </td>
                                         <td class="text-nowrap" align="center">
-                                            <a href="/master/izin-usaha/{{ $izinusaha->id }}/edit">
+                                            <a href="{{ url('/master/izin-usaha/') }}{{ $izinusaha->id }}/edit">
                                                 <button type="button" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
                                             </a>
-                                            <form action="/master/izin-usaha/{{ $izinusaha->id }}" method="post"
+                                            <form action="{{ url('/master/izin-usaha/') }}{{ $izinusaha->id }}" method="post"
                                                 class="d-inline">
                                                 @method('delete')
                                                 @csrf
