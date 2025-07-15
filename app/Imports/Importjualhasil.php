@@ -14,11 +14,16 @@ class Importjualhasil implements ToModel, WithStartRow, WithMultipleSheets
     /**
      * @return int
      */
-    protected $requestData;
+    protected 
+        $bulan, 
+        $id_permohonan, 
+        $id_sub_page;
 
-    public function __construct($requestData)
+    public function __construct($bulan, $id_permohonan, $id_sub_page)
     {
-        $this->requestData = $requestData;
+        $this->id_permohonan = $id_permohonan;
+        $this->id_sub_page = $id_sub_page;
+        $this->bulan = $bulan;
     }
 
     public function sheets(): array
@@ -40,8 +45,10 @@ class Importjualhasil implements ToModel, WithStartRow, WithMultipleSheets
     public function model(array $row)
     {
         return new Jual_hasil_olah_bbm([
-            'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'bulan' => $this->requestData,
+            'npwp' => Auth::user()->npwp,
+            'bulan' => $this->bulan,
+            'id_permohonan' => $this->id_permohonan,
+            'id_sub_page' => $this->id_sub_page,
             'produk' => $row[0],
             'provinsi' => $row[1],
             'kabupaten_kota' => $row[2],
