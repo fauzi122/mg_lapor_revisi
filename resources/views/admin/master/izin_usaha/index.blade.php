@@ -61,7 +61,7 @@
                             <thead class="bg-light">
                                 <tr class="fw-bold text-uppercase">
                                     <th style="text-align: center; vertical-align: middle;">No</th>
-                                    <th style="text-align: center; vertical-align: middle;">ID Sub Pgae</th>
+                                    <th style="text-align: center; vertical-align: middle;">ID Sub Page</th>
                                     <th style="text-align: center; vertical-align: middle;">ID Template</th>
                                     <th style="text-align: center; vertical-align: middle;">Jenis Izin</th>
                                     <th style="text-align: center; vertical-align: middle;">Nama Opsi</th>
@@ -100,12 +100,13 @@
 
                                         </td>
                                         <td class="text-nowrap" align="center">
-                                            <a href="{{ url('/master/izin-usaha/') }}{{ $izinusaha->id }}/edit">
-                                                <button type="button" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                            <a href="{{ url('/master/izin-usaha/' . $izinusaha->id . '/edit') }}" 
+                                                class="btn btn-icon btn-sm btn-info mb-2" 
+                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                     <i class="fa fa-edit"></i>
-                                                </button>
                                             </a>
-                                            <form action="{{ url('/master/izin-usaha/') }}{{ $izinusaha->id }}" method="post"
+
+                                            <form action="{{ url('/master/izin-usaha/' . $izinusaha->id) }}" method="post"
                                                 class="d-inline">
                                                 @method('delete')
                                                 @csrf
@@ -115,7 +116,6 @@
                                                 </button>
                                             </form>
                                         </td>
-                                        
                                     </tr>
                                 @endforeach
                             </tbody>
