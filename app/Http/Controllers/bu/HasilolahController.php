@@ -261,7 +261,7 @@ class HasilolahController extends Controller
             }
         }
 
-            $import = Excel::import(new Importjualhasil($bulan), request()->file('file'));
+            $import = Excel::import(new Importjualhasil($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
             if ($import) {
                 //redirect dengan pesan sukses
                 Alert::success('success', 'Data excel berhasil diupload');

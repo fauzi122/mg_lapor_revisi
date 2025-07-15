@@ -210,7 +210,7 @@ class PasokanHasilolahController extends Controller
             }
         }
 
-            $import = Excel::import(new Importpasokanhasil($bulan), request()->file('file'));
+            $import = Excel::import(new Importpasokanhasil($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
             if ($import) {
                 //redirect dengan pesan sukses
