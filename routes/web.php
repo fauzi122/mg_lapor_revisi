@@ -368,8 +368,8 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::delete('/master/meping/destroy_izin/{id}', 'destroy_Dizin');
 
 
-		Route::get('/master/meping/{id}/show', 'show');
-		Route::get('/master/meping/create/jenis-izin/{id}', 'create_Jizin');
+		Route::get('/master/meping/{id}/show/{jenis}', 'show');
+		Route::get('/master/meping/create/{id}/jenis-izin/{jenis_izin}', 'create_Jizin');
 		Route::post('/master/meping/izin', 'store_JIzin');
 		Route::get('/master/meping/izin/{id}/edit', 'edit_Jizin');
 		Route::put('/master/meping/izin/{id}', 'update_Jizin');

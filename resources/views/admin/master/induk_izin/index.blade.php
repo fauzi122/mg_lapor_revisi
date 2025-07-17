@@ -35,7 +35,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="/master/meping/create" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Data Izin">
+                                <a href="{{ url('/master/meping/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Data Izin">
                                     <i class="ki-duotone ki-plus"></i> Input Data Izin
                                 </a>
                             </div>
@@ -66,25 +66,27 @@
                                     <td>{{ $izin->izin }}</td>
                                     <td>{{ $izin->nm_izin }}</td>
                                     <td class="text-nowrap" align="center">
-                                        <a href="/master/meping/{{ $izin->izin }}/show">
+                                        <a href="{{ url('/master/meping/' . $izin->izin . '/show/' . $izin->jenis_izin) }}">
                                             <button type="button" class="btn btn-info waves-effect waves-light" title="show jenis izin" data-bs-toggle="tooltip" data-bs-placement="top" title="Jenis Izin">
                                                 <i class="bi bi-file-earmark-text fs-4"></i>Jenis Izin
                                             </button>
                                         </a>
-                                        <a href="/master/meping/edit/{{ $izin->id }}">
+
+                                        <a href="{{ url('/master/meping/edit/' . $izin->id) }}">
                                             <button type="button" class="btn btn-warning waves-effect waves-light" title="edit" data-bs-toggle="tooltip" data-bs-placement="top" title="edit">
                                                 <i class="fa fa-edit"></i>Edit
                                             </button>
                                         </a>
-                                        <form action="/master/meping/destroy_izin/{{ $izin->id }}" method="post"
-                                            class="d-inline">
+
+                                        <form action="{{ url('/master/meping/destroy_izin/' . $izin->id) }}" method="post" class="d-inline">
                                             @method('delete')
                                             @csrf
                                             <button class="btn btn-danger waves-effect waves-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus"
                                                 onclick="return confirm('Yakin ingin menghapus data?')">
-                                                <i class="bi bi-trash3-fill"></i></i>Hapus
+                                                <i class="bi bi-trash3-fill"></i> Hapus
                                             </button>
                                         </form>
+
                                         {{-- <a href="/master/meping/{{ $izin->izin }}/show">
                                             <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Menu Izin">
                                                 Menu Izin
