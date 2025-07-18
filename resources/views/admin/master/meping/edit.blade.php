@@ -35,6 +35,15 @@
     <div id="kt_app_content_container" class="app-container container-xxl">
         <div class="card mb-5 mb-xl-8 shadow">
             <div class="card-body p-4">
+                {{-- @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif --}}
                 <form method="POST" action="{{ url('/master/meping/izin/' . $meping->id) }}" class="form-material m-t-40" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -51,6 +60,9 @@
                                     <option value="2" {{ old('kategori', $meping->kategori) == '2' ? 'selected' : '' }}>Minyak</option>
                                 </select>
                                 <input type="hidden" name="kategori" value="{{ old('kategori', $meping->kategori) }}">
+                                @error('kategori')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
@@ -70,6 +82,9 @@
                                     <option value="">Pilih Jenis Izin</option>
                                     <!-- Diisi oleh JS -->
                                 </select>
+                                @error('id_sub_page')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>   
 
@@ -80,6 +95,9 @@
                                     <option value="">Pilih Nama Menu</option>
                                     <!-- Diisi oleh JS -->
                                 </select>
+                                @error('nama_menu')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>

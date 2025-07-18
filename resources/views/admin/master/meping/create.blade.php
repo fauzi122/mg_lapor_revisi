@@ -58,6 +58,9 @@
                                     <option value="1" {{ old('kategori', $meping->kategori ?? '') == '1' ? 'selected' : '' }}>Gas</option>
                                     <option value="2" {{ old('kategori', $meping->kategori ?? '') == '2' ? 'selected' : '' }}>Minyak</option>
                                 </select>
+                                @error('kategori')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
@@ -80,6 +83,9 @@
                                 <select name="id_sub_page" id="id_sub_page_select" class="form-control" required>
                                     <option value="">Pilih Jenis Izin</option>
                                 </select>
+                                @error('id_sub_page')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>   
                         
