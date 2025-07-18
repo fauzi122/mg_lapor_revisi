@@ -30,21 +30,21 @@ class SyncPasokanBbm implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('MULAI JBU '. $this->tahun);
+        Log::info('MULAI '. $this->tahun);
         $api = new APIBph();
         $page = 1;
         
         while (true) {
 
-            $response = $api->post('/bbm/penjualan-jbu', $this->tahun, $page);
+            $response = $api->post('/bbm/penyediaan', $this->tahun, $page);
 
             if ($response->status() === 404) {
-                Log::info("JBU Tidak ada data lagi pada halaman " . $page);
+                Log::info("Tidak ada data lagi pada halaman " . $page);
                 break;
             }
 
             if ($response->failed()) {
-                Log::warning('JBU Gagal sinkronisasi data page ', [
+                Log::warning('Gagal sinkronisasi data page ', [
                     'status' => $response->status(),
                     'page' => $page,
                 ]);
@@ -62,7 +62,7 @@ class SyncPasokanBbm implements ShouldQueue
             $page++;
         }    
 
-        Log::info("JBU TOTAL PAGE = " . $page);
+        Log::info("TOTAL PAGE = " . $page);
     }
 
     protected function simpanData($item): void
@@ -75,9 +75,8 @@ class SyncPasokanBbm implements ShouldQueue
                     'tahun'            => $item['tahun'],
                     'bulan'            => $item['bulan'],
                     'produk'           => $item['produk'],
-                    'provinsi'         => $item['provinsi'],
-                    'kabupaten_kota'   => $item['kabupaten_kota'],
-                    'sektor'           => $item['sektor'],
+                    'sumber'           => $item['sumber'],
+                    'supplier'         => $item['supplier'],
                 ],
                 [
                     'nama_badan_usaha' => $item['nama_badan_usaha'],

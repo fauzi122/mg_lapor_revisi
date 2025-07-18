@@ -74,16 +74,16 @@ class SyncPengangkutanGasBumi implements ShouldQueue
                     'npwp_badan_usaha' => $item['npwp_badan_usaha'],
                     'tahun'            => $item['tahun'],
                     'bulan'            => $item['bulan'],
-                    'produk'           => $item['produk'],
-                    'provinsi'         => $item['provinsi'],
-                    'kabupaten_kota'   => $item['kabupaten_kota'],
-                    'sektor'           => $item['sektor'],
                 ],
                 [
                     'nama_badan_usaha' => $item['nama_badan_usaha'],
-                    'izin_usaha'       => json_encode($item['izin_usaha']),
-                    'volume'           => $item['volume'],
-                    'satuan'           => $item['satuan'],
+                    'izin_usaha' => json_encode($item['izin_usaha']),
+                    'ruas_angkut' => $item['ruas_angkut'],
+                    'diameter' => $item['diameter'],
+                    'shipper' => $item['shipper'],
+                    'volume_mscf' => $item['volume_mscf'] ?? null,
+                    'satuan_mscf' => $item['satuan_mscf'] ?? null,
+                    'tarif_mscf' => $item['tarif_mscf'] ?? null,
                 ]
             );
         } catch (\Throwable $e) {
