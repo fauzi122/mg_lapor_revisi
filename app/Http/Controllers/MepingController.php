@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\induk_izin;
+use App\Models\IzinUsaha;
+use App\Models\Menu_Item;
 use App\Models\Meping;
 
 
@@ -27,9 +29,13 @@ class MepingController extends Controller
         return view('admin.master.induk_izin.create');
     }
 
-    public function create_JIzin($id)
+    public function create_JIzin($id, $jenis_izin)
     {
-        return view('admin.master.meping.create', compact('id'));
+        
+        $izin_usaha = IzinUsaha::get();
+
+        $menu_items = Menu_Item::get();
+        return view('admin.master.meping.create', compact('id', 'izin_usaha', 'jenis_izin', 'menu_items'));
     }
 
 
@@ -55,13 +61,14 @@ class MepingController extends Controller
     public function store_JIzin(Request $request)
     {
         $validated = $request->validate([
-            'id_sub_page' => 'required|string|',
-            'id_template' => 'required|string|',
+            'id_sub_page' => 'required|string',
+            'id_template' => 'required|string',
             'nama_opsi' => 'required|string|',
             'nama_menu' => 'required|string|',
             'kategori' => 'required|in:1,2',
             'url' => 'required|string|',
-            'id_induk_izin' => 'required'
+            'id_induk_izin' => 'required',
+            'jenis_izin' => 'required'
         ]);
         // dd($request->all());
 
@@ -73,10 +80,11 @@ class MepingController extends Controller
             'nama_menu' => $validated['nama_menu'],
             'kategori' => $validated['kategori'],
             'url' => $validated['url'],
+            'jenis_izin' => $validated['jenis_izin'],
             'status' => 1, // default aktif
         ]);
 
-        return redirect('/master/meping/' . $validated['id_induk_izin'] . '/show')
+        return redirect('/master/meping/' . $validated['id_induk_izin'] . '/show/' .$validated['jenis_izin'])
             ->with('success', 'Data berhasil ditambahkan!');
     }
 
@@ -85,12 +93,14 @@ class MepingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, string $jenis_izin)
     {
-
-        $meping = Meping::where('id_induk_izin', $id)->get();
-        return view('admin.master.meping.index', compact('meping', 'id'));
+        $meping = Meping::where('id_induk_izin', $id)
+            ->where('jenis_izin', $jenis_izin)
+            ->get();
+        return view('admin.master.meping.index', compact('meping', 'id', 'jenis_izin'));
     }
+
 
     public function show_menu(string $id)
     {
@@ -110,25 +120,34 @@ class MepingController extends Controller
 
     public function edit_Jizin(string $id)
     {
-        $meping = Meping::findOrFail($id); // ambil data izin berdasarkan id
-        return view('admin.master.meping.edit', compact('meping'));
+        $meping = Meping::findOrFail($id); // data yang sedang di-edit
+
+        $izin_usaha = IzinUsaha::get(); // untuk dropdown jenis izin
+        $menu_items = Menu_Item::get(); // untuk dropdown nama menu
+
+        $jenis_izin = $meping->jenis_izin; // ambil dari data meping yang sedang di-edit
+
+        return view('admin.master.meping.edit', compact('meping', 'izin_usaha', 'menu_items', 'jenis_izin'));
     }
+
 
     public function update_Jizin(Request $request, string $id)
     {
         $validated = $request->validate([
-            'id_sub_page' => 'required|string|max:255',
-            'id_template' => 'required|string|max:255',
-            'nama_opsi' => 'required|string|max:255',
-            'nama_menu' => 'required|string|max:255',
+            'id_sub_page' => 'required|string',
+            'id_template' => 'required|string',
+            'nama_opsi' => 'required|string',
+            'nama_menu' => 'required|string',
             'kategori' => 'required|in:1,2',
-            'url' => 'required|string|max:255',
+            'url' => 'required|string',
+            'id_induk_izin' => 'required',
+            'jenis_izin' => 'required'
         ]);
 
         $meping = Meping::findOrFail($id);
         $meping->update($validated);
 
-        return redirect('/master/meping/' . $meping->id_induk_izin . '/show')
+        return redirect('/master/meping/' . $validated['id_induk_izin'] . '/show/' . $validated['jenis_izin'])
             ->with('success', 'Data berhasil diperbarui!');
     }
 
@@ -184,7 +203,7 @@ class MepingController extends Controller
         $meping = Meping::findOrFail($id);
         $meping->delete();
 
-        return redirect('/master/meping/' . $meping->id_induk_izin . '/show')
+        return redirect('/master/meping/' . $meping->id_induk_izin . '/show/'. $meping->jenis_izin)
             ->with('success', 'Data berhasil dihapus');
     }
 }

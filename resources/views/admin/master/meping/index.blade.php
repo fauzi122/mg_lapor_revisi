@@ -42,7 +42,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ url('/master/meping/create/jenis-izin/' . $id) }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Jenis Izin">
+                                <a href="{{ url('/master/meping/create/' . $id . '/jenis-izin/'. $jenis_izin) }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Jenis Izin">
                                     <i class="ki-duotone ki-plus"></i> Input Jenis Izin
                                 </a>
                             </div>
@@ -118,12 +118,12 @@
                                     <td>{{ $meping->url }}</td>
 
                                     <td class="text-nowrap" align="center">
-                                        <a href="/master/meping/izin/{{ $meping->id }}/edit">
+                                        <a href="{{ url('/master/meping/izin/'. $meping->id . '/edit') }}">
                                             <button type="button" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fa fa-edit"></i>
                                             </button>
                                         </a>
-                                        <form action="/master/meping/{{ $meping->id }}/destroy" method="post" class="d-inline">
+                                        <form action="{{ url('/master/meping/'. $meping->id .'/destroy') }}" method="post" class="d-inline">
                                             @method('delete')
                                             @csrf
                                             <button class="btn btn-icon btn-sm btn-danger mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus" onclick="return confirm('Yakin ingin menghapus data?')">
