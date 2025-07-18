@@ -3,7 +3,7 @@
 namespace App\Jobs\bph;
 
 use App\Library\APIBph;
-use App\Models\PenjualanJbt;
+use App\Models\PenjualanJbu;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class SyncPenjualanJbt implements ShouldQueue
+class SyncPenjualanJbu implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -36,7 +36,7 @@ class SyncPenjualanJbt implements ShouldQueue
         
         while (true) {
 
-            $response = $api->post('/bbm/penjualan-jbt', $this->tahun, $page);
+            $response = $api->post('/bbm/penjualan-jbu', $this->tahun, $page);
 
             if ($response->status() === 404) {
                 Log::info("Tidak ada data lagi pada halaman " . $page);
@@ -54,7 +54,6 @@ class SyncPenjualanJbt implements ShouldQueue
             }
             
             // Jika berhasil
-            Log::info("PROSES PAGE = " . $page);
             $response =  $response->json();
 
             foreach ($response['data'] as $value) {
@@ -69,7 +68,7 @@ class SyncPenjualanJbt implements ShouldQueue
     protected function simpanData($item): void
     {
         try {
-            PenjualanJbt::updateOrCreate(
+            PenjualanJbu::updateOrCreate(
                 [
                     'id_badan_usaha'   => $item['id_badan_usaha'],
                     'npwp_badan_usaha' => $item['npwp_badan_usaha'],
@@ -94,4 +93,5 @@ class SyncPenjualanJbt implements ShouldQueue
             ]);
         }
     }
+
 }

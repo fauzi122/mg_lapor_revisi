@@ -3,7 +3,7 @@
 namespace App\Jobs\bph;
 
 use App\Library\APIBph;
-use App\Models\PenjualanJbt;
+use App\Models\BphPenjualanGasBumi;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class SyncPenjualanJbt implements ShouldQueue
+class SyncPenjualanGasBumi implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -36,7 +36,7 @@ class SyncPenjualanJbt implements ShouldQueue
         
         while (true) {
 
-            $response = $api->post('/bbm/penjualan-jbt', $this->tahun, $page);
+            $response = $api->post('/gas/penjualan-gas', $this->tahun, $page);
 
             if ($response->status() === 404) {
                 Log::info("Tidak ada data lagi pada halaman " . $page);
@@ -54,7 +54,6 @@ class SyncPenjualanJbt implements ShouldQueue
             }
             
             // Jika berhasil
-            Log::info("PROSES PAGE = " . $page);
             $response =  $response->json();
 
             foreach ($response['data'] as $value) {
@@ -68,23 +67,28 @@ class SyncPenjualanJbt implements ShouldQueue
 
     protected function simpanData($item): void
     {
+        // Log::info($item);
         try {
-            PenjualanJbt::updateOrCreate(
+            BphPenjualanGasBumi::updateOrCreate(
                 [
                     'id_badan_usaha'   => $item['id_badan_usaha'],
                     'npwp_badan_usaha' => $item['npwp_badan_usaha'],
                     'tahun'            => $item['tahun'],
                     'bulan'            => $item['bulan'],
-                    'produk'           => $item['produk'],
                     'provinsi'         => $item['provinsi'],
-                    'kabupaten_kota'   => $item['kabupaten_kota'],
+                    'kabkot'   => $item['kabkot'],
                     'sektor'           => $item['sektor'],
                 ],
                 [
                     'nama_badan_usaha' => $item['nama_badan_usaha'],
                     'izin_usaha'       => json_encode($item['izin_usaha']),
-                    'volume'           => $item['volume'],
-                    'satuan'           => $item['satuan'],
+                    'konsumen'           => $item['konsumen'],
+                    'jml_hari_penyaluran'           => $item['jml_hari_penyaluran'],
+                    'ghv'           => $item['ghv'],
+                    'keterangan'           => $item['keterangan'],
+                    'volume_mmbtu'           => $item['volume_mmbtu'] ?? null,
+                    'satuan_mmbtu'           => $item['satuan_mmbtu'] ?? null,
+                    'harga_mmbtu'           => $item['harga_mmbtu'] ?? null,
                 ]
             );
         } catch (\Throwable $e) {
