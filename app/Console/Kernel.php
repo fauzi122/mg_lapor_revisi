@@ -2,9 +2,19 @@
 
 namespace App\Console;
 
+use App\Jobs\bph\SyncJbkpKuota;
+use App\Jobs\bph\SyncJbtKuota;
+use App\Jobs\bph\SyncPasokanBbm;
+use App\Jobs\bph\SyncPasokanGasBumi;
+use App\Jobs\bph\SyncPengangkutanGasBumi;
+use App\Jobs\bph\SyncPenjualanGasBumi;
+use App\Jobs\bph\SyncPenjualanJbkp;
+use App\Jobs\bph\SyncPenjualanJbt as BphSyncPenjualanJbt;
+use App\Jobs\bph\SyncPenjualanJbu;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Jobs\SyncPenjualanJbt;
 use App\Jobs\SyncJbtJob;
+use Carbon\Carbon;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -15,8 +25,17 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function () {
-            $startYear = 2023; // Hanya menjalankan job untuk tahun 2020
-            SyncJbtJob::dispatchSync($startYear);
+            $year = Carbon::now()->year;
+            // SyncJbtJob::dispatchSync($startYear);
+            SyncPenjualanJbkp::dispatchSync($year);
+            BphSyncPenjualanJbt::dispatchSync($year);
+            SyncPenjualanJbu::dispatchSync($year);
+            SyncPasokanBbm::dispatchSync($year);
+            SyncPenjualanGasBumi::dispatchSync($year);
+            SyncPasokanGasBumi::dispatchSync($year);
+            SyncPengangkutanGasBumi::dispatchSync($year);
+            SyncJbtKuota::dispatchSync($year);
+            SyncJbkpKuota::dispatchSync($year);
         })->dailyAt('15:15'); // Menjadwalkan job setiap hari pukul 01:00 AM
         // $schedule->command('inspire')->hourly();
 

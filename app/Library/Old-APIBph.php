@@ -47,7 +47,8 @@ class APIBph
         $token = Cache::get('access_token');
 
         try {
-            $response = Http::timeout(180)
+            $response = Http::timeout(200)
+                ->retry(3, 2000)
                 ->withToken($token)
                 ->post(self::BASEURL . $endpoint, [
                     "tahun" => $year,
@@ -55,12 +56,12 @@ class APIBph
                 ]);
 
             // Unauthorized (Token expired)
-            if ($response->status() === 401) {
+            if ($response->status() === 401 || $response->json('error') === 'Token is Invalid') {
                 // Refresh token
                 $this->tokenBphApi();
 
                 // Retry sekali
-                $response = Http::timeout(180)
+                $response = Http::timeout(200)
                     ->withToken(Cache::get('access_token'))
                     ->post(self::BASEURL . $endpoint, [
                         "tahun" => $year,

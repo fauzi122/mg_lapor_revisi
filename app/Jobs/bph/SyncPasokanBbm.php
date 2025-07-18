@@ -3,7 +3,7 @@
 namespace App\Jobs\bph;
 
 use App\Library\APIBph;
-use App\Models\PenjualanJbt;
+use App\Models\PenjualanBbm;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class SyncPenjualanJbt implements ShouldQueue
+class SyncPasokanBbm implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,21 +30,21 @@ class SyncPenjualanJbt implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('MULAI '. $this->tahun);
+        Log::info('MULAI JBU '. $this->tahun);
         $api = new APIBph();
         $page = 1;
         
         while (true) {
 
-            $response = $api->post('/bbm/penjualan-jbt', $this->tahun, $page);
+            $response = $api->post('/bbm/penjualan-jbu', $this->tahun, $page);
 
             if ($response->status() === 404) {
-                Log::info("Tidak ada data lagi pada halaman " . $page);
+                Log::info("JBU Tidak ada data lagi pada halaman " . $page);
                 break;
             }
 
             if ($response->failed()) {
-                Log::warning('Gagal sinkronisasi data page ', [
+                Log::warning('JBU Gagal sinkronisasi data page ', [
                     'status' => $response->status(),
                     'page' => $page,
                 ]);
@@ -62,13 +62,13 @@ class SyncPenjualanJbt implements ShouldQueue
             $page++;
         }    
 
-        Log::info("TOTAL PAGE = " . $page);
+        Log::info("JBU TOTAL PAGE = " . $page);
     }
 
     protected function simpanData($item): void
     {
         try {
-            PenjualanJbt::updateOrCreate(
+            PenjualanBbm::updateOrCreate(
                 [
                     'id_badan_usaha'   => $item['id_badan_usaha'],
                     'npwp_badan_usaha' => $item['npwp_badan_usaha'],
