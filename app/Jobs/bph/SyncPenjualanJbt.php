@@ -54,6 +54,7 @@ class SyncPenjualanJbt implements ShouldQueue
             }
             
             // Jika berhasil
+            Log::info("PROSES PAGE = " . $page);
             $response =  $response->json();
 
             foreach ($response['data'] as $value) {

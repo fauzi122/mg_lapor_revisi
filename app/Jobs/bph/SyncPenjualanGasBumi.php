@@ -67,6 +67,7 @@ class SyncPenjualanGasBumi implements ShouldQueue
 
     protected function simpanData($item): void
     {
+        // Log::info($item);
         try {
             BphPenjualanGasBumi::updateOrCreate(
                 [
@@ -74,16 +75,20 @@ class SyncPenjualanGasBumi implements ShouldQueue
                     'npwp_badan_usaha' => $item['npwp_badan_usaha'],
                     'tahun'            => $item['tahun'],
                     'bulan'            => $item['bulan'],
-                    'produk'           => $item['produk'],
                     'provinsi'         => $item['provinsi'],
-                    'kabupaten_kota'   => $item['kabupaten_kota'],
+                    'kabkot'   => $item['kabkot'],
                     'sektor'           => $item['sektor'],
                 ],
                 [
                     'nama_badan_usaha' => $item['nama_badan_usaha'],
                     'izin_usaha'       => json_encode($item['izin_usaha']),
-                    'volume'           => $item['volume'],
-                    'satuan'           => $item['satuan'],
+                    'konsumen'           => $item['konsumen'],
+                    'jml_hari_penyaluran'           => $item['jml_hari_penyaluran'],
+                    'ghv'           => $item['ghv'],
+                    'keterangan'           => $item['keterangan'],
+                    'volume_mmbtu'           => $item['volume_mmbtu'] ?? null,
+                    'satuan_mmbtu'           => $item['satuan_mmbtu'] ?? null,
+                    'harga_mmbtu'           => $item['harga_mmbtu'] ?? null,
                 ]
             );
         } catch (\Throwable $e) {
