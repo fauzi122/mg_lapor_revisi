@@ -7,7 +7,7 @@ use App\Models\induk_izin;
 use App\Models\IzinUsaha;
 use App\Models\Menu_Item;
 use App\Models\Meping;
-
+use Illuminate\Validation\Rule;
 
 class MepingController extends Controller
 {
@@ -61,7 +61,7 @@ class MepingController extends Controller
     public function store_JIzin(Request $request)
     {
         $validated = $request->validate([
-            'id_sub_page' => 'required|string',
+            'id_sub_page' => 'required|string|unique:mepings,id_sub_page',
             'id_template' => 'required|string',
             'nama_opsi' => 'required|string|',
             'nama_menu' => 'required|string|',
@@ -69,6 +69,10 @@ class MepingController extends Controller
             'url' => 'required|string|',
             'id_induk_izin' => 'required',
             'jenis_izin' => 'required'
+        ],[
+            'id_sub_page.required' => 'ID Sub Page wajib diisi.',
+            'id_sub_page.unique' => 'ID Sub Page sudah digunakan.',
+            'nama_menu.required' => 'Nama Menu wajib dipilih.'
         ]);
         // dd($request->all());
 
@@ -134,7 +138,11 @@ class MepingController extends Controller
     public function update_Jizin(Request $request, string $id)
     {
         $validated = $request->validate([
-            'id_sub_page' => 'required|string',
+            'id_sub_page' => [
+                'required',
+                'string',
+                Rule::unique('mepings', 'id_sub_page')->ignore($id),
+            ],
             'id_template' => 'required|string',
             'nama_opsi' => 'required|string',
             'nama_menu' => 'required|string',
@@ -142,6 +150,10 @@ class MepingController extends Controller
             'url' => 'required|string',
             'id_induk_izin' => 'required',
             'jenis_izin' => 'required'
+        ], [
+            'id_sub_page.required' => 'ID Sub Page wajib diisi.',
+            'id_sub_page.unique' => 'ID Sub Page sudah digunakan.',
+            'nama_menu.required' => 'Nama Menu wajib dipilih.',
         ]);
 
         $meping = Meping::findOrFail($id);
