@@ -157,11 +157,14 @@
 
         function populateJenisIzin(kategoriValue) {
             const kategoriText = kategoriValue === "1" ? "GAS" :
-                                 kategoriValue === "2" ? "BBM" : "";
+                                kategoriValue === "2" ? "BBM" : "";
 
             idSubPageSelect.innerHTML = '<option value="">Pilih Jenis Izin</option>';
 
-            const filtered = izinUsahaData.filter(item => item.jenis === kategoriText);
+            const filtered = izinUsahaData.filter(item =>
+                item.jenis === kategoriText &&
+                item.kategori_izin == jenisIzinFromServer
+            );
 
             filtered.forEach(item => {
                 const option = document.createElement('option');
@@ -174,7 +177,9 @@
             });
 
             if (oldSelectedSubPage) {
-                const selectedIzin = izinUsahaData.find(item => item.id_sub_page == oldSelectedSubPage);
+                const selectedIzin = izinUsahaData.find(item =>
+                    item.id_sub_page == oldSelectedSubPage
+                );
                 if (selectedIzin) {
                     idTemplateInput.value = selectedIzin.id_template || '';
                     namaOpsiInput.value = selectedIzin.nama_opsi || '';
@@ -184,6 +189,7 @@
             // Panggil update Nama Menu juga
             populateNamaMenu(kategoriValue);
         }
+
 
         function populateNamaMenu(kategoriValue) {
             const kategoriText = kategoriValue === "1" ? "Gas" :
