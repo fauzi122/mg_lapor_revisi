@@ -88,10 +88,13 @@ class APIBph
                         "page" => $page
                     ]);
             }
-            Log::info("PROSES PAGE = " . $page);
+            // Log::info("PROSES PAGE = " . $page);
+            
             return $response;
         } catch (\Throwable $th) {
             throw new Exception("Gagal request ke endpoint {$endpoint}: " . $th->getMessage());
         }
     }
 }
+
+
