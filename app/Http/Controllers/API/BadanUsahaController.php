@@ -20,11 +20,11 @@ class BadanUsahaController extends BaseController
             'email' => 'required|email|unique:users,email',
             'npwp' => 'required',
         ]);
-        
+
         if ($validator->fails()) {
-            return $this->sendError('Error Validasi.', $validator->errors());       
+            return $this->sendError('Error Validasi.', $validator->errors());
         }
-        
+
         $input = $request->all();
         $input['password'] = bcrypt('-');
         $user = User::create([
@@ -44,7 +44,7 @@ class BadanUsahaController extends BaseController
     public function getDataLaporanBU(Request $request)
     {
         $npwp = $request->NPWP;
-        
+
         // Validasi jika NPWP kosong
         if ($npwp == 'null' || $npwp == "") {
             $message = "NPWP tidak boleh kosong";
@@ -55,17 +55,15 @@ class BadanUsahaController extends BaseController
             return response()->json($response, 200);
         }
 
-        $dataNpwp = encrypt($npwp);
-         if (App::environment('production')) {
+        // $dataNpwp = encrypt($npwp);
+        if (App::environment('production')) {
             // Jika di produksi, gunakan URL dari APP_URL di .env dan tambahkan '/pelaporan-hilir'
-            $url = env('APP_URL') . '/badan-usaha/login/' . $dataNpwp;
-
+            $url = env('APP_URL') . '/badan-usaha/login/';
         } else {
             // Jika di lokal, gunakan URL lokal
-            $url = 'http://127.0.0.1:8000/badan-usaha/login/' . $dataNpwp;
-
+            $url = 'http://127.0.0.1:8000/badan-usaha/login/';
         }
-        
+
 
         $message = "Data Pelaporan";
         App::setLocale('id'); // Set locale ke bahasa Indonesia
@@ -83,7 +81,7 @@ class BadanUsahaController extends BaseController
             ['table' => 'ekspors', 'column' => 'bulan_peb'],
             ['table' => 'impors', 'column' => 'bulan_pib'],
             ['table' => 'penyminyakbumis', 'column' => 'bulan'],
-            
+
             // GAS
             ['table' => 'harga_l_p_g_s', 'column' => 'bulan'],
             ['table' => 'penjualan_lngs', 'column' => 'bulan'],
@@ -128,7 +126,7 @@ class BadanUsahaController extends BaseController
             ['table' => 'ekspors', 'column' => 'bulan_peb'],
             ['table' => 'impors', 'column' => 'bulan_pib'],
             ['table' => 'penyminyakbumis', 'column' => 'bulan'],
-            
+
             // GAS
             ['table' => 'pengolahans', 'column' => 'bulan', 'extra' => ['jenis' => 'Gas Bumi']],
         ];
@@ -274,7 +272,7 @@ class BadanUsahaController extends BaseController
             'message'   => $message,
             'data'      => $dataContent
         ];
-        
+
         return response()->json($response, 200);
     }
 }
