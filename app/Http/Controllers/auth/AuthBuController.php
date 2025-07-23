@@ -75,21 +75,55 @@ class AuthBuController extends Controller
 
 
 
+
     public function postloginIzinByURL(Request $request)
     {
+        // $qryStr = 'HGqpJjieV/Ot8kH+cFVi/CCoHI7WlosRTE7YJFuGwnuyR2DjKHdVEzFdIcbrOQQPzGQiSfCH5FiC/CQZ6TbVM0lHIQYJoDIYuJQJUAGEkWnnByMcX0xTLgAteBQvtLSV';
         $tokenNonOss = $request->query('token_non_oss');
+        $key = "pu5dat1nEsdm2020s1lv141nt3grasi!@3$%^";
 
-        $npwp = decrypt($tokenNonOss);
+        // Decode token
+        $c = base64_decode($tokenNonOss);
+        $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
+        $iv = substr($c, 0, $ivlen);
+        $hmac = substr($c, $ivlen, $sha2len = 32);
+        $ciphertext_raw = substr($c, $ivlen + $sha2len);
+        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, $options = OPENSSL_RAW_DATA, $iv);
 
-
-        $check = User::where('npwp', $npwp)->count();
-
-        if ($check == '0') {
-            return redirect('/login')->with('statusLogin', 'Eror Autentikasi');
+        // Validate HMAC
+        $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary = true);
+        if (!hash_equals($calcmac, $hmac)) {
+            return redirect('/login')->with('statusLogin', 'Error: HMAC mismatch');
         }
 
+        // Parse the decrypted data into an associative array
+        parse_str($original_plaintext, $output);
+        // Ensure the 'npwp' is extracted from the decrypted data
+        $npwp = isset($output['npwp']) ? $output['npwp'] : null;
+
+        // Cek apakah NPWP ada di database
+        $check = User::where('npwp', $npwp)->count();
+
+        if ($check == 0) {
+            $email = $output['email'] ?? 'default@example.com';  // Ganti dengan email default jika tidak ada
+            $password = bcrypt('-');  // Encrypt password with bcrypt
+            // dd($email);
+
+            // Membuat record baru di database jika NPWP tidak tersedia
+            User::updateOrCreate(
+                [
+                    'email' => $email,
+                    'npwp'  => $npwp,
+                ],
+                [
+                    'password' => $password,
+                    'role'     => 'BU',
+                ]
+            );
+        }
+
+        // Ambil user dan login
         $user = User::where('npwp', $npwp)->first();
-        // dd($user);
         $email = $user->email;
         $password = '-';
         $credentials = [
@@ -106,10 +140,10 @@ class AuthBuController extends Controller
             ]);
             return redirect('/');
         } else {
-            // dd('hai');
-            return redirect('/login')->with('statusLogin', 'Eror Autentikasi');
+            return redirect('/login')->with('statusLogin', 'Error: Autentikasi');
         }
     }
+
 
     public function logoutBU()
     {
