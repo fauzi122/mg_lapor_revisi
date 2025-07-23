@@ -58,10 +58,10 @@ class BadanUsahaController extends BaseController
         // $dataNpwp = encrypt($npwp);
         if (App::environment('production')) {
             // Jika di produksi, gunakan URL dari APP_URL di .env dan tambahkan '/pelaporan-hilir'
-            $url = env('APP_URL') . '/badan-usaha/login/';
+            $url = env('APP_URL') . '/badan-usaha/login';
         } else {
             // Jika di lokal, gunakan URL lokal
-            $url = 'http://127.0.0.1:8000/badan-usaha/login/';
+            $url = 'http://127.0.0.1:8000/badan-usaha/login';
         }
 
 
