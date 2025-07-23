@@ -14,7 +14,6 @@ use App\Models\Meping;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Mail;
-use Illuminate\Support\Facades\Log;
 
 class AuthBuController extends Controller
 {
@@ -79,13 +78,10 @@ class AuthBuController extends Controller
 
     public function postloginIzinByURL(Request $request)
     {
-        // $qryStr = 'HGqpJjieV/Ot8kH+cFVi/CCoHI7WlosRTE7YJFuGwnuyR2DjKHdVEzFdIcbrOQQPzGQiSfCH5FiC/CQZ6TbVM0lHIQYJoDIYuJQJUAGEkWnnByMcX0xTLgAteBQvtLSV';
+        $qryStr = 'HGqpJjieV/Ot8kH+cFVi/CCoHI7WlosRTE7YJFuGwnuyR2DjKHdVEzFdIcbrOQQPzGQiSfCH5FiC/CQZ6TbVM0lHIQYJoDIYuJQJUAGEkWnnByMcX0xTLgAteBQvtLSV';
         $tokenNonOss = $request->query('token_non_oss');
-        // dd($npwp);
-
+        $tokenNonOss = str_replace(' ', '+', $tokenNonOss);
         $key = "pu5dat1nEsdm2020s1lv141nt3grasi!@3$%^";
-
-        // Decode token
         $c = base64_decode($tokenNonOss);
         $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
         $iv = substr($c, 0, $ivlen);
@@ -93,15 +89,12 @@ class AuthBuController extends Controller
         $ciphertext_raw = substr($c, $ivlen + $sha2len);
         $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, $key, $options = OPENSSL_RAW_DATA, $iv);
 
-        // Debugging: Cek hasil perhitungan HMAC
+        // Validate HMAC
         $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary = true);
-        Log::debug('Calculated HMAC: ' . bin2hex($calcmac)); // Log hasil HMAC yang dihitung
-
         if (!hash_equals($calcmac, $hmac)) {
-            // Log the HMAC mismatch for debugging
-            Log::debug('HMAC mismatch!');
-            return response()->json(['error' => 'HMAC mismatch'], 400); // Return JSON error response
+            return redirect('/login')->with('statusLogin', 'Error: HMAC mismatch');
         }
+
         // Parse the decrypted data into an associative array
         parse_str($original_plaintext, $output);
         // Ensure the 'npwp' is extracted from the decrypted data
