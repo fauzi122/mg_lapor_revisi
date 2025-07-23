@@ -80,6 +80,8 @@ class AuthBuController extends Controller
     {
         // $qryStr = 'HGqpJjieV/Ot8kH+cFVi/CCoHI7WlosRTE7YJFuGwnuyR2DjKHdVEzFdIcbrOQQPzGQiSfCH5FiC/CQZ6TbVM0lHIQYJoDIYuJQJUAGEkWnnByMcX0xTLgAteBQvtLSV';
         $tokenNonOss = $request->query('token_non_oss');
+        dd($tokenNonOss);
+
         $key = "pu5dat1nEsdm2020s1lv141nt3grasi!@3$%^";
 
         // Decode token
@@ -100,7 +102,6 @@ class AuthBuController extends Controller
         parse_str($original_plaintext, $output);
         // Ensure the 'npwp' is extracted from the decrypted data
         $npwp = isset($output['npwp']) ? $output['npwp'] : null;
-        dd($npwp);
         // Cek apakah NPWP ada di database
         $check = User::where('npwp', $npwp)->count();
 
