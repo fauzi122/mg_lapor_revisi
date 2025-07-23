@@ -100,7 +100,7 @@ class AuthBuController extends Controller
         parse_str($original_plaintext, $output);
         // Ensure the 'npwp' is extracted from the decrypted data
         $npwp = isset($output['npwp']) ? $output['npwp'] : null;
-
+        dd($npwp);
         // Cek apakah NPWP ada di database
         $check = User::where('npwp', $npwp)->count();
 
