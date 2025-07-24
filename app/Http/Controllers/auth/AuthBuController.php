@@ -196,12 +196,12 @@ class AuthBuController extends Controller
 
             if (Auth::attempt($credentials)) {
                 Http::get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Login Non OSS berhasil',
-                    'user' => $user,
-                ]);
+                return redirect('/');
+                // return response()->json([
+                //     'status' => 'success',
+                //     'message' => 'Login Non OSS berhasil',
+                //     'user' => $user,
+                // ]);
             }
 
             return response()->json([
@@ -274,12 +274,12 @@ class AuthBuController extends Controller
         if (Auth::attempt($credentials)) {
             // Panggil endpoint simpan
             Http::get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Login OSS berhasil',
-                'user' => $user,
-            ]);
+            return redirect('/');
+            // return response()->json([
+            //     'status' => 'success',
+            //     'message' => 'Login OSS berhasil',
+            //     'user' => $user,
+            // ]);
         }
 
         return response()->json([
