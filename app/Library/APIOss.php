@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\App;
 
 class APIOss
 {
-    const BASEURL = 'https://apic.esdm.go.id/production/prod-sandbox/';
+    const BASEURL = 'https://apicdev.esdm.go.id/development/dev-sandbox/';
 
     // Header tetap
     const USER_KEY = '352fa6f82403d0e389006a44f7498273';

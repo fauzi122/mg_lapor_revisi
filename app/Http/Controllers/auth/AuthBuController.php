@@ -138,6 +138,7 @@ class AuthBuController extends Controller
         // } else {
         //     return redirect('/login')->with('statusLogin', 'Error: Autentikasi');
         // }
+        // dd($request->has('token_oss'));
         if ($request->has('token_non_oss')) {
             return $this->loginFromNonOSS($request);
         }
@@ -164,7 +165,10 @@ class AuthBuController extends Controller
 
             $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
             if (!hash_equals($calcmac, $hmac)) {
-                return redirect('/login')->with('statusLogin', 'Error: HMAC mismatch');
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'HMAC mismatch'
+                ], 400);
             }
 
             parse_str($plaintext, $output);
@@ -172,26 +176,46 @@ class AuthBuController extends Controller
             $email = $output['email'] ?? 'default@example.com';
 
             if (!$npwp) {
-                return redirect('/login')->with('statusLogin', 'Error: NPWP tidak ditemukan');
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'NPWP tidak ditemukan'
+                ], 422);
             }
 
-            User::updateOrCreate(
+            $user = User::updateOrCreate(
                 ['npwp' => $npwp],
-                ['email' => $email, 'password' => bcrypt('-'), 'role' => 'BU']
+                [
+                    'email' => $email,
+                    'password' => bcrypt('-'),
+                    'badan_usaha_id' => 'NON OSS',
+                    'role' => 'BU'
+                ]
             );
 
             $credentials = ['email' => $email, 'password' => '-'];
 
             if (Auth::attempt($credentials)) {
                 Http::get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
-                return redirect('/');
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Login Non OSS berhasil',
+                    'user' => $user,
+                ]);
             }
 
-            return redirect('/login')->with('statusLogin', 'Error: Autentikasi gagal');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Autentikasi gagal'
+            ], 401);
         } catch (\Exception $e) {
-            return redirect('/login')->with('statusLogin', 'Error: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Exception: ' . $e->getMessage()
+            ], 500);
         }
     }
+
 
     /**
      * Fungsi login dengan token OSS (Bearer + API)
@@ -201,39 +225,69 @@ class AuthBuController extends Controller
         $bearerToken = $request->query('token_oss');
 
         if (!$bearerToken) {
-            return redirect('/login')->with('statusLogin', 'Error: token OSS tidak tersedia');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token OSS tidak tersedia',
+            ], 400);
         }
 
         $apiOss = new APIOss();
 
-        $response = $apiOss->get('oss/v1.0/sso/users/login', [], $bearerToken);
+        // Panggil endpoint userinfo-token
+        $response = $apiOss->post('oss/v1.0/sso/users/userinfo-token', [], $bearerToken);
 
         if (!$response->successful()) {
-            return redirect('/login')->with('statusLogin', 'Error: Token OSS tidak valid atau API gagal');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token OSS tidak valid atau API gagal',
+                'code' => $response->status(),
+                'body' => $response->body()
+            ], $response->status());
         }
 
         $data = $response->json();
-        $npwp = $data['npwp'] ?? null;
-        $email = $data['email'] ?? 'default@example.com';
+        $userInfo = $data['data'] ?? null;
 
-        if (!$npwp) {
-            return redirect('/login')->with('statusLogin', 'Error: NPWP tidak ditemukan di API');
+        if (!$userInfo || !isset($userInfo['npwp_perseroan'])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data pengguna tidak lengkap di response API',
+            ], 422);
         }
 
-        User::updateOrCreate(
+        $npwp = $userInfo['npwp_perseroan'];
+        $email = $userInfo['email'] ?? 'default@example.com';
+        $nib = $userInfo['data_nib'][0] ?? null;
+        // Simpan user ke database
+        $user = User::updateOrCreate(
             ['npwp' => $npwp],
-            ['email' => $email, 'password' => bcrypt('-'), 'role' => 'BU']
+            [
+                'email' => $email,
+                'password' => bcrypt('-'),
+                'badan_usaha_id' => 'OSS',
+                'role' => 'BU',
+                'nib' => $nib
+            ]
         );
-
+        // Autentikasi user
         $credentials = ['email' => $email, 'password' => '-'];
-
         if (Auth::attempt($credentials)) {
+            // Panggil endpoint simpan
             Http::get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
-            return redirect('/');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Login OSS berhasil',
+                'user' => $user,
+            ]);
         }
 
-        return redirect('/login')->with('statusLogin', 'Error: Autentikasi OSS gagal');
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Autentikasi OSS gagal',
+        ], 401);
     }
+
     public function logoutBU()
     {
 

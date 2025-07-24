@@ -24,11 +24,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-		'role',
-		'npwp',
+        'role',
+        'npwp',
         'badan_usaha_id',
         'remember_token',
-        'profil_adm'
+        'profil_adm',
+        'nib'
     ];
 
     /**
@@ -55,10 +56,9 @@ class User extends Authenticatable
         return $this->roles->pluck('name');
     }
 
-// Di dalam model User
-public function profilAdmin()
-{
-    return $this->belongsTo('App\Models\Profil_admin', 'profil_adm', 'id');
-}
-
+    // Di dalam model User
+    public function profilAdmin()
+    {
+        return $this->belongsTo('App\Models\Profil_admin', 'profil_adm', 'id');
+    }
 }

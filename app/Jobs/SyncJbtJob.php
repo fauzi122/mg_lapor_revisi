@@ -36,8 +36,6 @@ class SyncJbtJob implements ShouldQueue
 
         $api = new APIBph();
         $page = 1;
-        $maxRetries = 3; // Max retries in case of error
-        $retryDelay = 60; // Delay in seconds for retries
 
         // Lakukan request halaman berturut-turut hingga tidak ada data
         while (true) {
@@ -48,39 +46,21 @@ class SyncJbtJob implements ShouldQueue
                 break;  // Jika tidak ada data lagi, keluar dari loop
             }
 
-            // Handle Rate Limit (429 Too Many Requests)
-            if ($response->status() == 429) {
-                Log::warning("Rate limit tercapai pada halaman $page, menunggu $retryDelay detik.");
-                sleep($retryDelay);  // Tunggu sesuai waktu delay sebelum mencoba lagi
-                $retryDelay *= 2;  // Ganda kan waktu tunggu setelah setiap percobaan
-                continue; // Retry page yang sama
-            }
-
-            // Handle Failed Response
             if ($response->failed()) {
                 Log::warning('Gagal sinkronisasi data page ', [
                     'status' => $response->status(),
                     'page' => $page,
                 ]);
 
-                // Retry logic
-                $attempt = 0;
-                while ($attempt < $maxRetries) {
-                    $attempt++;
-                    Log::warning("Retrying page $page (Attempt $attempt)...");
-                    $response = $api->post('/bbm/penjualan-jbt', 2023, $page);
-                    if ($response->successful()) {
-                        break;
-                    }
-                    sleep(5);  // Delay before retrying
+                if ($response->status() === 429) {
+                    // Jika rate limit tercapai, tunggu sebelum mencoba lagi
+                    $retryAfter = $response->header('Retry-After') ? $response->header('Retry-After') : 60; // default 60 detik
+                    Log::info("Rate limit tercapai. Menunggu selama $retryAfter detik...");
+                    sleep($retryAfter); // Menunggu sesuai dengan Retry-After (atau 60 detik)
                 }
 
-                // Jika tetap gagal setelah retry, lanjutkan ke page berikutnya
-                if ($attempt >= $maxRetries) {
-                    Log::error("Gagal sinkronisasi data page $page setelah $maxRetries percobaan.");
-                    $page++;
-                    continue;
-                }
+                $page++;
+                continue;
             }
 
             // Jika berhasil mendapatkan data
@@ -97,7 +77,7 @@ class SyncJbtJob implements ShouldQueue
             Log::info("Berhasil ambil data dari halaman $page");
 
             // Tunggu sebentar sebelum melanjutkan ke halaman berikutnya
-            usleep(50000);
+            usleep(50000); // Tunggu 50 milidetik sebelum lanjut ke halaman berikutnya
             $page++;
         }
 
