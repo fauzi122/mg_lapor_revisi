@@ -143,7 +143,7 @@ class AuthBuController extends Controller
             return $this->loginFromNonOSS($request);
         }
 
-        if ($request->has('token_oss')) {
+        if ($request->query('token_oss')) {
             return $this->loginFromOSS($request);
         }
 
@@ -223,7 +223,6 @@ class AuthBuController extends Controller
     private function loginFromOSS(Request $request)
     {
         $bearerToken = $request->query('token_oss');
-
         if (!$bearerToken) {
             return response()->json([
                 'status' => 'error',
@@ -271,6 +270,7 @@ class AuthBuController extends Controller
         );
         // Autentikasi user
         $credentials = ['email' => $email, 'password' => '-'];
+        // dd($npwp);
         if (Auth::attempt($credentials)) {
             // Panggil endpoint simpan
             Http::get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
