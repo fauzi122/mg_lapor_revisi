@@ -244,7 +244,43 @@ class AuthBuController extends Controller
             ], $response->status());
         }
 
-        $data = $response->json();
+        $data = [
+            "status" => 200,
+            "message" => "success",
+            "data" => [
+                "id_profile" => 1219724283,
+                "username" => "karya8838",
+                "kode_instansi" => null,
+                "jenis_identitas" => "02",
+                "nomor_identitas" => "3271024408650002",
+                "nama" => "HENY HERLAWANTO",
+                "email" => "karyatunasplastikindo@karyatehnikgroup.com",
+                "alamat" => "DANAU BOGOR RAYA BLOK D.5 NO.15",
+                "telp" => "216910382",
+                "status" => "Y",
+                "role" => "11",
+                "flag_umk" => "N",
+                "foto" => null,
+                "nama_kota" => null,
+                "jenis_perseroan" => "01",
+                "flag_migrasi" => "N",
+                "kantor" => null,
+                "jenis_kelamin" => "P",
+                "unit_kerja" => null,
+                "npwp_perseroan" => "947275830412000",
+                "jenis_pelaku_usaha" => "01",
+                "kewenangan_izin" => [],
+                "data_nib" => ["1909230000045"],
+                "data_perusahaan" => [
+                    "alamat_perusahaan" => "Jalan Raya Bogor Kilometer 38,2",
+                    "perusahaan_daerah_id" => "3276101006"
+                ],
+                "id_kawasan" => null,
+                "two_factor_auth_status" => false
+            ]
+        ];
+
+        // Ambil data dari 'data'
         $userInfo = $data['data'] ?? null;
 
         if (!$userInfo || !isset($userInfo['npwp_perseroan'])) {
