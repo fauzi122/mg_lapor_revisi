@@ -273,7 +273,7 @@ class AuthBuController extends Controller
         // dd($npwp);
         if (Auth::attempt($credentials)) {
             // Panggil endpoint simpan
-            Http::get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
+            Http::withoutVerifying()->get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
             return redirect('/');
             // return response()->json([
             //     'status' => 'success',
