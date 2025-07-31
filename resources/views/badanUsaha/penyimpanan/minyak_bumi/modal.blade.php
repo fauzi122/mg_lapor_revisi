@@ -13,6 +13,7 @@
                 <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
                 <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
                 <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
+                <input type="hidden" name="prefix" value="pm">
 
                 <div class="modal-body">
                     <div class="mb-6">
