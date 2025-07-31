@@ -246,7 +246,14 @@ class PenyMinyakbumiController extends Controller
             }
         }
 
+        // Upload File
+        $tgl = Carbon::parse($request->bulan);
+        $path = $tgl->year . "/" . $tgl->format('F') . "/" . Auth()->user()->name;
 
+        $file = $request->file('kontrak_sewa');
+
+        $fileName = $request->prefix . "-" . $file->hashName();
+        
         $validatedData = Penyminyakbumi::create([
             'npwp' => $request->npwp,
             'id_permohonan' => $request->id_permohonan,
@@ -276,7 +283,7 @@ class PenyMinyakbumiController extends Controller
             'jumlah_bu' => $request->jumlah_bu,
             'nama_penyewa' => $request->nama_penyewa,
             'kapasitas_penyewaan' => $request->kapasitas_penyewaan,
-            'kontrak_sewa' => $request->file('kontrak_sewa')->store('dok-kontrak-sewa', 'public')
+            'kontrak_sewa' => $file->storeAs($path, $fileName, 'public')
         ]);
 
         if ($validatedData) {
