@@ -329,11 +329,12 @@ class HargabbmController extends Controller
     ];
 
     $validatedData = $request->validate($rules, $pesan);
+    $sanitizedData = fullySanitizeInput($validatedData);
 
     Harga_bbm_jbu::where('id', $ekport)
-      ->update($validatedData);
+      ->update($sanitizedData);
 
-    if ($validatedData) {
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
