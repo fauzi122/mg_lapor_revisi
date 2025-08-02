@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "maatwebsite/excel": "^3.1",
+        "mews/purifier": "^3.4",
         "mtownsend/laravel-make-trait": "^1.5",
         "paragonie/random_compat": "2.*",
         "ramsey/uuid": "^4.7",

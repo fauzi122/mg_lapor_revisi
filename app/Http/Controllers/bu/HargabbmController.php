@@ -15,6 +15,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Mews\Purifier\Facades\Purifier;
 
 class HargabbmController extends Controller
 {
@@ -213,6 +214,9 @@ class HargabbmController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+    // dd($sanitizedData);
+
     // $validatedData = Harga_bbm_jbu::create([
     //   'badan_usaha_id' =>  $request->badan_usaha_id,
     //   'izin_id' => $request->izin_id,
@@ -246,9 +250,9 @@ class HargabbmController extends Controller
         }
     }
 
-    Harga_bbm_jbu::create($validatedData);
+    Harga_bbm_jbu::create($sanitizedData);
 
-    if ($validatedData) {
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil ditambahkan');
       return back();
