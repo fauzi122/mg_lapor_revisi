@@ -1,5 +1,6 @@
 <?php
 
+use Mews\Purifier\Facades\Purifier;
 
 function hari_ini() {
     $hari = date("D");
@@ -65,6 +66,31 @@ function getTahun($date) {
     $tahun = date('Y', strtotime($date));
     return $tahun;
 }
+
+function fullySanitizeInput(array $input): array
+{
+    $sanitized = [];
+
+    foreach ($input as $key => $value) {
+        // Cek apakah numeric (angka) → konversi
+        if (is_numeric($value)) {
+            // Jika ada titik desimal, float
+            $sanitized[$key] = strpos($value, '.') !== false
+                ? floatval($value)
+                : intval($value);
+        } elseif (is_string($value)) {
+            // Kalau string → bersihkan pakai Purifier
+            $cleanText = Purifier::clean($value);
+            $sanitized[$key] = strip_tags($cleanText);
+        } else {
+            // Biarkan tipe lain (array, file, dsb) tetap apa adanya
+            $sanitized[$key] = $value;
+        }
+    }
+
+    return $sanitized;
+}
+
 
 
 

@@ -170,7 +170,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
-     
+        Mews\Purifier\PurifierServiceProvider::class,
 
     ])->toArray(),
 
@@ -188,7 +188,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
-      
+        'Purifier' => Mews\Purifier\Facades\Purifier::class,
 
     ])->toArray(),
 
