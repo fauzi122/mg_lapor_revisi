@@ -162,9 +162,144 @@ class PenyMinyakbumiController extends Controller
             'pecah'
         ));
     }
+    // public function simpan_pmbx(Request $request)
+    // {
+    //     // dd($request->all());
+    //     $pesan = [
+    //         'npwp.required' => 'npwp masih kosong',
+    //         'id_permohonan.required' => 'id_permohonan masih kosong',
+    //         'id_sub_page.required' => 'id_sub_page masih kosong',
+    //         'bulan.required' => 'bulan masih kosong',
+    //         'no_tangki.required' => 'no_tangki masih kosong',
+    //         'kapasitas_tangki.required' => 'kapasitas_tangki masih kosong',
+    //         'pengguna.required' => 'pengguna masih kosong',
+    //         'jenis_fasilitas.required' => 'jenis_fasilitas masih kosong',
+    //         'jenis_komoditas.required' => 'jenis komoditas masih kosong',
+    //         'produk.required' => 'produk masih kosong',
+    //         'satuan.required' => 'satuan masih kosong',
+    //         'provinsi.required' => 'provinsi masih kosong',
+    //         'kab_kota.required' => 'kab kota masih kosong',
+    //         'kategori_supplai.required' => 'kategori supplai masih kosong',
+    //         'volume_stok_awal.required' => 'volume stok_awal masih kosong',
+    //         'volume_supply.required' => 'volume supply masih kosong',
+    //         'volume_output.required' => 'volume output masih kosong',
+    //         'volume_stok_akhir.required' => 'volume stok akhir masih kosong',
+    //         'utilisasi_tangki.required' => 'utilasi tangki masih kosong',
+    //         'tanggal_awal.required' => 'tanggal awal penggunaan masih kosong',
+    //         'tanggal_akhir.required' => 'tanggal akhir penggunaan masih kosong',
+    //         'tarif_penyimpanan.required' => 'tarif_penyimpanan masih kosong',
+    //         'satuan_tarif.required' => 'satuan tarif masih kosong',
+    //         'keterangan.required' => 'keterangan masih kosong',
+    //         'commingle.required' => 'commingle masih kosong',
+    //         'jumlah_bu.required' => 'jumlah_bu masih kosong',
+    //         'nama_penyewa.required' => 'nama_penyewa masih kosong',
+    //         'kapasitas_penyewaan.required' => 'kapasitas_penyewaan masih kosong',
+    //         'kontrak_sewa.required' => 'kontrak_sewa masih kosong',
+    //     ];
+
+    //     $validatedData = $request->validate([
+    //         'npwp' => 'required',
+    //         'id_permohonan' => 'required',
+    //         'id_sub_page' => 'required',
+    //         'bulan' => 'required',
+    //         'jenis_fasilitas' => 'required',
+    //         'no_tangki' => 'required',
+    //         'kapasitas_tangki' => 'required',
+    //         'jenis_komoditas' => 'required',
+    //         'produk' => 'required',
+    //         'provinsi' => 'required',
+    //         'kab_kota' => 'required',
+    //         'kategori_supplai' => 'required',
+    //         'volume_stok_awal' => 'required',
+    //         'volume_supply' => 'required',
+    //         'volume_output' => 'required',
+    //         'volume_stok_akhir' => 'required',
+    //         'satuan' => 'required',
+    //         'utilisasi_tangki' => 'required|numeric|lte:100|gte:0',
+    //         'pengguna' => 'required',
+    //         'tarif_penyimpanan' => 'required',
+    //         'satuan_tarif' => 'required',
+    //         'keterangan' => 'required',
+    //         'tanggal_awal' => 'required',
+    //         'tanggal_akhir' => 'required',
+    //         'commingle' => 'required',
+    //         'jumlah_bu' => 'required_if:commingle,ya',
+    //         'nama_penyewa' => 'required_if:commingle,ya',
+    //         'kapasitas_penyewaan' => 'required',
+    //         'kontrak_sewa' => 'required|file|mimes:pdf',
+    //     ], $pesan);
+
+    //     $npwp = Auth::user()->npwp;
+
+    //     $cekdb = DB::table('penyminyakbumis')
+    //         ->where('npwp', $npwp)
+    //         ->where('id_permohonan', $request->id_permohonan)
+    //         ->where('id_sub_page', $request->id_sub_page)
+    //         ->where('bulan', $request->bulan . '-01')
+    //         ->orderBy('status', 'desc')
+    //         ->first();
+
+    //     if (isset($cekdb) == 1) {
+    //         if ($cekdb->status == 1) {
+    //             Alert::error('Error', 'Bulan yang anda pilih sedang status kirim / revisi');
+    //             return back();
+    //         }
+    //     }
+
+    //     // Upload File
+    //     $tgl = Carbon::parse($request->bulan);
+    //     $path = $tgl->year . "/" . $tgl->format('F') . "/" . Auth()->user()->name;
+
+    //     $file = $request->file('kontrak_sewa');
+
+    //     $fileName = $request->prefix . "-" . $file->hashName();
+
+    //     $validatedData = Penyminyakbumi::create([
+    //         'npwp' => $request->npwp,
+    //         'id_permohonan' => $request->id_permohonan,
+    //         'id_sub_page' => $request->id_sub_page,
+    //         'bulan' => $request->bulan . '-01',
+    //         'jenis_fasilitas' => $request->jenis_fasilitas,
+    //         'no_tangki' => $request->no_tangki,
+    //         'kapasitas_tangki' => $request->kapasitas_tangki,
+    //         'jenis_komoditas' => $request->jenis_komoditas,
+    //         'produk' => $request->produk,
+    //         'provinsi' => $request->provinsi,
+    //         'kab_kota' => $request->kab_kota,
+    //         'kategori_supplai' => $request->kategori_supplai,
+    //         'volume_stok_awal' => $request->volume_stok_awal,
+    //         'volume_supply' => $request->volume_supply,
+    //         'volume_output' => $request->volume_output,
+    //         'volume_stok_akhir' => $request->volume_stok_akhir,
+    //         'satuan' => $request->satuan,
+    //         'utilisasi_tangki' => $request->utilisasi_tangki,
+    //         'pengguna' => $request->pengguna,
+    //         'tarif_penyimpanan' => $request->tarif_penyimpanan,
+    //         'satuan_tarif' => $request->satuan_tarif,
+    //         'keterangan' => $request->keterangan,
+    //         'tanggal_awal' => $request->tanggal_awal,
+    //         'tanggal_akhir' => $request->tanggal_akhir,
+    //         'commingle' => $request->commingle,
+    //         'jumlah_bu' => $request->jumlah_bu,
+    //         'nama_penyewa' => $request->nama_penyewa,
+    //         'kapasitas_penyewaan' => $request->kapasitas_penyewaan,
+    //         'kontrak_sewa' => $file->storeAs($path, $fileName, 'public')
+    //     ]);
+
+    //     if ($validatedData) {
+    //         //redirect dengan pesan sukses
+    //         Alert::success('success', 'Data berhasil ditambahkan');
+    //         return back();
+    //     } else {
+    //         //redirect dengan pesan error
+    //         Alert::error('error', 'Data gagal berhasil ditambahkan');
+    //         return back();
+    //     }
+    // }
+
+    // Penyimpanan Minyak Bumi
     public function simpan_pmbx(Request $request)
     {
-        // dd($request->all());
         $pesan = [
             'npwp.required' => 'npwp masih kosong',
             'id_permohonan.required' => 'id_permohonan masih kosong',
@@ -197,6 +332,7 @@ class PenyMinyakbumiController extends Controller
             'kontrak_sewa.required' => 'kontrak_sewa masih kosong',
         ];
 
+        // 1. Validasi
         $validatedData = $request->validate([
             'npwp' => 'required',
             'id_permohonan' => 'required',
@@ -229,73 +365,50 @@ class PenyMinyakbumiController extends Controller
             'kontrak_sewa' => 'required|file|mimes:pdf',
         ], $pesan);
 
+        // 2. Cek status bulan
         $npwp = Auth::user()->npwp;
-
         $cekdb = DB::table('penyminyakbumis')
             ->where('npwp', $npwp)
             ->where('id_permohonan', $request->id_permohonan)
             ->where('id_sub_page', $request->id_sub_page)
-            ->where('bulan', $request->bulan . '-01')
+            ->where('bulan', \Carbon\Carbon::parse($request->bulan)->format('Y-m-01'))
             ->orderBy('status', 'desc')
             ->first();
 
-        if (isset($cekdb) == 1) {
-            if ($cekdb->status == 1) {
-                Alert::error('Error', 'Bulan yang anda pilih sedang status kirim / revisi');
-                return back();
-            }
+        if ($cekdb && $cekdb->status == 1) {
+            Alert::error('Error', 'Bulan yang anda pilih sedang status kirim / revisi');
+            return back();
         }
 
-        // Upload File
+        // 3. Upload file
         $tgl = Carbon::parse($request->bulan);
         $path = $tgl->year . "/" . $tgl->format('F') . "/" . Auth()->user()->name;
-
         $file = $request->file('kontrak_sewa');
-
         $fileName = $request->prefix . "-" . $file->hashName();
-        
-        $validatedData = Penyminyakbumi::create([
-            'npwp' => $request->npwp,
-            'id_permohonan' => $request->id_permohonan,
-            'id_sub_page' => $request->id_sub_page,
-            'bulan' => $request->bulan . '-01',
-            'jenis_fasilitas' => $request->jenis_fasilitas,
-            'no_tangki' => $request->no_tangki,
-            'kapasitas_tangki' => $request->kapasitas_tangki,
-            'jenis_komoditas' => $request->jenis_komoditas,
-            'produk' => $request->produk,
-            'provinsi' => $request->provinsi,
-            'kab_kota' => $request->kab_kota,
-            'kategori_supplai' => $request->kategori_supplai,
-            'volume_stok_awal' => $request->volume_stok_awal,
-            'volume_supply' => $request->volume_supply,
-            'volume_output' => $request->volume_output,
-            'volume_stok_akhir' => $request->volume_stok_akhir,
-            'satuan' => $request->satuan,
-            'utilisasi_tangki' => $request->utilisasi_tangki,
-            'pengguna' => $request->pengguna,
-            'tarif_penyimpanan' => $request->tarif_penyimpanan,
-            'satuan_tarif' => $request->satuan_tarif,
-            'keterangan' => $request->keterangan,
-            'tanggal_awal' => $request->tanggal_awal,
-            'tanggal_akhir' => $request->tanggal_akhir,
-            'commingle' => $request->commingle,
-            'jumlah_bu' => $request->jumlah_bu,
-            'nama_penyewa' => $request->nama_penyewa,
-            'kapasitas_penyewaan' => $request->kapasitas_penyewaan,
-            'kontrak_sewa' => $file->storeAs($path, $fileName, 'public')
-        ]);
+        $validatedData['kontrak_sewa'] = $file->storeAs($path, $fileName, 'public');
 
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil ditambahkan');
-            return back();
+        // 4. Tambah field bulan fix
+        $validatedData['bulan'] = \Carbon\Carbon::parse($request->bulan)->format('Y-m-01');
+
+        // 5. Sanitasi
+        $sanitizedData = fullySanitizeInput($validatedData);
+
+        // dd($sanitizedData);
+
+
+        // 6. Simpan ke database
+        $created = Penyminyakbumi::create($sanitizedData);
+
+        // 7. Feedback ke user
+        if ($created) {
+            Alert::success('Success', 'Data berhasil ditambahkan');
         } else {
-            //redirect dengan pesan error
-            Alert::error('error', 'Data gagal berhasil ditambahkan');
-            return back();
+            Alert::error('Error', 'Data gagal ditambahkan');
         }
+
+        return back();
     }
+
     public function simpan_pggbx(Request $request)
     {
         $pesan = [
@@ -520,15 +633,18 @@ class PenyMinyakbumiController extends Controller
         
         $validatedData = $request->validate($rules, $pesan);
 
+        $sanitizedData = fullySanitizeInput($validatedData);
+
+
         if ($request->commingle == "tidak") {
             $validatedData["jumlah_bu"] = null;
             $validatedData["nama_penyewa"] = null;
         }
 
         Penyminyakbumi::where('id', $pmb)
-            ->update($validatedData);
+            ->update($sanitizedData);
 
-        if ($validatedData) {
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
