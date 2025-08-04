@@ -477,6 +477,8 @@ class PengolahanController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
     $npwp = Auth::user()->npwp;
     $cekdb = DB::table('pengolahans')
       ->where('npwp', $npwp)
@@ -497,9 +499,9 @@ class PengolahanController extends Controller
       }
     }
 
-    Pengolahan::create($validatedData);
+    Pengolahan::create($sanitizedData);
 
-    if ($validatedData) {
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil ditambahkan');
       return back();
@@ -549,9 +551,12 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
-    Pengolahan::where('id', $id)->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
+    // dd($sanitizedData);
 
-    if ($validatedData) {
+    Pengolahan::where('id', $id)->update($sanitizedData);
+
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
@@ -756,15 +761,22 @@ class PengolahanController extends Controller
         return back();
       }
     }
-
+    $berhasil = false;
     foreach ($request->kabupaten_kota as $kota) {
-      $validatedData['kabupaten_kota'] = $kota;
-      Pengolahan::create($validatedData);
+      $data = $validatedData;
+      $data['kabupaten_kota'] = $kota;
+
+      $sanitized = fullySanitizeInput($data); // <-- jangan lupa sanitasi
+
+      $create = Pengolahan::create($sanitized);
+      if ($create) {
+        $berhasil = true;
+      }
     }
 
     // $validatedData = PengolahanMinyakBumiPasokan::create(['npwp' => '3','id_permohonan' => '10']);
 
-    if ($validatedData) {
+    if ($berhasil) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil ditambahkan');
       return back();
@@ -816,9 +828,11 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
-    Pengolahan::where('id', $id)->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
 
-    if ($validatedData) {
+    Pengolahan::where('id', $id)->update($sanitizedData);
+
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
@@ -1006,6 +1020,8 @@ class PengolahanController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
     $npwp = Auth::user()->npwp;
     $cekdb = DB::table('pengolahans')
       ->where('npwp', $npwp)
@@ -1026,9 +1042,9 @@ class PengolahanController extends Controller
       }
     }
 
-    Pengolahan::create($validatedData);
+    Pengolahan::create($sanitizedData);
 
-    if ($validatedData) {
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil ditambahkan');
       return back();
@@ -1080,9 +1096,11 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
-    Pengolahan::where('id', $id)->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
 
-    if ($validatedData) {
+    Pengolahan::where('id', $id)->update($sanitizedData);
+
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
@@ -1263,6 +1281,8 @@ class PengolahanController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
     $npwp = Auth::user()->npwp;
     $cekdb = DB::table('pengolahans')
       ->where('npwp', $npwp)
@@ -1283,9 +1303,9 @@ class PengolahanController extends Controller
       }
     }
 
-    Pengolahan::create($validatedData);
+    Pengolahan::create($sanitizedData);
 
-    if ($validatedData) {
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil ditambahkan');
       return back();
@@ -1333,9 +1353,11 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
-    Pengolahan::where('id', $id)->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
 
-    if ($validatedData) {
+    Pengolahan::where('id', $id)->update($sanitizedData);
+
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
@@ -1516,6 +1538,8 @@ class PengolahanController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
     $npwp = Auth::user()->npwp;
     $cekdb = DB::table('pengolahans')
       ->where('npwp', $npwp)
@@ -1536,10 +1560,10 @@ class PengolahanController extends Controller
       }
     }
 
-    Pengolahan::create($validatedData);
+    Pengolahan::create($sanitizedData);
     // $validatedData = PengolahanMinyakBumiPasokan::create(['npwp' => '3','id_permohonan' => '10']);
 
-    if ($validatedData) {
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil ditambahkan');
       return back();
@@ -1587,9 +1611,12 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
-    Pengolahan::where('id', $id)->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
 
-    if ($validatedData) {
+
+    Pengolahan::where('id', $id)->update($sanitizedData);
+
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
@@ -1773,6 +1800,9 @@ class PengolahanController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+
     $npwp = Auth::user()->npwp;
     $cekdb = DB::table('pengolahans')
       ->where('npwp', $npwp)
@@ -1793,9 +1823,9 @@ class PengolahanController extends Controller
       }
     }
 
-    Pengolahan::create($validatedData);
+    Pengolahan::create($sanitizedData);
 
-    if ($validatedData) {
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil ditambahkan');
       return back();
@@ -1845,9 +1875,12 @@ class PengolahanController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
-    Pengolahan::where('id', $id)->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
 
-    if ($validatedData) {
+
+    Pengolahan::where('id', $id)->update($sanitizedData);
+
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
