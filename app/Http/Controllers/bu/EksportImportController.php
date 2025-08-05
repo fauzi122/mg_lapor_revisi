@@ -133,6 +133,102 @@ class EksportImportController extends Controller
 
     ));
   }
+  // public function simpan_exportx(Request $request)
+  // {
+  //   $pesan = [
+  //     'npwp.required' => 'npwp masih kosong',
+  //     'id_permohonan.required' => 'id_permohonan masih kosong',
+  //     'id_sub_page.required' => 'id_sub_page masih kosong',
+  //     'produk.required' => 'produk masih kosong',
+  //     'hs_code.required' => 'hs code masih kosong',
+  //     'volume_peb.required' => 'volume peb masih kosong',
+  //     'satuan.required' => 'satuan masih kosong',
+  //     'invoice_amount_nilai_pabean.required' => 'invoice amount nilai pabean masih kosong',
+  //     'invoice_amount_final.required' => 'invoice amount final masih kosong',
+  //     'nama_konsumen.required' => 'nama konsumen masih kosong',
+  //     'pelabuhan_muat.required' => 'pelabuhan muat masih kosong',
+  //     'negara_tujuan.required' => 'negara tujuan masih kosong',
+  //     'vessel_name.required' => 'vessel name masih kosong',
+  //     'tanggal_bl.required' => 'tanggal bl masih kosong',
+  //     'bl_no.required' => 'bl no masih kosong',
+  //     'no_pendaf_peb.required' => 'no pendaf peb masih kosong',
+  //     'tanggal_pendaf_peb.required' => 'tanggal pendaf peb masih kosong',
+  //     'incoterms.required' => 'incoterms masih kosong',
+  //   ];
+
+  //   $validatedData = $request->validate([
+  //     'npwp' => 'required',
+  //     'id_permohonan' => 'required',
+  //     'id_sub_page' => 'required',
+  //     'bulan_peb' => 'required',
+  //     'produk' => 'required',
+  //     'hs_code' => 'required',
+  //     'volume_peb' => 'required',
+  //     'satuan' => 'required',
+  //     'invoice_amount_nilai_pabean' => 'required',
+  //     'invoice_amount_final' => 'required',
+  //     'nama_konsumen' => 'required',
+  //     'pelabuhan_muat' => 'required',
+  //     'negara_tujuan' => 'required',
+  //     'vessel_name' => 'required',
+  //     'tanggal_bl' => 'required',
+  //     'bl_no' => 'required',
+  //     'no_pendaf_peb' => 'required',
+  //     'tanggal_pendaf_peb' => 'required',
+  //     'incoterms' => 'required',
+  //   ], $pesan);
+
+  //   $npwp = Auth::user()->npwp;
+
+  //   $cekdb = DB::table('ekspors')
+  //     ->where('npwp', $npwp)
+  //     ->where('id_permohonan', $request->id_permohonan)
+  //     ->where('id_sub_page', $request->id_sub_page)
+  //     ->where('bulan_peb', $request->bulan_peb . '-01')
+  //     ->orderBy('status', 'desc')
+  //     ->first();
+
+  //   if (isset($cekdb) == 1) {
+  //     if ($cekdb->status == 1) {
+  //       Alert::error('Error', 'Bulan yang anda pilih sedang status kirim / revisi');
+  //       return back();
+  //     }
+  //   }
+
+  //   $validatedData = Ekspor::create([
+  //     'npwp' =>  $request->npwp,
+  //     'id_permohonan' =>  $request->id_permohonan,
+  //     'id_sub_page' =>  $request->id_sub_page,
+  //     'bulan_peb' => $request->bulan_peb . '-01',
+  //     'produk' => $request->produk,
+  //     'hs_code' => $request->hs_code,
+  //     'volume_peb' => $request->volume_peb,
+  //     'satuan' => $request->satuan,
+  //     'invoice_amount_nilai_pabean' => $request->invoice_amount_nilai_pabean,
+  //     'invoice_amount_final' => $request->invoice_amount_final,
+  //     'nama_konsumen' => $request->nama_konsumen,
+  //     'pelabuhan_muat' => $request->pelabuhan_muat,
+  //     'negara_tujuan' => $request->negara_tujuan,
+  //     'vessel_name' => $request->vessel_name,
+  //     'tanggal_bl' => $request->tanggal_bl,
+  //     'bl_no' => $request->bl_no,
+  //     'no_pendaf_peb' => $request->no_pendaf_peb,
+  //     'tanggal_pendaf_peb' => $request->tanggal_pendaf_peb,
+  //     'incoterms' => $request->incoterms,
+  //   ]);
+
+  //   if ($validatedData) {
+  //     //redirect dengan pesan sukses
+  //     Alert::success('success', 'Data berhasil ditambahkan');
+  //     return back();
+  //   } else {
+  //     //redirect dengan pesan error
+  //     Alert::error('error', 'Data gagal berhasil ditambahkan');
+  //     return back();
+  //   }
+  // }
+
+  // Ekspor
   public function simpan_exportx(Request $request)
   {
     $pesan = [
@@ -195,29 +291,13 @@ class EksportImportController extends Controller
       }
     }
 
-    $validatedData = Ekspor::create([
-      'npwp' =>  $request->npwp,
-      'id_permohonan' =>  $request->id_permohonan,
-      'id_sub_page' =>  $request->id_sub_page,
-      'bulan_peb' => $request->bulan_peb . '-01',
-      'produk' => $request->produk,
-      'hs_code' => $request->hs_code,
-      'volume_peb' => $request->volume_peb,
-      'satuan' => $request->satuan,
-      'invoice_amount_nilai_pabean' => $request->invoice_amount_nilai_pabean,
-      'invoice_amount_final' => $request->invoice_amount_final,
-      'nama_konsumen' => $request->nama_konsumen,
-      'pelabuhan_muat' => $request->pelabuhan_muat,
-      'negara_tujuan' => $request->negara_tujuan,
-      'vessel_name' => $request->vessel_name,
-      'tanggal_bl' => $request->tanggal_bl,
-      'bl_no' => $request->bl_no,
-      'no_pendaf_peb' => $request->no_pendaf_peb,
-      'tanggal_pendaf_peb' => $request->tanggal_pendaf_peb,
-      'incoterms' => $request->incoterms,
-    ]);
+    $validatedData['bulan_peb'] = $request->bulan_peb . '-01';
 
-    if ($validatedData) {
+    $sanitizedData = fullySanitizeInput($validatedData);
+    
+    $createdData = Ekspor::create($sanitizedData);
+
+    if ($createdData) {
       //redirect dengan pesan sukses
       Alert::success('success', 'Data berhasil ditambahkan');
       return back();
@@ -228,6 +308,110 @@ class EksportImportController extends Controller
     }
   }
 
+  // public function simpan_importx(Request $request)
+  // {
+  //   $pesan = [
+  //     'npwp.required' => 'npwp masih kosong',
+  //     'id_permohonan.required' => 'id_permohonan masih kosong',
+  //     'id_sub_page.required' => 'id_sub_page masih kosong',
+  //     'bulan_pib.required' => 'bulan pib masih kosong',
+  //     'produk.required' => 'produk masih kosong',
+  //     'hs_code.required' => 'hs code masih kosong',
+  //     'volume_pib.required' => 'volume pib masih kosong',
+  //     'satuan.required' => 'satuan masih kosong',
+  //     'invoice_amount_nilai_pabean.required' => 'invoice amount nilai pabean masih kosong',
+  //     'invoice_amount_final.required' => 'invoice amount final masih kosong',
+  //     'nama_supplier.required' => 'nama supplier masih kosong',
+  //     'negara_asal.required' => 'nama supplier masih kosong',
+  //     'pelabuhan_muat.required' => 'pelabuhan muat masih kosong',
+  //     'pelabuhan_bongkar.required' => 'pelabuhan bongkar masih kosong',
+  //     'vessel_name.required' => 'vessel name masih kosong',
+  //     'tanggal_bl.required' => 'tanggal bl masih kosong',
+  //     'bl_no.required' => 'bl no masih kosong',
+  //     'no_pendaf_pib.required' => 'no pendaf peb masih kosong',
+  //     'tanggal_pendaf_pib.required' => 'tanggal pendaf peb masih kosong',
+  //     'incoterms.required' => 'incoterms masih kosong',
+  //     'status.required' => 'status masih kosong',
+  //   ];
+
+  //   $validatedData = $request->validate([
+  //     'npwp' => 'required',
+  //     'id_permohonan' => 'required',
+  //     'id_sub_page' => 'required',
+  //     'bulan_pib' => 'required',
+  //     'produk' => 'required',
+  //     'hs_code' => 'required',
+  //     'volume_pib' => 'required',
+  //     'satuan' => 'required',
+  //     'invoice_amount_nilai_pabean' => 'required',
+  //     'invoice_amount_final' => 'required',
+  //     'nama_supplier' => 'required',
+  //     'negara_asal' => 'required',
+  //     'pelabuhan_muat' => 'required',
+  //     'pelabuhan_bongkar' => 'required',
+  //     'vessel_name' => 'required',
+  //     'tanggal_bl' => 'required',
+  //     'bl_no' => 'required',
+  //     'no_pendaf_pib' => 'required',
+  //     'tanggal_pendaf_pib' => 'required',
+  //     'incoterms' => 'required',
+  //     'status' => 'required',
+  //   ], $pesan);
+
+  //   $npwp = Auth::user()->npwp;
+
+  //   $cekdb = DB::table('impors')
+  //     ->where('npwp', $npwp)
+  //     ->where('id_permohonan', $request->id_permohonan)
+  //     ->where('id_sub_page', $request->id_sub_page)
+  //     ->where('bulan_pib', $request->bulan_pib . '-01')
+  //     ->orderBy('status', 'desc')
+  //     ->first();
+
+  //   if (isset($cekdb) == 1) {
+  //     if ($cekdb->status == 1) {
+  //       Alert::error('Error', 'Bulan yang anda pilih sedang status kirim / revisi');
+  //       return back();
+  //     }
+  //   }
+
+  //   $validatedData = Impor::create([
+  //     'npwp' =>  $request->npwp,
+  //     'id_permohonan' =>  $request->id_permohonan,
+  //     'id_sub_page' =>  $request->id_sub_page,
+  //     'bulan_pib' => $request->bulan_pib . '-01',
+  //     'produk' => $request->produk,
+  //     'hs_code' => $request->hs_code,
+  //     'volume_pib' => $request->volume_pib,
+  //     'satuan' => $request->satuan,
+  //     'invoice_amount_nilai_pabean' => $request->invoice_amount_nilai_pabean,
+  //     'invoice_amount_final' => $request->invoice_amount_final,
+  //     'nama_supplier' => $request->nama_supplier,
+  //     'negara_asal' => $request->negara_asal,
+  //     'pelabuhan_muat' => $request->pelabuhan_muat,
+  //     'pelabuhan_bongkar' => $request->pelabuhan_bongkar,
+  //     'vessel_name' => $request->vessel_name,
+  //     'tanggal_bl' => $request->tanggal_bl,
+  //     'bl_no' => $request->bl_no,
+  //     'no_pendaf_pib' => $request->no_pendaf_pib,
+  //     'tanggal_pendaf_pib' => $request->tanggal_pendaf_pib,
+  //     'incoterms' => $request->incoterms,
+  //     'status' => $request->status,
+
+  //   ]);
+
+  //   if ($validatedData) {
+  //     //redirect dengan pesan sukses
+  //     Alert::success('success', 'Data berhasil ditambahkan');
+  //     return back();
+  //   } else {
+  //     //redirect dengan pesan error
+  //     Alert::error('error', 'Data gagal berhasil ditambahkan');
+  //     return back();
+  //   }
+  // }
+
+  // Impor
   public function simpan_importx(Request $request)
   {
     $pesan = [
@@ -295,32 +479,17 @@ class EksportImportController extends Controller
       }
     }
 
-    $validatedData = Impor::create([
-      'npwp' =>  $request->npwp,
-      'id_permohonan' =>  $request->id_permohonan,
-      'id_sub_page' =>  $request->id_sub_page,
-      'bulan_pib' => $request->bulan_pib . '-01',
-      'produk' => $request->produk,
-      'hs_code' => $request->hs_code,
-      'volume_pib' => $request->volume_pib,
-      'satuan' => $request->satuan,
-      'invoice_amount_nilai_pabean' => $request->invoice_amount_nilai_pabean,
-      'invoice_amount_final' => $request->invoice_amount_final,
-      'nama_supplier' => $request->nama_supplier,
-      'negara_asal' => $request->negara_asal,
-      'pelabuhan_muat' => $request->pelabuhan_muat,
-      'pelabuhan_bongkar' => $request->pelabuhan_bongkar,
-      'vessel_name' => $request->vessel_name,
-      'tanggal_bl' => $request->tanggal_bl,
-      'bl_no' => $request->bl_no,
-      'no_pendaf_pib' => $request->no_pendaf_pib,
-      'tanggal_pendaf_pib' => $request->tanggal_pendaf_pib,
-      'incoterms' => $request->incoterms,
-      'status' => $request->status,
+    $validatedData['bulan_pib'] = $request->bulan_pib . '-01';
 
-    ]);
+    // Sanitasi
 
-    if ($validatedData) {
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    $createdData = Impor::create($sanitizedData);
+
+    // Cek data masuk atau tidak
+
+    if ($createdData) {
       //redirect dengan pesan sukses
       Alert::success('success', 'Data berhasil ditambahkan');
       return back();
@@ -330,6 +499,8 @@ class EksportImportController extends Controller
       return back();
     }
   }
+
+  
   public function hapus_exportx(Request $request, $id)
   {
     Ekspor::destroy($id);
@@ -443,10 +614,13 @@ class EksportImportController extends Controller
 
     $validatedData['bulan_peb'] = $request->bulan_peb . '-01';
 
-    Ekspor::where('id', $ekport)
-      ->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
 
-    if ($validatedData) {
+
+    Ekspor::where('id', $ekport)
+      ->update($sanitizedData);
+
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('success', 'Data berhasil diupdate');
       return back();
@@ -516,10 +690,15 @@ class EksportImportController extends Controller
 
     $validatedData['bulan_pib'] = $request->bulan_pib . '-01';
 
-    Impor::where('id', $import)
-      ->update($validatedData);
+    // Sanitasi input mencegah serangan xss
 
-    if ($validatedData) {
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    // Update Impor
+    Impor::where('id', $import)
+      ->update($sanitizedData);
+
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('success', 'Data berhasil diupdate');
       return back();

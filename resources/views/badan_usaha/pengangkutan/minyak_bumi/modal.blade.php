@@ -348,7 +348,7 @@
                         <label for="example-text-input" class="form-label">Satuan Volume Angkut</label>
                         {{-- <input class="form-control" type="text" id="satuan_volume_angkut_pengmb"
                             name="satuan_volume_angkut"> --}}
-                        <select class="form-select satuan" name="satuan_volume_supply"
+                        <select class="form-select satuan" name="satuan_volume_angkut"
                             id="satuan_volume_angkut_pengmb">
                             <option>Pilih Satuan</option>
                         </select>

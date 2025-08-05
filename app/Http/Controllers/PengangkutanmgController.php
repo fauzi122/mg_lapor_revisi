@@ -125,8 +125,19 @@ class PengangkutanmgController extends Controller
     public function simpan_pengmbx(Request $request)
     {
         // echo json_encode(gettype($request->jenis_moda));exit;
+        // $request->merge([
+        //     'bulan' => $request->bulan . '-01',
+        // ]);
+        
+        try {
+            $normalizedBulan = Carbon::parse($request->bulan)->startOfMonth()->toDateString();
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Format bulan tidak valid');
+            return back();
+        }
+
         $request->merge([
-            'bulan' => $request->bulan . '-01',
+            'bulan' => $normalizedBulan,
         ]);
         $pesan = [
             'npwp.required' => 'npwp masih kosong',
@@ -146,7 +157,7 @@ class PengangkutanmgController extends Controller
         ];
 
         $validatedData = $request->validate([
-             'npwp' => 'required',
+            'npwp' => 'required',
             'id_permohonan' => 'required',
             'id_sub_page' => 'required',
             'bulan' => 'required',
@@ -163,7 +174,7 @@ class PengangkutanmgController extends Controller
             'satuan_volume_angkut' => 'required',
 
         ], $pesan);
-
+        
         $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('pengangkutan_minyakbumis')
@@ -180,10 +191,13 @@ class PengangkutanmgController extends Controller
                 return back();
             }
         }
+        
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
 
-        pengangkutan_minyakbumi::create($validatedData);
+        $created = pengangkutan_minyakbumi::create($sanitizedData);
 
-        if ($validatedData) {
+        if ($created) {
             //redirect dengan pesan sukses
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
@@ -269,10 +283,13 @@ class PengangkutanmgController extends Controller
 
         $validatedData = $request->validate($rules, $pesan);
 
-        pengangkutan_minyakbumi::where('id', $pmb)
-            ->update($validatedData);
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
 
-        if ($validatedData) {
+        pengangkutan_minyakbumi::where('id', $pmb)
+            ->update($sanitizedData);
+
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('Success', 'Data berhasil diupdate');
             return back();
@@ -398,6 +415,9 @@ class PengangkutanmgController extends Controller
 
         ], $pesan);
 
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
+
         $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('pengangkutan_gaskbumis')
@@ -420,9 +440,9 @@ class PengangkutanmgController extends Controller
             }
         }
 
-        pengangkutan_gaskbumi::create($validatedData);
+        pengangkutan_gaskbumi::create($sanitizedData);
 
-        if ($validatedData) {
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
@@ -505,10 +525,14 @@ class PengangkutanmgController extends Controller
 
         $validatedData = $request->validate($rules, $pesan);
 
-        pengangkutan_gaskbumi::where('id', $pmb)
-            ->update($validatedData);
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
 
-        if ($validatedData) {
+
+        pengangkutan_gaskbumi::where('id', $pmb)
+            ->update($sanitizedData);
+
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('Success', 'Data berhasil diupdate');
             return back();

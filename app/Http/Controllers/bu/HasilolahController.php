@@ -145,6 +145,10 @@ class HasilolahController extends Controller
     // Fungsi untuk menyimpan data penjualan hasil olahan BBM
     public function simpan_jholbx(Request $request)
     {
+        $request->merge([
+            'bulan' => $request->bulan . '-01',
+        ]);
+
         $pesan = [
             'npwp.required' => 'npwp masih kosong',
             'id_permohonan.required' => 'id_permohonan masih kosong',
@@ -173,6 +177,10 @@ class HasilolahController extends Controller
 
         ], $pesan);
 
+        
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
+
         // var_dump($request->bulan.'01');
         // die;
         $npwp = Auth::user()->npwp;
@@ -181,7 +189,7 @@ class HasilolahController extends Controller
             ->where('npwp', $npwp)
             ->where('id_permohonan', $request->id_permohonan)
             ->where('id_sub_page', $request->id_sub_page)
-            ->where('bulan', $request->bulan . '-01')
+            ->where('bulan', $request->bulan)
             ->orderBy('status', 'desc')
             ->first();
 
@@ -192,21 +200,23 @@ class HasilolahController extends Controller
             }
         }
 
-        $validatedData = Jual_hasil_olah_bbm::create([
-            'npwp' =>  $request->npwp,
-            'id_permohonan' => $request->id_permohonan,
-            'id_sub_page' => $request->id_sub_page,
-            'bulan' => $request->bulan.'-01',
-            'produk' => $request->produk,
-            'provinsi' => $request->provinsi,
-            'kabupaten_kota' => $request->kabupaten_kota,
-            'sektor' => $request->sektor,
-            'volume' => $request->volume,
-            'satuan' => $request->satuan,
-         
-          ]);
+        // $validatedData = Jual_hasil_olah_bbm::create([
+        //     'npwp' =>  $request->npwp,
+        //     'id_permohonan' => $request->id_permohonan,
+        //     'id_sub_page' => $request->id_sub_page,
+        //     'bulan' => $request->bulan.'-01',
+        //     'produk' => $request->produk,
+        //     'provinsi' => $request->provinsi,
+        //     'kabupaten_kota' => $request->kabupaten_kota,
+        //     'sektor' => $request->sektor,
+        //     'volume' => $request->volume,
+        //     'satuan' => $request->satuan,
 
-        if ($validatedData) {
+        //   ]);
+
+        $created = Jual_hasil_olah_bbm::create($sanitizedData);
+
+        if ($created) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil ditambahkan');
             return back();
@@ -322,10 +332,13 @@ class HasilolahController extends Controller
 
         $validatedData = $request->validate($rules, $pesan);
 
-        Jual_hasil_olah_bbm::where('id', $Jual_hasil_olah_bbm)
-            ->update($validatedData);
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
 
-        if ($validatedData) {
+        Jual_hasil_olah_bbm::where('id', $Jual_hasil_olah_bbm)
+            ->update($sanitizedData);
+
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
