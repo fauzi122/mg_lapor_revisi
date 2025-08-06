@@ -330,10 +330,13 @@ class HargabbmController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
-    Harga_bbm_jbu::where('id', $ekport)
-      ->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
 
-    if ($validatedData) {
+
+    Harga_bbm_jbu::where('id', $ekport)
+      ->update($sanitizedData);
+
+    if ($sanitizedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
@@ -365,6 +368,21 @@ class HargabbmController extends Controller
 
   public function importhargajbux(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
@@ -384,22 +402,49 @@ class HargabbmController extends Controller
             return back();
         }
     }
-    $import = Excel::import(new Importhargabbmjbu($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new Importhargabbmjbu($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
-      Alert::success('success', 'Data excel berhasil diupload');
-      return back();
-    } else {
-      //redirect dengan pesan error
-      Alert::error('error', 'Data excel gagal diupload');
-      return back();
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('error', 'Data excel gagal diupload');
+    //   return back();
 
-      // return redirect('/show/hasil-olahan/minyak-bumi')->with(['success' => 'Data excel berhasil diupload']);
+    //   // return redirect('/show/hasil-olahan/minyak-bumi')->with(['success' => 'Data excel berhasil diupload']);
+    // }
+    try {
+      Excel::import(
+        new Importhargabbmjbu($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
+      Alert::success('Success', 'Data excel berhasil diupload');
+      return back();
+    } catch (\Exception $e) {
+      Alert::error('Error', 'Data excel gagal diupload');
+      return back();
     }
   }
   public function importhargalpgx(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
@@ -419,18 +464,30 @@ class HargabbmController extends Controller
             return back();
         }
     }
-    $import = Excel::import(new Importhargalpg($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new Importhargalpg($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
-      Alert::success('success', 'Data excel berhasil diupload');
-      return back();
-    } else {
-      //redirect dengan pesan error
-      Alert::error('error', 'Data excel gagal diupload');
-      return back();
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('error', 'Data excel gagal diupload');
+    //   return back();
 
-      // return redirect('/show/hasil-olahan/minyak-bumi')->with(['success' => 'Data excel berhasil diupload']);
+    //   // return redirect('/show/hasil-olahan/minyak-bumi')->with(['success' => 'Data excel berhasil diupload']);
+    // }
+    try {
+      Excel::import(
+        new Importhargalpg($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
+      Alert::success('Success', 'Data excel berhasil diupload');
+      return back();
+    } catch (\Exception $e) {
+      Alert::error('Error', 'Data excel gagal diupload');
+      return back();
     }
   }
 
@@ -517,6 +574,8 @@ class HargabbmController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
     $npwp = Auth::user()->npwp;
 
     $cekdb = DB::table('harga_l_p_g_s')
@@ -535,8 +594,8 @@ class HargabbmController extends Controller
         }
 
 
-    HargaLPG::create($validatedData);
-    if ($validatedData) {
+    $created = HargaLPG::create($sanitizedData);
+    if ($created) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil ditambahkan');
       return back();
@@ -615,9 +674,11 @@ class HargabbmController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
-    HargaLPG::where('id', $id)->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
 
-    if ($validatedData) {
+    $updateHarga = HargaLPG::where('id', $id)->update($sanitizedData);
+
+    if ($updateHarga) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();

@@ -127,12 +127,13 @@ class PenyMinyakbumiController extends Controller
     {
         $pecah = explode(',', Crypt::decryptString($id));
         $pggb = Penygasbumi::get();
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $npwp = Auth::user()->npwp;
         // Mengambil bulan dari tabel Penygasbumi sesuai ID badan usaha dan bulan yang ditemukan
         $bulan_ambil = DB::table('penygasbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('bulan', $pecah[0])
-            ->where('izin_id', $pecah[2])
+            ->where('npwp', $npwp)
+            ->where('bulan', $pecah[3])
+            ->where('id_permohonan', $pecah[0])
+            ->where('id_sub_page', $pecah[2])
             ->orderBy('status', 'desc')
             ->first();
 
@@ -141,18 +142,21 @@ class PenyMinyakbumiController extends Controller
         $tahun_ambilx = $bulan_ambil ? substr($bulan_ambil->bulan, 0, 4) : '';
         $statusx = $bulan_ambil->status;
 
-        
-        if ($filter == 'bulan') {
-            $pggb = Penygasbumi::where([
-                'bulan' => $pecah[0],
-                'badan_usaha_id' => $pecah[1],
-                'izin_id' => $pecah[2]
-            ])->orderBy('status', 'desc')->get();
+
+        // Filter berdasarkan tahun atau bulan
+        if ($filter && $filter === "tahun") {
+            $filterBy = substr($pecah[3], 0, 4);
         } else {
-            $pggb = Penygasbumi::where('bulan', 'like' , "%" . $tahun_ambilx . "%")
-                            ->where('izin_id', $pecah[2])
-                            ->orderBy('status', 'desc')->get();
+            $filterBy = $pecah[3];
         }
+
+        // Query data utama
+        $pggb = Penygasbumi::where([
+            ['bulan', 'like', "%" . $filterBy . "%"],
+            'npwp' => $pecah[1],
+            'id_permohonan' => $pecah[0],
+            'id_sub_page' => $pecah[2],
+        ])->orderBy('status', 'desc')->get();
 
         // return view('badan_usaha.penyimpanan.gas_bumi.show', compact(
         return view('badanUsaha.penyimpanan.gas_bumi.show', compact(
@@ -411,9 +415,15 @@ class PenyMinyakbumiController extends Controller
 
     public function simpan_pggbx(Request $request)
     {
+        $request->merge([
+            'bulan' => $request->bulan . '-01',
+        ]);
         $pesan = [
-            'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-            'izin_id.required' => 'izin_id masih kosong',
+            // 'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
+            'npwp.required' => 'npwp masih kosong',
+            'id_sub_page' => 'id_sub_page kosong',
+            'id_permohonan' => 'id_permohonan kosong',
+            // 'izin_id.required' => 'izin_id masih kosong',
             'bulan.required' => 'bulan masih kosong',
             'no_tangki.required' => 'no_tangki masih kosong',
             'produk.required' => 'produk masih kosong',
@@ -432,8 +442,11 @@ class PenyMinyakbumiController extends Controller
         ];
 
         $validatedData = $request->validate([
-            'badan_usaha_id' => 'required',
-            'izin_id' => 'required',
+            // 'badan_usaha_id' => 'required',
+            'npwp' => 'required',
+            'id_sub_page' => 'required',
+            'id_permohonan' => 'required',
+            // 'izin_id' => 'required',
             'bulan' => 'required',
             'no_tangki' => 'required',
             'produk' => 'required',
@@ -451,11 +464,15 @@ class PenyMinyakbumiController extends Controller
             'satuan_tarif' => 'required',
         ], $pesan);
 
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $sanitizedData = fullySanitizeInput($validatedData);
+
+        $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('penygasbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('bulan', $request->bulan . '-01')
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $request->id_permohonan)
+            ->where('id_sub_page', $request->id_sub_page)
+            ->where('bulan', $request->bulan)
             ->orderBy('status', 'desc')
             ->first();
 
@@ -469,27 +486,30 @@ class PenyMinyakbumiController extends Controller
             }
         }
 
-        $validatedData = Penygasbumi::create([
-            'badan_usaha_id' => $request->badan_usaha_id,
-            'izin_id' => $request->izin_id,
-            'bulan' => $request->bulan . '-01',
-            'no_tangki' => $request->no_tangki,
-            'produk' => $request->produk,
-            'kab_kota' => $request->kab_kota,
-            'volume_stok_awal' => $request->volume_stok_awal,
-            'volume_supply' => $request->volume_supply,
-            'volume_output' => $request->volume_output,
-            'volume_stok_akhir' => $request->volume_stok_akhir,
-            'satuan' => $request->satuan,
-            'utilisasi_tangki' => $request->utilisasi_tangki,
-            'pengguna' => $request->pengguna,
-            'tanggal_awal' => $request->tanggal_awal,
-            'tanggal_berakhir' => $request->tanggal_berakhir,
-            'tarif_penyimpanan' => $request->tarif_penyimpanan,
-            'satuan_tarif' => $request->satuan_tarif,
+        // $validatedData = Penygasbumi::create([
+        //     'npwp' => $request->npwp,
+        //     'izin_id' => $request->izin_id,
+        //     'bulan' => $request->bulan . '-01',
+        //     'no_tangki' => $request->no_tangki,
+        //     'produk' => $request->produk,
+        //     'kab_kota' => $request->kab_kota,
+        //     'volume_stok_awal' => $request->volume_stok_awal,
+        //     'volume_supply' => $request->volume_supply,
+        //     'volume_output' => $request->volume_output,
+        //     'volume_stok_akhir' => $request->volume_stok_akhir,
+        //     'satuan' => $request->satuan,
+        //     'utilisasi_tangki' => $request->utilisasi_tangki,
+        //     'pengguna' => $request->pengguna,
+        //     'tanggal_awal' => $request->tanggal_awal,
+        //     'tanggal_berakhir' => $request->tanggal_berakhir,
+        //     'tarif_penyimpanan' => $request->tarif_penyimpanan,
+        //     'satuan_tarif' => $request->satuan_tarif,
 
-        ]);
-        if ($validatedData) {
+        // ]);
+
+        $created = Penygasbumi::create($sanitizedData);
+
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil ditambahkan');
             return back();
@@ -565,13 +585,40 @@ class PenyMinyakbumiController extends Controller
 
         return response()->json(['data' => $data]);
     }
+    // public function get_pggb($id)
+    // {
+    //     $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
+    //     $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
+    //     $data['find'] = Penygasbumi::find($id);
+    //     return response()->json(['data' => $data]);
+    // }
+
     public function get_pggb($id)
     {
-        $data['produk'] = DB::select("SELECT produks.name FROM produks GROUP BY produks.name");
-        $data['provinsi'] = DB::select("SELECT provinces.id, provinces.name FROM provinces GROUP BY provinces.name");
-        $data['find'] = Penygasbumi::find($id);
-        return response()->json(['data' => $data]);
+        try {
+            // Ambil produk dengan nama unik
+            $data['produk'] = DB::select("
+            SELECT DISTINCT name FROM produks
+        ");
+
+            // Ambil provinsi dengan nama unik, tapi tetap ambil 1 ID yang mewakili (pakai MIN)
+            $data['provinsi'] = DB::select("
+            SELECT MIN(id) AS id, name FROM provinces GROUP BY name
+        ");
+
+            // Ambil data berdasarkan ID
+            $data['find'] = Penygasbumi::find($id);
+
+            // Kembalikan response JSON
+            return response()->json(['data' => $data]);
+        } catch (\Exception $e) {
+            // Jika error, kirim error message-nya biar bisa kamu debug
+            return response()->json([
+                'error' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
+
     public function update_pmbx(Request $request, $id)
     {
         $pmb = $id;
@@ -668,7 +715,9 @@ class PenyMinyakbumiController extends Controller
             'satuan.required' => 'satuan masih kosong',
             'utilisasi_tangki.required' => 'utilasi tangki masih kosong',
             'pengguna.required' => 'pengguna masih kosong',
-            'jangka_waktu_penggunaan.required' => 'jangka waktu penggunaan masih kosong',
+            // 'jangka_waktu_penggunaan.required' => 'jangka waktu penggunaan masih kosong',
+            'tanggal_awal.required' => 'tanggal awal masih kosong',
+            'tanggal_berakhir.required' => 'tanggal berakhir masih kosong',
             'tarif_penyimpanan.required' => 'tarif_penyimpanan masih kosong',
             'satuan_tarif.required' => 'satuan tarif masih kosong',
         ];
@@ -684,17 +733,21 @@ class PenyMinyakbumiController extends Controller
             'satuan' => 'required',
             'utilisasi_tangki' => 'required',
             'pengguna' => 'required',
-            'jangka_waktu_penggunaan' => 'required',
+            // 'jangka_waktu_penggunaan' => 'required',
+            'tanggal_awal' => 'required',
+            'tanggal_berakhir' => 'required',
             'tarif_penyimpanan' => 'required',
             'satuan_tarif' => 'required',
         ];
 
         $validatedData = $request->validate($rules, $pesan);
 
-        Penygasbumi::where('id', $pmb)
-            ->update($validatedData);
+        $sanitizedData = fullySanitizeInput($validatedData);
 
-        if ($validatedData) {
+        Penygasbumi::where('id', $pmb)
+            ->update($sanitizedData);
+
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
@@ -763,6 +816,21 @@ class PenyMinyakbumiController extends Controller
      
     public function import_pmbx(Request $request)
     {
+        $request->validate([
+            'file' => [
+                'required',
+                'file',
+                'mimes:xlsx,xls,csv',
+                // Sanitasi Excel
+                function ($attribute, $value, $fail) {
+                    validateExcelUpload($attribute, $value, $fail);
+                },
+            ],
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
+            'bulan' => 'required',
+        ]);
+
         $id_permohonan = $request->id_permohonan;
         $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
@@ -783,27 +851,56 @@ class PenyMinyakbumiController extends Controller
             }
         }
 
-        $import = Excel::import(new Importpenyimpananmb($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+        // $import = Excel::import(new Importpenyimpananmb($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-        if ($import) {
-            //redirect dengan pesan sukses
+        // if ($import) {
+        //     //redirect dengan pesan sukses
+        //     Alert::success('Success', 'Data excel berhasil diupload');
+        //     return back();
+        // } else {
+        //     //redirect dengan pesan error
+        //     Alert::error('Error', 'Data excel gagal diupload');
+        //     return back();
+        // }
+        try {
+            Excel::import(
+                new Importpenyimpananmb($bulan, $id_permohonan, $id_sub_page),
+                $request->file('file')
+            );
+
             Alert::success('Success', 'Data excel berhasil diupload');
             return back();
-        } else {
-            //redirect dengan pesan error
+        } catch (\Exception $e) {
             Alert::error('Error', 'Data excel gagal diupload');
             return back();
         }
     }
     public function import_pggbx(Request $request)
     {
-        $izin_id = $request->izin_id;
-        $bulan = $request->bulan . "-01";
+        $request->validate([
+            'file' => [
+                'required',
+                'file',
+                'mimes:xlsx,xls,csv',
+                // Sanitasi Excel
+                function ($attribute, $value, $fail) {
+                    validateExcelUpload($attribute, $value, $fail);
+                },
+            ],
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
+            'bulan' => 'required',
+        ]);
 
-        $badan_usaha_id = Auth::user()->badan_usaha_id;
+        $id_permohonan = $request->id_permohonan;
+        $id_sub_page = $request->id_sub_page;
+        $bulan = $request->bulan . "-01";
+        $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('penygasbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
+            ->where('npwp', $npwp)
+            ->where('id_permohonan', $id_permohonan)
+            ->where('id_sub_page', $id_sub_page)
             ->where('bulan', $bulan)
             ->orderBy('status', 'desc')
             ->first();
@@ -814,18 +911,33 @@ class PenyMinyakbumiController extends Controller
                 return back();
             }
         }
-        $import = Excel::import(new Importpenyimpanangb($bulan, $izin_id), request()->file('file'));
+        // $import = Excel::import(new Importpenyimpanangb($bulan, $izin_id), request()->file('file'));
 
-        if ($import) {
-            //redirect dengan pesan sukses
+        // if ($import) {
+        //     //redirect dengan pesan sukses
+        //     Alert::success('Success', 'Data excel berhasil diupload');
+        //     return back();
+        // } else {
+        //     //redirect dengan pesan error
+        //     Alert::error('Error', 'Data excel gagal diupload');
+        //     return back();
+        // }
+
+        try {
+            Excel::import(
+                new Importpenyimpanangb($bulan, $id_permohonan, $id_sub_page),
+                $request->file('file')
+            );
+
             Alert::success('Success', 'Data excel berhasil diupload');
             return back();
-        } else {
-            //redirect dengan pesan error
+        } catch (\Exception $e) {
             Alert::error('Error', 'Data excel gagal diupload');
             return back();
         }
     }
+
+    
     public function get_kab_kota()
     {
 

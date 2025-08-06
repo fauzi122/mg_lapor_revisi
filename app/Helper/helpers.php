@@ -92,6 +92,49 @@ function fullySanitizeInput(array $input): array
 }
 
 
+// Sanitasi impor Excel
+function validateExcelUpload($attribute, $value, $fail)
+{
+    $filename = strtolower($value->getClientOriginalName());
+    $extension = strtolower($value->getClientOriginalExtension());
+
+    $fileBerbahaya = [
+        '.php',
+        '.php3',
+        '.php4',
+        '.php5',
+        '.php7',
+        '.phtml',
+        '.asp',
+        '.aspx',
+        '.jsp',
+        '.exe',
+        '.sh',
+        '.bat',
+        '.cmd',
+        '.cgi',
+        '.pl',
+        '.py',
+        '.htaccess'
+    ];
+
+    foreach ($fileBerbahaya as $ext) {
+        if (str_contains($filename, $ext)) {
+            return $fail('Nama file tidak boleh mengandung ekstensi berbahaya.');
+        }
+    }
+
+    if (!in_array($extension, ['xls', 'xlsx', 'csv'])) {
+        return $fail('Hanya file Excel yang diperbolehkan.');
+    }
+
+    if (!preg_match('/\.(xls|xlsx)$/i', $filename)) {
+        return $fail('Ekstensi file tidak valid.');
+    }
+}
+
+
+
 
 
 // Contoh penggunaan:

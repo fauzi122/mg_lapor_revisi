@@ -302,6 +302,21 @@ class PengangkutanmgController extends Controller
 
     public function importPengangkutanMB(Request $request)
     {
+        $request->validate([
+            'file' => [
+                'required',
+                'file',
+                'mimes:xlsx,xls,csv',
+                // Sanitasi Excel
+                function ($attribute, $value, $fail) {
+                    validateExcelUpload($attribute, $value, $fail);
+                },
+            ],
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
+            'bulan' => 'required',
+        ]);
+
         $id_permohonan = $request->id_permohonan;
         $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
@@ -324,14 +339,26 @@ class PengangkutanmgController extends Controller
             }
         }
 
-        $import = Excel::import(new ImportPengangkutanMB($bulan,$id_permohonan, $id_sub_page), request()->file('file'));
+        // $import = Excel::import(new ImportPengangkutanMB($bulan,$id_permohonan, $id_sub_page), request()->file('file'));
 
-        if ($import) {
-            //redirect dengan pesan sukses
+        // if ($import) {
+        //     //redirect dengan pesan sukses
+        //     Alert::success('Success', 'Data excel berhasil diupload');
+        //     return back();
+        // } else {
+        //     //redirect dengan pesan error
+        //     Alert::error('Error', 'Data excel gagal diupload');
+        //     return back();
+        // }
+        try {
+            Excel::import(
+                new ImportPengangkutanMB($bulan, $id_permohonan, $id_sub_page),
+                $request->file('file')
+            );
+
             Alert::success('Success', 'Data excel berhasil diupload');
             return back();
-        } else {
-            //redirect dengan pesan error
+        } catch (\Exception $e) {
             Alert::error('Error', 'Data excel gagal diupload');
             return back();
         }
@@ -545,6 +572,21 @@ class PengangkutanmgController extends Controller
 
     public function importPengangkutanGB(Request $request)
     {
+        $request->validate([
+            'file' => [
+                'required',
+                'file',
+                'mimes:xlsx,xls,csv',
+                // Sanitasi Excel
+                function ($attribute, $value, $fail) {
+                    validateExcelUpload($attribute, $value, $fail);
+                },
+            ],
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
+            'bulan' => 'required',
+        ]);
+
         $id_permohonan = $request->id_permohonan;
         $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
@@ -567,14 +609,26 @@ class PengangkutanmgController extends Controller
             }
         }
 
-        $import = Excel::import(new ImportPengangkutanGB($bulan,$id_permohonan, $id_sub_page), request()->file('file'));
+        // $import = Excel::import(new ImportPengangkutanGB($bulan,$id_permohonan, $id_sub_page), request()->file('file'));
 
-        if ($import) {
-            //redirect dengan pesan sukses
+        // if ($import) {
+        //     //redirect dengan pesan sukses
+        //     Alert::success('Success', 'Data excel berhasil diupload');
+        //     return back();
+        // } else {
+        //     //redirect dengan pesan error
+        //     Alert::error('Error', 'Data excel gagal diupload');
+        //     return back();
+        // }
+        try {
+            Excel::import(
+                new ImportPengangkutanGB($bulan, $id_permohonan, $id_sub_page),
+                $request->file('file')
+            );
+
             Alert::success('Success', 'Data excel berhasil diupload');
             return back();
-        } else {
-            //redirect dengan pesan error
+        } catch (\Exception $e) {
             Alert::error('Error', 'Data excel gagal diupload');
             return back();
         }

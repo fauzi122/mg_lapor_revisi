@@ -736,6 +736,20 @@ class EksportImportController extends Controller
   }
   public function import_eksportx(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
 
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_sub_page;
@@ -756,20 +770,47 @@ class EksportImportController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importekspor($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new Importekspor($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
-      Alert::success('success', 'Data excel berhasil diupload');
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+    try {
+      Excel::import(
+        new Importekspor($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
+      Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
-      Alert::error('error', 'Data excel gagal diupload');
+    } catch (\Exception $e) {
+      Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
   }
   public function import_importx(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
@@ -789,15 +830,27 @@ class EksportImportController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importimport($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new Importimport($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
-      Alert::success('success', 'Data excel berhasil diupload');
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+    try {
+      Excel::import(
+        new Importimport($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
+      Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
-      Alert::error('error', 'Data excel gagal diupload');
+    } catch (\Exception $e) {
+      Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
   }

@@ -658,6 +658,20 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_minyak_bumi_produksi(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_permohonan;
     $bulan = $request->bulan . "-01";
@@ -682,14 +696,27 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanMBProduksi($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new ImportPengolahanMBProduksi($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('Success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('Error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+
+    try {
+      Excel::import(
+        new ImportPengolahanMBProduksi($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
       Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
+    } catch (\Exception $e) {
       Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
@@ -934,6 +961,22 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_minyak_bumi_pasokan(Request $request)
   {
+    // Validasi File
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_permohonan;
     $bulan = $request->bulan . "-01";
@@ -958,14 +1001,26 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanMBPasokan($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new ImportPengolahanMBPasokan($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('Success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('Error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+    try {
+      Excel::import(
+        new ImportPengolahanMBPasokan($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
       Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
+    } catch (\Exception $e) {
       Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
@@ -1202,6 +1257,22 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_minyak_bumi_distribusi(Request $request)
   {
+    // Validasi File
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_permohonan;
     $bulan = $request->bulan . "-01";
@@ -1226,14 +1297,27 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanMBDistribusi($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new ImportPengolahanMBDistribusi($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('Success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('Error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+
+    try {
+      Excel::import(
+        new ImportPengolahanMBDistribusi($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
       Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
+    } catch (\Exception $e) {
       Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
@@ -1459,6 +1543,21 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_gas_bumi_produksi(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_permohonan;
     $bulan = $request->bulan . "-01";
@@ -1483,14 +1582,27 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanGBProduksi($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new ImportPengolahanGBProduksi($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('Success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('Error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+
+    try {
+      Excel::import(
+        new ImportPengolahanGBProduksi($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
       Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
+    } catch (\Exception $e) {
       Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
@@ -1719,6 +1831,21 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_gas_bumi_pasokan(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_permohonan;
     $bulan = $request->bulan . "-01";
@@ -1743,14 +1870,26 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanGBPasokan($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new ImportPengolahanGBPasokan($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('Success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('Error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+    try {
+      Excel::import(
+        new ImportPengolahanGBPasokan($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
       Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
+    } catch (\Exception $e) {
       Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
@@ -1982,6 +2121,21 @@ class PengolahanController extends Controller
 
   public function import_pengolahan_gas_bumi_distribusi(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
@@ -2006,14 +2160,26 @@ class PengolahanController extends Controller
       }
     }
 
-    $import = Excel::import(new ImportPengolahanGBDistribusi($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new ImportPengolahanGBDistribusi($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('Success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('Error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+    try {
+      Excel::import(
+        new ImportPengolahanGBDistribusi($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
       Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
+    } catch (\Exception $e) {
       Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
