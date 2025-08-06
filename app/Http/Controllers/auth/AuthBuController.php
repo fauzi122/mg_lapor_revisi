@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Models\T_perusahaan;
-use Illuminate\Support\Str;
-use App\Mail\GenOTPMail;
-use App\Models\Meping;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use App\Library\APIOss;
-use Mail;
+use Illuminate\Support\Facades\Log;
 
 class AuthBuController extends Controller
 {
@@ -222,6 +217,7 @@ class AuthBuController extends Controller
      */
     private function loginFromOSS(Request $request)
     {
+        // Ambil token OSS dari query string
         $bearerToken = $request->query('token_oss');
         if (!$bearerToken) {
             return response()->json([
@@ -230,10 +226,24 @@ class AuthBuController extends Controller
             ], 400);
         }
 
+        // Log Token OSS yang diterima
+        // Log::info('Received Token OSS', ['token_oss' => $bearerToken]);
+
         $apiOss = new APIOss();
 
         // Panggil endpoint userinfo-token
+        // Log::info('Sending request to API OSS', [
+        //     'url' => 'oss/v1.0/sso/users/userinfo-token',
+        //     'bearer_token' => $bearerToken
+        // ]);
+
         $response = $apiOss->post('oss/v1.0/sso/users/userinfo-token', [], $bearerToken);
+
+        // Log Response API
+        // Log::info('Received response from API OSS', [
+        //     'status' => $response->status(),
+        //     'body' => $response->body()
+        // ]);
 
         if (!$response->successful()) {
             return response()->json([
@@ -244,8 +254,12 @@ class AuthBuController extends Controller
             ], $response->status());
         }
 
+        // Proses data pengguna
         $data = $response->json();
         $userInfo = $data['data'] ?? null;
+
+        // Log data pengguna yang diterima
+        // Log::info('Data pengguna dari API OSS', ['user_info' => $userInfo]);
 
         if (!$userInfo || !isset($userInfo['npwp_perseroan'])) {
             return response()->json([
@@ -257,7 +271,8 @@ class AuthBuController extends Controller
         $npwp = $userInfo['npwp_perseroan'];
         $email = $userInfo['email'] ?? 'default@example.com';
         $nib = $userInfo['data_nib'][0] ?? null;
-        // Simpan user ke database
+
+        // Simpan atau update user ke database
         $user = User::updateOrCreate(
             ['npwp' => $npwp],
             [
@@ -268,19 +283,25 @@ class AuthBuController extends Controller
                 'nib' => $nib
             ]
         );
+
+        // Log data user yang disimpan/diupdate
+        // Log::info('User created or updated', ['user_id' => $user->id]);
+
         // Autentikasi user
         $credentials = ['email' => $email, 'password' => '-'];
-        // dd($npwp);
         if (Auth::attempt($credentials)) {
+            // Log sukses login
+            // Log::info('User authenticated successfully', ['user_id' => $user->id]);
+
             // Panggil endpoint simpan
             Http::withoutVerifying()->get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
+
+            // Redirect ke homepage setelah login berhasil
             return redirect('/');
-            // return response()->json([
-            //     'status' => 'success',
-            //     'message' => 'Login OSS berhasil',
-            //     'user' => $user,
-            // ]);
         }
+
+        // Log jika autentikasi gagal
+        // Log::error('Authentication failed', ['email' => $email]);
 
         return response()->json([
             'status' => 'error',
