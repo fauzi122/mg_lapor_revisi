@@ -227,23 +227,23 @@ class AuthBuController extends Controller
         }
 
         // Log Token OSS yang diterima
-        Log::info('Received Token OSS', ['token_oss' => $bearerToken]);
+        // Log::info('Received Token OSS', ['token_oss' => $bearerToken]);
 
         $apiOss = new APIOss();
 
         // Panggil endpoint userinfo-token
-        Log::info('Sending request to API OSS', [
-            'url' => 'oss/v1.0/sso/users/userinfo-token',
-            'bearer_token' => $bearerToken
-        ]);
+        // Log::info('Sending request to API OSS', [
+        //     'url' => 'oss/v1.0/sso/users/userinfo-token',
+        //     'bearer_token' => $bearerToken
+        // ]);
 
         $response = $apiOss->post('oss/v1.0/sso/users/userinfo-token', [], $bearerToken);
 
         // Log Response API
-        Log::info('Received response from API OSS', [
-            'status' => $response->status(),
-            'body' => $response->body()
-        ]);
+        // Log::info('Received response from API OSS', [
+        //     'status' => $response->status(),
+        //     'body' => $response->body()
+        // ]);
 
         if (!$response->successful()) {
             return response()->json([
@@ -259,7 +259,7 @@ class AuthBuController extends Controller
         $userInfo = $data['data'] ?? null;
 
         // Log data pengguna yang diterima
-        Log::info('Data pengguna dari API OSS', ['user_info' => $userInfo]);
+        // Log::info('Data pengguna dari API OSS', ['user_info' => $userInfo]);
 
         if (!$userInfo || !isset($userInfo['npwp_perseroan'])) {
             return response()->json([
@@ -285,13 +285,13 @@ class AuthBuController extends Controller
         );
 
         // Log data user yang disimpan/diupdate
-        Log::info('User created or updated', ['user_id' => $user->id]);
+        // Log::info('User created or updated', ['user_id' => $user->id]);
 
         // Autentikasi user
         $credentials = ['email' => $email, 'password' => '-'];
         if (Auth::attempt($credentials)) {
             // Log sukses login
-            Log::info('User authenticated successfully', ['user_id' => $user->id]);
+            // Log::info('User authenticated successfully', ['user_id' => $user->id]);
 
             // Panggil endpoint simpan
             Http::withoutVerifying()->get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
@@ -301,7 +301,7 @@ class AuthBuController extends Controller
         }
 
         // Log jika autentikasi gagal
-        Log::error('Authentication failed', ['email' => $email]);
+        // Log::error('Authentication failed', ['email' => $email]);
 
         return response()->json([
             'status' => 'error',
