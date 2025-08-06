@@ -4,6 +4,7 @@ namespace App\Library;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class APIOss
 {
@@ -20,14 +21,29 @@ class APIOss
     public function post($endpoint, array $data = [], $bearerToken = null)
     {
         try {
+            // Log request
+            Log::info('Sending POST request to API OSS', [
+                'url' => self::BASEURL . ltrim($endpoint, '/'),
+                'headers' => $this->buildHeaders($bearerToken),
+                'data' => $data,
+            ]);
+
+            // Mengirim request
             $response = Http::withHeaders($this->buildHeaders($bearerToken))
                 ->withOptions([
                     'verify' => App::environment('production'), // false di local
                 ])
                 ->post(self::BASEURL . ltrim($endpoint, '/'), $data);
 
+            // Log response
+            Log::info('Received response from API OSS', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
             return $response;
         } catch (\Exception $e) {
+            Log::error('Error saat POST ke API OSS', ['error' => $e->getMessage()]);
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Error saat POST ke API OSS',
@@ -42,14 +58,29 @@ class APIOss
     public function get($endpoint, array $params = [], $bearerToken = null)
     {
         try {
+            // Log request
+            Log::info('Sending GET request to API OSS', [
+                'url' => self::BASEURL . ltrim($endpoint, '/'),
+                'headers' => $this->buildHeaders($bearerToken),
+                'params' => $params,
+            ]);
+
+            // Mengirim request
             $response = Http::withHeaders($this->buildHeaders($bearerToken))
                 ->withOptions([
                     'verify' => App::environment('production'),
                 ])
                 ->get(self::BASEURL . ltrim($endpoint, '/'), $params);
 
+            // Log response
+            Log::info('Received response from API OSS', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
             return $response;
         } catch (\Exception $e) {
+            Log::error('Error saat GET ke API OSS', ['error' => $e->getMessage()]);
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Error saat GET ke API OSS',
