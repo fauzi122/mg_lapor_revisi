@@ -31,7 +31,10 @@ class PortCOntroller extends Controller
         'lokasi' => 'required',
       ], $pesan);
 
-      Port::create($validatedData);
+    // Sanitasi Input
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+      Port::create($sanitizedData);
         return redirect('/master/port')->with(['success' => 'Data berhasil ditambahkan']);
 
     }
@@ -57,9 +60,11 @@ class PortCOntroller extends Controller
       ];
 
       $validatedData = $request->validate($rules, $pesan);
+    // Sanitasi Input
+    $sanitizedData = fullySanitizeInput($validatedData);
 
       Port::where('id', $port)
-      ->update($validatedData);
+      ->update($sanitizedData);
       return redirect('/master/port')->with(['success' => 'Data berhasil diupdate']);
     }
     public function destroy(Request $request, $id)

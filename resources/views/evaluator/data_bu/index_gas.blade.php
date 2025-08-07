@@ -35,7 +35,7 @@
                 <div class="card-header bg-light p-5">
                     <div class="row w-100">
                         <div class="col-12">
-                            <div class="d-flex justify-content-end gap-2">
+                            <div class="d-flex justify-content-center gap-2">
                                 <h3>Data Izin Badan Usaha Gas</h3>
                             </div>
                         </div>

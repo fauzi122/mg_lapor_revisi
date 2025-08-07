@@ -32,7 +32,10 @@ class IntakeCOntroller extends Controller
         'satuan' => 'required',
       ], $pesan);
 
-      Intake_Kilang::create($validatedData);
+      // Sanitasi Input
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    Intake_Kilang::create($sanitizedData);
         return redirect('/master/intake_kilangs')->with(['success' => 'Data berhasil ditambahkan']);
 
     }
@@ -59,8 +62,11 @@ class IntakeCOntroller extends Controller
 
       $validatedData = $request->validate($rules, $pesan);
 
-      Intake_Kilang::where('id', $intake)
-      ->update($validatedData);
+      // Sanitasi Input
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    Intake_Kilang::where('id', $intake)
+      ->update($sanitizedData);
       return redirect('/master/intake_kilangs')->with(['success' => 'Data berhasil diupdate']);
     }
     public function destroy(Request $request, $id)

@@ -51,7 +51,10 @@ class IzinUsahaController extends Controller
             'kategori_izin' => 'required|max:1',
         ], $pesan);
 
-        IzinUsaha::create($validatedData);
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
+
+        IzinUsaha::create($sanitizedData);
 
         return redirect('/master/izin-usaha')->with(['success' => 'Data berhasil ditambahkan']);
     }
@@ -104,8 +107,11 @@ class IzinUsahaController extends Controller
 
         $validatedData = $request->validate($rules, $pesan);
 
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
+
         IzinUsaha::where('id', $IzinUsaha)
-            ->update($validatedData);
+            ->update($sanitizedData);
         return redirect('/master/izin-usaha')->with(['success' => 'Data berhasil diupdate']);
     }
 

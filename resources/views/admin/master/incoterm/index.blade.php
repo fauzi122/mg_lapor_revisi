@@ -35,7 +35,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="/master/inco-term/create" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Incoterm">
+                                <a href="{{ url('/master/inco-term/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Incoterm">
                                     <i class="ki-duotone ki-plus"></i> Input Incoterm
                                 </a>
                             </div>
@@ -66,12 +66,12 @@
                                     <td>{{ $inco->incoterm }}</td>
                                     <td>{{ $inco->ket }}</td>
                                     <td class="text-nowrap" align="center">
-                                        <a href="/master/inco-term/{{ $inco->id }}/edit">
+                                        <a href="{{ url('/master/inco-term/'. $inco->id .'/edit') }}">
                                             <button type="button" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fa fa-edit"></i>
                                             </button>
                                         </a>
-                                        <form action="/master/inco-term/{{ $inco->id }}" method="post"
+                                        <form action="{{ url('/master/inco-term/'. $inco->id) }}" method="post"
                                             class="d-inline">
                                             @method('delete')
                                             @csrf
