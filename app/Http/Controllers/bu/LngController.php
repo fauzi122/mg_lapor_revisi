@@ -142,6 +142,9 @@ class LngController extends Controller
     public function simpan_lngx(Request $request)
     {
         // dd($request->all());
+        $request->merge([
+            'bulan' => $request->bulan . '-01',
+        ]);
 
         $pesan = [
             'npwp.required' => 'npwp masih kosong',
@@ -200,12 +203,14 @@ class LngController extends Controller
             'satuan_harga_jual' => 'required',
         ], $pesan);
 
+        $sanitizedData = fullySanitizeInput($validatedData);
+
         $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('penjualan_lngs')
             ->where('npwp', $npwp)
             ->where('id_permohonan', $request->id_permohonan)
-            ->where('bulan', $request->bulan . '-01')
+            ->where('bulan', $request->bulan)
             ->orderBy('status', 'desc')
             ->first();
 
@@ -215,36 +220,38 @@ class LngController extends Controller
                 return back();
             }
         }
-        $validatedData = Penjualan_lng::create([
-            'npwp' =>  $request->npwp,
-            'id_permohonan' =>  $request->id_permohonan,
-            'id_sub_page' =>  $request->id_sub_page,
-            'bulan' => $request->bulan . '-01',
-            'provinsi' => $request->provinsi,
-            'kabupaten_kota' => $request->kabupaten_kota,
-            'produk' => $request->produk,
-            'konsumen' => $request->konsumen,
-            'sektor' => $request->sektor,
-            'volume' => $request->volume,
-            'satuan' => $request->satuan,
-            'biaya_kompresi' => $request->biaya_kompresi,
-            'satuan_biaya_kompresi' => $request->satuan_biaya_kompresi,
-            'biaya_penyimpanan' => $request->biaya_penyimpanan,
-            'satuan_biaya_penyimpanan' => $request->satuan_biaya_penyimpanan,
-            'biaya_pengangkutan' => $request->biaya_pengangkutan,
-            'satuan_biaya_pengangkutan' => $request->satuan_biaya_pengangkutan,
-            'biaya_niaga' => $request->biaya_niaga,
-            'satuan_biaya_niaga' => $request->satuan_biaya_niaga,
-            'harga_bahan_baku' => $request->harga_bahan_baku,
-            'satuan_harga_bahan_baku' => $request->satuan_harga_bahan_baku,
-            'pajak' => $request->pajak,
-            'satuan_pajak' => $request->satuan_pajak,
-            'harga_jual' => $request->harga_jual,
-            'satuan_harga_jual' => $request->satuan_harga_jual,
+        // $validatedData = Penjualan_lng::create([
+        //     'npwp' =>  $request->npwp,
+        //     'id_permohonan' =>  $request->id_permohonan,
+        //     'id_sub_page' =>  $request->id_sub_page,
+        //     'bulan' => $request->bulan . '-01',
+        //     'provinsi' => $request->provinsi,
+        //     'kabupaten_kota' => $request->kabupaten_kota,
+        //     'produk' => $request->produk,
+        //     'konsumen' => $request->konsumen,
+        //     'sektor' => $request->sektor,
+        //     'volume' => $request->volume,
+        //     'satuan' => $request->satuan,
+        //     'biaya_kompresi' => $request->biaya_kompresi,
+        //     'satuan_biaya_kompresi' => $request->satuan_biaya_kompresi,
+        //     'biaya_penyimpanan' => $request->biaya_penyimpanan,
+        //     'satuan_biaya_penyimpanan' => $request->satuan_biaya_penyimpanan,
+        //     'biaya_pengangkutan' => $request->biaya_pengangkutan,
+        //     'satuan_biaya_pengangkutan' => $request->satuan_biaya_pengangkutan,
+        //     'biaya_niaga' => $request->biaya_niaga,
+        //     'satuan_biaya_niaga' => $request->satuan_biaya_niaga,
+        //     'harga_bahan_baku' => $request->harga_bahan_baku,
+        //     'satuan_harga_bahan_baku' => $request->satuan_harga_bahan_baku,
+        //     'pajak' => $request->pajak,
+        //     'satuan_pajak' => $request->satuan_pajak,
+        //     'harga_jual' => $request->harga_jual,
+        //     'satuan_harga_jual' => $request->satuan_harga_jual,
 
-        ]);
+        // ]);
 
-        if ($validatedData) {
+        $created = Penjualan_lng::create($sanitizedData);
+
+        if ($created) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil ditambahkan');
             return back();
@@ -343,10 +350,12 @@ class LngController extends Controller
 
         $validatedData = $request->validate($rules, $pesan);
 
-        Penjualan_lng::where('id', $penjualan_lng)
-            ->update($validatedData);
+        $sanitizedData = fullySanitizeInput($validatedData);
 
-        if ($validatedData) {
+        Penjualan_lng::where('id', $penjualan_lng)
+            ->update($sanitizedData);
+
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
@@ -360,6 +369,9 @@ class LngController extends Controller
     public function simpan_pasokan_lngx(Request $request)
     {
         // echo json_encode($request->all());exit;
+        $request->merge([
+            'bulan' => $request->bulan . '-01',
+        ]);
         $pesan = [
             'npwp.required' => 'npwp masih kosong',
             'id_permohonan.required' => 'id_permohonan masih kosong',
@@ -388,12 +400,15 @@ class LngController extends Controller
             'satuan_harga_gas' => 'required',
         ], $pesan);
 
+        // Sanitasi data
+        $sanitizedData = fullySanitizeInput($validatedData);
+
         $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('pasokanlngs')
             ->where('npwp', $npwp)
             ->where('id_permohonan', $request->id_permohonan)
-            ->where('bulan', $request->bulan . '-01')
+            ->where('bulan', $request->bulan)
             ->orderBy('status', 'desc')
             ->first();
         // echo json_encode($cekdb);
@@ -407,22 +422,25 @@ class LngController extends Controller
         }
 
 
-        $validatedData = Pasokanlng::create([
-            'npwp' =>  $request->npwp,
-            'id_permohonan' =>  $request->id_permohonan,
-            'id_sub_page' =>  $request->id_sub_page,
-            'bulan' => $request->bulan . '-01',
-            'produk' => $request->produk,
-            'nama_pemasok' => $request->nama_pemasok,
-            'kategori_pemasok' => $request->kategori_pemasok,
-            'volume' => $request->volume,
-            'satuan' => $request->satuan,
-            'harga_gas' => $request->harga_gas,
-            'satuan_harga_gas' => $request->satuan_harga_gas,
+        // $validatedData = Pasokanlng::create([
+        //     'npwp' =>  $request->npwp,
+        //     'id_permohonan' =>  $request->id_permohonan,
+        //     'id_sub_page' =>  $request->id_sub_page,
+        //     'bulan' => $request->bulan . '-01',
+        //     'produk' => $request->produk,
+        //     'nama_pemasok' => $request->nama_pemasok,
+        //     'kategori_pemasok' => $request->kategori_pemasok,
+        //     'volume' => $request->volume,
+        //     'satuan' => $request->satuan,
+        //     'harga_gas' => $request->harga_gas,
+        //     'satuan_harga_gas' => $request->satuan_harga_gas,
 
-        ]);
+        // ]);
 
-        if ($validatedData) {
+        // Sanitasi Create
+        $created = Pasokanlng::create($sanitizedData);
+
+        if ($created) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil ditambahkan');
             return back();
@@ -481,10 +499,12 @@ class LngController extends Controller
 
         $validatedData = $request->validate($rules, $pesan);
 
-        Pasokanlng::where('id', $penjualan_lng)
-            ->update($validatedData);
+        $sanitizedData = fullySanitizeInput($validatedData);
 
-        if ($validatedData) {
+        Pasokanlng::where('id', $penjualan_lng)
+            ->update($sanitizedData);
+
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
@@ -544,6 +564,21 @@ class LngController extends Controller
     }
     public function importlngpenx(Request $request)
     {
+        $request->validate([
+            'file' => [
+                'required',
+                'file',
+                'mimes:xlsx,xls,csv',
+                // Sanitasi Excel
+                function ($attribute, $value, $fail) {
+                    validateExcelUpload($attribute, $value, $fail);
+                },
+            ],
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
+            'bulan' => 'required',
+        ]);
+
         $id_permohonan = $request->id_permohonan;
         $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
@@ -560,20 +595,47 @@ class LngController extends Controller
                 return back();
             }
         }
-        $import = Excel::import(new Importlngpenjualan($bulan,$id_permohonan,$id_sub_page), request()->file('file'));
+        // $import = Excel::import(new Importlngpenjualan($bulan,$id_permohonan,$id_sub_page), request()->file('file'));
 
-        if ($import) {
-            //redirect dengan pesan sukses
-            Alert::success('success', 'Data excel berhasil diupload');
+        // if ($import) {
+        //     //redirect dengan pesan sukses
+        //     Alert::success('success', 'Data excel berhasil diupload');
+        //     return back();
+        // } else {
+        //     //redirect dengan pesan error
+        //     Alert::error('error', 'Data excel gagal diupload');
+        //     return back();
+        // }
+        try {
+            Excel::import(
+                new Importlngpenjualan($bulan, $id_permohonan, $id_sub_page),
+                $request->file('file')
+            );
+
+            Alert::success('Success', 'Data excel berhasil diupload');
             return back();
-        } else {
-            //redirect dengan pesan error
-            Alert::error('error', 'Data excel gagal diupload');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Data excel gagal diupload');
             return back();
         }
     }
     public function importlngpasokx(Request $request)
     {
+        $request->validate([
+            'file' => [
+                'required',
+                'file',
+                'mimes:xlsx,xls,csv',
+                // Sanitasi Excel
+                function ($attribute, $value, $fail) {
+                    validateExcelUpload($attribute, $value, $fail);
+                },
+            ],
+            'id_permohonan' => 'required',
+            'id_sub_page' => 'required',
+            'bulan' => 'required',
+        ]);
+
         $id_permohonan = $request->id_permohonan;
         $id_sub_page = $request->id_sub_page;
         $bulan = $request->bulan . "-01";
@@ -590,15 +652,27 @@ class LngController extends Controller
                 return back();
             }
         }
-        $import = Excel::import(new Importlngpasok($bulan,$id_permohonan, $id_sub_page), request()->file('file'));
+        // $import = Excel::import(new Importlngpasok($bulan,$id_permohonan, $id_sub_page), request()->file('file'));
 
-        if ($import) {
-            //redirect dengan pesan sukses
-            Alert::success('success', 'Data excel berhasil diupload');
+        // if ($import) {
+        //     //redirect dengan pesan sukses
+        //     Alert::success('success', 'Data excel berhasil diupload');
+        //     return back();
+        // } else {
+        //     //redirect dengan pesan error
+        //     Alert::error('error', 'Data excel gagal diupload');
+        //     return back();
+        // }
+        try {
+            Excel::import(
+                new Importlngpasok($bulan, $id_permohonan, $id_sub_page),
+                $request->file('file')
+            );
+
+            Alert::success('Success', 'Data excel berhasil diupload');
             return back();
-        } else {
-            //redirect dengan pesan error
-            Alert::error('error', 'Data excel gagal diupload');
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Data excel gagal diupload');
             return back();
         }
     }

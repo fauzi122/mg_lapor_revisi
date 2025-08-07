@@ -182,6 +182,8 @@ class LpgController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
     // echo json_encode($request->all());exit;
 
     // $simpan = Penjualan_lpg::create($request->all());
@@ -204,7 +206,7 @@ class LpgController extends Controller
         return back();
       }
     }
-    $simpan = Penjualan_lpg::create($validatedData);
+    $simpan = Penjualan_lpg::create($sanitizedData);
 
     if ($simpan) {
       //redirect dengan pesan sukses
@@ -253,6 +255,21 @@ class LpgController extends Controller
 
   public function importlpgx(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
@@ -272,20 +289,47 @@ class LpgController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importlpgpenjualan($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new Importlpgpenjualan($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('Success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('Error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+    try {
+      Excel::import(
+        new Importlpgpenjualan($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
       Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
+    } catch (\Exception $e) {
       Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
   }
   public function importlpg_pasokx(Request $request)
   {
+    $request->validate([
+      'file' => [
+        'required',
+        'file',
+        'mimes:xlsx,xls,csv',
+        // Sanitasi Excel
+        function ($attribute, $value, $fail) {
+          validateExcelUpload($attribute, $value, $fail);
+        },
+      ],
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'bulan' => 'required',
+    ]);
+
     $id_permohonan = $request->id_permohonan;
     $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
@@ -305,14 +349,26 @@ class LpgController extends Controller
         return back();
       }
     }
-    $import = Excel::import(new Importlpgpasok($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
+    // $import = Excel::import(new Importlpgpasok($bulan, $id_permohonan, $id_sub_page), request()->file('file'));
 
-    if ($import) {
-      //redirect dengan pesan sukses
+    // if ($import) {
+    //   //redirect dengan pesan sukses
+    //   Alert::success('Success', 'Data excel berhasil diupload');
+    //   return back();
+    // } else {
+    //   //redirect dengan pesan error
+    //   Alert::error('Error', 'Data excel gagal diupload');
+    //   return back();
+    // }
+    try {
+      Excel::import(
+        new Importlpgpasok($bulan, $id_permohonan, $id_sub_page),
+        $request->file('file')
+      );
+
       Alert::success('Success', 'Data excel berhasil diupload');
       return back();
-    } else {
-      //redirect dengan pesan error
+    } catch (\Exception $e) {
       Alert::error('Error', 'Data excel gagal diupload');
       return back();
     }
@@ -363,8 +419,10 @@ class LpgController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
     $update = Penjualan_lpg::where('id', $id_lpg)
-      ->update($validatedData);
+      ->update($sanitizedData);
 
     if ($update) {
       //redirect dengan pesan sukses
@@ -461,6 +519,8 @@ class LpgController extends Controller
       // 'petugas' => 'required',
     ], $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
     // echo json_encode($request->all());exit;
     $npwp = Auth::user()->npwp;
 
@@ -479,7 +539,7 @@ class LpgController extends Controller
       }
     }
 
-    $simpan = PasokanLPG::create($validatedData);
+    $simpan = PasokanLPG::create($sanitizedData);
 
     if ($simpan) {
       //redirect dengan pesan sukses
@@ -546,8 +606,10 @@ class LpgController extends Controller
 
     $validatedData = $request->validate($rules, $pesan);
 
+    $sanitizedData = fullySanitizeInput($validatedData);
+
     $update = PasokanLPG::where('id', $id)
-      ->update($validatedData);
+      ->update($sanitizedData);
 
     if ($update) {
       //redirect dengan pesan sukses

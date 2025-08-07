@@ -77,7 +77,14 @@
                                     <tbody class="fw-semibold text-gray-600">
                                         @foreach ($pm as $data)
                                             @php
-                                                $id = Crypt::encryptString($data->bulan . ',' . $data->badan_usaha_id . ',' . $data->izin_id);
+                                                $id = Crypt::encryptString(
+                                                        $data->id_permohonan .
+                                                        ',' .
+                                                        $data->npwp .
+                                                        ',' .
+                                                        $data->id_sub_page .
+                                                        ',' .
+                                                        $data->bulan,);
                                             @endphp
                                             <tr>
                                                 <td class="text-center">{{ $loop->iteration }}</td>

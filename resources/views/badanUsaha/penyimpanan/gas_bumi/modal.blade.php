@@ -10,8 +10,11 @@
             </div>
             <form method="post" action="{{ url('/simpan_pggb') }}" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="badan_usaha_id" value="{{ Auth::user()->badan_usaha_id }}">
-                <input type="hidden" name="izin_id" value="{{ $pecah[0] }}">
+                {{-- <input type="hidden" name="badan_usaha_id" value="{{ Auth::user()->badan_usaha_id }}"> --}}
+                {{-- <input type="hidden" name="izin_id" value="{{ $pecah[0] }}"> --}}
+                <input type="hidden" name="npwp" value="{{ Auth::user()->npwp }}">
+                <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
+                <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
 
                 <div class="modal-body">
                     <div class="mb-6">

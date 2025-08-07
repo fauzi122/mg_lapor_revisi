@@ -36,6 +36,10 @@ class PasokanHasilolahController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge([
+            'bulan' => $request->bulan . '-01',
+        ]);
+
         $pesan = [
             'npwp.required' => 'npwp masih kosong',
             'id_permohonan.required' => 'id_permohonan masih kosong',
@@ -57,13 +61,17 @@ class PasokanHasilolahController extends Controller
             'kategori_pemasok' => 'required',
             'volume' => 'required',
         ], $pesan);
+
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
+
         $npwp = Auth::user()->npwp;
 
         $cekdb = DB::table('pasokan_hasil_olah_bbms')
             ->where('npwp', $npwp)
             ->where('id_permohonan', $request->id_permohonan)
             ->where('id_sub_page', $request->id_sub_page)
-            ->where('bulan', $request->bulan . '-01')
+            ->where('bulan', $request->bulan)
             ->orderBy('status', 'desc')
             ->first();
 
@@ -73,19 +81,20 @@ class PasokanHasilolahController extends Controller
                 return back();
             }
         }
-        $validatedData = Pasokan_hasil_olah_bbm::create([
-            'npwp' =>  $request->npwp,
-            'id_permohonan' => $request->id_permohonan,
-            'id_sub_page' => $request->id_sub_page,
-            'bulan' => $request->bulan.'-01',
-            'produk' => $request->produk,
-            'nama_pemasok' => $request->nama_pemasok,
-            'kategori_pemasok' => $request->kategori_pemasok,
-            'volume' => $request->volume,
+        // $validatedData = Pasokan_hasil_olah_bbm::create([
+        //     'npwp' =>  $request->npwp,
+        //     'id_permohonan' => $request->id_permohonan,
+        //     'id_sub_page' => $request->id_sub_page,
+        //     'bulan' => $request->bulan.'-01',
+        //     'produk' => $request->produk,
+        //     'nama_pemasok' => $request->nama_pemasok,
+        //     'kategori_pemasok' => $request->kategori_pemasok,
+        //     'volume' => $request->volume,
          
-          ]);
+        //   ]);
+        $created = Pasokan_hasil_olah_bbm::create($sanitizedData);
 
-        if ($validatedData) {
+        if ($created) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil ditambahkan');
             return back();
@@ -158,10 +167,13 @@ class PasokanHasilolahController extends Controller
 
         $validatedData = $request->validate($rules, $pesan);
 
-        Pasokan_hasil_olah_bbm::where('id', $pasokan_olah)
-            ->update($validatedData);
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
 
-        if ($validatedData) {
+        Pasokan_hasil_olah_bbm::where('id', $pasokan_olah)
+            ->update($sanitizedData);
+
+        if ($sanitizedData) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
