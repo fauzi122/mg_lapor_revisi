@@ -36,7 +36,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="/master/intake_kilangs/create" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Kintake Kilang">
+                                <a href="{{ url('/master/intake_kilangs/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Kintake Kilang">
                                     <i class="ki-duotone ki-plus"></i> Input Kintake Kilang
                                 </a>
                             </div>
@@ -73,12 +73,12 @@
                                         <td>{{ $intake->nm_produk }}</td>
                                         <td>{{ $intake->satuan }}</td>
                                         <td class="text-nowrap" align="center">
-                                            <a href="/master/intake_kilangs/{{ $intake->id }}/edit">
+                                            <a href="{{ url('/master/intake_kilangs/'. $intake->id .'/edit') }}">
                                                 <button type="button" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
                                             </a>
-                                            <form action="/master/intake_kilangs/{{ $intake->id }}" method="post"
+                                            <form action="{{ url('/master/intake_kilangs/' .$intake->id) }}" method="post"
                                                 class="d-inline">
                                                 @method('delete')
                                                 @csrf

@@ -37,7 +37,7 @@
     <div id="kt_app_content_container" class="app-container container-xxl">
         <div class="card mb-5 mb-xl-8 shadow">
             <div class="card-body p-4">
-                <form method="post" action="/master/produk/{{ $produk->id }}" class="form-material m-t-40" enctype="multipart/form-data">
+                <form method="post" action="{{ url('/master/produk/' . $produk->id) }}" class="form-material m-t-40" enctype="multipart/form-data">
                     @method('put')
                     @csrf
                         <div class="row">

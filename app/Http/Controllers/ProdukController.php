@@ -37,7 +37,10 @@ class ProdukController extends Controller
         'petugas' => 'required',
       ], $pesan);
 
-      Produk::create($validatedData);
+      // Sanitasi Input
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    Produk::create($sanitizedData);
         return redirect('/master/produk')->with(['success' => 'Data berhasil ditambahkan']);
 
     }
@@ -70,8 +73,10 @@ class ProdukController extends Controller
 
       $validatedData = $request->validate($rules, $pesan);
 
-      Produk::where('id', $produk)
-      ->update($validatedData);
+      $sanitizedData = fullySanitizeInput($validatedData);
+
+    Produk::where('id', $produk)
+      ->update($sanitizedData);
       return redirect('/master/produk')->with(['success' => 'Data berhasil diupdate']);
     }
     public function destroy(Request $request, $id)

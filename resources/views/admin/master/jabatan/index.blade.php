@@ -36,7 +36,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="/master/jabatan/create" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Jabatan">
+                                <a href="{{ url('/master/jabatan/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Jabatan">
                                     <i class="ki-duotone ki-plus"></i> Input Jabatan
                                 </a>
                             </div>
@@ -71,12 +71,12 @@
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td>{{ $jabatan->nm_jabatan }}</td>
                                         <td class="text-nowrap" align="center">
-                                            <a href="/master/jabatan/{{ $jabatan->id }}/edit">
+                                            <a href="{{ url('/master/jabatan/'. $jabatan->id .'/edit') }}">
                                                 <button type="button" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
                                             </a>
-                                            <form action="/master/jabatan/{{ $jabatan->id }}" method="post"
+                                            <form action="{{ url('/master/jabatan/'. $jabatan->id) }}" method="post"
                                                 class="d-inline">
                                                 @method('delete')
                                                 @csrf

@@ -41,7 +41,7 @@
     <div id="kt_app_content_container" class="app-container container-xxl">
         <div class="card mb-5 mb-xl-8 shadow">
             <div class="card-body p-4">
-                <form method="post" action="/master/intake_kilangs" class="form-material m-t-40" enctype="multipart/form-data">
+                <form method="post" action="{{ url('/master/intake_kilangs') }}" class="form-material m-t-40" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-6">

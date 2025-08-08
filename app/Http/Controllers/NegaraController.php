@@ -31,7 +31,10 @@ class NegaraCOntroller extends Controller
         'nm_negara' => 'required',
       ], $pesan);
 
-      Negara::create($validatedData);
+      // Sanitasi Input
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    Negara::create($sanitizedData);
         return redirect('/master/negara')->with(['success' => 'Data berhasil ditambahkan']);
 
     }
@@ -58,8 +61,11 @@ class NegaraCOntroller extends Controller
 
       $validatedData = $request->validate($rules, $pesan);
 
-      Negara::where('id', $negara)
-      ->update($validatedData);
+      // Sanitasi Input
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    Negara::where('id', $negara)
+      ->update($sanitizedData);
       return redirect('/master/negara')->with(['success' => 'Data berhasil diupdate']);
     }
     public function destroy(Request $request, $id)

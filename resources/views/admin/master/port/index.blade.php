@@ -36,7 +36,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="/master/port/create" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Port">
+                                <a href="{{ url('/master/port/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Port">
                                     <i class="ki-duotone ki-plus"></i> Input Port
                                 </a>
                             </div>
@@ -67,12 +67,12 @@
                                         <td>{{ $port->nm_port }}</td>
                                         <td>{{ $port->lokasi }}</td>
                                         <td class="text-nowrap" align="center">
-                                            <a href="/master/port/{{ $port->id }}/edit">
+                                            <a href="{{ url('/master/port/'. $port->id .'/edit') }}">
                                                 <button type="button" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
                                             </a>
-                                            <form action="/master/port/{{ $port->id }}" method="post"
+                                            <form action="{{ url('/master/port/'. $port->id) }}" method="post"
                                                 class="d-inline">
                                                 @method('delete')
                                                 @csrf
