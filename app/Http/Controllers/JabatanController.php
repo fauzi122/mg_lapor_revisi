@@ -30,7 +30,9 @@ class JabatanController extends Controller
         'nm_jabatan' => 'required',
       ], $pesan);
 
-      Jabatan::create($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    Jabatan::create($sanitizedData);
         return redirect('/master/jabatan')->with(['success' => 'Data berhasil ditambahkan']);
 
     }
@@ -55,8 +57,10 @@ class JabatanController extends Controller
 
       $validatedData = $request->validate($rules, $pesan);
 
-      Jabatan::where('id', $jabatan)
-      ->update($validatedData);
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    Jabatan::where('id', $jabatan)
+      ->update($sanitizedData);
       return redirect('/master/jabatan')->with(['success' => 'Data berhasil diupdate']);
     }
     public function destroy(Request $request, $id)
@@ -70,7 +74,7 @@ class JabatanController extends Controller
         }
     
         // Jika tidak digunakan, lanjutkan proses penghapusan
-        DB::table('jabatan')->where('id', $id)->delete();
+        DB::table('jabatans')->where('id', $id)->delete();
         return redirect('/master/jabatan')->with(['success' => 'Data berhasil dihapus']);
     }
 }

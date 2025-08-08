@@ -36,7 +36,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="/master/negara/create" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Negara">
+                                <a href="{{ url('/master/negara/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Negara">
                                     <i class="ki-duotone ki-plus"></i> Input Negara
                                 </a>
                             </div>
@@ -67,12 +67,12 @@
                                         <td>{{ $negara->id_negara }}</td>
                                         <td>{{ $negara->nm_negara }}</td>
                                         <td class="text-nowrap" align="center">
-                                            <a href="/master/negara/{{ $negara->id }}/edit">
+                                            <a href="{{ url('/master/negara/'. $negara->id .'/edit') }}">
                                                 <button type="button" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
                                             </a>
-                                            <form action="/master/negara/{{ $negara->id }}" method="post"
+                                            <form action="{{ url('/master/negara/'. $negara->id) }}" method="post"
                                                     class="d-inline">
                                                     @method('delete')
                                                     @csrf

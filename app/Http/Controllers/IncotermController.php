@@ -31,7 +31,11 @@ class IncotermCOntroller extends Controller
         'ket' => 'required',
 
       ], $pesan);
-      Inco_term::create($validatedData);
+
+      // Sanitasi Input
+      $sanitizedData = fullySanitizeInput($validatedData);
+
+    Inco_term::create($sanitizedData);
 
         return redirect('/master/inco-term')->with(['success' => 'Data berhasil ditambahkan']);
     }
@@ -56,8 +60,12 @@ class IncotermCOntroller extends Controller
         'ket' => 'required',
       ];
       $validatedData = $request->validate($rules, $pesan);
-      Inco_term::where('id', $inco)
-      ->update($validatedData);
+
+      // Sanitasi Input
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    Inco_term::where('id', $inco)
+      ->update($sanitizedData);
       return redirect('/master/inco-term')->with(['success' => 'Data berhasil diupdate']);
     }
 

@@ -45,15 +45,20 @@ class MepingController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validatedData = $request->validate([
             'izin' => 'required|string',
             'nm_izin' => 'required|string'
         ]);
 
-        induk_izin::create([
-            'izin' => $validated['izin'],
-            'nm_izin' => $validated['nm_izin']
-        ]);
+        // induk_izin::create([
+        //     'izin' => $validated['izin'],
+        //     'nm_izin' => $validated['nm_izin']
+        // ]);
+
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validatedData);
+
+        induk_izin::create($sanitizedData);
 
         return redirect('/master/meping')->with('success', 'Data berhasil disimpan!');
     }
@@ -76,17 +81,21 @@ class MepingController extends Controller
         ]);
         // dd($request->all());
 
-        Meping::create([
-            'id_induk_izin' => $validated['id_induk_izin'],
-            'id_sub_page' => $validated['id_sub_page'],
-            'id_template' => $validated['id_template'],
-            'nama_opsi' => $validated['nama_opsi'],
-            'nama_menu' => $validated['nama_menu'],
-            'kategori' => $validated['kategori'],
-            'url' => $validated['url'],
-            'jenis_izin' => $validated['jenis_izin'],
-            'status' => 1, // default aktif
-        ]);
+        // Meping::create([
+        //     'id_induk_izin' => $validated['id_induk_izin'],
+        //     'id_sub_page' => $validated['id_sub_page'],
+        //     'id_template' => $validated['id_template'],
+        //     'nama_opsi' => $validated['nama_opsi'],
+        //     'nama_menu' => $validated['nama_menu'],
+        //     'kategori' => $validated['kategori'],
+        //     'url' => $validated['url'],
+        //     'jenis_izin' => $validated['jenis_izin'],
+        //     'status' => 1, // default aktif
+        // ]);
+        $sanitizedData = fullySanitizeInput($validated);
+
+        Meping::create($sanitizedData);
+
 
         return redirect('/master/meping/' . $validated['id_induk_izin'] . '/show/' .$validated['jenis_izin'])
             ->with('success', 'Data berhasil ditambahkan!');
@@ -157,7 +166,11 @@ class MepingController extends Controller
         ]);
 
         $meping = Meping::findOrFail($id);
-        $meping->update($validated);
+
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validated);
+
+        $meping->update($sanitizedData);
 
         return redirect('/master/meping/' . $validated['id_induk_izin'] . '/show/' . $validated['jenis_izin'])
             ->with('success', 'Data berhasil diperbarui!');
@@ -176,7 +189,10 @@ class MepingController extends Controller
 
         $izin = induk_izin::findOrFail($id);
 
-        $izin->update($validated);
+        // Sanitasi Input
+        $sanitizedData = fullySanitizeInput($validated);
+
+        $izin->update($sanitizedData);
 
         return redirect('/master/meping')->with('success', 'Data berhasil disimpan!');
     }

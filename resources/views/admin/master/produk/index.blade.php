@@ -35,7 +35,7 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="/master/produk/create" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Produk">
+                                <a href="{{ url('/master/produk/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Produk">
                                     <i class="ki-duotone ki-plus"></i> Input Produk
                                 </a>
                             </div>
@@ -72,10 +72,10 @@
                                     <td>{{ $item->satuan }}</td>
                                     <td>{{ $item->petugas }}</td>
                                     <td class="text-nowrap" align="center">
-                                        <a href="/master/produk/{{ $item->id }}/edit" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                        <a href="{{ url('/master/produk/'. $item->id .'/edit') }}" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <form action="/master/produk/{{ $item->id }}" method="POST" class="d-inline">
+                                        <form action="{{ url('/master/produk/'. $item->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-icon btn-sm btn-danger mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus" onclick="return confirm('Yakin ingin menghapus data?')">
