@@ -35,6 +35,7 @@
                                             <img src="{{ asset('assets/images/logo-esdm.png') }}" alt="Logo ESDM" height="40" class="me-2">
                                             <h1 class="logo-txt mb-0 fs-1">Pelaporan Migas</h1>
                                         </div>
+                                        
                                         <div class="text-center mt-10">
                                             <h5 class="mb-0">Selamat Datang</h5>
                                             <p class="text-muted mt-2">
@@ -124,20 +125,7 @@
             </div>
 
             <!-- Right Side Image Panel -->
-            <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2" 
-            style="background-image: url('/assetsMetronic/media/auth/bg4.jpg')"{{ asset('assetsMetronic/media/auth/bg4.jpg') }}>
-                <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
-                    <a href="#" class="mb-0 mb-lg-12">
-                        <img alt="Logo" src="{{ asset('assets/images/logo-esdm.png') }}" class="h-60px h-lg-75px" />
-                    </a>
-                    {{-- <img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="assets/media/misc/auth-screens.png" alt="" /> --}}
-                    <h1 class="d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-5">Sistem Pelaporan Migas</h1>
-                    <p class="d-none d-lg-block text-white fs-5 text-center">
-                        Platform digital untuk pelaporan dan pemantauan kegiatan migas <br>
-                        secara efisien dan terintegrasi.
-                    </p>
-                </div>
-            </div>
+           
 
         </div>
     </div>
