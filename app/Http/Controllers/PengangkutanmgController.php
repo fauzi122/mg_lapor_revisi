@@ -227,7 +227,12 @@ class PengangkutanmgController extends Controller
     {
         $idx = $id;
         $now = Carbon::now();
-        $validatedData = DB::update("update pengangkutan_minyakbumis set status='1', tgl_kirim='$now' where id='$idx'");
+        
+        $validatedData = pengangkutan_minyakbumi::findOrFail($idx);
+        $validatedData->update([
+            'status' => '1',
+            'tgl_kirim' => $now
+        ]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -286,10 +291,10 @@ class PengangkutanmgController extends Controller
         // Sanitasi Input
         $sanitizedData = fullySanitizeInput($validatedData);
 
-        pengangkutan_minyakbumi::where('id', $pmb)
-            ->update($sanitizedData);
+        $updated = pengangkutan_minyakbumi::where('id', $pmb)->firstOrFail();
+        $updated->update($sanitizedData);
 
-        if ($sanitizedData) {
+        if ($updated) {
             //redirect dengan pesan sukses
             Alert::success('Success', 'Data berhasil diupdate');
             return back();
@@ -498,7 +503,12 @@ class PengangkutanmgController extends Controller
     {
         $idx = $id;
         $now = Carbon::now();
-        $validatedData = DB::update("update pengangkutan_gaskbumis set status='1', tgl_kirim='$now' where id='$idx'");
+
+        $validatedData = pengangkutan_gaskbumi::findOrFail($idx);
+        $validatedData->update([
+            'status' => '1',
+            'tgl_kirim' => $now
+        ]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -555,11 +565,10 @@ class PengangkutanmgController extends Controller
         // Sanitasi Input
         $sanitizedData = fullySanitizeInput($validatedData);
 
+        $updated = pengangkutan_gaskbumi::where('id', $pmb)->firstOrFail();
+        $updated->update($sanitizedData);
 
-        pengangkutan_gaskbumi::where('id', $pmb)
-            ->update($sanitizedData);
-
-        if ($sanitizedData) {
+        if ($updated) {
             //redirect dengan pesan sukses
             Alert::success('Success', 'Data berhasil diupdate');
             return back();
@@ -644,22 +653,29 @@ class PengangkutanmgController extends Controller
         $id_permohonan = $pecah[0];
         $id_sub_page = $pecah[2];
             
-        $validatedData = DB::table('pengangkutan_minyakbumis')
-            ->where('npwp', $npwp)
-            ->where('bulan', $bulanx)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->delete();
-       
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('Success', 'Data berhasil dihapus');
-            return back();
-        } else {
-            //redirect dengan pesan error
-            Alert::error('Error', 'Data gagal dihapus');
-            return back();
+        $models = pengangkutan_minyakbumi::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
+
+        try {
+        foreach ($models as $model) {
+            if ($model->delete()) { $successCount++;}
         }
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dihapus");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+        } else {
+            Alert::error('error', 'Tidak ada data yang berhasil dihapus');
+        }
+
+        return back();
     }
 
     public function submit_bulan_pengmbx(Request $request, $id)
@@ -673,25 +689,34 @@ class PengangkutanmgController extends Controller
         $now = Carbon::now();
         // dd($bulanx, $npwp, $id_permohonan, $id_sub_page);
 
+        $models = pengangkutan_minyakbumi::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
 
-        // Menggunakan parameter binding untuk keamanan
-        $validatedData = DB::table('pengangkutan_minyakbumis')
-        // Menggunakan parameter binding untuk keamanan
-            ->where('bulan', $bulanx)
-            ->where('npwp', $npwp)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->update(['status' => '1', 'tgl_kirim' => $now]);
-
-            if ($validatedData) {
-                //redirect dengan pesan sukses
-                Alert::success('Success', 'Data berhasil dikirim');
-                return back();
-            } else {
-                //redirect dengan pesan error
-                Alert::error('Error', 'Data gagal dikirim');
-                return back();
+        try {
+            foreach ($models as $model) {
+                if ($model->update([
+                    'status' => '1',
+                    'tgl_kirim' => $now
+                ])) {
+                    $successCount++;
+                }
             }
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dikirim");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
+        } else {
+            Alert::error('error', 'Tidak ada data yang berhasil dikirim');
+        }
+
+        return back();
     }
 
     public function hapus_bulan_pgbx(Request $request, $id)
@@ -704,22 +729,29 @@ class PengangkutanmgController extends Controller
         $id_permohonan = $pecah[0];
         $id_sub_page = $pecah[2];
             
-        $validatedData = DB::table('pengangkutan_gaskbumis')
-            ->where('npwp', $npwp)
-            ->where('bulan', $bulanx)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->delete();
-        // pengangkutan_minyakbumi::destroy($bulan);
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('Success', 'Data berhasil dihapus');
-            return back();
-        } else {
-            //redirect dengan pesan error
-            Alert::error('Error', 'Data gagal dihapus');
-            return back();
+        $models = pengangkutan_minyakbumi::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
+
+        try {
+        foreach ($models as $model) {
+            if ($model->delete()) { $successCount++;}
         }
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dihapus");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+        } else {
+            Alert::error('error', 'Tidak ada data yang berhasil dihapus');
+        }
+        
+        return back();
     }
 
     public function submit_bulan_pgbx(Request $request, $id)
@@ -731,22 +763,33 @@ class PengangkutanmgController extends Controller
         $id_sub_page = $pecah[2];
         $now = Carbon::now();
     
-        // Menggunakan parameter binding untuk keamanan
-        $validatedData = DB::table('pengangkutan_gaskbumis')
-        ->where('bulan', $bulanx)
+        $models = pengangkutan_gaskbumi::where('bulan', $bulanx)
         ->where('npwp', $npwp)
         ->where('id_permohonan', $id_permohonan)
         ->where('id_sub_page', $id_sub_page)
-        ->update(['status' => '1', 'tgl_kirim' => $now]);
+        ->get();
+        
+        $successCount = 0;
 
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('Success', 'Data berhasil dikirim');
-            return back();
+        try {
+            foreach ($models as $model) {
+                if ($model->update([
+                    'status' => '1',
+                    'tgl_kirim' => $now
+                ])) {
+                    $successCount++;
+                }
+            }
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dikirim");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
         } else {
-            //redirect dengan pesan error
-            Alert::error('Error', 'Data gagal dikirim');
-            return back();
+            Alert::error('error', 'Tidak ada data yang berhasil dikirim');
         }
+
+        return back();
     }
 }

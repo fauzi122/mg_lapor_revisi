@@ -531,7 +531,12 @@ class EksportImportController extends Controller
   {
     $idx = $id;
     $now = Carbon::now();
-    $validatedData = DB::update("update ekspors set status='1', tgl_kirim='$now' where id='$idx'");
+    
+    $validatedData = Ekspor::findOrFail($idx);
+    $validatedData->update([
+        'status' => '1',
+        'tgl_kirim' => $now
+    ]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -547,7 +552,12 @@ class EksportImportController extends Controller
   {
     $idx = $id;
     $now = Carbon::now();
-    $validatedData = DB::update("update impors set status='1', tgl_kirim='$now' where id='$idx'");
+    
+    $validatedData = Impor::findOrFail($idx);
+    $validatedData->update([
+        'status' => '1',
+        'tgl_kirim' => $now
+    ]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -617,10 +627,10 @@ class EksportImportController extends Controller
     $sanitizedData = fullySanitizeInput($validatedData);
 
 
-    Ekspor::where('id', $ekport)
-      ->update($sanitizedData);
+    $updated = Ekspor::where('id', $ekport)->firstOrFail();
+    $updated->update($sanitizedData);
 
-    if ($sanitizedData) {
+    if ($updated) {
       //redirect dengan pesan sukses
       Alert::success('success', 'Data berhasil diupdate');
       return back();
@@ -695,10 +705,10 @@ class EksportImportController extends Controller
     $sanitizedData = fullySanitizeInput($validatedData);
 
     // Update Impor
-    Impor::where('id', $import)
-      ->update($sanitizedData);
+    $updated = Impor::where('id', $import)->firstOrFail();
+    $updated->update($sanitizedData);
 
-    if ($sanitizedData) {
+    if ($updated) {
       //redirect dengan pesan sukses
       Alert::success('success', 'Data berhasil diupdate');
       return back();
@@ -857,111 +867,150 @@ class EksportImportController extends Controller
 
   public function submit_bulan_exportx(Request $request, $id)
   {
-      $pecah = explode(',', Crypt::decryptString($id));
-      // dd($pecah);
-      $bulanx = $pecah[3]; // Mengambil bulan_peb dari hasil dekripsi
-      $id_permohonan = $pecah[0]; // Mengambil id_permohonan dari hasil dekripsi
-  
-      $npwp = Auth::user()->npwp;
-      $id_sub_page = $pecah[2];
-      $now = Carbon::now();
-  
-      // Update data ekspors dengan id_permohonan dan bulan_peb
-      $affected = DB::table('ekspors')
-          ->where('bulan_peb', $bulanx)
-          ->where('npwp', $npwp)
-          ->where('id_permohonan', $id_permohonan)
-          ->where('id_sub_page', $id_sub_page)
-          ->update(['status' => '1', 'tgl_kirim' => $now]);
-  
-      if ($affected) {
-          // Redirect dengan pesan sukses
-          Alert::success('success', 'Data berhasil dikirim');
-      } else {
-          // Redirect dengan pesan error
-          Alert::error('error', 'Data gagal dikirim');
-      }
-  
-      return back();
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulan_peb = $pecah[3];
+    $npwp = $pecah[1];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
+    $now = Carbon::now();
+
+    $models = Ekspor::where('bulan_peb', $bulan_peb)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
+
+    try {
+        foreach ($models as $model) {
+            if ($model->update([
+                'status' => '1',
+                'tgl_kirim' => $now
+            ])) {
+                $successCount++;
+            }
+        }
+    } catch (\Throwable $th) {}
+
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dikirim");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
+    } else {
+        Alert::error('error', 'Tidak ada data yang berhasil dikirim');
+    }
+
+    return back();
   }
   
   public function submit_bulan_importx(Request $request, $id)
   {
-      $pecah = explode(',', Crypt::decryptString($id));
-      $bulan_pib = $pecah[3];
-      $npwp = $pecah[1];
-      $id_permohonan = $pecah[0];
-      $id_sub_page = $pecah[2];
-      $now = Carbon::now();
-  
-      // Menggunakan parameter binding untuk keamanan
-      $affected = DB::table('impors')
-          ->where('bulan_pib', $bulan_pib)
-          ->where('npwp', $npwp)
-          ->where('id_permohonan', $id_permohonan)
-          ->where('id_sub_page', $id_sub_page)
-          ->update(['status' => '1', 'tgl_kirim' => $now]);
-  
-      if ($affected) {
-          // Redirect dengan pesan sukses
-          Alert::success('success', 'Data berhasil dikirim');
-      } else {
-          // Redirect dengan pesan error
-          Alert::error('error', 'Data gagal dikirim');
-      }
-  
-      return back();
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulan_pib = $pecah[3];
+    $npwp = $pecah[1];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
+    $now = Carbon::now();
+
+    $models = Impor::where('bulan_pib', $bulan_pib)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
+
+    try {
+        foreach ($models as $model) {
+            if ($model->update([
+                'status' => '1',
+                'tgl_kirim' => $now
+            ])) {
+                $successCount++;
+            }
+        }
+    } catch (\Throwable $th) {}
+
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dikirim");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
+    } else {
+        Alert::error('error', 'Tidak ada data yang berhasil dikirim');
+    }
+
+    return back();
   }
   
 
   public function hapus_bulan_exportx(Request $request, $id)
   {
-      // Dekripsi ID dan pecah menjadi array
-      $pecah = explode(',', Crypt::decryptString($id));
+    // Dekripsi ID dan pecah menjadi array
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulan_peb = $pecah[3];
+    $npwp = $pecah[1];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
 
-      // Siapkan query untuk menghapus data
-      $affected = DB::table('ekspors')
-          ->where('npwp', $pecah[1])
-          ->where('bulan_peb', $pecah[3])
-          ->where('id_permohonan', $pecah[0])
-          ->delete();
+    $models = Ekspor::where('bulan_peb', $bulan_peb)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+      
+    $successCount = 0;
 
-      // Cek hasil penghapusan dan tampilkan pesan sesuai
-      if ($affected) {
-          Alert::success('Success', 'Data berhasil dihapus');
-      } else {
-          Alert::error('Error', 'Data gagal dihapus');
+    try {
+      foreach ($models as $model) {
+          if ($model->delete()) { $successCount++;}
       }
+    } catch (\Throwable $th) {}
 
-      return back();
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dihapus");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+    } else {
+        Alert::error('error', 'Tidak ada data yang berhasil dihapus');
+    }
+    
+    return back();
   }
 
 
   public function hapus_bulan_importx(Request $request, $id)
   {
-      // Dekripsi ID dan pecah menjadi array
-      $pecah = explode(',', Crypt::decryptString($id));
-      $bulan_pib = $pecah[3];
-      $npwp = $pecah[1];
-      $id_permohonan = $pecah[0];
-  
-      // Menggunakan query builder untuk menghapus data
-      $affected = DB::table('impors')
-          ->where('npwp', $npwp)
-          ->where('bulan_pib', $bulan_pib)
-          ->where('id_permohonan', $id_permohonan)
-          ->delete();
-  
-      // Cek hasil penghapusan dan tampilkan pesan sesuai
-      if ($affected) {
-          // Redirect dengan pesan sukses
-          Alert::success('Success', 'Data berhasil dihapus');
-      } else {
-          // Redirect dengan pesan error
-          Alert::error('Error', 'Data gagal dihapus');
+    // Dekripsi ID dan pecah menjadi array
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulan_pib = $pecah[3];
+    $npwp = $pecah[1];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
+
+    $models = Impor::where('bulan_pib', $bulan_pib)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+
+    $successCount = 0;
+
+    try {
+      foreach ($models as $model) {
+          if ($model->delete()) { $successCount++;}
       }
-  
-      return back();
+    } catch (\Throwable $th) {}
+
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dihapus");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+    } else {
+        Alert::error('error', 'Tidak ada data yang berhasil dihapus');
+    }
+    
+    return back();
   }
   
 }

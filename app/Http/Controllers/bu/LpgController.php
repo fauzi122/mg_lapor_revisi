@@ -421,10 +421,10 @@ class LpgController extends Controller
 
     $sanitizedData = fullySanitizeInput($validatedData);
 
-    $update = Penjualan_lpg::where('id', $id_lpg)
-      ->update($sanitizedData);
+    $updated = Penjualan_lpg::where('id', $id_lpg)->firstOrFail();
+    $updated->update($sanitizedData);
 
-    if ($update) {
+    if ($updated) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
@@ -608,10 +608,10 @@ class LpgController extends Controller
 
     $sanitizedData = fullySanitizeInput($validatedData);
 
-    $update = PasokanLPG::where('id', $id)
-      ->update($sanitizedData);
+    $updated = PasokanLPG::where('id', $id)->firstOrFail();
+    $updated->update($sanitizedData);
 
-    if ($update) {
+    if ($updated) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
@@ -626,7 +626,12 @@ class LpgController extends Controller
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
     $now = Carbon::now();
-    $validatedData = DB::table('penjualan_lpgs')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
+    
+    $validatedData = Penjualan_lpg::findOrFail($id);
+    $validatedData->update([
+        'status' => '1',
+        'tgl_kirim' => $now
+    ]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -647,31 +652,46 @@ class LpgController extends Controller
     $id_sub_page = $pecah[2];
     $now = Carbon::now();
 
-    // $validatedData = DB::update("update penjualan_lpgs set status='1', tgl_kirim='$now' where bulan='$bulanx' and npwp='$npwp'");
+    $models = Penjualan_lpg::where('bulan', $bulanx)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
 
-    $affected = DB::table('penjualan_lpgs')
-        ->where('bulan', $bulanx)
-        ->where('npwp', $npwp)
-        ->where('id_permohonan', $id_permohonan)
-        ->where('id_sub_page', $id_sub_page)
-        ->update(['status' => '1', 'tgl_kirim' => $now]);
+    try {
+        foreach ($models as $model) {
+            if ($model->update([
+                'status' => '1',
+                'tgl_kirim' => $now
+            ])) {
+                $successCount++;
+            }
+        }
+    } catch (\Throwable $th) {}
 
-    if ($affected) {
-      //redirect dengan pesan sukses
-      Alert::success('success', 'Data berhasil dikirim');
-      return back();
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dikirim");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
     } else {
-      //redirect dengan pesan error
-      Alert::error('error', 'Data gagal dikirim');
-      return back();
+        Alert::error('error', 'Tidak ada data yang berhasil dikirim');
     }
+
+    return back();
   }
 
   public function submit_pasokan_lpg(Request $request, $id)
   {
     // $validatedData = DB::update("update pengangkutan_minyakbumis set status='1' where id='$idx'");
     $now = Carbon::now();
-    $validatedData = DB::table('pasokan_l_p_g_s')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
+    
+    $validatedData = PasokanLPG::findOrFail($id);
+    $validatedData->update([
+        'status' => '1',
+        'tgl_kirim' => $now
+    ]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -692,24 +712,34 @@ class LpgController extends Controller
     $id_sub_page = $pecah[2];
     $now = Carbon::now();
 
-    // $validatedData = DB::update("update penjualan_lpgs set status='1', tgl_kirim='$now' where bulan='$bulanx' and npwp='$npwp'");
+    $models = PasokanLPG::where('bulan', $bulanx)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
 
-    $affected = DB::table('pasokan_l_p_g_s')
-        ->where('bulan', $bulanx)
-        ->where('npwp', $npwp)
-        ->where('id_permohonan', $id_permohonan)
-        ->where('id_sub_page', $id_sub_page)
-        ->update(['status' => '1', 'tgl_kirim' => $now]);
+    try {
+        foreach ($models as $model) {
+            if ($model->update([
+                'status' => '1',
+                'tgl_kirim' => $now
+            ])) {
+                $successCount++;
+            }
+        }
+    } catch (\Throwable $th) {}
 
-    if ($affected) {
-      //redirect dengan pesan sukses
-      Alert::success('success', 'Data berhasil dikirim');
-      return back();
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dikirim");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
     } else {
-      //redirect dengan pesan error
-      Alert::error('error', 'Data gagal dikirim');
-      return back();
+        Alert::error('error', 'Tidak ada data yang berhasil dikirim');
     }
+
+    return back();
   }
   public function hapus_bulan_lpg(Request $request, $id)
   {
@@ -720,23 +750,28 @@ class LpgController extends Controller
     $id_permohonan = $pecah[0];
     $id_sub_page = $pecah[2];
 
-    // Menggunakan query builder untuk menghapus data
-    $affected = DB::table('penjualan_lpgs')
-        ->where('npwp', $npwp)
-        ->where('bulan', $bulanx)
-        ->where('id_permohonan', $id_permohonan)
-        ->where('id_sub_page', $id_sub_page)
-        ->delete();
+    $models = Penjualan_lpg::where('bulan', $bulanx)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
 
-    // Cek hasil penghapusan dan tampilkan pesan sesuai
-    if ($affected) {
-        // Redirect dengan pesan sukses
-        Alert::success('Success', 'Data berhasil dihapus');
+    try {
+      foreach ($models as $model) {
+          if ($model->delete()) { $successCount++;}
+      }
+    } catch (\Throwable $th) {}
+
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dihapus");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
     } else {
-        // Redirect dengan pesan error
-        Alert::error('Error', 'Data gagal dihapus');
+        Alert::error('error', 'Tidak ada data yang berhasil dihapus');
     }
-
+    
     return back();
   }
   public function hapus_bulan_pasokanLPG(Request $request, $id)
@@ -748,23 +783,28 @@ class LpgController extends Controller
     $id_permohonan = $pecah[0];
     $id_sub_page = $pecah[2];
 
-    // Menggunakan query builder untuk menghapus data
-    $affected = DB::table('pasokan_l_p_g_s')
-        ->where('npwp', $npwp)
-        ->where('bulan', $bulanx)
-        ->where('id_permohonan', $id_permohonan)
-        ->where('id_sub_page', $id_sub_page)
-        ->delete();
+    $models = PasokanLPG::where('bulan', $bulanx)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
 
-    // Cek hasil penghapusan dan tampilkan pesan sesuai
-    if ($affected) {
-        // Redirect dengan pesan sukses
-        Alert::success('Success', 'Data berhasil dihapus');
+    try {
+      foreach ($models as $model) {
+          if ($model->delete()) { $successCount++;}
+      }
+    } catch (\Throwable $th) {}
+
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dihapus");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
     } else {
-        // Redirect dengan pesan error
-        Alert::error('Error', 'Data gagal dihapus');
+        Alert::error('error', 'Tidak ada data yang berhasil dihapus');
     }
-
+    
     return back();
   }
 }

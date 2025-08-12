@@ -549,7 +549,12 @@ class PenyMinyakbumiController extends Controller
     {
         $idx = $id;
         $now = Carbon::now();
-        $validatedData = DB::update("update penyminyakbumis set status='1', tgl_kirim='$now' where id='$idx'");
+
+        $validatedData = Penyminyakbumi::findOrFail($idx);
+        $validatedData->update([
+            'status' => '1',
+            'tgl_kirim' => $now
+        ]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -565,7 +570,12 @@ class PenyMinyakbumiController extends Controller
     {
         $idx = $id;
         $now = Carbon::now();
-        $validatedData = DB::update("update penygasbumis set status='1', tgl_kirim='$now' where id='$idx'");
+
+        $validatedData = Penygasbumi::findOrFail($idx);
+        $validatedData->update([
+            'status' => '1',
+            'tgl_kirim' => $now
+        ]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -688,10 +698,10 @@ class PenyMinyakbumiController extends Controller
             $validatedData["nama_penyewa"] = null;
         }
 
-        Penyminyakbumi::where('id', $pmb)
-            ->update($sanitizedData);
+        $updated = Penyminyakbumi::where('id', $pmb)->firstOrFail();
+        $updated->update($sanitizedData);
 
-        if ($sanitizedData) {
+        if ($updated) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
@@ -744,10 +754,10 @@ class PenyMinyakbumiController extends Controller
 
         $sanitizedData = fullySanitizeInput($validatedData);
 
-        Penygasbumi::where('id', $pmb)
-            ->update($sanitizedData);
+        $updated = Penygasbumi::where('id', $pmb)->firstOrFail();
+        $updated->update($sanitizedData);
 
-        if ($sanitizedData) {
+        if ($updated) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
@@ -766,23 +776,27 @@ class PenyMinyakbumiController extends Controller
         $id_permohonan = $pecah[0];
         $id_sub_page = $pecah[2];
     
-        // Menggunakan query builder untuk menghapus data
-        $affected = DB::table('penyminyakbumis')
-            ->where('npwp', $npwp)
-            ->where('bulan', $bulanx)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->delete();
-    
-        // Cek hasil penghapusan dan tampilkan pesan sesuai
-        if ($affected) {
-            // Redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dihapus');
-        } else {
-            // Redirect dengan pesan error
-            Alert::error('error', 'Data gagal dihapus');
+        $models = Penyminyakbumi::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
+
+        try {
+        foreach ($models as $model) {
+            if ($model->delete()) { $successCount++;}
         }
-    
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dihapus");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+        } else {
+            Alert::error('error', 'Tidak ada data yang berhasil dihapus');
+        }
         return back();
     }
     public function submit_bulan_pmbx(Request $request, $id)
@@ -795,22 +809,33 @@ class PenyMinyakbumiController extends Controller
         $id_sub_page = $pecah[2];
         $now = Carbon::now();
     
-        // Update data penyminyakbumis dengan id_permohonan
-        $affected = DB::table('penyminyakbumis')
-            ->where('bulan', $bulanx)
-            ->where('npwp', $npwp)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->update(['status' => '1', 'tgl_kirim' => $now]);
-    
-        if ($affected) {
-            // Redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dikirim');
+        $models = Penyminyakbumi::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
+
+        try {
+            foreach ($models as $model) {
+                if ($model->update([
+                    'status' => '1',
+                    'tgl_kirim' => $now
+                ])) {
+                    $successCount++;
+                }
+            }
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dikirim");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
         } else {
-            // Redirect dengan pesan error
-            Alert::error('error', 'Data gagal dikirim');
+            Alert::error('error', 'Tidak ada data yang berhasil dikirim');
         }
-    
+
         return back();
     }
      
@@ -970,53 +995,71 @@ class PenyMinyakbumiController extends Controller
     {
         // Dekripsi ID dan pecah menjadi array
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
     
-        // Menggunakan query builder untuk menghapus data
-        $affected = DB::table('penygasbumis')
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('bulan', $bulanx)
-            ->where('izin_id', $izin_id)
-            ->delete();
-    
-        // Cek hasil penghapusan dan tampilkan pesan sesuai
-        if ($affected) {
-            // Redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dihapus');
-        } else {
-            // Redirect dengan pesan error
-            Alert::error('error', 'Data gagal dihapus');
+        $models = Penygasbumi::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
+
+        try {
+        foreach ($models as $model) {
+            if ($model->delete()) { $successCount++;}
         }
-    
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dihapus");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+        } else {
+            Alert::error('error', 'Tidak ada data yang berhasil dihapus');
+        }
         return back();
     }
     public function submit_bulan_pggbx(Request $request, $id)
     {
         // Dekripsi ID dan pecah menjadi array
         $pecah = explode(',', Crypt::decryptString($id));
-        $bulanx = $pecah[0];
-        $badan_usaha_id = $pecah[1];
-        $izin_id = $pecah[2];
+        $bulanx = $pecah[3];
+        $npwp = $pecah[1];
+        $id_permohonan = $pecah[0];
+        $id_sub_page = $pecah[2];
         $now = Carbon::now();
     
-        // Update data penygasbumis dengan izin_id
-        $affected = DB::table('penygasbumis')
-            ->where('bulan', $bulanx)
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('izin_id', $izin_id)
-            ->whereIn('status', ['0', '1', '2'])
-            ->update(['status' => '1', 'tgl_kirim' => $now]);
-    
-        if ($affected) {
-            // Redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dikirim');
+        $models = Penygasbumi::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
+
+        try {
+            foreach ($models as $model) {
+                if ($model->update([
+                    'status' => '1',
+                    'tgl_kirim' => $now
+                ])) {
+                    $successCount++;
+                }
+            }
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dikirim");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
         } else {
-            // Redirect dengan pesan error
-            Alert::error('error', 'Data gagal dikirim');
+            Alert::error('error', 'Tidak ada data yang berhasil dikirim');
         }
-    
+
         return back();
     }
      

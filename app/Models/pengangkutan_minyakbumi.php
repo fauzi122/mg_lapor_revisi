@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\LogTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class pengangkutan_minyakbumi extends Model
 {
-    use HasFactory;
+    use HasFactory, LogTrait;
     protected $table = 'pengangkutan_minyakbumis';
     protected $primaryKey = 'id';
     public $timestamps = true;

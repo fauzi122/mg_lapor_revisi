@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\LogTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class pengangkutan_gaskbumi extends Model
+class Log extends Model
 {
-    use HasFactory, LogTrait;
-    protected $guarded = [];
+    use HasFactory;
+
+    protected $table = 'logs';
+    protected $guarded = ['id'];
 }
