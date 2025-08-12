@@ -332,11 +332,10 @@ class HargabbmController extends Controller
 
     $sanitizedData = fullySanitizeInput($validatedData);
 
+    $updated = Harga_bbm_jbu::where('id', $ekport)->firstOrFail();
+    $updated->update($sanitizedData);
 
-    Harga_bbm_jbu::where('id', $ekport)
-      ->update($sanitizedData);
-
-    if ($sanitizedData) {
+    if ($updated) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil diupdate');
       return back();
@@ -353,6 +352,7 @@ class HargabbmController extends Controller
   public function destroy(string $id)
   {
     Harga_bbm_jbu::destroy($id);
+
     if ($id) {
       //redirect dengan pesan sukses
       Alert::success('success', 'Data berhasil dihapus');
@@ -510,7 +510,12 @@ class HargabbmController extends Controller
   {
     $idx = $id;
     $now = Carbon::now();
-    $validatedData = DB::update("update harga_bbm_jbus set status='1', tgl_kirim='$now' where id='$idx'");
+    
+    $validatedData = Harga_bbm_jbu::findOrFail($idx);
+    $validatedData->update([
+        'status' => '1',
+        'tgl_kirim' => $now
+    ]);
 
     if ($validatedData) {
       //redirect dengan pesan sukses
@@ -676,7 +681,9 @@ class HargabbmController extends Controller
 
     $sanitizedData = fullySanitizeInput($validatedData);
 
-    $updateHarga = HargaLPG::where('id', $id)->update($sanitizedData);
+    // Update Eloquent
+    $updateHarga = HargaLPG::where('id', $id)->firstOrFail();
+    $updateHarga->update($sanitizedData);
 
     if ($updateHarga) {
       //redirect dengan pesan sukses
@@ -708,7 +715,13 @@ class HargabbmController extends Controller
   public function submit_harga_lpg(Request $request, $id)
   {
     $now = Carbon::now();
-    $validatedData = DB::table('harga_l_p_g_s')->where('id', $id)->update(['status' => "1", 'tgl_kirim' => $now]);
+
+    $validatedData = HargaLPG::findOrFail($id);
+    $validatedData->update([
+        'status' => '1',
+        'tgl_kirim' => $now
+    ]);
+
     if ($validatedData) {
       //redirect dengan pesan sukses
       Alert::success('Success', 'Data berhasil dikirim');
@@ -719,110 +732,153 @@ class HargabbmController extends Controller
       return back();
     }
   }
+
   public function hapusbulanHargabbmjbux(Request $request, $id)
-    {
-      
-      $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[3];
-      $npwp = $pecah[1];
-      $id_permohonan = $pecah[0];
-      $id_sub_page = $pecah[2];
-        
-      $validatedData = DB::table('harga_bbm_jbus')
-        ->where('npwp', $npwp)
-        ->where('bulan', $bulanx)
-        ->where('id_permohonan', $id_permohonan)
-        ->where('id_sub_page', $id_sub_page)
-        ->delete();
-      // pengangkutan_minyakbumi::destroy($bulan);
-      if ($validatedData) {
-          //redirect dengan pesan sukses
-          Alert::success('Success', 'Data berhasil dihapus');
-          return back();
-      } else {
-          //redirect dengan pesan error
-          Alert::error('Error', 'Data gagal dihapus');
-          return back();
-      }
+  {
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[3];
+    $npwp = $pecah[1];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
 
+    // Update Eloquent
+    $models = Harga_bbm_jbu::where('bulan', $bulanx)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
+
+    try {
+      foreach ($models as $model) {
+          if ($model->delete()) { $successCount++;}
+      }
+    } catch (\Throwable $th) {}
+
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dihapus");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+    } else {
+        Alert::error('error', 'Tidak ada data yang berhasil dihapus');
     }
+    
+    return back();
+  }
+
   public function hapus_bulan_harga_lpg(Request $request, $id)
-    {
-      $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[3];
-      $npwp = $pecah[1];
-      $id_permohonan = $pecah[0];
-      $id_sub_page = $pecah[2];
-        
-      $validatedData = DB::table('harga_l_p_g_s')
-        ->where('npwp', $npwp)
-        ->where('bulan', $bulanx)
-        ->where('id_permohonan', $id_permohonan)
-        ->where('id_sub_page', $id_sub_page)
-        ->delete();
-      // pengangkutan_minyakbumi::destroy($bulan);
-      if ($validatedData) {
-          //redirect dengan pesan sukses
-          Alert::success('Success', 'Data berhasil dihapus');
-          return back();
-      } else {
-          //redirect dengan pesan error
-          Alert::error('Error', 'Data gagal dihapus');
-          return back();
+  {
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[3];
+    $npwp = $pecah[1];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
+    
+    // Update Eloquent
+    $models = HargaLPG::where('bulan', $bulanx)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
+
+    try {
+      foreach ($models as $model) {
+          if ($model->delete()) { $successCount++;}
       }
+    } catch (\Throwable $th) {}
+
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dihapus");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+    } else {
+        Alert::error('error', 'Tidak ada data yang berhasil dihapus');
     }
+    return back();
+  }
+
   public function submit_bulan_harga_bbm_jbux(Request $request, $id)
-    {
-      $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[3];
-      $npwp = $pecah[1];
-      $id_permohonan = $pecah[0];
-      $id_sub_page = $pecah[2];
-      $now = Carbon::now();
-  
-      // Menggunakan parameter binding untuk keamanan
-      $validatedData = DB::table('harga_bbm_jbus')
-          ->where('bulan', $bulanx)
-          ->where('npwp', $npwp)
-          ->where('id_permohonan', $id_permohonan)
-          ->where('id_sub_page', $id_sub_page)
-          ->update(['status' => '1', 'tgl_kirim' => $now]);
+  {
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[3];
+    $npwp = $pecah[1];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
+    $now = Carbon::now();
 
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dikirim');
-            return back();
-        } else {
-            //redirect dengan pesan error
-            Alert::error('error', 'Data gagal dikirim');
-            return back();
+    // Menggunakan parameter binding untuk keamanan
+    // Update Eloquent
+    $models = Harga_bbm_jbu::where('bulan', $bulanx)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
+
+    try {
+        foreach ($models as $model) {
+            if ($model->update([
+                'status' => '1',
+                'tgl_kirim' => $now
+            ])) {
+                $successCount++;
+            }
         }
+    } catch (\Throwable $th) {}
+
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dikirim");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
+    } else {
+        Alert::error('error', 'Tidak ada data yang berhasil dikirim');
     }
+
+    return back();
+  }
+
   public function submit_bulan_harga_lpg(Request $request, $id)
-    {
-      $pecah = explode(',', Crypt::decryptString($id));
-      $bulanx = $pecah[3];
-      $npwp = $pecah[1];
-      $id_permohonan = $pecah[0];
-      $id_sub_page = $pecah[2];
-      $now = Carbon::now();
-  
-      // Menggunakan parameter binding untuk keamanan
-      $validatedData = DB::table('harga_l_p_g_s')
-          ->where('bulan', $bulanx)
-          ->where('npwp', $npwp)
-          ->where('id_permohonan', $id_permohonan)
-          ->where('id_sub_page', $id_sub_page)
-          ->update(['status' => '1', 'tgl_kirim' => $now]);
+  {
+    $pecah = explode(',', Crypt::decryptString($id));
+    $bulanx = $pecah[3];
+    $npwp = $pecah[1];
+    $id_permohonan = $pecah[0];
+    $id_sub_page = $pecah[2];
+    $now = Carbon::now();
 
-        if ($validatedData) {
-            //redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dikirim');
-            return back();
-        } else {
-            //redirect dengan pesan error
-            Alert::error('error', 'Data gagal dikirim');
-            return back();
+    // Menggunakan parameter binding untuk keamanan
+    // Update Eloquent
+    $models = HargaLPG::where('bulan', $bulanx)
+      ->where('npwp', $npwp)
+      ->where('id_permohonan', $id_permohonan)
+      ->where('id_sub_page', $id_sub_page)
+      ->get();
+    
+    $successCount = 0;
+
+    try {
+        foreach ($models as $model) {
+            if ($model->update([
+                'status' => '1',
+                'tgl_kirim' => $now
+            ])) {
+                $successCount++;
+            }
         }
+    } catch (\Throwable $th) {}
+
+    if ($successCount > 0 && $successCount === count($models)) {
+        Alert::success('success', "Data berhasil dikirim");
+    } elseif ($successCount > 0 && $successCount < count($models)) {
+        Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
+    } else {
+        Alert::error('error', 'Tidak ada data yang berhasil dikirim');
     }
+
+    return back();
+  }
 }

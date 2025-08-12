@@ -1,129 +1,73 @@
 <?php
 
 namespace App\Traits;
+
 use App\Models\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 trait LogTrait
 {
-
-    /**
-
-     * Handle model event
-
-     */
+    protected static $oldValuesCache = [];
+    protected static $newValuesCache = [];
 
     public static function bootLogTrait()
-
     {
+        // Simpan old & new values sebelum update
+        static::updating(function ($model) {
+            self::$oldValuesCache[$model->getKey()] = $model->getOriginal();
+            self::$newValuesCache[$model->getKey()] = $model->getDirty();
+        });
 
-        /**
+        static::created(function ($model) {
+            static::storeLog($model, static::class, 'CREATED');
+        });
 
-         * Data creating and updating event
-
-         */
-
-        static::saved(function ($model) {
-
-            // create or update?
-
-            if ($model->wasRecentlyCreated) {
-
-                static::storeLog($model, static::class, 'CREATED');
-            } else {
-
-                if (!$model->getChanges()) {
-
-                    return;
-                }
-
-                static::storeLog($model, static::class, 'UPDATED');
-            }
+        static::updated(function ($model) {
+            static::storeLog($model, static::class, 'UPDATED');
         });
 
         static::deleted(function ($model) {
-
-            static::storeLog($model, static::class, 'DELETED');
-        });
-
-        static::deleting(function ($model) {
             static::storeLog($model, static::class, 'DELETED');
         });
     }
 
-    /**
-
-     * Generate the model name
-
-     * @param  Model  $model
-
-     * @return string
-
-     */
-
     public static function getTagName($model)
-
     {
-
         return !empty($model->tagName) ? $model->tagName : Str::title(Str::snake(class_basename($model), ' '));
     }
 
-    /**
-
-     * Store model logs
-
-     * @param $model
-
-     * @param $modelPath
-
-     * @param $action
-
-     */
-
     public static function storeLog($model, $modelPath, $action)
-
     {
-        $newValues = null;
-
         $oldValues = null;
+        $newValues = null;
 
         if ($action === 'CREATED') {
             $newValues = $model->getAttributes();
         } elseif ($action === 'UPDATED') {
-            $oldValues = $model->getOriginal();
-            $newValues = $model->getChanges();
+            $oldValues = self::$oldValuesCache[$model->getKey()] ?? [];
+            $newValues = self::$newValuesCache[$model->getKey()] ?? [];
         } elseif ($action === 'DELETED') {
-            $oldValues = $model->getAttributes(); // Simpan nilai sebelum dihapus
+            $oldValues = $model->getAttributes();
         }
 
         $subject = static::getTagName($model);
 
-        $description = 'Data ' . $subject . ' [' . $action . ']';
         $systemLog = new Log();
-
         $systemLog->subject = $subject . ':' . $action;
-
         $systemLog->action = $action;
-        if (isset(Auth::user()->username)) {
-            $systemLog->username = Auth::user()->username;
-            $systemLog->kode = Auth::user()->kode;
-            $systemLog->utype = Auth::user()->utype;
+
+        if (Auth::check()) {
+            $systemLog->bu_id = Auth::user()->id;
+            $systemLog->bu_name = Auth::user()->name;
         }
+
         $systemLog->method = request()->method();
-
         $systemLog->old_properties = json_encode($oldValues);
-
+        $systemLog->properties = json_encode($newValues);
         $systemLog->url = request()->path();
-
-        $systemLog->description = $description;
-
-        $systemLog->properties = json_encode(request()->except('_token'));
-
-        $systemLog->created_at = now();
-
+        $systemLog->description = 'Data ' . $subject . ' [' . $action . ']';
         $systemLog->ip_address = request()->ip();
-        // dd($systemLog);
         $systemLog->save();
     }
 }
