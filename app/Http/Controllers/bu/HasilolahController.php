@@ -323,7 +323,7 @@ class HasilolahController extends Controller
 
     public function update_jholbx(Request $request, $id)
     {
-        $Jual_hasil_olah_bbm = $id;
+        // $Jual_hasil_olah_bbm = $id;
         $pesan = [
             // 'id.required' => 'id masih kosong',
             // 'npwp.required' => 'npwp masih kosong',
@@ -362,10 +362,10 @@ class HasilolahController extends Controller
         // Sanitasi Input
         $sanitizedData = fullySanitizeInput($validatedData);
 
-        Jual_hasil_olah_bbm::where('id', $Jual_hasil_olah_bbm)
-            ->update($sanitizedData);
+        $updated = Jual_hasil_olah_bbm::where('id', $id)->firstOrFail();
+        $updated->update($sanitizedData);
 
-        if ($sanitizedData) {
+        if ($updated) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
@@ -407,9 +407,14 @@ class HasilolahController extends Controller
 
     public function submit_jholbx(Request $request, $id)
     {
-       $idx=$id;
-       $now = Carbon::now();
-        $validatedData = DB::update("update jual_hasil_olah_bbms set status='1', tgl_kirim='$now' where id='$idx'");
+        $idx=$id;
+        $now = Carbon::now();
+        
+        $validatedData = Jual_hasil_olah_bbm::findOrFail($idx);
+        $validatedData->update([
+            'status' => '1',
+            'tgl_kirim' => $now
+        ]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -431,22 +436,34 @@ class HasilolahController extends Controller
         $id_sub_page = $pecah[2];
         $now = Carbon::now();
 
-        $affected = DB::table('jual_hasil_olah_bbms')
-            ->where('bulan', $bulanx)
-            ->where('npwp', $npwp)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->update(['status' => '1', 'tgl_kirim' => $now]);
+        $models = Jual_hasil_olah_bbm::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
 
-        if ($affected) {
-        //redirect dengan pesan sukses
-        Alert::success('success', 'Data berhasil dikirim');
-        return back();
+        try {
+            foreach ($models as $model) {
+                if ($model->update([
+                    'status' => '1',
+                    'tgl_kirim' => $now
+                ])) {
+                    $successCount++;
+                }
+            }
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dikirim");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
         } else {
-        //redirect dengan pesan error
-        Alert::error('error', 'Data gagal dikirim');
-        return back();
+            Alert::error('error', 'Tidak ada data yang berhasil dikirim');
         }
+
+        return back();
     }
 
     public function hapus_bulan_jholbx(Request $request, $id)
@@ -458,23 +475,27 @@ class HasilolahController extends Controller
         $id_permohonan = $pecah[0];
         $id_sub_page = $pecah[2];
 
-        // Menggunakan query builder untuk menghapus data
-        $affected = DB::table('jual_hasil_olah_bbms')
-            ->where('npwp', $npwp)
-            ->where('bulan', $bulanx)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->delete();
+        $models = Jual_hasil_olah_bbm::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
 
-        // Cek hasil penghapusan dan tampilkan pesan sesuai
-        if ($affected) {
-            // Redirect dengan pesan sukses
-            Alert::success('Success', 'Data berhasil dihapus');
-        } else {
-            // Redirect dengan pesan error
-            Alert::error('Error', 'Data gagal dihapus');
+        try {
+        foreach ($models as $model) {
+            if ($model->delete()) { $successCount++;}
         }
+        } catch (\Throwable $th) {}
 
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dihapus");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+        } else {
+            Alert::error('error', 'Tidak ada data yang berhasil dihapus');
+        }
         return back();
     }
     

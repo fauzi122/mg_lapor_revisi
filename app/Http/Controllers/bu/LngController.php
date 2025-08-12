@@ -352,10 +352,10 @@ class LngController extends Controller
 
         $sanitizedData = fullySanitizeInput($validatedData);
 
-        Penjualan_lng::where('id', $penjualan_lng)
-            ->update($sanitizedData);
+        $updated = Penjualan_lng::where('id', $penjualan_lng)->firstOrFail();
+        $updated->update($sanitizedData);
 
-        if ($sanitizedData) {
+        if ($updated) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
@@ -501,10 +501,10 @@ class LngController extends Controller
 
         $sanitizedData = fullySanitizeInput($validatedData);
 
-        Pasokanlng::where('id', $penjualan_lng)
-            ->update($sanitizedData);
+        $updated = Pasokanlng::where('id', $penjualan_lng)->firstOrFail();
+        $updated->update($sanitizedData);
 
-        if ($sanitizedData) {
+        if ($updated) {
             //redirect dengan pesan sukses
             Alert::success('success', 'Data berhasil diupdate');
             return back();
@@ -534,7 +534,12 @@ class LngController extends Controller
     {
         $idx = $id;
         $now = Carbon::now();
-        $validatedData = DB::update("update penjualan_lngs set status='1', tgl_kirim='$now' where id='$idx'");
+        
+        $validatedData = Penjualan_lng::findOrFail($idx);
+        $validatedData->update([
+            'status' => '1',
+            'tgl_kirim' => $now
+        ]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -550,7 +555,12 @@ class LngController extends Controller
     {
         $idx = $id;
         $now = Carbon::now();
-        $validatedData = DB::update("update pasokanlngs set status='1', tgl_kirim='$now' where id='$idx'");
+        
+        $validatedData = Pasokanlng::findOrFail($idx);
+        $validatedData->update([
+            'status' => '1',
+            'tgl_kirim' => $now
+        ]);
 
         if ($validatedData) {
             //redirect dengan pesan sukses
@@ -685,22 +695,33 @@ class LngController extends Controller
         $id_sub_page = $pecah[2];
         $now = Carbon::now();
     
-        // Update data penjualan_lngs dengan id_permohonan
-        $affected = DB::table('penjualan_lngs')
-            ->where('bulan', $bulanx)
-            ->where('npwp', $npwp)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->update(['status' => '1', 'tgl_kirim' => $now]);
-    
-        if ($affected) {
-            // Redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dikirim');
+        $models = Penjualan_lng::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
+
+        try {
+            foreach ($models as $model) {
+                if ($model->update([
+                    'status' => '1',
+                    'tgl_kirim' => $now
+                ])) {
+                    $successCount++;
+                }
+            }
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dikirim");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
         } else {
-            // Redirect dengan pesan error
-            Alert::error('error', 'Data gagal dikirim');
+            Alert::error('error', 'Tidak ada data yang berhasil dikirim');
         }
-    
+
         return back();
     }
 
@@ -713,22 +734,33 @@ class LngController extends Controller
         $id_sub_page = $pecah[2];
         $now = Carbon::now();
     
-        // Update data pasokanlngs dengan id_permohonan
-        $affected = DB::table('pasokanlngs')
-            ->where('bulan', $bulanx)
-            ->where('npwp', $npwp)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->update(['status' => '1', 'tgl_kirim' => $now]);
-    
-        if ($affected) {
-            // Redirect dengan pesan sukses
-            Alert::success('success', 'Data berhasil dikirim');
+        $models = Pasokanlng::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
+
+        try {
+            foreach ($models as $model) {
+                if ($model->update([
+                    'status' => '1',
+                    'tgl_kirim' => $now
+                ])) {
+                    $successCount++;
+                }
+            }
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dikirim");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dikirim, sebagian gagal");
         } else {
-            // Redirect dengan pesan error
-            Alert::error('error', 'Data gagal dikirim');
+            Alert::error('error', 'Tidak ada data yang berhasil dikirim');
         }
-    
+
         return back();
     }
     
@@ -741,23 +773,28 @@ class LngController extends Controller
         $id_permohonan = $pecah[0];
         $id_sub_page = $pecah[2];
     
-        // Menggunakan query builder untuk menghapus data
-        $affected = DB::table('penjualan_lngs')
-            ->where('npwp', $npwp)
-            ->where('bulan', $bulanx)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->delete();
-    
-        // Cek hasil penghapusan dan tampilkan pesan sesuai
-        if ($affected) {
-            // Redirect dengan pesan sukses
-            Alert::success('Success', 'Data berhasil dihapus');
-        } else {
-            // Redirect dengan pesan error
-            Alert::error('Error', 'Data gagal dihapus');
+        $models = Penjualan_lng::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
+
+        try {
+        foreach ($models as $model) {
+            if ($model->delete()) { $successCount++;}
         }
-    
+        } catch (\Throwable $th) {}
+
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dihapus");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+        } else {
+            Alert::error('error', 'Tidak ada data yang berhasil dihapus');
+        }
+        
         return back();
     }
 
@@ -770,23 +807,28 @@ class LngController extends Controller
         $id_permohonan = $pecah[0];
         $id_sub_page = $pecah[2];
 
-        // Menggunakan query builder untuk menghapus data
-        $affected = DB::table('pasokanlngs')
-            ->where('npwp', $npwp)
-            ->where('bulan', $bulanx)
-            ->where('id_permohonan', $id_permohonan)
-            ->where('id_sub_page', $id_sub_page)
-            ->delete();
+        $models = Pasokanlng::where('bulan', $bulanx)
+        ->where('npwp', $npwp)
+        ->where('id_permohonan', $id_permohonan)
+        ->where('id_sub_page', $id_sub_page)
+        ->get();
+        
+        $successCount = 0;
 
-        // Cek hasil penghapusan dan tampilkan pesan sesuai
-        if ($affected) {
-            // Redirect dengan pesan sukses
-            Alert::success('Success', 'Data berhasil dihapus');
-        } else {
-            // Redirect dengan pesan error
-            Alert::error('Error', 'Data gagal dihapus');
+        try {
+        foreach ($models as $model) {
+            if ($model->delete()) { $successCount++;}
         }
+        } catch (\Throwable $th) {}
 
+        if ($successCount > 0 && $successCount === count($models)) {
+            Alert::success('success', "Data berhasil dihapus");
+        } elseif ($successCount > 0 && $successCount < count($models)) {
+            Alert::warning('partial', "$successCount data berhasil dihapus, sebagian gagal");
+        } else {
+            Alert::error('error', 'Tidak ada data yang berhasil dihapus');
+        }
+        
         return back();
     }
 
