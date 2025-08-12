@@ -62,7 +62,15 @@
                                     <th style="text-align: center; vertical-align: middle;">No</th>
                                     <th style="text-align: center; vertical-align: middle;">Bulan</th>
                                     <th style="text-align: center; vertical-align: middle;">Tahun</th>
-                                    <th style="text-align: center; vertical-align: middle;">Produk</th>
+                                    <th style="text-align: center; vertical-align: middle;">Action</th>
+                                    <th style="text-align: center; vertical-align: middle;">Bu Id</th>
+                                    <th style="text-align: center; vertical-align: middle;">Nama Perusahaan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Method</th>
+                                    <th style="text-align: center; vertical-align: middle;">Url</th>
+                                    <th style="text-align: center; vertical-align: middle;">Old Properties</th>
+                                    <th style="text-align: center; vertical-align: middle;">Properties</th>
+                                    
+                                    {{-- <th style="text-align: center; vertical-align: middle;">Produk</th>
                                     <th style="text-align: center; vertical-align: middle;">Sektor</th>
                                     <th style="text-align: center; vertical-align: middle;">Provinsi</th>
                                     <th style="text-align: center; vertical-align: middle;">Volume</th>
@@ -74,7 +82,7 @@
                                     <th style="text-align: center; vertical-align: middle;">Pbbkp</th>
                                     <th style="text-align: center; vertical-align: middle;">Harga Jual</th>
                                     <th style="text-align: center; vertical-align: middle;">Formula Harga</th>
-                                    <th style="text-align: center; vertical-align: middle;">Keterangan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Keterangan</th> --}}
                                 </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
@@ -83,7 +91,22 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ getBulan($show->tanggal) }}</td>
                                         <td>{{ getTahun($show->tanggal) }}</td>
-                                        <td>{{ $show->produk }}</td>
+                                        <td>{{ $show->action }}</td>
+                                        <td>{{ $show->bu_id }}</td>
+                                        <td>{{ $show->bu_name }}</td>
+                                        <td>{{ $show->method }}</td>
+                                        <td>{{ $show->url }}</td>
+                                        <td><a href="{{ url('/logs/old_properties/' . $show->id) }}" class="btn btn-primary btn-rounded btn-sm">
+                                                <i class="bx bx-show bi-eye fs-5"></i> Lihat
+                                            </a></td>
+
+                                        <td><a href="{{ url('/logs/properties/' . $show->id) }}" class="btn btn-primary btn-rounded btn-sm">
+                                            <i class="bx bx-show bi-eye fs-5"></i> Lihat
+                                        </a></td>
+
+
+                                        
+                                        {{-- <td>{{ $show->produk }}</td>
                                         <td>{{ $show->sektor }}</td>
                                         <td>{{ $show->provinsi }}</td>
                                         <td>{{ $show->volume }}</td>
@@ -95,7 +118,7 @@
                                         <td>{{ $show->pbbkp }}</td>
                                         <td>{{ $show->harga_jual }}</td>
                                         <td>{{ $show->formula_harga }}</td>
-                                        <td>{{ $show->keterangan }}</td>
+                                        <td>{{ $show->keterangan }}</td> --}}
                                     </tr>
                                 @endforeach
 
