@@ -26,7 +26,8 @@ use App\Http\Controllers\{
 	IzinMigasController,
 	testEmailController,
 	IzinController,
-	IzinUsahaController
+	IzinUsahaController,
+    LogsEvController
 };
 
 use App\Http\Controllers\Evaluator\{
@@ -795,6 +796,13 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/permission/json', 'jsonpermission')->name('permission.json');
 		Route::get('/permission/create', 'create')->name('permission.create');
 		Route::post('/permission', 'store')->name('permission.store');
+	});
+
+	// Logs Evaluator User Management
+	Route::controller(LogsEvController::class)->group(function () {
+		Route::get('/logs', 'index')->name('logs.index');
+		Route::get('/logs/periode/{bulan}', 'periode')->name('logs.periode');
+		Route::get('/logs/show/{filter?}/{value?}', 'show')->name('logs.show');
 	});
 
 	// Role access management route group

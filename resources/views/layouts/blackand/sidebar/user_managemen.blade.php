@@ -1,5 +1,5 @@
 @php
-    $userActive = Request::is('user-badan-usaha', 'user', 'role', 'permission');
+    $userActive = Request::is('user-badan-usaha', 'user', 'role', 'permission', 'logs');
 @endphp
 
 <div data-kt-menu-trigger="click" class="menu-item menu-accordion mt-2 {{ $userActive ? 'show' : '' }}">
@@ -54,5 +54,15 @@
             </a>
         </div>
         @endcan
+
+        
+        <div class="menu-item menu-accordion">
+            <a href="{{ url('/logs') }}" class="menu-link {{ Request::is('logs') ? 'active shadow' : '' }}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Logs</span>
+            </a>
+        </div>
     </div>
 </div>
