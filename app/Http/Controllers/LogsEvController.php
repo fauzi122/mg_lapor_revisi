@@ -10,7 +10,10 @@ class LogsEvController extends Controller
 {
     public function index()
     {
-        $logs = Logs::get();
+        $logs = Logs::select('bu_name', 'bu_id', DB::raw('count(*) as total'))
+            ->groupBy('bu_name', 'bu_id')
+            ->get();
+            // dd($logs);
         return view('logs.index', compact('logs'));
     }
 
