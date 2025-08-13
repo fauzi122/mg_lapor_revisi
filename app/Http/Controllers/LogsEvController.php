@@ -30,32 +30,18 @@ class LogsEvController extends Controller
         $value = $request->query('value');   // misal '08' atau '2025'
 
         $query = Logs::select(
-            DB::raw("properties::jsonb ->> 'npwp' AS npwp"),
-            DB::raw("properties::jsonb ->> 'id_permohonan' AS id_permohonan"),
-            DB::raw("properties::jsonb ->> 'bulan' AS bulan"),
-            DB::raw("properties::jsonb ->> 'produk' AS produk"),
-            DB::raw("properties::jsonb ->> 'sektor' AS sektor"),
-            DB::raw("properties::jsonb ->> 'provinsi' AS provinsi"),
-            DB::raw("properties::jsonb ->> 'volume' AS volume"),
-            DB::raw("properties::jsonb ->> 'biaya_perolehan' AS biaya_perolehan"),
-            DB::raw("properties::jsonb ->> 'biaya_distribusi' AS biaya_distribusi"),
-            DB::raw("properties::jsonb ->> 'biaya_penyimpanan' AS biaya_penyimpanan"),
-            DB::raw("properties::jsonb ->> 'margin' AS margin"),
-            DB::raw("properties::jsonb ->> 'ppn' AS ppn"),
-            DB::raw("properties::jsonb ->> 'pbbkp' AS pbbkp"),
-            DB::raw("properties::jsonb ->> 'harga_jual' AS harga_jual"),
-            DB::raw("properties::jsonb ->> 'formula_harga' AS formula_harga"),
-            DB::raw("properties::jsonb ->> 'keterangan' AS keterangan"),
-            'created_at as tanggal'
-        )
-            ->whereRaw("jsonb_typeof(properties::jsonb) = 'object'")
-
-            // Pastikan npwp, id_permohonan dan bulan tidak kosong/null
-            ->whereRaw("
-        (properties::jsonb ->> 'npwp') IS NOT NULL AND trim(properties::jsonb ->> 'npwp') != '' AND
-        (properties::jsonb ->> 'id_permohonan') IS NOT NULL AND trim(properties::jsonb ->> 'id_permohonan') != '' AND
-        (properties::jsonb ->> 'bulan') IS NOT NULL AND trim(properties::jsonb ->> 'bulan') != ''
-    ");
+            'id',
+            'action',
+            'bu_id',
+            'bu_name',
+            'method',
+            'url',
+            'ip_address',
+            'description',
+            'created_at as tanggal',
+            'old_properties',
+            'properties'
+        );
 
         if ($filter === 'bulan' && $value) {
             $query->whereMonth('created_at', '=', $value);
@@ -69,5 +55,49 @@ class LogsEvController extends Controller
         $logsShow = $query->get();
 
         return view('logs.show', compact('logsShow'));
+    }
+
+    public function properties($id)
+    {
+        $log = Logs::select('properties')->where('id', $id)->first();
+
+        if (!$log) {
+            abort(404, 'Data tidak ditemukan');
+        }
+
+        // Decode JSON
+        $properties = json_decode($log->properties, true);
+
+        // Kalau decode-nya gagal atau null, buat jadi array kosong
+        if (!is_array($properties)) {
+            $properties = [];
+        }
+
+        // Ganti null jadi string kosong, tapi hanya kalau ada isi
+        $properties = array_map(fn($v) => $v ?? '', $properties);
+
+        return view('logs.properties', compact('properties'));
+    }
+
+    public function properties_old($id)
+    {
+        $log = Logs::select('old_properties')->where('id', $id)->first();
+
+        if (!$log) {
+            abort(404, 'Data tidak ditemukan');
+        }
+
+        // Decode JSON
+        $properties = json_decode($log->old_properties, true);
+
+        // Kalau decode-nya gagal atau null, buat jadi array kosong
+        if (!is_array($properties)) {
+            $properties = [];
+        }
+
+        // Ganti null jadi string kosong, tapi hanya kalau ada isi
+        $properties = array_map(fn($v) => $v ?? '', $properties);
+
+        return view('logs.old_properties', compact('properties'));
     }
 }

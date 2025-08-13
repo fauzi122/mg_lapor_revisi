@@ -799,11 +799,15 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	});
 
 	// Logs Evaluator User Management
+	// routes/web.php
 	Route::controller(LogsEvController::class)->group(function () {
 		Route::get('/logs', 'index')->name('logs.index');
 		Route::get('/logs/periode/{bulan}', 'periode')->name('logs.periode');
+		Route::get('/logs/properties/{id}', 'properties')->name('logs.properties');
+		Route::get('/logs/old_properties/{id}', 'properties_old')->name('logs.properties_old');
 		Route::get('/logs/show/{filter?}/{value?}', 'show')->name('logs.show');
 	});
+
 
 	// Role access management route group
 	Route::controller(RoleController::class)->group(function () {
