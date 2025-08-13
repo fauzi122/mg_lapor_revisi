@@ -139,6 +139,7 @@
                                             <th style="text-align: center; vertical-align: middle;">Status</th>
                                             <th style="text-align: center; vertical-align: middle;">Catatan</th>
                                             <th style="text-align: center; vertical-align: middle;">No Tangki</th>
+                                            <th style="text-align: center; vertical-align: middle;">Aksi</th>
                                             <th style="text-align: center; vertical-align: middle;">Produk</th>
                                             <th style="text-align: center; vertical-align: middle;">Kab/Kota</th>
                                             <th style="text-align: center; vertical-align: middle;">Jenis Komoditas</th>
@@ -149,7 +150,7 @@
                                             <th style="text-align: center; vertical-align: middle;">Volume Stok Akhir</th>
                                             <th style="text-align: center; vertical-align: middle;">Satuan</th>
                                             <th style="text-align: center; vertical-align: middle;">Utilisasi Tangki</th>
-                                            <th style="text-align: center; vertical-align: middle;">Aksi</th>
+                                            
                                             <th style="text-align: center; vertical-align: middle;">Pengguna</th>
                                             <th style="text-align: center; vertical-align: middle;">Tarif Penyimpanan</th>
                                             <th style="text-align: center; vertical-align: middle;">Satuan Tarif</th>
@@ -186,24 +187,13 @@
                                                         <span class="badge bg-info">Draf</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $pgb->id }}</td>
+                                                <td>{{ $pgb->catatan }}</td>
                                                 <td>{{ $pgb->no_tangki }}</td>
-                                                <td>{{ $pgb->produk }}</td>
-                                                <td>{{ $pgb->kab_kota }}</td>
-                                                <td>{{ is_array(json_decode($pgb->jenis_komoditas, true)) ? implode(', ', json_decode($pgb->jenis_komoditas, true)) : $pgb->jenis_komoditas }}
-                                                </td>
-                                                <td>{{ $pgb->kapasitas_tangki }}</td>
-                                                <td>{{ $pgb->volume_stok_awal }}</td>
-                                                <td>{{ $pgb->volume_supply }}</td>
-                                                <td>{{ $pgb->volume_output }}</td>
-                                                <td>{{ $pgb->volume_stok_akhir }}</td>
-                                                <td>{{ $pgb->satuan }}</td>
-                                                <td>{{ $pgb->utilisasi_tangki }}</td>
                                                 <td>
                                                     @if ($pgb->status == 1)
                                                         <button type="button"
                                                             class="btn btn-icon btn-sm btn-info btn-update"
-                                                            data-bs-toggle="modal" data-bs-target="#kt_modal_update"
+                                                            data-bs-toggle="modal" data-bs-target="#kt_modal_update_{{ $pgb->id }}"
                                                             title="Revisi data">
                                                             <i class="ki-solid ki-pencil align-middle"></i>
                                                         </button>
@@ -215,7 +205,7 @@
                                                             </button>
                                                         @endif
 
-                                                        <div class="modal fade" id="kt_modal_update" tabindex="-1"
+                                                        <div class="modal fade" id="kt_modal_update_{{ $pgb->id }}" tabindex="-1"
                                                             aria-hidden="true">
                                                             <!--begin::Modal dialog-->
                                                             <div class="modal-dialog modal-dialog-centered mw-650px">
@@ -276,6 +266,18 @@
                                                         </div><!-- /.modal -->
                                                     @endif
                                                 </td>
+                                                <td>{{ $pgb->produk }}</td>
+                                                <td>{{ $pgb->kab_kota }}</td>
+                                                <td>{{ is_array(json_decode($pgb->jenis_komoditas, true)) ? implode(', ', json_decode($pgb->jenis_komoditas, true)) : $pgb->jenis_komoditas }}
+                                                </td>
+                                                <td>{{ $pgb->kapasitas_tangki }}</td>
+                                                <td>{{ $pgb->volume_stok_awal }}</td>
+                                                <td>{{ $pgb->volume_supply }}</td>
+                                                <td>{{ $pgb->volume_output }}</td>
+                                                <td>{{ $pgb->volume_stok_akhir }}</td>
+                                                <td>{{ $pgb->satuan }}</td>
+                                                <td>{{ $pgb->utilisasi_tangki }}</td>
+                                                
                                                 <td>{{ $pgb->pengguna }}</td>
                                                 <td>{{ $pgb->tarif_penyimpanan }}</td>
                                                 <td>{{ $pgb->satuan_tarif }}</td>

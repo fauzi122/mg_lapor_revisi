@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Evaluator;
 
 use App\Http\Controllers\Controller;
+use App\Models\pasokanGBP;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -205,11 +206,16 @@ class EvPasokGasBumiController extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = DB::table('pasokan_g_b_p_s')->where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = DB::table('pasokan_g_b_p_s')->where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $update = pasokanGBP::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }

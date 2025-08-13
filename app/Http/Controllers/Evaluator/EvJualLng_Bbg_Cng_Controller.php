@@ -283,11 +283,16 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = DB::table('penjualan_lngs')->where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = DB::table('penjualan_lngs')->where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $update = Penjualan_lng::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }
@@ -298,13 +303,13 @@ class EvJualLng_Bbg_Cng_Controller extends Controller
         $request->validate([
             'catatan' => 'required',
         ]); 
-        $izin_id = Crypt::decrypt($request->input('p')) ;
+        $badan_usaha_id = Crypt::decrypt($request->input('p')) ;
         $bulan = Crypt::decrypt($request->input('b')) ;
 
 
 
         $update = DB::table('penjualan_lngs')
-            ->where('izin_id', $izin_id)
+            ->where('npwp', $badan_usaha_id)
             ->where('bulan',$bulan)
             ->whereIn('status', [1, 2,3])
             ->update([

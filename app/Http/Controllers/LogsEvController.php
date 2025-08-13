@@ -17,21 +17,20 @@ class LogsEvController extends Controller
         return view('logs.index', compact('logs'));
     }
 
-    public function periode()
+    public function periode($bu_id)
     {
         $logsPeriode = Logs::selectRaw("MAX(created_at) as created_at")
+            ->where('bu_id', $bu_id)
             ->groupByRaw("DATE_TRUNC('month', created_at)")
             ->orderByRaw("MAX(created_at) DESC")
             ->get();
 
-        return view('logs.periode', compact('logsPeriode'));
+        return view('logs.periode', compact('logsPeriode', 'bu_id'));
     }
 
-    public function show(Request $request)
-    {
-        $filter = $request->query('filter'); // 'bulan' atau 'tahun'
-        $value = $request->query('value');   // misal '08' atau '2025'
 
+    public function show($bu_id, Request $request, $filter = null, $value = null)
+    {
         $query = Logs::select(
             'id',
             'action',
@@ -41,24 +40,28 @@ class LogsEvController extends Controller
             'url',
             'ip_address',
             'description',
-            'created_at as tanggal',
-            'old_properties',
-            'properties'
+            'created_at as tanggal'
         );
 
+        // filter per bu_id
+        if ($bu_id) {
+            $query->where('bu_id', $bu_id);
+        }
+
+        // filter per bulan/tahun
         if ($filter === 'bulan' && $value) {
-            $query->whereMonth('created_at', '=', $value);
+            $query->whereMonth('created_at', $value);
         }
 
         if ($filter === 'tahun' && $value) {
-            $query->whereYear('created_at', '=', $value);
+            $query->whereYear('created_at', $value);
         }
-
 
         $logsShow = $query->get();
 
         return view('logs.show', compact('logsShow'));
     }
+
 
     public function properties($id)
     {

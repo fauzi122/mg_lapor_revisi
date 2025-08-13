@@ -205,11 +205,16 @@ class EvPasokLpgController extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = DB::table('pasokan_l_p_g_s')->where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = DB::table('pasokan_l_p_g_s')->where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $update = PasokanLPG::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }

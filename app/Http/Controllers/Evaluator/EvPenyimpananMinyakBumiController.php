@@ -270,11 +270,17 @@ class EvPenyimpananMinyakBumiController extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = Penyminyakbumi::where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = Penyminyakbumi::where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+
+        $update = Penyminyakbumi::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }

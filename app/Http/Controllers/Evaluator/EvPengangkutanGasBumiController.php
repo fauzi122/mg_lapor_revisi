@@ -203,11 +203,16 @@ public function cetakperiode(Request $request)
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = pengangkutan_gaskbumi::where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = pengangkutan_gaskbumi::where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $update = pengangkutan_gaskbumi::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }

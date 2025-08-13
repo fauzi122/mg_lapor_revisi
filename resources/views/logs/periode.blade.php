@@ -65,14 +65,23 @@
                                 @foreach ($logsPeriode as $periode)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td><b><a href="{{ url('/logs/show/bulan/' . getBulan($periode->created_at)) }}">
+                                    <td>
+                                        <b>
+                                            <a href="{{ url('/logs/show/' . $bu_id . '/bulan/' . \Carbon\Carbon::parse($periode->created_at)->month) }}">
                                                 {{ getBulan($periode->created_at) }}
                                                 <i class="bi bi-check" title="Lihat laporan per bulan"></i>
-                                            </a></b></td>
-                                    <td><b><a href="{{ url('/logs/show/tahun/' . getTahun($periode->created_at)) }}">
+                                            </a>
+                                        </b>
+                                    </td>
+                                    <td>
+                                        <b>
+                                            <a href="{{ url('/logs/show/' . $bu_id . '/tahun/' . \Carbon\Carbon::parse($periode->created_at)->year) }}">
                                                 {{ getTahun($periode->created_at) }}
                                                 <i class="bi bi-check" title="Lihat laporan per tahun"></i>
-                                            </a></b></td>
+                                            </a>
+                                        </b>
+                                    </td>
+
                                 </tr>
                                     
                                 @endforeach

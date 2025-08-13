@@ -127,42 +127,79 @@ class EvHargaBBMController extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = DB::table('harga_bbm_jbus')->where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = DB::table('harga_bbm_jbus')->where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+
+        $update = Harga_bbm_jbu::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }
 
     public function updateRevisionNotesAll(Request $request)
     {
-
         $request->validate([
             'catatan' => 'required',
-        ]); 
-        $badan_usaha_id = Crypt::decrypt($request->input('p')) ;
-        $bulan = Crypt::decrypt($request->input('b')) ;
+        ]);
 
+        $npwp = Crypt::decrypt($request->input('p'));
+        $bulan = Crypt::decrypt($request->input('b'));
+        // $matchingData = Harga_bbm_jbu::where('npwp', $npwp)
+        //     ->where('bulan', $bulan) // <- nanti kita cek apakah ini cocok atau tidak
+        //     ->whereIn('status', [1, 2, 3])
+        //     ->get();
 
+        // dd([
+        //     'request_raw' => $request->all(),
+        //     'p_encrypted' => $request->input('p'),
+        //     'b_encrypted' => $request->input('b'),
+        //     'p_decrypted' => $npwp,
+        //     'b_decrypted' => $bulan,
+        //     'b_decrypted_type' => gettype($bulan),
+        //     'matching_count' => $matchingData->count(),
+        //     'matching_data_sample' => $matchingData->take(3)->toArray(),
+        //     'all_bulan_values_for_npwp' => Harga_bbm_jbu::where('npwp', $npwp)->pluck('bulan')->toArray(),
+        // ]);
 
-        $update = DB::table('harga_bbm_jbus')
-            ->where('badan_usaha_id', $badan_usaha_id)
-            ->where('bulan',$bulan)
-            ->whereIn('status', [1, 2,3])
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        $models = Harga_bbm_jbu::where('npwp', $npwp)
+            ->where('bulan', $bulan)
+            ->whereIn('status', [1, 2, 3])
+            ->get();
 
+        if ($models->isEmpty()) {
+            return redirect()->back()->with('sweet_error', 'Tidak ada data yang bisa diperbarui.');
+        }
 
-        if ($update) {
-            return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+        $successCount = 0;
+
+        foreach ($models as $model) {
+            try {
+                if ($model->update([
+                    'catatan' => $request->catatan,
+                    'status'  => 2,
+                ])) {
+                    $successCount++;
+                }
+            } catch (\Throwable $th) {
+                // Biarkan kosong supaya data lain tetap diproses
+            }
+        }
+
+        if ($successCount > 0 && $successCount === $models->count()) {
+            return redirect()->back()->with('sweet_success', 'Semua catatan revisi berhasil dikirim.');
+        } elseif ($successCount > 0) {
+            return redirect()->back()->with('sweet_warning', "{$successCount} catatan revisi berhasil dikirim, sebagian gagal.");
         } else {
             return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
         }
     }
+
 
     public function selesaiPeriodeAll(Request $request)
     {

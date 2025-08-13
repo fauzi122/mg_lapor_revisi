@@ -214,11 +214,16 @@ class EvPasokLng_Bbg_Cng_Controller extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = DB::table('pasokanlngs')->where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = DB::table('pasokanlngs')->where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $update = Pasokanlng::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }

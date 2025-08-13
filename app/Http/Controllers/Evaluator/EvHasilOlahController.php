@@ -147,11 +147,16 @@ class EvHasilOlahController extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = DB::table('jual_hasil_olah_bbms')->where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = DB::table('jual_hasil_olah_bbms')->where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $update = Jual_hasil_olah_bbm::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }

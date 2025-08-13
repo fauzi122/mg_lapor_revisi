@@ -206,11 +206,16 @@ class EvPengangkutanMinyakBumiController extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = pengangkutan_minyakbumi::where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = pengangkutan_minyakbumi::where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $update = pengangkutan_minyakbumi::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }

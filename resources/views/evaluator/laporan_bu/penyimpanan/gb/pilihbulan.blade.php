@@ -183,7 +183,7 @@
                                                 <button type="button"
                                                     class="btn btn-info btn-sm rounded-pill btn-update"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_update"
+                                                    data-bs-target="#kt_modal_update_{{ $pgb->id }}"
                                                     title="Revisi data">
                                                     <i class="ki-solid ki-pencil align-middle"></i>
                                                 </button>
@@ -196,7 +196,7 @@
                                                 @endif
 
                                                 <!-- Modal Update -->
-                                                <div class="modal fade" id="kt_modal_update" tabindex="-1" aria-hidden="true">
+                                                <div class="modal fade" id="kt_modal_update_{{ $pgb->id }}" tabindex="-1" aria-hidden="true">
                                                     <!--begin::Modal dialog-->
                                                     <div class="modal-dialog modal-dialog-centered mw-650px">
                                                         <!--begin::Modal content-->

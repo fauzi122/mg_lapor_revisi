@@ -507,7 +507,7 @@
                             data: {
                                 _token: '{{ csrf_token() }}',
                                 b: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->bulan) }}',
-                                p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->badan_usaha_id) }}'
+                                p: '{{ \Illuminate\Support\Facades\Crypt::encrypt($per->npwp) }}'
                             },
                             success: function(response) {
                                 Swal.fire('Status diperbarui!',

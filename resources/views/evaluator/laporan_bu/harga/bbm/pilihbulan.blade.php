@@ -179,10 +179,10 @@
                                         <td class="text-center">
                                             @if ($pgb->status == 1)
                                                 <button type="button"
-                                                    class="btn btn-info btn-sm rounded-pill btn-update"
-                                                    data-bs-toggle="modal" data-bs-target="#modal-update"
+                                                    class="btn btn-icon btn-sm btn-info btn-update"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_update_{{ $pgb->id }}"
                                                     title="Revisi data">
-                                                    <i class="bx bxs-edit align-middle"></i>
+                                                    <i class="ki-solid ki-pencil align-middle"></i>
                                                 </button>
                                         
 
