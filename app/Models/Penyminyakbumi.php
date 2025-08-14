@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Traits\LogTrait;
+use App\Traits\SentEmailTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Penyminyakbumi extends Model
 {
-    use HasFactory, LogTrait;
+    use HasFactory, LogTrait, SentEmailTrait;
 
     protected $table = 'penyminyakbumis';
     protected $primaryKey = 'id';
@@ -24,5 +25,10 @@ class Penyminyakbumi extends Model
     public function getJenisKomoditasAttribute($value)
     {
         return $this->attributes['jenis_komoditas'] = json_decode($value);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'npwp', 'npwp');
     }
 }
