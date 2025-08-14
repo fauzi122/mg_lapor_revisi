@@ -65,8 +65,8 @@ class IntakeCOntroller extends Controller
       // Sanitasi Input
     $sanitizedData = fullySanitizeInput($validatedData);
 
-    Intake_Kilang::where('id', $intake)
-      ->update($sanitizedData);
+    $update = Intake_Kilang::where('id', $intake)->firstOrFail();
+    $update->update($sanitizedData);
       return redirect('/master/intake_kilangs')->with(['success' => 'Data berhasil diupdate']);
     }
     public function destroy(Request $request, $id)

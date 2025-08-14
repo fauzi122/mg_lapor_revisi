@@ -60,7 +60,7 @@
                                 </button>
 
                                 <button type="button"
-                                    class="btn btn-info waves-effect waves-light">
+                                    class="btn btn-info waves-effect waves-light btn-selesai-status">
                                     <i class="bi bi-check-lg"></i> Selesai
                                 </button>
 
@@ -186,7 +186,7 @@
                                         <td class="text-center">
                                             @if ($pgb->status == 1)
                                                 <button type="button"
-                                                    class="btn btn-icon btn-sm btn-info btn-update"
+                                                    class="btn btn-icon btn-sm btn-info btn-update mb-2"
                                                     data-bs-toggle="modal" data-bs-target="#modal-update"
                                                     title="Revisi data">
                                                     <i class="ki-solid ki-pencil align-middle"></i>

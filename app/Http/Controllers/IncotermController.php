@@ -64,8 +64,8 @@ class IncotermCOntroller extends Controller
       // Sanitasi Input
     $sanitizedData = fullySanitizeInput($validatedData);
 
-    Inco_term::where('id', $inco)
-      ->update($sanitizedData);
+    $update = Inco_term::where('id', $inco)->firstOrFail();
+    $update->update($sanitizedData);
       return redirect('/master/inco-term')->with(['success' => 'Data berhasil diupdate']);
     }
 

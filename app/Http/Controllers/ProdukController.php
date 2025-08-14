@@ -75,9 +75,10 @@ class ProdukController extends Controller
 
       $sanitizedData = fullySanitizeInput($validatedData);
 
-    Produk::where('id', $produk)
-      ->update($sanitizedData);
-      return redirect('/master/produk')->with(['success' => 'Data berhasil diupdate']);
+    $update = Produk::where('id', $produk)->firstOrFail();
+    $update->update($sanitizedData);
+    // ->update($sanitizedData);
+    return redirect('/master/produk')->with(['success' => 'Data berhasil diupdate']);
     }
     public function destroy(Request $request, $id)
     {

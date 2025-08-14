@@ -117,7 +117,7 @@
                                         @if ($data->status == 1)
                                             <td class="text-center">
                                                 <button type="button"
-                                                    class="btn btn-icon btn-sm btn-info mb-2 btn-update"
+                                                    class="btn btn-icon btn-sm btn-info btn-update"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_update_{{ getBulan($data->bulan) }}" title="Revisi data">
                                                     <i class="ki-solid ki-pencil align-middle"></i>

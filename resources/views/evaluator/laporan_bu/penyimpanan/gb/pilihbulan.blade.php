@@ -61,7 +61,7 @@
                                 </button>
 
                                 <button type="button"
-                                    class="btn btn-info waves-effect waves-light">
+                                    class="btn btn-info waves-effect waves-light btn-selesai-status">
                                     <i class="bi bi-check-lg"></i> Selesai
                                 </button>
 
@@ -181,7 +181,7 @@
                                         <td>
                                             @if ($pgb->status == 1)
                                                 <button type="button"
-                                                    class="btn btn-info btn-sm rounded-pill btn-update"
+                                                    class="btn btn-info btn-sm rounded-pill btn-update mb-3"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_update_{{ $pgb->id }}"
                                                     title="Revisi data">

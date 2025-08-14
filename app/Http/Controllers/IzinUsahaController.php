@@ -110,8 +110,8 @@ class IzinUsahaController extends Controller
         // Sanitasi Input
         $sanitizedData = fullySanitizeInput($validatedData);
 
-        IzinUsaha::where('id', $IzinUsaha)
-            ->update($sanitizedData);
+        $update = IzinUsaha::where('id', $IzinUsaha)->firstOrFail();
+        $update->update($sanitizedData);
         return redirect('/master/izin-usaha')->with(['success' => 'Data berhasil diupdate']);
     }
 

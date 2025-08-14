@@ -231,7 +231,7 @@ class EvPasokGasBumiController extends Controller
 
         $models = pasokanGBP::where('npwp', $npwp)
             ->where('bulan', $bulan)
-            ->whereIn('status', [1, 2, 3])
+            ->whereIn('status', [1, 2])
             ->get();
 
         if ($models->isEmpty()) {
@@ -281,26 +281,25 @@ class EvPasokGasBumiController extends Controller
     public function selesaiPeriodeAll(Request $request)
     {
         try {
-            $badan_usaha_id = Crypt::decrypt($request->input('p'));
+            $npwp = Crypt::decrypt($request->input('p'));
             $bulan = Crypt::decrypt($request->input('b'));
 
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = DB::table('pasokan_g_b_p_s')
-                ->where('npwp', $badan_usaha_id)
+            // Ambil semua data yang match
+            $models = pasokanGBP::where('npwp', $npwp)
                 ->where('bulan', $bulan)
-                ->whereIn('status', [1, 2,3])
-                ->update([
-                    'status' => '3'
-                ]);
+                ->whereIn('status', [1])
+                ->get();
 
-
-            if ($update) {
-                // Jika berhasil, kembalikan respons JSON
-                return response()->json(['success' => 'Periode berhasil diselesaikan.']);
-            } else {
-                // Jika gagal, kembalikan respons JSON dengan status 500 (Internal Server Error)
-                return response()->json(['error' => 'Gagal menyelesaikan periode.'], 500);
+            if ($models->isEmpty()) {
+                return response()->json(['error' => 'Tidak ada data untuk diselesaikan.'], 404);
             }
+
+            foreach ($models as $model) {
+                $model->status = 3;
+                $model->save(); // <-- ini yang akan memicu LogTraitEv
+            }
+
+            return response()->json(['success' => 'Periode berhasil diselesaikan.']);
         } catch (\Exception $e) {
             // Tangkap dan tangani exception
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);
@@ -312,21 +311,11 @@ class EvPasokGasBumiController extends Controller
         try {
             $id = $request->input('id');
 
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = DB::table('pasokan_g_b_p_s')->where('id', $id)
-                ->update([
-                    'status' => '3'
-                ]);
+            $model = pasokanGBP::findOrFail($id);
+            $model->status = '3';
+            $model->save(); // <-- otomatis memicu LogTraitEv
 
-
-
-            if ($update) {
-                // Jika berhasil, kembalikan respons JSON
-                return response()->json(['success' => 'Periode berhasil diselesaikan.']);
-            } else {
-                // Jika gagal, kembalikan respons JSON dengan status 500 (Internal Server Error)
-                return response()->json(['error' => 'Gagal menyelesaikan periode.'], 500);
-            }
+            return response()->json(['success' => 'Periode berhasil diselesaikan.']);
         } catch (\Exception $e) {
             // Tangkap dan tangani exception
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);

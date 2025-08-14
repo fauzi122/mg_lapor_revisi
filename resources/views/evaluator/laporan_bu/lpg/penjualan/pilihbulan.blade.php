@@ -56,7 +56,7 @@
                                 </button>
 
                                 <button type="button"
-                                    class="btn btn-info waves-effect waves-light">
+                                    class="btn btn-info waves-effect waves-light btn-selesai-status">
                                     <i class="bi bi-check-lg"></i> Selesai
                                 </button>
 

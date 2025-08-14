@@ -64,8 +64,8 @@ class NegaraCOntroller extends Controller
       // Sanitasi Input
     $sanitizedData = fullySanitizeInput($validatedData);
 
-    Negara::where('id', $negara)
-      ->update($sanitizedData);
+    $update = Negara::where('id', $negara)->firstOrFail();
+    $update->update($sanitizedData);
       return redirect('/master/negara')->with(['success' => 'Data berhasil diupdate']);
     }
     public function destroy(Request $request, $id)
