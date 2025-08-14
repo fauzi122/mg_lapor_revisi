@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Evaluator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PasokanLPG;
+use App\Models\Penjualan_lpg;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -225,26 +226,56 @@ class EvPasokLpgController extends Controller
         $request->validate([
             'catatan' => 'required',
         ]);
-        $badan_usaha_id = Crypt::decrypt($request->input('p')) ;
+        $npwp = Crypt::decrypt($request->input('p')) ;
         $bulan = Crypt::decrypt($request->input('b')) ;
 
+        $models = PasokanLPG::where('npwp', $npwp)
+            ->where('bulan', $bulan)
+            ->whereIn('status', [1, 2, 3])
+            ->get();
 
+        if ($models->isEmpty()) {
+            return redirect()->back()->with('sweet_error', 'Tidak ada data yang bisa diperbarui.');
+        }
 
-        $update = DB::table('pasokan_l_p_g_s')
-            ->where('npwp', $badan_usaha_id)
-            ->where('bulan',$bulan)
-            ->whereIn('status', [1, 2,3])
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        $successCount = 0;
 
+        foreach ($models as $model) {
+            try {
+                if ($model->update([
+                    'catatan' => $request->catatan,
+                    'status'  => 2,
+                ])) {
+                    $successCount++;
+                }
+            } catch (\Throwable $th) {
+                // Biarkan kosong supaya data lain tetap diproses
+            }
+        }
 
-        if ($update) {
-            return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+        if ($successCount > 0 && $successCount === $models->count()) {
+            return redirect()->back()->with('sweet_success', 'Semua catatan revisi berhasil dikirim.');
+        } elseif ($successCount > 0) {
+            return redirect()->back()->with('sweet_warning', "{$successCount} catatan revisi berhasil dikirim, sebagian gagal.");
         } else {
             return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
         }
+
+        // $update = DB::table('pasokan_l_p_g_s')
+        //     ->where('npwp', $badan_usaha_id)
+        //     ->where('bulan',$bulan)
+        //     ->whereIn('status', [1, 2,3])
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+
+
+        // if ($update) {
+        //     return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+        // } else {
+        //     return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
+        // }
     }
 
     public function selesaiPeriodeAll(Request $request)

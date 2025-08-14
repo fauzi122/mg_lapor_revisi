@@ -166,19 +166,51 @@ class EvHasilOlahController extends Controller
         $request->validate([
             'catatan' => 'required',
         ]);
-        $badan_usaha_id = Crypt::decrypt($request->input('p'));
+        $npwp = Crypt::decrypt($request->input('p'));
         $bulan = Crypt::decrypt($request->input('b'));
 
 
 
-        $update = DB::table('jual_hasil_olah_bbms')
-            ->where('npwp', $badan_usaha_id)
+        // $update = DB::table('jual_hasil_olah_bbms')
+        //     ->where('npwp', $badan_usaha_id)
+        //     ->where('bulan', $bulan)
+        //     ->whereIn('status', [1, 2, 3])
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $models = Jual_hasil_olah_bbm::where('npwp', $npwp)
             ->where('bulan', $bulan)
             ->whereIn('status', [1, 2, 3])
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+            ->get();
+
+
+        if ($models->isEmpty()) {
+            return redirect()->back()->with('sweet_error', 'Tidak ada data yang bisa diperbarui.');
+        }
+
+        $successCount = 0;
+
+        foreach ($models as $model) {
+            try {
+                if ($model->update([
+                    'catatan' => $request->catatan,
+                    'status'  => 2,
+                ])) {
+                    $successCount++;
+                }
+            } catch (\Throwable $th) {
+                // Biarkan kosong supaya data lain tetap diproses
+            }
+        }
+
+        if ($successCount > 0 && $successCount === $models->count()) {
+            return redirect()->back()->with('sweet_success', 'Semua catatan revisi berhasil dikirim.');
+        } elseif ($successCount > 0) {
+            return redirect()->back()->with('sweet_warning', "{$successCount} catatan revisi berhasil dikirim, sebagian gagal.");
+        } else {
+            return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
+        }
 
         // $receiver = 'vanturgo16@gmail.com; ozanfauzi39@gmail.com';
         // $subject = 'Tes push notifikasi noreply mail ESDM';
@@ -196,11 +228,11 @@ class EvHasilOlahController extends Controller
         //     dd('gak punya akses');
         // }
 
-        if ($update) {
-            return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
-        } else {
-            return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
-        }
+        // if ($update) {
+        //     return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+        // } else {
+        //     return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
+        // }
     }
 
     public function selesaiPeriodeAll(Request $request)

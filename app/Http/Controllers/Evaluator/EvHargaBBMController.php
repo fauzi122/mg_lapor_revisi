@@ -150,22 +150,6 @@ class EvHargaBBMController extends Controller
 
         $npwp = Crypt::decrypt($request->input('p'));
         $bulan = Crypt::decrypt($request->input('b'));
-        // $matchingData = Harga_bbm_jbu::where('npwp', $npwp)
-        //     ->where('bulan', $bulan) // <- nanti kita cek apakah ini cocok atau tidak
-        //     ->whereIn('status', [1, 2, 3])
-        //     ->get();
-
-        // dd([
-        //     'request_raw' => $request->all(),
-        //     'p_encrypted' => $request->input('p'),
-        //     'b_encrypted' => $request->input('b'),
-        //     'p_decrypted' => $npwp,
-        //     'b_decrypted' => $bulan,
-        //     'b_decrypted_type' => gettype($bulan),
-        //     'matching_count' => $matchingData->count(),
-        //     'matching_data_sample' => $matchingData->take(3)->toArray(),
-        //     'all_bulan_values_for_npwp' => Harga_bbm_jbu::where('npwp', $npwp)->pluck('bulan')->toArray(),
-        // ]);
 
         $models = Harga_bbm_jbu::where('npwp', $npwp)
             ->where('bulan', $bulan)
