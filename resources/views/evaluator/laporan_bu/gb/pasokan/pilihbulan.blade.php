@@ -56,7 +56,7 @@
                                 </button>
 
                                 <button type="button"
-                                    class="btn btn-info waves-effect waves-light">
+                                    class="btn btn-info waves-effect waves-light btn-selesai-status">
                                     <i class="bi bi-check-lg"></i> Selesai
                                 </button>
 
@@ -126,23 +126,23 @@
                         <table class="kt-datatable table table-bordered table-hover">
                             <thead class="bg-light">
                                 <tr class="fw-bold text-uppercase">
-                                    <th>No</th>
-                                    <th>Bulan</th>
-                                    <th>Tahun</th>
-                                    <th>Status</th>
-                                    <th>Catatan</th>
-                                    <th>Kategori Pemasok</th>
-                                    <th>Intake Kilang</th>
-                                    <th>Produk</th>
-                                    <th>Aksi</th>
-                                    <th>Provinsi</th>
-                                    <th>Kabupaten/Kota</th>
-                                    <th>Sektor</th>
-                                    <th>Volume</th>
-                                    <th>Satuan</th>
-                                    <th>Keterangan</th>
-                                    <th>Tgl Dibuat Laporan</th>
-                                    <th>Tgl Pengajuan Laporan</th>
+                                    <th style="text-align: center; vertical-align: middle;">No</th>
+                                    <th style="text-align: center; vertical-align: middle;">Bulan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tahun</th>
+                                    <th style="text-align: center; vertical-align: middle;">Status</th>
+                                    <th style="text-align: center; vertical-align: middle;">Catatan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Kategori Pemasok</th>
+                                    <th style="text-align: center; vertical-align: middle;">Intake Kilang</th>
+                                    <th style="text-align: center; vertical-align: middle;">Produk</th>
+                                    <th style="text-align: center; vertical-align: middle;">Aksi</th>
+                                    <th style="text-align: center; vertical-align: middle;">Provinsi</th>
+                                    <th style="text-align: center; vertical-align: middle;">Kabupaten/Kota</th>
+                                    <th style="text-align: center; vertical-align: middle;">Sektor</th>
+                                    <th style="text-align: center; vertical-align: middle;">Volume</th>
+                                    <th style="text-align: center; vertical-align: middle;">Satuan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Keterangan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tgl Dibuat Laporan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tgl Pengajuan Laporan</th>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
                                 @foreach ($query as $pgb)
@@ -170,9 +170,9 @@
                                         <td>
                                             @if ($pgb->status == 1)
                                                 <button type="button"
-                                                    class="btn btn-icon btn-sm btn-info btn-update"
+                                                    class="btn btn-icon btn-sm btn-info btn-update mb-3"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_update" title="Revisi data">
+                                                    data-bs-target="#kt_modal_update_{{ $pgb->id }}" title="Revisi data">
                                                     <i class="ki-solid ki-pencil align-middle"></i>
                                                 </button>
 
@@ -184,7 +184,7 @@
                                                     </button>
                                                 @endif
 
-                                                <div class="modal fade" id="kt_modal_update" tabindex="-1" aria-hidden="true">
+                                                <div class="modal fade" id="kt_modal_update_{{ $pgb->id }}" tabindex="-1" aria-hidden="true">
                                                     <!--begin::Modal dialog-->
                                                     <div class="modal-dialog modal-dialog-centered mw-650px">
                                                         <!--begin::Modal content-->

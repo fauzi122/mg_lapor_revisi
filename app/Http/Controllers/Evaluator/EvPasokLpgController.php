@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Evaluator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PasokanLPG;
+use App\Models\Penjualan_lpg;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -205,11 +206,16 @@ class EvPasokLpgController extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = DB::table('pasokan_l_p_g_s')->where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = DB::table('pasokan_l_p_g_s')->where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $update = PasokanLPG::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }
@@ -220,52 +226,80 @@ class EvPasokLpgController extends Controller
         $request->validate([
             'catatan' => 'required',
         ]);
-        $badan_usaha_id = Crypt::decrypt($request->input('p')) ;
+        $npwp = Crypt::decrypt($request->input('p')) ;
         $bulan = Crypt::decrypt($request->input('b')) ;
 
+        $models = PasokanLPG::where('npwp', $npwp)
+            ->where('bulan', $bulan)
+            ->whereIn('status', [1, 2])
+            ->get();
 
+        if ($models->isEmpty()) {
+            return redirect()->back()->with('sweet_error', 'Tidak ada data yang bisa diperbarui.');
+        }
 
-        $update = DB::table('pasokan_l_p_g_s')
-            ->where('npwp', $badan_usaha_id)
-            ->where('bulan',$bulan)
-            ->whereIn('status', [1, 2,3])
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        $successCount = 0;
 
+        foreach ($models as $model) {
+            try {
+                if ($model->update([
+                    'catatan' => $request->catatan,
+                    'status'  => 2,
+                ])) {
+                    $successCount++;
+                }
+            } catch (\Throwable $th) {
+                // Biarkan kosong supaya data lain tetap diproses
+            }
+        }
 
-        if ($update) {
-            return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+        if ($successCount > 0 && $successCount === $models->count()) {
+            return redirect()->back()->with('sweet_success', 'Semua catatan revisi berhasil dikirim.');
+        } elseif ($successCount > 0) {
+            return redirect()->back()->with('sweet_warning', "{$successCount} catatan revisi berhasil dikirim, sebagian gagal.");
         } else {
             return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
         }
+
+        // $update = DB::table('pasokan_l_p_g_s')
+        //     ->where('npwp', $badan_usaha_id)
+        //     ->where('bulan',$bulan)
+        //     ->whereIn('status', [1, 2,3])
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+
+
+        // if ($update) {
+        //     return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+        // } else {
+        //     return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
+        // }
     }
 
     public function selesaiPeriodeAll(Request $request)
     {
         try {
 
-            $badan_usaha_id = Crypt::decrypt($request->input('p'));
+            $npwp = Crypt::decrypt($request->input('p'));
             $bulan = Crypt::decrypt($request->input('b'));
 
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = DB::table('pasokan_l_p_g_s')
-                ->where('npwp', $badan_usaha_id)
+            $models = PasokanLPG::where('npwp', $npwp)
                 ->where('bulan', $bulan)
-                ->whereIn('status', [1, 2,3])
-                ->update([
-                    'status' => '3'
-                ]);
+                ->whereIn('status', [1])
+                ->get();
 
-
-            if ($update) {
-                // Jika berhasil, kembalikan respons JSON
-                return response()->json(['success' => 'Periode berhasil diselesaikan.']);
-            } else {
-                // Jika gagal, kembalikan respons JSON dengan status 500 (Internal Server Error)
-                return response()->json(['error' => 'Gagal menyelesaikan periode.'], 500);
+            if ($models->isEmpty()) {
+                return response()->json(['error' => 'Tidak ada data untuk diselesaikan.'], 404);
             }
+
+            foreach ($models as $model) {
+                $model->status = 3;
+                $model->save(); // <-- ini yang akan memicu LogTraitEv
+            }
+
+            return response()->json(['success' => 'Periode berhasil diselesaikan.']);
         } catch (\Exception $e) {
             // Tangkap dan tangani exception
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);
@@ -277,21 +311,13 @@ class EvPasokLpgController extends Controller
         try {
             $id = $request->input('id');
 
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = DB::table('pasokan_l_p_g_s')->where('id', $id)
-                ->update([
-                    'status' => '3'
-                ]);
+            $id = $request->input('id');
 
+            $model = PasokanLPG::findOrFail($id);
+            $model->status = '3';
+            $model->save(); // <-- otomatis memicu LogTraitEv
 
-
-            if ($update) {
-                // Jika berhasil, kembalikan respons JSON
-                return response()->json(['success' => 'Periode berhasil diselesaikan.']);
-            } else {
-                // Jika gagal, kembalikan respons JSON dengan status 500 (Internal Server Error)
-                return response()->json(['error' => 'Gagal menyelesaikan periode.'], 500);
-            }
+            return response()->json(['success' => 'Periode berhasil diselesaikan.']);
         } catch (\Exception $e) {
             // Tangkap dan tangani exception
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);

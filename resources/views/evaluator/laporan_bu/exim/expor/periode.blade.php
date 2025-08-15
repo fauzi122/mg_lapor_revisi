@@ -119,7 +119,7 @@
                                                 <button type="button"
                                                     class="btn btn-icon btn-sm btn-info mb-2 btn-update"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_update" title="Revisi data">
+                                                    data-bs-target="#kt_modal_update_{{ getBulan($data->bulan_peb) }}" title="Revisi data">
                                                     <i class="ki-solid ki-pencil align-middle"></i>
                                                 </button>
                                                 @if ($data->status == 1 && $data->catatan)
@@ -131,7 +131,7 @@
                                                             title="Selesai"></i></button>
                                                 @endif
 
-                                                <div class="modal fade" id="kt_modal_update" tabindex="-1" aria-hidden="true">
+                                                <div class="modal fade" id="kt_modal_update_{{ getBulan($data->bulan_peb) }}" tabindex="-1" aria-hidden="true">
                                                     <!--begin::Modal dialog-->
                                                     <div class="modal-dialog modal-dialog-centered mw-650px">
                                                         <!--begin::Modal content-->

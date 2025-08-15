@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Evaluator;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pengolahan;
 use Illuminate\Http\Request;
 use App\Models\PengolahanMBProduksi;
 use Carbon\Carbon;
@@ -18,7 +19,7 @@ class EvProduksiMinyakBumiController extends Controller
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'a.npwp')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->where('a.jenis', 'Minyak Bumi')
-            ->where('a.tipe', 'Pasokan')
+            ->where('a.tipe', 'Produksi')
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->groupBy('u.name', 'i.npwp', DB::raw("(d ->> 'Id_Permohonan')::int"))
             ->select(
@@ -287,11 +288,16 @@ class EvProduksiMinyakBumiController extends Controller
         $id = Crypt::decrypt($request->input('id'));
 
 
-        $update = DB::table('pengolahans')->where('id', $id)
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+        // $update = DB::table('pengolahans')->where('id', $id)
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+        $update = Pengolahan::findOrFail($id);
+        $update->update([
+            'status' => '2',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
     }
@@ -302,55 +308,85 @@ class EvProduksiMinyakBumiController extends Controller
         $request->validate([
             'catatan' => 'required',
         ]);
-        $badan_usaha_id = Crypt::decrypt($request->input('p')) ;
+        $npwp = Crypt::decrypt($request->input('p')) ;
         $bulan = Crypt::decrypt($request->input('b')) ;
 
-
-
-        $update = DB::table('pengolahans')
+        $models = Pengolahan::where('npwp', $npwp)
+            ->where('bulan', $bulan)
             ->where('jenis', 'Minyak Bumi')
-            ->where('tipe', 'Produksi')
-            ->where('npwp', $badan_usaha_id)
-            ->where('bulan',$bulan)
-            ->whereIn('status', [1, 2,3])
-            ->update([
-                'catatan' => $request->catatan,
-                'status' => '2'
-            ]);
+            ->where('tipe', 'Pasokan')
+            ->whereIn('status', [1, 2])
+            ->get();
 
+        if ($models->isEmpty()) {
+            return redirect()->back()->with('sweet_error', 'Tidak ada data yang bisa diperbarui.');
+        }
 
-        if ($update) {
-            return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+        $successCount = 0;
+
+        foreach ($models as $model) {
+            try {
+                if ($model->update([
+                    'catatan' => $request->catatan,
+                    'status'  => 2,
+                ])) {
+                    $successCount++;
+                }
+            } catch (\Throwable $th) {
+                // Biarkan kosong supaya data lain tetap diproses
+            }
+        }
+
+        if ($successCount > 0 && $successCount === $models->count()) {
+            return redirect()->back()->with('sweet_success', 'Semua catatan revisi berhasil dikirim.');
+        } elseif ($successCount > 0) {
+            return redirect()->back()->with('sweet_warning', "{$successCount} catatan revisi berhasil dikirim, sebagian gagal.");
         } else {
             return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
         }
+
+        // $update = DB::table('pengolahans')
+        //     ->where('jenis', 'Minyak Bumi')
+        //     ->where('tipe', 'Produksi')
+        //     ->where('npwp', $badan_usaha_id)
+        //     ->where('bulan',$bulan)
+        //     ->whereIn('status', [1, 2,3])
+        //     ->update([
+        //         'catatan' => $request->catatan,
+        //         'status' => '2'
+        //     ]);
+
+
+        // if ($update) {
+        //     return redirect()->back()->with('sweet_success', 'Catatan revisi berhasil dikirim.');
+        // } else {
+        //     return redirect()->back()->with('sweet_error', 'Catatan revisi gagal dikirim.');
+        // }
     }
 
     public function selesaiPeriodeAll(Request $request)
     {
         try {
-            $badan_usaha_id = Crypt::decrypt($request->input('p'));
+            $npwp = Crypt::decrypt($request->input('p'));
             $bulan = Crypt::decrypt($request->input('b'));
 
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = DB::table('pengolahans')
+            $models = Pengolahan::where('npwp', $npwp)
+                ->where('bulan', $bulan)
                 ->where('jenis', 'Minyak Bumi')
                 ->where('tipe', 'Produksi')
-                ->where('npwp', $badan_usaha_id)
-                ->where('bulan', $bulan)
-                ->whereIn('status', [1, 2,3])
-                ->update([
-                    'status' => '3'
-                ]);
+                ->whereIn('status', [1])
+                ->get();
 
-
-            if ($update) {
-                // Jika berhasil, kembalikan respons JSON
-                return response()->json(['success' => 'Periode berhasil diselesaikan.']);
-            } else {
-                // Jika gagal, kembalikan respons JSON dengan status 500 (Internal Server Error)
-                return response()->json(['error' => 'Gagal menyelesaikan periode.'], 500);
+            if ($models->isEmpty()) {
+                return response()->json(['error' => 'Tidak ada data untuk diselesaikan.'], 404);
             }
+
+            foreach ($models as $model) {
+                $model->status = 3;
+                $model->save(); // <-- ini yang akan memicu LogTraitEv
+            }
+
+            return response()->json(['success' => 'Periode berhasil diselesaikan.']);
         } catch (\Exception $e) {
             // Tangkap dan tangani exception
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);
@@ -362,21 +398,11 @@ class EvProduksiMinyakBumiController extends Controller
         try {
             $id = $request->input('id');
 
-            // Pastikan bahwa badan_usaha_id dan bulan ada dalam kondisi where
-            $update = DB::table('pengolahans')->where('id', $id)
-                ->update([
-                    'status' => '3'
-                ]);
+            $model = Pengolahan::findOrFail($id);
+            $model->status = '3';
+            $model->save(); // <-- otomatis memicu LogTraitEv
 
-
-
-            if ($update) {
-                // Jika berhasil, kembalikan respons JSON
-                return response()->json(['success' => 'Periode berhasil diselesaikan.']);
-            } else {
-                // Jika gagal, kembalikan respons JSON dengan status 500 (Internal Server Error)
-                return response()->json(['error' => 'Gagal menyelesaikan periode.'], 500);
-            }
+            return response()->json(['success' => 'Periode berhasil diselesaikan.']);
         } catch (\Exception $e) {
             // Tangkap dan tangani exception
             return response()->json(['error' => 'Terjadi kesalahan saat memperbarui status.'], 500);

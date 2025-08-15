@@ -106,7 +106,7 @@
                                                 <button type="button"
                                                     class="btn btn-icon btn-sm btn-info btn-update"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_update" title="Revisi data">
+                                                    data-bs-target="#kt_modal_update_{{ getBulan($data->bulan) }}" title="Revisi data">
                                                     <i class="bi bi-pencil-fill align-middle"></i>
                                                 </button>
 
@@ -119,7 +119,7 @@
                                                             title="Selesai"></i></button>
                                                 @endif
 
-                                                <div class="modal fade" id="kt_modal_update" tabindex="-1" aria-hidden="true">
+                                                <div class="modal fade" id="kt_modal_update_{{ getBulan($data->bulan) }}" tabindex="-1" aria-hidden="true">
                                                     <!--begin::Modal dialog-->
                                                     <div class="modal-dialog modal-dialog-centered mw-650px">
                                                         <!--begin::Modal content-->
