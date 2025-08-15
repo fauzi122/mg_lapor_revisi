@@ -6,7 +6,7 @@
     <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
         <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
             <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
-                <h3 class="text-dark fw-bold">Log Show</h3>
+                <h3 class="text-dark fw-bold">Log Periode</h3>
             </div>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
@@ -16,31 +16,27 @@
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Log Properties</li>
+                    <li class="breadcrumb-item text-muted">Log</li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Show</li>
+                    <li class="breadcrumb-item text-muted">Log Periode</li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
 
+@if ($logsPeriode)
 <div id="kt_app_content" class="app-content flex-column-fluid mt-n5">
     <div id="kt_app_content_container" class="app-container container-xxl">
-        <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-0" role="alert">
-            <i class="mdi mdi-alert-circle-outline label-icon"></i>
-            <strong>Informasi:</strong> Data yang ditampilkan di halaman ini adalah data untuk bulan berjalan.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
         <div class="card-body mt-4">
             <div class="card mb-5 mb-xl-8 shadow">
                 <div class="card-header bg-light p-5">
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="javascript:history.back()"
+                                <a href="{{ url('/logs-ev') }}"
                                     class="btn btn-danger waves-effect waves-light">
                                     <i class='bi bi-arrow-left'></i> Kembali
                                 </a>
@@ -48,28 +44,48 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card-body p-2">
                     <div class="card">
                         <div class="card-header align-items-center px-2">
                             <div class="card-toolbar"></div> 
                             <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                <input type="hidden" class="export-title" value="Logs " />
+                                <input type="hidden" class="export-title" value="Logs Periode" />
                             </div>
                         </div>
                         <table class="kt-datatable table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:center">Field</th>
-                                    <th style="text-align:center">Value</th>
+                            <thead class="bg-light">
+                                <tr class="fw-bold text-uppercase">
+                                    <th style="text-align: center; vertical-align: middle;">No</th>
+                                    <th style="text-align: center; vertical-align: middle;">Bulan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tahun</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach($properties as $key => $value)
-                                    <tr>
-                                        <td style="text-align:center">{{ $key }}</td>
-                                        <td style="text-align:center">{{ $value }}</td>
-                                    </tr>
+                            <tbody class="fw-semibold text-gray-600">
+                                @foreach ($logsPeriode as $periode)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        <b>
+                                            <a href="{{ url('/logs-ev/show/' . $bu_id . '/bulan/' . \Carbon\Carbon::parse($periode->created_at)->month) }}">
+                                                {{ getBulan($periode->created_at) }}
+                                                <i class="bi bi-check" title="Lihat laporan per bulan"></i>
+                                            </a>
+                                        </b>
+                                    </td>
+                                    <td>
+                                        <b>
+                                            <a href="{{ url('/logs-ev/show/' . $bu_id . '/tahun/' . \Carbon\Carbon::parse($periode->created_at)->year) }}">
+                                                {{ getTahun($periode->created_at) }}
+                                                <i class="bi bi-check" title="Lihat laporan per tahun"></i>
+                                            </a>
+                                        </b>
+                                    </td>
+
+                                </tr>
+                                    
                                 @endforeach
+
                             </tbody>
                         </table>
                     </div>
@@ -78,4 +94,6 @@
         </div>
     </div>
 </div>
+@endif
+
 @endsection

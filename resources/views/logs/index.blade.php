@@ -4,7 +4,7 @@
     <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
         <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
             <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
-                <h3 class="text-dark fw-bold">Logs</h3>
+                <h3 class="text-dark fw-bold">Log Aktifitas Badan Usaha</h3>
             </div>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
@@ -18,7 +18,7 @@
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Logs</li>
+                    <li class="breadcrumb-item text-muted">Log Badan Usaha</li>
                 </ul>
             </div>
         </div>
@@ -40,7 +40,7 @@
                         <div class="col-12">
                             <div class="d-flex justify-content-start">
                                 <div class="d-flex justify-content-start">
-                                    <h5 class="card-title">Logs</h5>
+                                    <h5 class="card-title">Log Aktifitas Badan Usaha</h5>
                                 </div>
                             </div>
                             {{-- <div class="d-flex justify-content-end gap-2">
