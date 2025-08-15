@@ -96,11 +96,11 @@
                                         <td>{{ $show->bu_name }}</td>
                                         <td>{{ $show->method }}</td>
                                         <td>{{ $show->url }}</td>
-                                        <td><a href="{{ url('/logs/old_properties/' . $show->id) }}" class="btn btn-primary btn-rounded btn-sm">
+                                        <td><a href="{{ url('/logs-ev/old_properties/' . $show->id) }}" class="btn btn-primary btn-rounded btn-sm">
                                                 <i class="bx bx-show bi-eye fs-5"></i> Lihat
                                             </a></td>
 
-                                        <td><a href="{{ url('/logs/properties/' . $show->id) }}" class="btn btn-primary btn-rounded btn-sm">
+                                        <td><a href="{{ url('/logs-ev/properties/' . $show->id) }}" class="btn btn-primary btn-rounded btn-sm">
                                             <i class="bx bx-show bi-eye fs-5"></i> Lihat
                                         </a></td>
 

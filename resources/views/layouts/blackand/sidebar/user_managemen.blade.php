@@ -61,7 +61,15 @@
                 <span class="menu-bullet">
                     <span class="bullet bullet-dot"></span>
                 </span>
-                <span class="menu-title">Logs</span>
+                <span class="menu-title">Log Badan Usaha</span>
+            </a>
+        </div>
+        <div class="menu-item menu-accordion">
+            <a href="{{ url('/logs-ev') }}" class="menu-link {{ Request::is('logs-ev') ? 'active shadow' : '' }}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Log Evaluator</span>
             </a>
         </div>
     </div>
