@@ -271,6 +271,32 @@
             ]
         });
     </script>
+    <script>
+        function formatNumberInput(input) {
+            let value = input.value;
+
+            // Hanya izinkan angka dan koma
+            value = value.replace(/[^0-9,]/g, "");
+
+            // Pisahkan bilangan dan desimal (jika ada koma)
+            let parts = value.split(",");
+            let integerPart = parts[0];
+            let decimalPart = parts[1] !== undefined ? "," + parts[1] : "";
+
+            // Format ribuan dengan titik
+            integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+            // Gabungkan lagi
+            input.value = integerPart + decimalPart;
+        }
+
+        // Tambahkan event listener ke semua input dengan class "number-input"
+        document.querySelectorAll(".number-input").forEach(function(el) {
+            el.addEventListener("input", function() {
+                formatNumberInput(el);
+            });
+        });
+    </script>
 </body>
 
 </html>
