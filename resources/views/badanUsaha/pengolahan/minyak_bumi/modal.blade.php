@@ -74,7 +74,7 @@
                     </div>
                     <div class="mb-6">
                         <label for="example-text-input" class="form-label">Volume</label>
-                        <input class="form-control" type="number" step="0.01" id="example-text-input" name="volume"
+                        <input class="form-control number-input" type="text" id="example-text-input" name="volume"
                             value="{{ old('volume') }}" required>
                         @error('volume')
                             <div class="form-group has-danger mb-0">
