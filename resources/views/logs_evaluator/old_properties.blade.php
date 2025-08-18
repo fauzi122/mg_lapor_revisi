@@ -6,7 +6,7 @@
     <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
         <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
             <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
-                <h3 class="text-dark fw-bold">Log Show</h3>
+                <h3 class="text-dark fw-bold">Logs Show</h3>
             </div>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
@@ -16,7 +16,7 @@
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Log Properties</li>
+                    <li class="breadcrumb-item text-muted">Logs Old Properties</li>
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
                     </li>
@@ -53,13 +53,13 @@
                         <div class="card-header align-items-center px-2">
                             <div class="card-toolbar"></div> 
                             <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                <input type="hidden" class="export-title" value="Logs " />
+                                <input type="hidden" class="export-title" value="Logs" />
                             </div>
                         </div>
                         <table class="kt-datatable table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th style="text-align:center">Field</th>
+                                    <th style="text-align:center">Nama Field</th>
                                     <th style="text-align:center">Value</th>
                                 </tr>
                             </thead>
@@ -70,6 +70,7 @@
                                         <td style="text-align:center">{{ $value }}</td>
                                     </tr>
                                 @endforeach
+
                             </tbody>
                         </table>
                     </div>

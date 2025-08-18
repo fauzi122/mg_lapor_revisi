@@ -59,22 +59,29 @@ class JabatanController extends Controller
 
     $sanitizedData = fullySanitizeInput($validatedData);
 
-    Jabatan::where('id', $jabatan)
-      ->update($sanitizedData);
+    $update = Jabatan::where('id', $jabatan)->firstOrFail();
+    $update->update($sanitizedData);
       return redirect('/master/jabatan')->with(['success' => 'Data berhasil diupdate']);
     }
+
     public function destroy(Request $request, $id)
     {
-        // Cek apakah id jabatan masih digunakan di tabel profil_admins
-        $isUsed = DB::table('profil_admins')->where('id_jabatan', $id)->exists();
-    
-        // Jika id_jabatan masih digunakan, batalkan penghapusan dan tampilkan pesan
-        if ($isUsed) {
-            return redirect('/master/jabatan')->with(['sweet_error' => 'Data tidak dapat dihapus karena masih digunakan di tabel profil']);
-        }
-    
-        // Jika tidak digunakan, lanjutkan proses penghapusan
-        DB::table('jabatans')->where('id', $id)->delete();
-        return redirect('/master/jabatan')->with(['success' => 'Data berhasil dihapus']);
+      // Cek apakah id intake_kilang masih digunakan di tabel produks
+      $isUsed = DB::table('profil_admins')->where('id_jabatan', $id)->exists();
+
+
+      // Jika masih digunakan, batalkan penghapusan dan tampilkan pesan
+      if ($isUsed) {
+        return redirect('/master/jabatan')->with([
+          'sweet_error' => 'Data tidak dapat dihapus karena masih digunakan di tabel produks'
+        ]);
+      }
+
+      // Jika tidak digunakan, hapus data
+      Jabatan::destroy($id);
+
+      return redirect('/master/jabatan')->with([
+        'success' => 'Data berhasil dihapus'
+      ]);
     }
 }

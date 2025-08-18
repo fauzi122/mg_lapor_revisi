@@ -26,7 +26,8 @@ trait SentEmailTrait
         ]);
 
         $jsonResponse = $request->json();
-        $code = $jsonResponse['code'];
+        // Penambahan Null Hanya Percobaan karena harus memakai API sendEmail, Code sebelumnya $code = $jsonResponse['code']
+        $code = $jsonResponse['code'] ?? null;
         return $code;
         //dd($jsonResponse['code']);
     }

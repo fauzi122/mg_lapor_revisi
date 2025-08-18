@@ -27,7 +27,8 @@ use App\Http\Controllers\{
 	testEmailController,
 	IzinController,
 	IzinUsahaController,
-    LogsEvController
+    LogsEvController,
+	LogsEvaluatorController
 };
 
 use App\Http\Controllers\Evaluator\{
@@ -802,10 +803,19 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	// routes/web.php
 	Route::controller(LogsEvController::class)->group(function () {
 		Route::get('/logs', 'index')->name('logs.index');
-		Route::get('/logs/periode/{bulan}', 'periode')->name('logs.periode');
+		Route::get('/logs/periode/{bu_id}', 'periode')->name('logs.periode');
 		Route::get('/logs/properties/{id}', 'properties')->name('logs.properties');
 		Route::get('/logs/old_properties/{id}', 'properties_old')->name('logs.properties_old');
-		Route::get('/logs/show/{filter?}/{value?}', 'show')->name('logs.show');
+		// Route::get('/logs/show/{filter?}/{value?}', 'show')->name('logs.show');
+		Route::get('/logs/show/{bu_id?}/{filter?}/{value?}', 'show')->name('logs.show');
+	});
+
+		Route::controller(LogsEvaluatorController::class)->group(function () {
+		Route::get('/logs-ev', 'index')->name('logs-ev.index');
+		Route::get('/logs-ev/periode/{bu_id}', 'periode')->name('logs-ev.periode');
+		Route::get('/logs-ev/properties/{id}', 'properties')->name('logs-ev.properties');
+		Route::get('/logs-ev/old_properties/{id}', 'properties_old')->name('logs-ev.properties_old');
+		Route::get('/logs-ev/show/{bu_id?}/{filter?}/{value?}', 'show')->name('logs-ev.show');
 	});
 
 

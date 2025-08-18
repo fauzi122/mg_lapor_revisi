@@ -1,4 +1,9 @@
-<div data-kt-menu-trigger="click" class="menu-item menu-accordion mt-2">
+@php
+    $isSubsidiBBMActive =
+        request()->is('laporan/kuota-jbt') ||
+        request()->is('laporan/kuota-jbkp');
+@endphp
+<div data-kt-menu-trigger="click" class="menu-item menu-accordion mt-2 {{ $isSubsidiBBMActive ? 'here show' : '' }}">
     <!--begin:Menu link-->
     <span class="menu-link active shadow">
         <span class="menu-icon">

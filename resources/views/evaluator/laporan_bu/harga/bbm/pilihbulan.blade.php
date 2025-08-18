@@ -60,7 +60,7 @@
                                 </button>
 
                                 <button type="button"
-                                    class="btn btn-info waves-effect waves-light">
+                                    class="btn btn-info waves-effect waves-light btn-selesai-status">
                                     <i class="bi bi-check-lg"></i> Selesai
                                 </button>
 
@@ -179,17 +179,17 @@
                                         <td class="text-center">
                                             @if ($pgb->status == 1)
                                                 <button type="button"
-                                                    class="btn btn-info btn-sm rounded-pill btn-update"
-                                                    data-bs-toggle="modal" data-bs-target="#modal-update"
+                                                    class="btn btn-icon btn-sm btn-info btn-update mb-3"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_update_{{ $pgb->id }}"
                                                     title="Revisi data">
-                                                    <i class="bx bxs-edit align-middle"></i>
+                                                    <i class="ki-solid ki-pencil align-middle"></i>
                                                 </button>
                                         
 
                                                 @if ($pgb->status == 1 && $pgb->catatan)
                                                     <button
                                                         class="btn btn-primary btn-rounded btn-sm btn-selesai"
-                                                        data-id="{{ $pgb->id }}"><i class="bx bx-check"
+                                                        data-id="{{ $pgb->id }}"><i class="bi bi-check-lg"
                                                             title="Selesai"></i></button>
                                                 @endif
 

@@ -63,8 +63,8 @@ class PortCOntroller extends Controller
     // Sanitasi Input
     $sanitizedData = fullySanitizeInput($validatedData);
 
-      Port::where('id', $port)
-      ->update($sanitizedData);
+      $update = Port::where('id', $port)->firstOrFail();
+      $update->update($sanitizedData);
       return redirect('/master/port')->with(['success' => 'Data berhasil diupdate']);
     }
     public function destroy(Request $request, $id)
