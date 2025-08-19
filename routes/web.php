@@ -64,7 +64,8 @@ use App\Http\Controllers\Evaluator\{
 	EvPenjualanJbkp,
 	EvPenjualanJbt,
 	EvPenjualanJbu,
-	SubsidiLpg
+    EvProgresPembangunanController,
+    SubsidiLpg
 };
 use App\Http\Controllers\user\PermissionController;
 use App\Http\Controllers\user\RoleController;
@@ -931,6 +932,15 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/pengangkutan-gas/periode/{kode}', 'periode');
 		Route::post('/laporan/pengangkutan-gas/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/pengangkutan-gas', 'sinkronisasiData');
+	});
+
+	Route::controller(EvProgresPembangunanController::class)->group(function () {
+		Route::get('/laporan/progres-pembangunan', 'index');
+		Route::get('/laporan/progres-pembangunan/{kode}', 'show');
+		Route::post('/laporan/progres-pembangunan/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/progres-pembangunan/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/progres-pembangunan/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/progres-pembangunan/selesai-periode', 'selesaiPeriode');
 	});
 
 
