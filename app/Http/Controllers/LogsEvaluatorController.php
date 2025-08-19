@@ -6,7 +6,7 @@ use App\Models\Logs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class LogsEvController extends Controller
+class LogsEvaluatorController extends Controller
 {
     public function index()
     {
@@ -18,10 +18,10 @@ class LogsEvController extends Controller
             )
             ->join('users', 'logs.bu_id', '=', 'users.id')
             ->groupBy('logs.bu_name', 'logs.bu_id', 'users.name')
-            ->where('users.role','BU')
+            ->where('users.role','ADM')
             ->get();
 
-        return view('logs.index', compact('logs'));
+        return view('logs_evaluator.index', compact('logs'));
 
     }
 
@@ -33,7 +33,7 @@ class LogsEvController extends Controller
             ->orderByRaw("MAX(created_at) DESC")
             ->get();
 
-        return view('logs.periode', compact('logsPeriode', 'bu_id'));
+        return view('logs_evaluator.periode', compact('logsPeriode', 'bu_id'));
     }
 
 
@@ -67,7 +67,7 @@ class LogsEvController extends Controller
 
         $logsShow = $query->get();
 
-        return view('logs.show', compact('logsShow'));
+        return view('logs_evaluator.show', compact('logsShow'));
     }
 
 
@@ -90,7 +90,7 @@ class LogsEvController extends Controller
         // Ganti null jadi string kosong, tapi hanya kalau ada isi
         $properties = array_map(fn($v) => $v ?? '', $properties);
 
-        return view('logs.properties', compact('properties'));
+        return view('logs_evaluator.properties', compact('properties'));
     }
 
     public function properties_old($id)
@@ -112,6 +112,6 @@ class LogsEvController extends Controller
         // Ganti null jadi string kosong, tapi hanya kalau ada isi
         $properties = array_map(fn($v) => $v ?? '', $properties);
 
-        return view('logs.old_properties', compact('properties'));
+        return view('logs_evaluator.old_properties', compact('properties'));
     }
 }

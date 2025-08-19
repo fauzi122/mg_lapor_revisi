@@ -23,20 +23,20 @@ trait LogTrait
         });
 
         static::created(function ($model) {
-            // Kirim email saat Badan Usaha membuat laporan
-            if (Auth::user()->role === "BU") {
-                $class = Str::of(class_basename($model))->replace('_', ' ');
-                // $receiver = Auth::user()->email;
-                $receiver = "mnja2701@gmail.com";
-                $subject = "Anda membuat laporan baru";
-                $content = "Anda membuat laporan $class";
-    
-                $model->emailNotif($receiver,$subject,$content);
-            }
             static::storeLog($model, static::class, 'CREATED');
         });
 
         static::updated(function ($model) {
+            // Kirim email saat BU men-submit laporan
+            if (Auth::user()->role === "BU" && $model->getOriginal()['status'] == '0' && $model->status == "1") {
+                $class = Str::of(class_basename($model))->replace('_', ' ');
+                // $receiver = Auth::user()->email;
+                $receiver = "mnja2701@gmail.com";
+                $subject = "Laporan baru";
+                $content = "Anda telah mengirim laporan $class";
+    
+                $model->emailNotif($receiver,$subject,$content);
+            }
             // Kirim email saat Badan Usaha mengirim perbaikan revisi
             if (Auth::user()->role === "BU" && $model->getOriginal()['status'] == '2' && $model->status == "1") {
                 $class = Str::of(class_basename($model))->replace('_', ' ');
