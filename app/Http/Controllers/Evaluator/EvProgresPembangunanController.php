@@ -147,175 +147,175 @@ class EvProgresPembangunanController extends Controller
         }
     }
 
-    // public function lihatSemuaData()
-    // {
-    //     $tgl = Carbon::now();
+    public function lihatSemuaData()
+    {
+        $tgl = Carbon::now();
 
-    //     $query = DB::table('progres_pembangunans as p')
-    //         ->leftJoin('users as u', 'u.npwp', '=', 'p.npwp')
-    //         ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-    //         ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-    //         ->where('p.created_at', $tgl->startOfMonth()->format('Y-m-d'))
-    //         ->whereIn(DB::raw('p.status::int'), [1, 2, 3])
-    //         ->groupBy(
-    //             'a.id',
-    //             'a.npwp',
-    //             'a.id_permohonan',
-    //             'a.prosentase_pembangunan',
-    //             'a.realisasi_investasi',
-    //             'a.matrik_bobot_pembangunan',
-    //             'a.path_matrik_bobot_pembangunan',
-    //             'a.bukti_progres_pembangunan',
-    //             'a.path_bukti_progres_pembangunan',
-    //             'a.tkdn',
-    //             'a.status',
-    //             'a.catatan',
-    //             'a.petugas',
-    //             'a.created_at',
-    //             'a.updated_at',
-    //             'u.name',
-    //             'i.npwp',
-    //             'm.status'
-    //         )
-    //         ->select(
-    //             'a.*',
-    //             'm.status',
-    //             'i.npwp',
-    //             'u.name as nama_perusahaan',
-    //             DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-    //             DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-    //             DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-    //         )
-    //         ->get();
-
-
-
-    //     $perusahaan = DB::table('progres_pembangunan as p')
-    //         ->leftJoin('users as u', 'u.npwp', '=', 'p.npwp')
-    //         ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-    //         ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-    //         ->whereIn(DB::raw('p.status::int'), [1, 2, 3])
-    //         ->groupBy('u.name', 'i.npwp')
-    //         ->select(
-    //             'u.name as nama_perusahaan',
-    //             'i.npwp',
-    //             DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-    //             DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-    //             DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-    //         )
-    //         ->get();
-
-    //     return view('evaluator.laporan_bu.exim.expor.lihat-semua-data', [
-    //         'title' => 'Laporan Ekspor',
-    //         'periode' => 'Bulan ' . $tgl->monthName . " " . $tgl->year,
-    //         'query' => $query,
-    //         'perusahaan' => $perusahaan,
-    //     ]);
-    // }
+        $query = DB::table('progres_pembangunans as p')
+            ->leftJoin('users as u', 'u.npwp', '=', 'p.npwp')
+            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->where('p.created_at', $tgl->startOfMonth()->format('Y-m-d'))
+            ->whereIn(DB::raw('p.status::int'), [1, 2, 3])
+            ->groupBy(
+                'a.id',
+                'a.npwp',
+                'a.id_permohonan',
+                'a.prosentase_pembangunan',
+                'a.realisasi_investasi',
+                'a.matrik_bobot_pembangunan',
+                'a.path_matrik_bobot_pembangunan',
+                'a.bukti_progres_pembangunan',
+                'a.path_bukti_progres_pembangunan',
+                'a.tkdn',
+                'a.status',
+                'a.catatan',
+                'a.petugas',
+                'a.created_at',
+                'a.updated_at',
+                'u.name',
+                'i.npwp',
+                'm.status'
+            )
+            ->select(
+                'a.*',
+                'm.status',
+                'i.npwp',
+                'u.name as nama_perusahaan',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->get();
 
 
-    // public function filterData(Request $request)
-    // {
-    //     $t_awal = Carbon::parse($request->t_awal)->startOfDay();
-    //     $t_akhir = Carbon::parse($request->t_akhir)->endOfDay();
 
-    //     // Data perusahaan (dropdown)
-    //     $perusahaan = DB::table('ekspors as a')
-    //         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-    //         ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-    //         ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-    //         ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-    //         ->groupBy('u.name', 'i.npwp')
-    //         ->select(
-    //             DB::raw("MAX(a.bulan_peb) as bulan_terbaru"),
-    //             'u.name as nama_perusahaan',
-    //             'i.npwp',
-    //             DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-    //             DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-    //             DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-    //         )
-    //         ->get();
+        $perusahaan = DB::table('progres_pembangunan as p')
+            ->leftJoin('users as u', 'u.npwp', '=', 'p.npwp')
+            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->whereIn(DB::raw('p.status::int'), [1, 2, 3])
+            ->groupBy('u.name', 'i.npwp')
+            ->select(
+                'u.name as nama_perusahaan',
+                'i.npwp',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->get();
 
-    //     // Data ekspor (utama)
-    //     $query = DB::table('ekspors as a')
-    //         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-    //         ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-    //         ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-    //         ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-    //         ->select(
-    //             'a.id',
-    //             'a.npwp',
-    //             'a.bulan_peb',
-    //             'a.produk',
-    //             'a.hs_code',
-    //             'a.volume_peb',
-    //             'a.satuan',
-    //             'a.invoice_amount_nilai_pabean',
-    //             'a.invoice_amount_final',
-    //             'a.nama_konsumen',
-    //             'a.pelabuhan_muat',
-    //             'a.negara_tujuan',
-    //             'a.vessel_name',
-    //             'a.tanggal_bl',
-    //             'a.bl_no',
-    //             'a.no_pendaf_peb',
-    //             'a.tanggal_pendaf_peb',
-    //             'a.incoterms',
-    //             'a.status',
-    //             'a.tgl_kirim',
-    //             'a.catatan',
-    //             'a.created_at',
-    //             'a.updated_at',
-    //             'a.id_sub_page',
-    //             'u.name as nama_perusahaan',
-    //             DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-    //             DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-    //             DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-    //         )
-    //         ->groupBy(
-    //             'a.id',
-    //             'a.npwp',
-    //             'a.bulan_peb',
-    //             'a.produk',
-    //             'a.hs_code',
-    //             'a.volume_peb',
-    //             'a.satuan',
-    //             'a.invoice_amount_nilai_pabean',
-    //             'a.invoice_amount_final',
-    //             'a.nama_konsumen',
-    //             'a.pelabuhan_muat',
-    //             'a.negara_tujuan',
-    //             'a.vessel_name',
-    //             'a.tanggal_bl',
-    //             'a.bl_no',
-    //             'a.no_pendaf_peb',
-    //             'a.tanggal_pendaf_peb',
-    //             'a.incoterms',
-    //             'a.status',
-    //             'a.tgl_kirim',
-    //             'a.catatan',
-    //             'a.created_at',
-    //             'a.updated_at',
-    //             'a.id_sub_page',
-    //             'u.name'
-    //         )
-    //         ->where(function ($q) use ($t_awal, $t_akhir) {
-    //             $q->whereBetween('a.bulan_peb', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-    //                 ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
-    //         })
-    //         ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
+        return view('evaluator.laporan_bu.progres_pembangunan.lihat-semua-data', [
+            'title' => 'Laporan Ekspor',
+            'periode' => 'Bulan ' . $tgl->monthName . " " . $tgl->year,
+            'query' => $query,
+            'perusahaan' => $perusahaan,
+        ]);
+    }
 
-    //     if ($request->perusahaan !== 'all') {
-    //         $query->where('a.npwp', $request->perusahaan);
-    //     }
 
-    //     $result = $query->get();
+    public function filterData(Request $request)
+    {
+        $t_awal = Carbon::parse($request->t_awal)->startOfDay();
+        $t_akhir = Carbon::parse($request->t_akhir)->endOfDay();
 
-    //     return view('evaluator.laporan_bu.exim.expor.lihat-semua-data', [
-    //         'title' => 'Laporan Ekspor',
-    //         'periode' => 'Tanggal ' . $t_awal->format('d F Y') . ' - ' . $t_akhir->format('d F Y'),
-    //         'query' => $result,
-    //         'perusahaan' => $perusahaan,
-    //     ]);
-    // }
+        // Data perusahaan (dropdown)
+        $perusahaan = DB::table('ekspors as a')
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->groupBy('u.name', 'i.npwp')
+            ->select(
+                DB::raw("MAX(a.bulan_peb) as bulan_terbaru"),
+                'u.name as nama_perusahaan',
+                'i.npwp',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->get();
+
+        // Data ekspor (utama)
+        $query = DB::table('ekspors as a')
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
+            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->select(
+                'a.id',
+                'a.npwp',
+                'a.bulan_peb',
+                'a.produk',
+                'a.hs_code',
+                'a.volume_peb',
+                'a.satuan',
+                'a.invoice_amount_nilai_pabean',
+                'a.invoice_amount_final',
+                'a.nama_konsumen',
+                'a.pelabuhan_muat',
+                'a.negara_tujuan',
+                'a.vessel_name',
+                'a.tanggal_bl',
+                'a.bl_no',
+                'a.no_pendaf_peb',
+                'a.tanggal_pendaf_peb',
+                'a.incoterms',
+                'a.status',
+                'a.tgl_kirim',
+                'a.catatan',
+                'a.created_at',
+                'a.updated_at',
+                'a.id_sub_page',
+                'u.name as nama_perusahaan',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->groupBy(
+                'a.id',
+                'a.npwp',
+                'a.bulan_peb',
+                'a.produk',
+                'a.hs_code',
+                'a.volume_peb',
+                'a.satuan',
+                'a.invoice_amount_nilai_pabean',
+                'a.invoice_amount_final',
+                'a.nama_konsumen',
+                'a.pelabuhan_muat',
+                'a.negara_tujuan',
+                'a.vessel_name',
+                'a.tanggal_bl',
+                'a.bl_no',
+                'a.no_pendaf_peb',
+                'a.tanggal_pendaf_peb',
+                'a.incoterms',
+                'a.status',
+                'a.tgl_kirim',
+                'a.catatan',
+                'a.created_at',
+                'a.updated_at',
+                'a.id_sub_page',
+                'u.name'
+            )
+            ->where(function ($q) use ($t_awal, $t_akhir) {
+                $q->whereBetween('a.bulan_peb', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+                    ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
+            })
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
+
+        if ($request->perusahaan !== 'all') {
+            $query->where('a.npwp', $request->perusahaan);
+        }
+
+        $result = $query->get();
+
+        return view('evaluator.laporan_bu.exim.expor.lihat-semua-data', [
+            'title' => 'Laporan Ekspor',
+            'periode' => 'Tanggal ' . $t_awal->format('d F Y') . ' - ' . $t_akhir->format('d F Y'),
+            'query' => $result,
+            'perusahaan' => $perusahaan,
+        ]);
+    }
 }
