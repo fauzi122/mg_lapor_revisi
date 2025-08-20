@@ -91,6 +91,17 @@ function fullySanitizeInput(array $input): array
     return $sanitized;
 }
 
+// SImpan File Dokumen Badan Usaha
+function simpanDokumenBu($tgl, $file, $prefix): string
+{
+    $path = $tgl->year . "/" . $tgl->format('F') . "/" . Auth()->user()->name;
+    // $file = $request->file('_bobot_pembangunan');
+    $fileName = $prefix . "-" . $file->hashName();
+    $fullPath = $file->storeAs($path, $fileName, 'public');
+
+    return $fullPath;
+}
+
 
 // Sanitasi impor Excel
 function validateExcelUpload($attribute, $value, $fail)

@@ -386,10 +386,7 @@ class PenyMinyakbumiController extends Controller
 
         // 3. Upload file
         $tgl = Carbon::parse($request->bulan);
-        $path = $tgl->year . "/" . $tgl->format('F') . "/" . Auth()->user()->name;
-        $file = $request->file('kontrak_sewa');
-        $fileName = $request->prefix . "-" . $file->hashName();
-        $validatedData['kontrak_sewa'] = $file->storeAs($path, $fileName, 'public');
+        $validatedData['kontrak_sewa'] = simpanDokumenBu($tgl, $request->file('kontrak_sewa'), "pm");
 
         // 4. Tambah field bulan fix
         $validatedData['bulan'] = \Carbon\Carbon::parse($request->bulan)->format('Y-m-01');

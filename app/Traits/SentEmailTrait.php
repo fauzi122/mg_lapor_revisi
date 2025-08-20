@@ -1,11 +1,16 @@
 <?php
 
 namespace App\Traits;
+
+use App\Models\EmailMaster;
 use Illuminate\Support\Facades\Http;
 
 trait SentEmailTrait
 {
-    public function emailNotif($receiver,$subject,$content){
+    // public function emailNotif($receiver,$subject,$content){
+    public function emailNotif($receiver,$event){
+        $email = EmailMaster::where('event', $event)->firstOrFail();
+        
         $url = "https://apicdev.esdm.go.id/development/dev-sandbox/api/v1/mail/send";
         $uname = "pelaporan-migas";
         $password = "f9q9b5YbQafj";
@@ -21,8 +26,8 @@ trait SentEmailTrait
         ])
         ->post($url, [
             'receiver' => $receiver,
-            'subject' => $subject,
-            'content' => $content
+            'subject' => $email->subject,
+            'content' => $email->content
         ]);
 
         $jsonResponse = $request->json();
