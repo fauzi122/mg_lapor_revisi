@@ -22,6 +22,7 @@
         'laporan/penyimpanan/gb',
         'laporan/pengangkutan/mb',
         'laporan/pengangkutan/gb',
+        'laporan/progres-pembangunan',
     ];
     $isLaporanBUActive = request()->is($laporanPaths);
 
@@ -588,4 +589,38 @@
             </div>
         </div>
     </div>
+
+
+    <div class="menu-sub menu-sub-accordion">
+            <!--begin:Menu item-->
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/progres-pembangunan') ? 'show here' : '' }}">
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span class="menu-bullet">
+                        <span class="bullet bullet-dot"></span>
+                    </span>
+                    <span class="menu-title">Progres Pembangungan</span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <!--end:Menu link-->
+
+                {{-- Progres Pembangunan --}}
+
+                <!--begin:Menu sub-->
+                <div class="menu-sub menu-sub-accordion">
+                    <!--begin:Menu item-->
+                    <div class="menu-item">
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('laporan/progres-pembangunan') ? 'active shadow' : '' }}" href="{{ url('/laporan/progres-pembangunan') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Progres Pembangunan</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                </div>
+            </div>
+        </div>
 </div>
