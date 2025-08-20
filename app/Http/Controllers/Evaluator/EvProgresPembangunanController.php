@@ -63,6 +63,74 @@ class EvProgresPembangunanController extends Controller
         return view('evaluator.laporan_bu.progres_pembangunan.show', $data);
     }
 
+    public function cetakperiode(Request $request)
+    {
+        $request->validate([
+            'perusahaan' => 'required',
+            't_awal' => 'required|date',
+            't_akhir' => 'required|date|after_or_equal:t_awal',
+        ]);
+
+        $perusahaan = $request->input('perusahaan');
+        $t_awal = Carbon::parse($request->input('t_awal'))->startOfDay();
+        $t_akhir = Carbon::parse($request->input('t_akhir'))->endOfDay();
+
+        $query = DB::table('progres_pembangunans as a')
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->select(
+                'a.*',
+                'u.name as nama_perusahaan',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->whereIn(DB::raw('a.status::int'), [0, 1, 2, 3])
+            ->whereBetween('a.created_at', [$t_awal, $t_akhir])
+            ->groupBy(
+                'a.id',
+                'a.npwp',
+                'a.id_sub_page',
+                'a.tgl_kirim',
+                'a.id_permohonan',
+                'a.prosentase_pembangunan',
+                'a.realisasi_investasi',
+                'a.matrik_bobot_pembangunan',
+                'a.path_matrik_bobot_pembangunan',
+                'a.bukti_progres_pembangunan',
+                'a.path_bukti_progres_pembangunan',
+                'a.tkdn',
+                'a.status',
+                'a.catatan',
+                'a.petugas',
+                'a.created_at',
+                'a.updated_at',
+                'u.name'
+            );
+
+        if ($perusahaan != 'all') {
+            $query->where('a.npwp', $perusahaan);
+        }
+
+        $result = $query->get();
+
+        if ($result->isEmpty()) {
+            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
+        }
+
+        $data = [
+            'title' => 'Laporan Progres Pembangunan',
+            'result' => $result
+        ];
+
+        $view = view('evaluator.laporan_bu.progres_pembangunan.cetak', $data);
+        $view->with('reload', true);
+
+        return response($view);
+    }
+
+
     public function updateRevisionNotes(Request $request)
     {
 
@@ -160,6 +228,8 @@ class EvProgresPembangunanController extends Controller
             ->groupBy(
                 'p.id',
                 'p.npwp',
+                'p.id_sub_page',
+                'p.tgl_kirim',
                 'p.id_permohonan',
                 'p.prosentase_pembangunan',
                 'p.realisasi_investasi',
@@ -242,6 +312,8 @@ class EvProgresPembangunanController extends Controller
                 'p.id',
                 'p.npwp',
                 'p.id_permohonan',
+                'p.tgl_kirim',
+                'p.id_sub_page',
                 'p.prosentase_pembangunan',
                 'p.realisasi_investasi',
                 'p.matrik_bobot_pembangunan',
@@ -261,6 +333,8 @@ class EvProgresPembangunanController extends Controller
             )
             ->groupBy(
                 'p.id',
+                'p.id_sub_page',
+                'p.tgl_kirim',
                 'p.npwp',
                 'p.id_permohonan',
                 'p.prosentase_pembangunan',

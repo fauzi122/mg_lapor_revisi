@@ -63,7 +63,7 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                {{-- <form id="cetakForm" action="#" method="post">
+                                                <form id="cetakForm" action="{{ url('/laporan/progres-pembangunan/cetak-periode') }}" method="post">
                                                     @csrf
                                                     <div>
                                                         <div class="mb-3">
@@ -102,7 +102,7 @@
                                                                 class="btn btn-primary">Proses</button>
                                                         </div>
                                                     </div>
-                                                </form> --}}
+                                                </form>
                                             </div>
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->
