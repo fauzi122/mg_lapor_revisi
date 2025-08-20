@@ -255,6 +255,7 @@
     <script src="{{ asset('assets/js/modal_penyimpanan_gas_minyak.js') }}"></script>
     <script src="{{ asset('assets/js/modal_pengangkutan_minyak_gas.js') }}"></script>
     <script src="{{ asset('assets/js/modal_subsidi.js') }}"></script>
+    <script src="{{ asset('assets/js/modal_pp.js') }}"></script>
 
     {{-- flatpickr (Untuk data tanggal pada laporan badan usaha) --}}
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

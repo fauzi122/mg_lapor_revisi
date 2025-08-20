@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Izin;
 use App\Models\ProgresPembangunan;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
 class ProgresPembangunanController extends Controller
@@ -16,12 +17,33 @@ class ProgresPembangunanController extends Controller
   {
     $pecah = explode(',', Crypt::decryptString($id));
 
-    $ProgresPembangunan = ProgresPembangunan::get();
+    // Code lama
+    // $ProgresPembangunan = ProgresPembangunan::get();
+
+    $ProgresPembangunan = ProgresPembangunan::where('npwp', Auth::user()->npwp)
+    ->where('id_permohonan', $pecah[0])
+    ->where('id_sub_page', $pecah[2])
+    ->get();
     // return view('badan_usaha.progres_pembangunan.show', compact(
     return view('badanUsaha.progres_pembangunan.show', compact(
       'ProgresPembangunan',
       'pecah'
     ));
+  }
+
+  public function hapus_izinSementara(Request $request, $id) 
+  {
+    try {
+      ProgresPembangunan::destroy($id);
+
+      Alert::success('success', 'Data berhasil dihapus');
+      return back();
+    } catch (\Throwable $th) {
+      //throw $th;
+      //redirect dengan pesan error
+      Alert::error('error', 'Data gagal dihapus');
+      return back();
+    }
   }
 
   public function simpan_izinSementara(Request $request)
@@ -35,46 +57,46 @@ class ProgresPembangunanController extends Controller
     // echo json_encode($request->badan_usaha_id);exit;
 
     $pesan = [
-      'badan_usaha_id.required' => 'badan_usaha_id masih kosong',
-      'izin_id.required' => 'izin_id masih kosong',
-
+      'npwp.required' => 'npwp masih kosong',
+      'id_permohonan.required' => 'id_permohonan masih kosong',
+      'id_sub_page.required' => 'id_sub_page masih kosong',
       'status.required' => 'status masih kosong',
       'catatan.required' => 'catatan masih kosong',
       'petugas.required' => 'petugas masih kosong',
     ];
 
     $validatedData = $request->validate([
-      'badan_usaha_id' => 'required',
-      'izin_id' => 'required',
+      'npwp' => 'required',
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
       'prosentase_pembangunan' => 'required',
       'realisasi_investasi' => 'required',
       'matrik_bobot_pembangunan' => 'required|mimes:doc,docx,dot,pdf|max:2048',
       'bukti_progres_pembangunan' => 'required|mimes:doc,docx,dot,pdf|max:2048',
       'tkdn' => 'required',
-      'status' => 'required',
-      'catatan' => 'required',
-      'petugas' => 'required',
+      // 'status' => 'required',
+      // 'catatan' => 'required',
+      // 'petugas' => 'required',
     ], $pesan);
 
-    $name_matrik = $request->file('matrik_bobot_pembangunan')->getClientOriginalName();
-    $path_matrik = $request->file('matrik_bobot_pembangunan')->store('public/izin_sementara/matrik');
-    $name_bukti = $request->file('bukti_progres_pembangunan')->getClientOriginalName();
-    $path_bukti = $request->file('bukti_progres_pembangunan')->store('public/izin_sementara/bukti');
+    $tgl = Carbon::now();
+    // 3. Upload matrik
+    $validatedData['matrik_bobot_pembangunan'] = $request->file('matrik_bobot_pembangunan')->getClientOriginalName();
+    $validatedData['path_matrik_bobot_pembangunan'] = simpanDokumenBu($tgl, $request->file('matrik_bobot_pembangunan'), "pp");
 
-    $simpan = ProgresPembangunan::create([
-      'badan_usaha_id' => $request->badan_usaha_id,
-      'izin_id' => $request->izin_id,
-      'prosentase_pembangunan' => $request->prosentase_pembangunan,
-      'realisasi_investasi' => $request->realisasi_investasi,
-      'matrik_bobot_pembangunan' => $name_matrik,
-      'path_matrik_bobot_pembangunan' => $path_matrik,
-      'bukti_progres_pembangunan' => $name_bukti,
-      'path_bukti_progres_pembangunan' => $path_bukti,
-      'tkdn' => $request->tkdn,
-      'status' => $request->status,
-      'catatan' => $request->catatan,
-      'petugas' => $request->petugas,
-    ]);
+    // 3. Upload Bukti
+    $validatedData['bukti_progres_pembangunan'] = $request->file('bukti_progres_pembangunan')->getClientOriginalName();
+    $validatedData['path_bukti_progres_pembangunan'] = simpanDokumenBu($tgl, $request->file('bukti_progres_pembangunan'), "pp");
+
+    // 5. Sanitasi
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    // $name_matrik = $request->file('matrik_bobot_pembangunan')->getClientOriginalName();
+    // $path_matrik = $request->file('matrik_bobot_pembangunan')->store('public/izin_sementara/matrik');
+    // $name_bukti = $request->file('bukti_progres_pembangunan')->getClientOriginalName();
+    // $path_bukti = $request->file('bukti_progres_pembangunan')->store('public/izin_sementara/bukti');
+
+    $simpan = ProgresPembangunan::create($sanitizedData);
 
     if ($simpan) {
       // $name = $request->file('matrik_bobot_pembangunan')->getClientOriginalName();
@@ -118,6 +140,86 @@ class ProgresPembangunanController extends Controller
     //     Alert::error('Error', 'Data gagal ditambahkan');
     //     return back();
     // }
+  }
+
+  public function update_izinSementara(Request $request, $id)
+  {
+    $pesan = [
+      'npwp.required' => 'npwp masih kosong',
+      'id_permohonan.required' => 'id_permohonan masih kosong',
+      'id_sub_page.required' => 'id_sub_page masih kosong',
+      'status.required' => 'status masih kosong',
+      'catatan.required' => 'catatan masih kosong',
+      'petugas.required' => 'petugas masih kosong',
+    ];
+
+    $validatedData = $request->validate([
+      'npwp' => 'required',
+      'id_permohonan' => 'required',
+      'id_sub_page' => 'required',
+      'prosentase_pembangunan' => 'required',
+      'realisasi_investasi' => 'required',
+      'matrik_bobot_pembangunan' => 'mimes:doc,docx,dot,pdf|max:2048',
+      'bukti_progres_pembangunan' => 'mimes:doc,docx,dot,pdf|max:2048',
+      'tkdn' => 'required',
+      // 'status' => 'required',
+      // 'catatan' => 'required',
+      // 'petugas' => 'required',
+    ], $pesan);
+
+    $tgl = Carbon::now();
+
+    if ($request->hasFile('matrik_bobot_pembangunan')) {
+      $validatedData['matrik_bobot_pembangunan'] = $request->file('matrik_bobot_pembangunan')->getClientOriginalName();
+      $validatedData['path_matrik_bobot_pembangunan'] = simpanDokumenBu($tgl, $request->file('matrik_bobot_pembangunan'), "pp");
+    }
+    if ($request->hasFile('bukti_progres_pembangunan')) {
+      $validatedData['bukti_progres_pembangunan'] = $request->file('bukti_progres_pembangunan')->getClientOriginalName();
+      $validatedData['path_bukti_progres_pembangunan'] = simpanDokumenBu($tgl, $request->file('bukti_progres_pembangunan'), "pp");
+    }
+
+    $sanitizedData = fullySanitizeInput($validatedData);
+
+    $updated = ProgresPembangunan::findOrFail($id);
+    $updated->update($sanitizedData);
+
+    if ($updated) {
+      //redirect dengan pesan sukses
+      Alert::success('success', 'Data berhasil diupdate');
+      return back();
+    } else {
+      //redirect dengan pesan error
+      Alert::error('error', 'Data gagal diupdate');
+      return back();
+    }
+  }
+
+  public function submit_izinSementara(Request $request, $id)
+  {
+    $now = Carbon::now();
+
+    $validatedData = ProgresPembangunan::findOrFail($id);
+    $validatedData->update([
+        'status' => '1',
+        'tgl_kirim' => $now
+    ]);
+
+    if ($validatedData) {
+        //redirect dengan pesan sukses
+        Alert::success('success', 'Data berhasil dikirim');
+        return back();
+    } else {
+        //redirect dengan pesan error
+        Alert::error('error', 'Data gagal dikirim');
+        return back();
+    }
+  }
+
+  public function get_izinSementara($id)
+  {
+    $data['find'] = ProgresPembangunan::findOrFail($id);
+
+    return response()->json(['data' => $data]);
   }
 
   public function hapus_lgpsubx(Request $request, $id)

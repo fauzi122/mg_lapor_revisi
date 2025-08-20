@@ -29,35 +29,25 @@ trait LogTrait
         static::updated(function ($model) {
             // Kirim email saat BU men-submit laporan
             if (Auth::user()->role === "BU" && $model->getOriginal()['status'] == '0' && $model->status == "1") {
-                $class = Str::of(class_basename($model))->replace('_', ' ');
+                // $class = Str::of(class_basename($model))->replace('_', ' ');
                 // $receiver = Auth::user()->email;
                 $receiver = "mnja2701@gmail.com";
-                $subject = "Laporan baru";
-                $content = "Anda telah mengirim laporan $class";
-    
-                $model->emailNotif($receiver,$subject,$content);
+                $model->emailNotif($receiver,"SUBMIT");
             }
             // Kirim email saat Badan Usaha mengirim perbaikan revisi
             if (Auth::user()->role === "BU" && $model->getOriginal()['status'] == '2' && $model->status == "1") {
-                $class = Str::of(class_basename($model))->replace('_', ' ');
-                // $model->load('user'); // preload relasi user
+                // $class = Str::of(class_basename($model))->replace('_', ' ');
                 // $receiver = $model->user->email;
                 $receiver = "mnja2701@gmail.com";
-                $subject = "Perbaikan Revisi Laporan Berhasil dikirim";
-                $content = "Perbaikan Revisi untuk laporan $class";
-    
-                $model->emailNotif($receiver,$subject,$content);
+                $model->emailNotif($receiver,"PERBAIKAN");
             }
             // Kirim email saat Evaluator mengirim revisi
             if (Auth::user()->role === "ADM") {
-                $class = Str::of(class_basename($model))->replace('_', ' ');
+                // $class = Str::of(class_basename($model))->replace('_', ' ');
                 // $model->load('user'); // preload relasi user
                 // $receiver = $model->user->email;
                 $receiver = "mnja2701@gmail.com";
-                $subject = "Revisi Laporan";
-                $content = "Revisi untuk laporan $class";
-    
-                $model->emailNotif($receiver,$subject,$content);
+                $model->emailNotif($receiver,"REVISI");
             }
             static::storeLog($model, static::class, 'UPDATED');
         });
