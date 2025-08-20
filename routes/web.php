@@ -791,6 +791,18 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/laporan/pengangkutan/mb/cetak-periode', 'cetakperiode');
 	});
 
+	// Progres pembangunan
+	Route::controller(EvProgresPembangunanController::class)->group(function () {
+		Route::get('/laporan/progres-pembangunan', 'index');
+		Route::post('/laporan/progres-pembangunan/lihat-semua-data', 'filterData');
+		Route::get('/laporan/progres-pembangunan/lihat-semua-data', 'lihatSemuaData');
+		Route::get('/laporan/progres-pembangunan/{kode}', 'show');
+		Route::post('/laporan/progres-pembangunan/update-revision', 'updateRevisionNotes');
+		Route::post('/laporan/progres-pembangunan/update-revision-all', 'updateRevisionNotesAll');
+		Route::post('/laporan/progres-pembangunan/selesai-periode-all', 'selesaiPeriodeAll');
+		Route::post('/laporan/progres-pembangunan/selesai-periode', 'selesaiPeriode');
+	});
+
 
 	// Permissions route group
 	Route::controller(PermissionController::class)->group(function () {
@@ -943,14 +955,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/sinkronisasi-data/pengangkutan-gas', 'sinkronisasiData');
 	});
 
-	Route::controller(EvProgresPembangunanController::class)->group(function () {
-		Route::get('/laporan/progres-pembangunan', 'index');
-		Route::get('/laporan/progres-pembangunan/{kode}', 'show');
-		Route::post('/laporan/progres-pembangunan/update-revision', 'updateRevisionNotes');
-		Route::post('/laporan/progres-pembangunan/update-revision-all', 'updateRevisionNotesAll');
-		Route::post('/laporan/progres-pembangunan/selesai-periode-all', 'selesaiPeriodeAll');
-		Route::post('/laporan/progres-pembangunan/selesai-periode', 'selesaiPeriode');
-	});
+	
 
 
 

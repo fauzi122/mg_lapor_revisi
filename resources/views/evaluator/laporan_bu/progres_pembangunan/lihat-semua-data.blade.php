@@ -45,7 +45,7 @@
                                 <h4>Periode {{ $periode }}</h4>
                             </div>
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ url('laporan/harga-lpg') }}"
+                                <a href="{{ url('/laporan/progres-pembangunan') }}"
                                     class="btn btn-danger waves-effect waves-light">
                                     <i class='bi bi-arrow-left'></i> Kembali
                                 </a>
@@ -134,7 +134,7 @@
                         <div class="card-header align-items-center px-2">
                             <div class="card-toolbar"></div> 
                             <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                <input type="hidden" class="export-title" value="Laporan Harga LPG {{ $periode }}" />
+                                <input type="hidden" class="export-title" value="Laporan Progres Pembangunan" />
                             </div>
                         </div>
                         <table class="kt-datatable table table-bordered table-hover">
@@ -142,30 +142,18 @@
                                 <tr class="fw-bold text-uppercase">
                                     <th style="text-align: center; vertical-align: middle;">No</th>
                                     <th style="text-align: center; vertical-align: middle;">Nama Perusahaan</th>
-                                    <th style="text-align: center; vertical-align: middle;">Nomor Izin</th>
-                                    <th style="text-align: center; vertical-align: middle;">Tgl Pengajuan Izin</th>
-                                    <th style="text-align: center; vertical-align: middle;">Tgl Disetujui Izin</th>
-                                    <th style="text-align: center; vertical-align: middle;">Bulan</th>
-                                    <th style="text-align: center; vertical-align: middle;">Tahun</th>
                                     <th style="text-align: center; vertical-align: middle;">Status</th>
                                     <th style="text-align: center; vertical-align: middle;">Catatan</th>
-                                <!-- <th style="text-align: center; vertical-align: middle;">Kategori Pemasok</th> -->
-                                <!-- <th style="text-align: center; vertical-align: middle;">Intake Kilang</th> -->
                                     <th style="text-align: center; vertical-align: middle;">Aksi</th>
-                                    <th style="text-align: center; vertical-align: middle;">Provinsi</th>
-                                    <th style="text-align: center; vertical-align: middle;">Kabupaten Kota</th>
-
-                                    <th style="text-align: center; vertical-align: middle;">Sektor</th>
-                                    <th style="text-align: center; vertical-align: middle;">Volume</th>
-                                    <th style="text-align: center; vertical-align: middle;">Biaya Perolehan</th>
-                                    <th style="text-align: center; vertical-align: middle;">Biaya Distribusi</th>
-                                    <th style="text-align: center; vertical-align: middle;">Biaya Penyimpanan</th>
-                                    <th style="text-align: center; vertical-align: middle;">Margin</th>
-                                    <th style="text-align: center; vertical-align: middle;">PPN</th>
-                                    <!-- <th style="text-align: center; vertical-align: middle;">PBBKB</th> -->
-                                    <th style="text-align: center; vertical-align: middle;">Harga Jual</th>
-                                    <th style="text-align: center; vertical-align: middle;">Tgl Dibuat Laporan</th>
-                                    <th style="text-align: center; vertical-align: middle;">Tgl Pengajuan Laporan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Prosentase Pembangunan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Realisasi Investasi</th>
+                                    <th style="text-align: center; vertical-align: middle;">Matrik bobot Pembangunan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Path Matrik Bobot Pembangunan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Bukti Progres Pembangunan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Path Bukti Progres Pembangunan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tkdn</th>
+                                    <th style="text-align: center; vertical-align: middle;">Status</th>
+                                    <th style="text-align: center; vertical-align: middle;">Petugas</th>
                                 </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
@@ -173,12 +161,6 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $pgb->nama_perusahaan }}</td>
-                                        <td>{{ $pgb->nomor_izin }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($pgb->tgl_pengajuan)->format('Y-m-d') }}</td>
-
-                                        <td>{{ $pgb->tgl_disetujui }}</td>
-                                        <td>{{ getBulan($pgb->bulan) }}</td>
-                                        <td>{{ getTahun($pgb->bulan) }}</td>
                                         <td>
                                             @if ($pgb->status == 1 && $pgb->catatan)
                                                 <span class="badge bg-warning">Sudah Diperbaiki</span>
@@ -231,7 +213,7 @@
                                                                     aria-label="Close"></button>
                                                             </div>
                                                             <form
-                                                                action="{{ url('/laporan/harga-lpg/update-revision') }}"
+                                                                action="{{ url('/laporan/progres-pembangunan/update-revision') }}"
                                                                 method="post" id="updateStatusForm"
                                                                 enctype="multipart/form-data">
                                                                 @csrf
@@ -255,29 +237,16 @@
                                                     </div>
                                                 </div>
                                             @endif
-
-
                                         </td>
-
-
-                                        <td>{{ $pgb->provinsi }}</td>
-                                        <td>{{ $pgb->kabupaten_kota }}</td>
-
-                                        <td>{{ $pgb->sektor }}</td>
-                                        <td>{{ $pgb->volume }}</td>
-                                        <td>{{ $pgb->biaya_perolehan }}</td>
-                                        <td>{{ $pgb->biaya_distribusi }}</td>
-                                        <td>{{ $pgb->biaya_penyimpanan }}</td>
-                                        <td>{{ $pgb->margin }}</td>
-                                        <td>{{ $pgb->ppn }}</td>
-                                        {{-- <td>{{ $pgb->pbbkp }}</td> --}}
-                                        <td>{{ $pgb->harga_jual }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
-
-
-
-
+                                        <td>{{ $pgb->prosentase_pembangunan }}</td>
+                                        <td>{{ $pgb->realisasi_investasi }}</td>
+                                        <td>{{ $pgb->matrik_bobot_pembangunan }}</td>
+                                        <td>{{ $pgb->path_matrik_bobot_pembangunan }}</td>
+                                        <td>{{ $pgb->bukti_progres_pembangunan }}</td>
+                                        <td>{{ $pgb->path_bukti_progres_pembangunan }}</td>
+                                        <td>{{ $pgb->tkdn }}</td>
+                                        <td>{{ $pgb->status }}</td>
+                                        <td>{{ $pgb->petugas }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

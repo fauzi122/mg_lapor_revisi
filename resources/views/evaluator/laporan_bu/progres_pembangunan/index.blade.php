@@ -46,7 +46,7 @@
                                 <i class='bi-printer-fill'></i>
                                 Cetak
                                 </button>
-                                <a href="#"
+                                <a href="{{ url('/laporan/progres-pembangunan/lihat-semua-data') }}"
                                     class="btn btn-flex btn-info h-40px fs-7 fw-bold">
                                     <i class='bi-card-list'></i>
                                     Lihat Semua Data
