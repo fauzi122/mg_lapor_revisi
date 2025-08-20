@@ -57,7 +57,8 @@
                         @if(Auth::user()->role == 'BU')
                             <img src="{{ asset('assetsMetronic/media/company_img.png')}}" alt="user"/>
                         @else
-                            <img src="{{ asset('assets/images/users/avatar-1.jpg')}}" alt="user"/>
+                            {{-- <img src="{{ asset('assets/images/users/avatar-1.jpg')}}" alt="user"/> --}}
+                            <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="user"/>
                         @endif
                     </div>
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
@@ -67,7 +68,9 @@
                                     @if(Auth::user()->role == 'BU')
                                         <img alt="Logo" src="{{ asset('assetsMetronic/media/company_img.png')}}"/>
                                     @else
-                                        <img alt="Logo" src="{{ asset('assets/images/users/avatar-1.jpg')}}"/>
+                                        {{-- <img alt="Logo" src="{{ asset('assets/images/users/avatar-1.jpg')}}"/> --}}
+                                        <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="user"/>
+
                                     @endif
                                 </div>
                                 <div class="d-flex flex-column">
