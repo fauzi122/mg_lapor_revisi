@@ -93,6 +93,7 @@ trait LogTrait
         $systemLog->url = request()->path();
         $systemLog->description = 'Data ' . $subject . ' [' . $action . ']';
         $systemLog->ip_address = request()->ip();
+        $systemLog->hostname = gethostname();
         $systemLog->save();
     }
 }
