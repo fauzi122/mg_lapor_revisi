@@ -798,6 +798,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/progres-pembangunan', 'index');
 		Route::post('/laporan/progres-pembangunan/lihat-semua-data', 'filterData');
 		Route::get('/laporan/progres-pembangunan/lihat-semua-data', 'lihatSemuaData');
+		Route::post('/laporan/progres-pembangunan/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/progres-pembangunan/{kode}', 'show');
 		Route::post('/laporan/progres-pembangunan/update-revision', 'updateRevisionNotes');
 		Route::post('/laporan/progres-pembangunan/update-revision-all', 'updateRevisionNotesAll');

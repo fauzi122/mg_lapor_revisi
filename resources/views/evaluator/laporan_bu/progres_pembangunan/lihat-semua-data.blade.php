@@ -154,6 +154,8 @@
                                     <th style="text-align: center; vertical-align: middle;">Tkdn</th>
                                     <th style="text-align: center; vertical-align: middle;">Status</th>
                                     <th style="text-align: center; vertical-align: middle;">Petugas</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tgl Dibuat Laporan</th>
+                                    <th style="text-align: center; vertical-align: middle;">Tgl Pengajuan Laporan</th>
                                 </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
@@ -247,6 +249,9 @@
                                         <td>{{ $pgb->tkdn }}</td>
                                         <td>{{ $pgb->status }}</td>
                                         <td>{{ $pgb->petugas }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('Y-m-d') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('Y-m-d') }}</td>
+
                                     </tr>
                                 @endforeach
                             </tbody>

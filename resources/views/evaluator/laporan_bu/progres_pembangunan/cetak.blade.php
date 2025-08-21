@@ -1,0 +1,145 @@
+<?php
+header('Content-type: application/vnd.ms-excel');
+header("Content-Disposition: attachment; filename={$title}.xls");
+header('Cache-Control: no-cache, must-revalidate');
+header('Pragma: no-cache');
+?>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>EVALUATOR | {{ $title }} </title>
+    <style>
+        /* Gaya CSS untuk kop surat */
+        .kop-surat {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .kop-surat h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .kop-surat p {
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
+        .kop-surat .alamat {
+            font-style: italic;
+        }
+
+        .tanda-tangan {
+            width: 100%;
+        }
+
+        .tanda-tangan-kanan {
+            text-align: right;
+        }
+
+        .tanda-tangan-kiri {
+            text-align: left;
+            margin-top: 20px;
+            /* Ubah nilai sesuai kebutuhan */
+
+        }
+    </style>
+</head>
+
+<body style="font-family: 'Times New Roman', Times, serif;">
+    <div class="kop-surat">
+        <h5 class="card-title" style="font-size: 14px;">
+            <strong>{{ $title }}</strong>
+        </h5>
+    </div>
+    <table class="table table-light" style="font-size: 12px; border-collapse: collapse; border: 1px solid black;">
+        <thead style="background-color: #f2f2f2;">
+            <tr>
+                <th style="border: 1px solid black;">NO</th>
+                <th style="border: 1px solid black;">NAMA PERUSAHAAN</th>
+                <th style="border: 1px solid black;">Nomor Izin </th>
+                <th style="border: 1px solid black;">Tgl Pengajuan Izin</th>
+                <th style="border: 1px solid black;">Tgl Disetujui Izin</th>
+                <th style="border: 1px solid black;">STATUS</th>
+                <th style="border: 1px solid black;">CATATAN</th>
+                <th style="border: 1px solid black;">PROSENTASE PEMBANGUNAN</th>
+                <th style="border: 1px solid black;">REALISASI INVESTASI</th>
+                <th style="border: 1px solid black;">MATRIK BOBOT PEMBANGUNAN</th>
+                <th style="border: 1px solid black;">PATH MATRIK BOBOT PEMBANGUNAN</th>
+                <th style="border: 1px solid black;">BUKTI PROGRES PEMBANGUNAN</th>
+                <th style="border: 1px solid black;">PATH BUKTI PROGRES PEMBANGUNAN</th>
+                <th style="border: 1px solid black;">TKDN</th>
+                <th style="border: 1px solid black;">PETUGAS</th>
+                <th style="border: 1px solid black;">Tgl Dibuat Laporan</th>
+                <th style="border: 1px solid black;">Tgl Pengajuan Laporan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($result as $pgb)
+                <tr>
+                    <td style="border: 1px solid black;">{{ $loop->iteration }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->nama_perusahaan }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->nomor_izin }}</td>
+                    <td style="border: 1px solid black;">
+                        {{ \Carbon\Carbon::parse($pgb->tgl_pengajuan)->format('Y-m-d') }}
+                    </td>
+                    <td style="border: 1px solid black;">{{ $pgb->tgl_disetujui }}</td>
+                    <td style="border: 1px solid black;">
+                        @if ($pgb->status == 1 && $pgb->catatan)
+                            Sudah Diperbaiki
+                        @elseif ($pgb->status == 1)
+                            Kirim
+                        @elseif ($pgb->status == 2)
+                            Revisi
+                        @elseif ($pgb->status == 3)
+                            Selesai
+                        @elseif ($pgb->status == 0)
+                            Draf
+                        @endif
+                    </td>
+                    <td style="border: 1px solid black;">{{ $pgb->catatan }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->prosentase_pembangunan }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->realisasi_investasi }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->matrik_bobot_pembangunan }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->path_matrik_bobot_pembangunan }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->bukti_progres_pembangunan }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->path_bukti_progres_pembangunan }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->tkdn }}</td>
+                    <td style="border: 1px solid black;">{{ $pgb->petugas }}</td>
+                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->created_at)->format('Y-m-d') }}</td>
+                    <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('Y-m-d') }}</td>
+
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+
+
+    <br>
+    <table class="tanda-tangan" style=" font-size: 12px">
+        <tr>
+
+
+        </tr>
+    </table>
+    <br>
+    <table class="tanda-tangan" style=" font-size: 12px">
+        <tr>
+
+
+        </tr>
+    </table>
+
+
+
+
+
+</body>
+
+
+</html>

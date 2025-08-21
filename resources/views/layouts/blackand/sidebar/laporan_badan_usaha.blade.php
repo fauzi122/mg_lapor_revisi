@@ -591,7 +591,7 @@
     </div>
 
 
-    <div class="menu-sub menu-sub-accordion">
+    {{-- <div class="menu-sub menu-sub-accordion">
             <!--begin:Menu item-->
             <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ request()->is('laporan/progres-pembangunan') ? 'show here' : '' }}">
                 <!--begin:Menu link-->
@@ -604,7 +604,7 @@
                 </span>
                 <!--end:Menu link-->
 
-                {{-- Progres Pembangunan --}}
+                <!-- Progres Pembangunan -->
 
                 <!--begin:Menu sub-->
                 <div class="menu-sub menu-sub-accordion">
@@ -622,5 +622,5 @@
                     <!--end:Menu item-->
                 </div>
             </div>
-        </div>
+        </div> --}}
 </div>
