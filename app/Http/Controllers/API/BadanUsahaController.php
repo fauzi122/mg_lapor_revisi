@@ -98,7 +98,7 @@ class BadanUsahaController extends BaseController
             $resultNiaga = DB::table("{$queryNiaga['table']}")
                 ->where(DB::raw("TO_CHAR(CAST({$queryNiaga['column']} AS DATE), 'YYYY-MM')"), $bulan)
                 ->where('npwp', $badanUsahaId)
-                ->where('status', '<>', 1)
+                ->where('status', 1)
                 ->exists();
 
             if ($resultNiaga) {
@@ -110,7 +110,7 @@ class BadanUsahaController extends BaseController
             }
         }
 
-        if ($foundNiaga == true) {
+        if ($foundNiaga == false) {
             $statusNiaga = 'Belum Melaporkan';
         } else {
             $statusNiaga = 'Diterima';
@@ -137,7 +137,7 @@ class BadanUsahaController extends BaseController
             $resultPengolahan = DB::table("{$queryPengolahan['table']}")
                 ->where(DB::raw("TO_CHAR(CAST({$queryPengolahan['column']} AS DATE), 'YYYY-MM')"), $bulan)
                 ->where('npwp', $npwp)
-                ->where('status', '<>', 1);
+                ->where('status', 1);
 
             // Tambahan filter jika ada 'extra'
             if (isset($queryPengolahan['extra'])) {
@@ -155,7 +155,7 @@ class BadanUsahaController extends BaseController
             }
         }
 
-        if ($foundPengolahan == true) {
+        if ($foundPengolahan == false) {
             $statusPengolahan = 'Belum Melaporkan';
         } else {
             $statusPengolahan = 'Diterima';
@@ -173,7 +173,7 @@ class BadanUsahaController extends BaseController
             $resultPenyimpanan = DB::table("{$queryPenyimpanan['table']}")
                 ->where(DB::raw("TO_CHAR(CAST({$queryPenyimpanan['column']} AS DATE), 'YYYY-MM')"), $bulan)
                 ->where('npwp', $badanUsahaId)
-                ->where('status', '<>', 1);
+                ->where('status', 1);
 
             if ($resultPenyimpanan->exists()) {
                 $foundPenyimpanan = true;
@@ -184,7 +184,7 @@ class BadanUsahaController extends BaseController
             }
         }
 
-        if ($foundPenyimpanan == true) {
+        if ($foundPenyimpanan == false) {
             $statusPenyimpanan = 'Belum Melaporkan';
         } else {
             $statusPenyimpanan = 'Diterima';
@@ -202,7 +202,7 @@ class BadanUsahaController extends BaseController
             $resultPengangkutan = DB::table("{$queryPengangkutan['table']}")
                 ->where(DB::raw("TO_CHAR(CAST({$queryPengangkutan['column']} AS DATE), 'YYYY-MM')"), $bulan)
                 ->where('npwp', $badanUsahaId)
-                ->where('status', '<>', 1);
+                ->where('status', 1);
 
             if ($resultPengangkutan->exists()) {
                 $foundPengangkutan = true;
@@ -213,7 +213,7 @@ class BadanUsahaController extends BaseController
             }
         }
 
-        if ($foundPengangkutan == true) {
+        if ($foundPengangkutan == false) {
             $statusPengangkutan = 'Belum Melaporkan';
         } else {
             $statusPengangkutan = 'Diterima';
