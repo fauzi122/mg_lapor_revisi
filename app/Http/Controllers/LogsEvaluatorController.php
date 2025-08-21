@@ -46,6 +46,7 @@ class LogsEvaluatorController extends Controller
             'bu_name',
             'method',
             'url',
+            'hostname',
             'ip_address',
             'description',
             'created_at as tanggal'

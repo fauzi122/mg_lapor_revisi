@@ -67,6 +67,8 @@
                                     <th style="text-align: center; vertical-align: middle;">Nama Perusahaan</th>
                                     <th style="text-align: center; vertical-align: middle;">Method</th>
                                     <th style="text-align: center; vertical-align: middle;">Url</th>
+                                    <th style="text-align: center; vertical-align: middle;">Ip address</th>
+                                    <th style="text-align: center; vertical-align: middle;">Hostname</th>
                                     <th style="text-align: center; vertical-align: middle;">Old Properties</th>
                                     <th style="text-align: center; vertical-align: middle;">Properties</th>
                                     
@@ -96,6 +98,8 @@
                                         <td>{{ $show->bu_name }}</td>
                                         <td>{{ $show->method }}</td>
                                         <td>{{ $show->url }}</td>
+                                        <td>{{ $show->ip_address }}</td>
+                                        <td>{{ $show->hostname }}</td>
                                         <td><a href="{{ url('/logs-ev/old_properties/' . $show->id) }}" class="btn btn-primary btn-rounded btn-sm">
                                                 <i class="bx bx-show bi-eye fs-5"></i> Lihat
                                             </a></td>

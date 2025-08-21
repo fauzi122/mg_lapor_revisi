@@ -48,6 +48,7 @@ class LogsEvController extends Controller
             'url',
             'ip_address',
             'description',
+            'hostname',
             'created_at as tanggal'
         );
 
