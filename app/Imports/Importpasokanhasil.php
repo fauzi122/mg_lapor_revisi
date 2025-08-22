@@ -49,10 +49,10 @@ class Importpasokanhasil implements ToModel, WithStartRow, WithMultipleSheets
             'bulan' => $this->bulan,
             'id_permohonan' => $this->id_permohonan,
             'id_sub_page' => $this->id_sub_page,
-            'nama_pemasok' => $row[0],
-            'kategori_pemasok' => $row[1],
-            'volume' => $row[2],
-            'satuan' => $row[3],
+            'produk' => $row[0],
+            'nama_pemasok' => $row[1],
+            'kategori_pemasok' => $row[2],
+            'volume' => $row[3],
         ]);
     }
 }
