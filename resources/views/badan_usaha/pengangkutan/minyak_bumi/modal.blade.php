@@ -563,8 +563,8 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <input class="form-control" type="hidden" id="example-text-input" name="id_permohonan"
-                            value="{{ $pecah[0] }}">
+                        <input type="hidden" name="id_permohonan" value="{{ $pecah[0] }}">
+                        <input type="hidden" name="id_sub_page" value="{{ $pecah[2] }}">
                         <input class="form-control flatpickr" name="bulan" id="bulan_import">
                         <br>
                         <input type="file" name="file" required="required" accept=".xlsx">

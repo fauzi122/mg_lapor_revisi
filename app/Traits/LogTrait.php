@@ -94,6 +94,7 @@ trait LogTrait
         $systemLog->description = 'Data ' . $subject . ' [' . $action . ']';
         $systemLog->ip_address = request()->ip();
         $systemLog->hostname = gethostname();
+        $systemLog->informasi_peramban = request()->header('User-Agent');
         $systemLog->save();
     }
 }

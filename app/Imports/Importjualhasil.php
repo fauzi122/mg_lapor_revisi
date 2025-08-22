@@ -50,11 +50,11 @@ class Importjualhasil implements ToModel, WithStartRow, WithMultipleSheets
             'id_permohonan' => $this->id_permohonan,
             'id_sub_page' => $this->id_sub_page,
             'produk' => $row[0],
-            'provinsi' => $row[1],
-            'kabupaten_kota' => $row[2],
-            'sektor' => $row[3],
-            'volume' => $row[4],
-            'satuan' => $row[5],
+            'satuan' => $row[1],
+            'provinsi' => $row[2],
+            'kabupaten_kota' => $row[3],
+            'sektor' => $row[4],
+            'volume' => $row[5],
 
         ]);
     }

@@ -698,7 +698,7 @@ class PengolahanController extends Controller
     ]);
 
     $id_permohonan = $request->id_permohonan;
-    $id_sub_page = $request->id_permohonan;
+    $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
 
     $npwp = Auth::user()->npwp;
@@ -1028,7 +1028,7 @@ class PengolahanController extends Controller
     ]);
 
     $id_permohonan = $request->id_permohonan;
-    $id_sub_page = $request->id_permohonan;
+    $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
 
     $npwp = Auth::user()->npwp;
@@ -1349,7 +1349,7 @@ class PengolahanController extends Controller
     ]);
 
     $id_permohonan = $request->id_permohonan;
-    $id_sub_page = $request->id_permohonan;
+    $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
 
     $npwp = Auth::user()->npwp;
@@ -1659,7 +1659,7 @@ class PengolahanController extends Controller
     ]);
 
     $id_permohonan = $request->id_permohonan;
-    $id_sub_page = $request->id_permohonan;
+    $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
 
     $npwp = Auth::user()->npwp;
@@ -1972,7 +1972,7 @@ class PengolahanController extends Controller
     ]);
 
     $id_permohonan = $request->id_permohonan;
-    $id_sub_page = $request->id_permohonan;
+    $id_sub_page = $request->id_sub_page;
     $bulan = $request->bulan . "-01";
 
     $npwp = Auth::user()->npwp;

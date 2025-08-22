@@ -15,12 +15,14 @@ class Importpenyimpanangb implements ToModel, WithStartRow, WithMultipleSheets
      * @return int
      */
     protected $bulan; 
-    protected $izin_id;
+    protected $id_permohonan;
+    protected $id_sub_page;
 
-    public function __construct($bulan,$izin_id)
+    public function __construct($bulan, $id_permohonan, $id_sub_page)
     {
         $this->bulan = $bulan; 
-        $this->izin_id = $izin_id;
+        $this->id_permohonan = $id_permohonan;
+        $this->id_sub_page = $id_sub_page;
     }
 
     public function sheets(): array
@@ -44,27 +46,32 @@ class Importpenyimpanangb implements ToModel, WithStartRow, WithMultipleSheets
     public function model(array $row)
     {
         // Ubah nilai numerik Excel ke format tanggal
-        $tanggalExcel = $row[10];
-        $tanggal = Carbon::createFromFormat('Y-m-d', '1900-01-01')->addDays($tanggalExcel - 2);
+        $tglAwal = $row[10];
+        $tanggalAwal = Carbon::createFromFormat('Y-m-d', '1900-01-01')->addDays($tglAwal - 2);
+        $tglAkhir = $row[11];
+        $tanggalAkhir = Carbon::createFromFormat('Y-m-d', '1900-01-01')->addDays($tglAkhir - 2);
         // echo json_encode(substr($tanggal, 0, 10));
         // exit;
         return new Penygasbumi([
-            'badan_usaha_id' => Auth::user()->badan_usaha_id,
-            'izin_id' => $this->izin_id,
+            'npwp' => Auth::user()->npwp,
+            'id_permohonan' => $this->id_permohonan,
+            'id_sub_page' => $this->id_sub_page,
             'bulan' => $this->bulan,
             'no_tangki' => $row[0],
             'produk' => $row[1],
-            'kab_kota' => $row[2],
-            'volume_stok_awal' => $row[3],
-            'volume_supply' => $row[4],
-            'volume_output' => $row[5],
-            'volume_stok_akhir' => $row[6],
-            'satuan' => $row[7],
+            'satuan' => $row[2],
+            'kab_kota' => $row[3],
+            'volume_stok_awal' => $row[4],
+            'volume_supply' => $row[5],
+            'volume_output' => $row[6],
+            'volume_stok_akhir' => $row[7],
             'utilisasi_tangki' => $row[8],
             'pengguna' => $row[9],
-            'jangka_waktu_penggunaan' => substr($tanggal, 0, 10),
-            'tarif_penyimpanan' => $row[11],
-            'satuan_tarif' => $row[12],
+            // 'jangka_waktu_penggunaan' => substr($tanggalAwal, 0, 10),
+            'tanggal_awal' => substr($tanggalAwal, 0, 10),
+            'tanggal_berakhir' => substr($tanggalAkhir, 0, 10),
+            'tarif_penyimpanan' => $row[12],
+            'satuan_tarif' => $row[13],
         ]);
     }
 }
