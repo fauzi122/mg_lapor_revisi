@@ -389,7 +389,7 @@ class HargabbmController extends Controller
     $npwp = Auth::user()->npwp;
     
     $cekdb = DB::table('harga_bbm_jbus')
-        ->where('$npwp', $npwp)
+        ->where('npwp', $npwp)
         ->where('id_permohonan', $id_permohonan)
         ->where('id_sub_page', $id_sub_page)
         ->where('bulan', $bulan)

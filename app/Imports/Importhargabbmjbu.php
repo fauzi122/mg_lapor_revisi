@@ -45,8 +45,9 @@ class Importhargabbmjbu implements ToModel, WithStartRow, WithMultipleSheets
     {
         // echo json_encode($row);exit;
         return new Harga_bbm_jbu([
-            'badan_usaha_id' => Auth::user()->badan_usaha_id,
+            'npwp' => Auth::user()->npwp,
             'id_permohonan' => $this->id_permohonan,
+            'id_sub_page' => $this->id_sub_page,
             'bulan' => $this->bulan,
             'produk' => $row[0],
             'sektor' => $row[1],
