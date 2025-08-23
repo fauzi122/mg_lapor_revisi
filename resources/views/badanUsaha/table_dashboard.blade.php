@@ -25,8 +25,10 @@
                 // Normalisasi dan ambil info subpage
                 $currentSubPage = collect($sub_page)->firstWhere('id_sub_page', $item->id_sub_page);
                 $kategori = $currentSubPage->kategori ?? null;
+                $kusus = $currentSubPage->kusus ?? null;
                 $nama_opsi = strtolower($currentSubPage->nama_opsi ?? '');
 
+              
                 // Normalisasi deskripsi izin
                 $kodeIzin = strtolower($item->kode_izin_desc);
 
@@ -39,9 +41,13 @@
 
                 // Khusus LPG dan gas lainnya
                 $isNiagaLPG = $isNiaga && $kategori == 1 && str_contains($nama_opsi, 'lpg');
+                $isNiagaLNG = $isNiaga && $kategori == 1 && str_contains($nama_opsi, 'lng');
+
                 $isNiagaGasTanpaHarga = $isNiaga && $kategori == 1 && !$isNiagaLPG;
+    
             @endphp
 
+           
             <tr class="align-top">
                 <td>
                     <b>Jenis Izin Usaha:</b> {{ $item->kode_izin_desc }}<br>
@@ -52,13 +58,14 @@
                 <td>
                     <ul class="sub-menu" aria-expanded="false">
                         {{-- Menu utama --}}
-                        @if (!empty($item->url))
-                            <li>
-                                <a href="{{ url($item->url) }}/{{ $encodedShow }}">
-                                    {{ $item->nama_menu }}
-                                </a>
-                            </li>
-                        @endif
+@if (!empty($item->url) && !($kusus == 2 && $isNiaga && $kategori == 2))
+    <li>
+        <a href="{{ url($item->url) }}/{{ $encodedShow }}">
+            {{ $item->nama_menu }}
+        </a>
+    </li>
+@endif
+
 
                         {{-- Pengolahan Minyak (kategori 2) --}}
                         @if ($isPengolahan && $kategori == 2)
@@ -70,6 +77,7 @@
 
                         {{-- Niaga Minyak (kategori 2) --}}
                         @if ($isNiaga && $kategori == 2)
+                        
                             <li><a href="{{ url('/penyimpananMinyakBumi') }}/{{ $encodedShow }}">Penyimpanan Minyak
                                     Bumi</a></li>
                             <li><a href="{{ url('/eksport-import') }}/{{ $encodedShow }}">Ekspor-Impor</a></li>
@@ -94,13 +102,15 @@
                         @endif
 
                         {{-- Pengangkutan atau Pengolahan Gas --}}
-                        @if ($isKusus && ($isPengangkutan || ($isPengolahan && Session::get('j_pengolahan') > 0)))
+                       
+                        @if ($kusus == 2 && ($isPengangkutan || ($isPengolahan && Session::get('j_pengolahan') > 0)))
                             <li><a href="{{ url('/penyimpanan-gas-bumi') }}/{{ $encodedShow }}">Penyimpanan Gas
                                     Bumi</a></li>
                         @endif
                     </ul>
                 </td>
             </tr>
+          
         @endforeach
     </tbody>
 </table>
