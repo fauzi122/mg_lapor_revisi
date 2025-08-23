@@ -66,14 +66,21 @@ class MepingController extends Controller
     public function store_JIzin(Request $request)
     {
         $validated = $request->validate([
-            'id_sub_page' => 'required|string|unique:mepings,id_sub_page',
+            'id_sub_page' => [
+                'required',
+                'string',
+                Rule::unique('mepings')->where(function ($query) use ($request) {
+                    return $query->where('id_induk_izin', $request->id_induk_izin);
+                }),
+            ],
             'id_template' => 'required|string',
             'nama_opsi' => 'required|string|',
             'nama_menu' => 'required|string|',
             'kategori' => 'required|in:1,2',
             'url' => 'required|string|',
             'id_induk_izin' => 'required',
-            'jenis_izin' => 'required'
+            'jenis_izin' => 'required',
+            'kusus' => 'nullable|in:0,2',
         ],[
             'id_sub_page.required' => 'ID Sub Page wajib diisi.',
             'id_sub_page.unique' => 'ID Sub Page sudah digunakan.',
@@ -150,7 +157,9 @@ class MepingController extends Controller
             'id_sub_page' => [
                 'required',
                 'string',
-                Rule::unique('mepings', 'id_sub_page')->ignore($id),
+                Rule::unique('mepings', 'id_sub_page')
+                    ->where(fn($q) => $q->where('id_induk_izin', $request->id_induk_izin))
+                    ->ignore($id),
             ],
             'id_template' => 'required|string',
             'nama_opsi' => 'required|string',
@@ -158,6 +167,7 @@ class MepingController extends Controller
             'kategori' => 'required|in:1,2',
             'url' => 'required|string',
             'id_induk_izin' => 'required',
+            'kusus' => 'nullable|in:0,2',
             'jenis_izin' => 'required'
         ], [
             'id_sub_page.required' => 'ID Sub Page wajib diisi.',
