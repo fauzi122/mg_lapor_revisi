@@ -75,27 +75,6 @@
                                 @foreach ($meping as $meping)
                                 <tr>
                                     {{-- <td class="text-center">{{ $loop->iteration }}</td> --}}
-                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                                    <script>
-                                        $(document).ready(function () {
-                                            $('.status-checkbox').change(function () {
-                                                const id = $(this).data('id');
-                                                const status = $(this).prop('checked') ? 1 : 0;
-                                
-                                                $.ajax({
-                                                    method: 'POST',
-                                                    url: '{{ route("update-status") }}',
-                                                    data: { id: id, status: status, _token: '{{ csrf_token() }}' },
-                                                    success: function (response) {
-                                                        console.log('Status updated successfully:', response.message);
-                                                    },
-                                                    error: function (xhr, status, error) {
-                                                        console.error('Error updating status:', error);
-                                                    }
-                                                });
-                                            });
-                                        });
-                                    </script>
                                     <td class="text-center">
                                         <input type="checkbox" class="status-checkbox" data-id="{{ $meping->id }}" {{ $meping->status ? 'checked' : '' }}>
                                         <label for="switch1" data-on-label="On" data-off-label="Off"></label>
@@ -250,5 +229,30 @@
 </div>
 </div> --}}
 @endsection
+@section('script')
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+<script>
+    $(document).ready(function () {
+    $(document).on('change', '.status-checkbox', function () {
+        const id = $(this).data('id');
+        const status = $(this).prop('checked') ? 1 : 0;
+
+        $.ajax({
+            method: 'POST',
+            url: '{{ route("update-status") }}',
+            data: { id: id, status: status, _token: '{{ csrf_token() }}' },
+            success: function (response) {
+                console.log('Status updated successfully:', response.message);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating status:', error);
+            }
+        });
+    });
+});
+
+</script>
+@endsection
+
 
 
