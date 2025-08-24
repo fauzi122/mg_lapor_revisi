@@ -36,7 +36,7 @@
                                                 $pecah[0] . ',' . $pecah[1] . ',' . $pecah[2] . ',' . $pecah[3],
                                             );
                                         @endphp
-                                
+
                                         @if ($statusx == 1)
                                             {{-- Jika status sudah terkirim, tombol hanya ditampilkan tapi disabled --}}
                                             <button type="button" class="btn btn-sm btn-info" disabled>
@@ -49,10 +49,10 @@
                                             <button type="button" class="btn btn-sm btn-success" disabled>
                                                 <i class="fas fa-upload"></i> Import Excel
                                             </button>
-                                
                                         @elseif ($statusx == 2)
                                             {{-- Jika status revisi, kirim aktif tapi tambah laporan/excel nonaktif --}}
-                                            <form action="{{ url('/submit_bulan_pengmb') }}/{{ $id }}" method="post" class="d-inline">
+                                            <form action="{{ url('/submit_bulan_pengmb') }}/{{ $id }}"
+                                                method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
                                                 <button type="button" class="btn btn-sm btn-info"
@@ -67,10 +67,10 @@
                                             <button type="button" class="btn btn-sm btn-success" disabled>
                                                 <i class="fas fa-upload"></i> Import Excel
                                             </button>
-                                
                                         @else
                                             {{-- Jika draf, semua tombol aktif --}}
-                                            <form action="{{ url('/submit_bulan_pengmb') }}/{{ $id }}" method="post" class="d-inline">
+                                            <form action="{{ url('/submit_bulan_pengmb') }}/{{ $id }}"
+                                                method="post" class="d-inline">
                                                 @method('put')
                                                 @csrf
                                                 <button type="button" class="btn btn-sm btn-info"
@@ -91,7 +91,7 @@
                                             </button>
                                         @endif
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                         <div class="card-body p-3">
@@ -155,17 +155,22 @@
                                                     <td class="text-center">
                                                         @if ($pgb->status == '0')
                                                             <center>
-                                                                <button type="button" class="btn btn-sm btn-info editPMB mb-2"
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-info editPMB mb-2"
                                                                     onclick="editpengmb('{{ $pgb->id }}', '{{ $pgb->produk }}')"
                                                                     data-bs-toggle="modal" data-bs-target="#edit-pengmb">
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
                                                                 </button>
-                                                                <form action="{{ url('hapus_pengmb') }}/{{ $pgb->id }}" method="post" class="d-inline">
+                                                                <form
+                                                                    action="{{ url('hapus_pengmb') }}/{{ $pgb->id }}"
+                                                                    method="post" class="d-inline">
                                                                     @method('delete')
                                                                     @csrf
-                                                                    <button type="button" class="btn btn-sm btn-danger mb-2"
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-danger mb-2"
                                                                         onclick="hapusData($(this).closest('form'))">
-                                                                        <i class="ki-solid ki-trash" title="Hapus data"></i>
+                                                                        <i class="ki-solid ki-trash"
+                                                                            title="Hapus data"></i>
                                                                     </button>
                                                                 </form>
                                                                 <button type="button" class="btn btn-sm btn-info mb-2"
@@ -184,7 +189,8 @@
                                                             </center>
                                                         @elseif ($pgb->status == '2')
                                                             <center>
-                                                                <button type="button" class="btn btn-sm btn-info editPMB mb-2"
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-info editPMB mb-2"
                                                                     onclick="editPMB('{{ $pgb->id }}', '{{ $pgb->kab_kota }}', '{{ $pgb->produk }}')"
                                                                     data-bs-toggle="modal" data-bs-target="#edit-pengmb">
                                                                     <i class="ki-solid ki-pencil" title="Edit Data"></i>
@@ -208,7 +214,7 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>

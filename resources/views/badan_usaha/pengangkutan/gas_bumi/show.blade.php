@@ -114,7 +114,7 @@
                                                 <th>Status</th>
                                                 <th>Catatan</th>
                                                 <th>Produk</th>
-                                                <th>Jenis Moda</th>
+                                                {{-- <th>Jenis Moda</th> --}}
                                                 <th>Mode Asal</th>
                                                 <th>Aksi</th>
                                                 <th>Provinsi Asal</th>
@@ -147,13 +147,13 @@
                                                     <td>{{ $pgb->catatan }}</td>
                                                     <td>{{ $pgb->produk }}</td>
                                                     {{-- <td>{{ $pgb->jenis_moda }}</td> --}}
-                                                    <td>
-                                                        @foreach (explode('"', json_encode($pgb->jenis_moda)) as $jenis)
-                                                            @foreach (explode('\\', $jenis) as $moda)
-                                                                {{ $moda }}
+                                                    {{-- <td>
+                                                            @foreach (explode('"', json_encode($pgb->jenis_moda)) as $jenis)
+                                                                @foreach (explode('\\', $jenis) as $moda)
+                                                                    {{ $moda }}
+                                                                @endforeach
                                                             @endforeach
-                                                        @endforeach
-                                                    </td>
+                                                        </td> --}}
                                                     {{-- <td>{!! json_encode($pgb->jenis_moda) !!}</td> --}}
                                                     <td>{{ $pgb->node_asal }}</td>
                                                     <td>
