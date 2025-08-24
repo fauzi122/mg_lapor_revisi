@@ -118,6 +118,8 @@ function edit_ekpor(id, produk, negara_tujuan) {
                         `"` +
                         isSelected +
                         `>` +
+                        value.nm_port +
+                        ` - ` +
                         value.lokasi +
                         `</option>`
                 );
@@ -399,6 +401,8 @@ function edit_impor(id, produk, negara_tujuan) {
                         `"` +
                         isSelected +
                         `>` +
+                        value.nm_port +
+                        ` - ` +
                         value.lokasi +
                         `</option>`
                 );
@@ -423,6 +427,8 @@ function edit_impor(id, produk, negara_tujuan) {
                         `"` +
                         isSelected +
                         `>` +
+                        value.nm_port +
+                        ` - ` +
                         value.lokasi +
                         `</option>`
                 );

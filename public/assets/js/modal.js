@@ -1398,7 +1398,7 @@ function pelabuhan() {
         method: "GET",
         data: {},
         success: function (response) {
-            // console.log(response);
+            console.log(response);
             // Loop melalui data dan tambahkan opsi ke dalam select
             $(".pelabuhan").empty();
             $(".pelabuhan").append(
@@ -1411,6 +1411,8 @@ function pelabuhan() {
                         ` - ` +
                         value.lokasi +
                         `">` +
+                        value.nm_port +
+                        ` - ` +
                         value.lokasi +
                         `</option>`
                 );
@@ -1442,7 +1444,11 @@ function incoterms() {
                 $(".incoterms").append(
                     `<option value="` +
                         value.incoterm +
+                        " - " +
+                        value.ket +
                         `">` +
+                        value.incoterm +
+                        " - " +
                         value.ket +
                         `</option>`
                 );
