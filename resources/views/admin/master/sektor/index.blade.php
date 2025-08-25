@@ -6,7 +6,7 @@
     <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap">
         <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
             <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
-                <h3 class="text-dark fw-bold">Keterangan Produk</h3>
+                <h3 class="text-dark fw-bold">Sektor</h3>
             </div>
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
@@ -20,7 +20,7 @@
                     <li class="breadcrumb-item">
                         <span class="bullet bg-gray-400 w-5px h-2px"></span>
                     </li>
-                    <li class="breadcrumb-item text-muted">Keterangan Produk</li>
+                    <li class="breadcrumb-item text-muted">Sektor</li>
                 </ul>
             </div>
         </div>
@@ -35,8 +35,8 @@
                     <div class="row w-100">
                         <div class="col-12">
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ url('/master/produk/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Produk">
-                                    <i class="ki-duotone ki-plus"></i> Input Produk
+                                <a href="{{ url('/master/sektor/create') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Input Produk">
+                                    <i class="ki-duotone ki-plus"></i> Input sektor
                                 </a>
                             </div>
                         </div>
@@ -53,35 +53,27 @@
                         <div class="card-header align-items-center px-2">
                             <div class="card-toolbar"></div> 
                             <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                <input type="hidden" class="export-title" value="Keterangan Produk" />
+                                <input type="hidden" class="export-title" value="Keterangan Sektor" />
                             </div>
                         </div>
                         <table class="kt-datatable table table-bordered table-hover">
                             <thead class="bg-light">
                                 <tr class="fw-bold text-uppercase">
                                     <th class="text-center">No</th>
-                                    <th class="text-center">Nama</th>
-                                    <th class="text-center">Jenis BBM</th>
-                                    <th class="text-center">Jenis Komuditas</th>
-                                    <th class="text-center">Satuan</th>
-                                    <th class="text-center">Petugas</th>
+                                    <th class="text-center">Nama Sektor</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
-                                @foreach ($produk as $item)
+                                @foreach ($sektor as $item)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->jenis_bbm }}</td>
-                                    <td>{{ $item->jenis_komuditas }}</td>
-                                    <td>{{ $item->satuan }}</td>
-                                    <td>{{ $item->petugas }}</td>
+                                    <td>{{ $item->nama_sektor }}</td>
                                     <td class="text-nowrap" align="center">
-                                        <a href="{{ url('/master/produk/'. $item->id .'/edit') }}" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                        <a href="{{ url('/master/sektor/'. $item->id .'/edit') }}" class="btn btn-icon btn-sm btn-info mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <form action="{{ url('/master/produk/'. $item->id) }}" method="POST" class="d-inline">
+                                        <form action="{{ url('/master/sektor/'. $item->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-icon btn-sm btn-danger mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus" onclick="return confirm('Yakin ingin menghapus data?')">

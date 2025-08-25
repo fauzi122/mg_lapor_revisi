@@ -29,7 +29,8 @@ use App\Http\Controllers\{
 	IzinController,
 	IzinUsahaController,
     LogsEvController,
-	LogsEvaluatorController
+	LogsEvaluatorController,
+    SektorController
 };
 
 use App\Http\Controllers\Evaluator\{
@@ -429,6 +430,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	Route::resource('/master/jabatan', JabatanController::class);
 	Route::resource('/master/izin-usaha', IzinUsahaController::class);
 	Route::resource('/master/email', EmailMasterController::class);
+	Route::resource('/master/sektor', SektorController::class);
 	//Evaluator hasil olahan bbm
 
 	Route::controller(EvHasilOlahController::class)->group(function () {
