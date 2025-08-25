@@ -51,6 +51,12 @@
                 </div>
                 <div class="card-body p-2">
                     <div class="card">
+                        @if (session()->has('success'))
+                            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                            <script>
+                            swal("{{ session('success') }}", "", "success");
+                            </script>
+                        @endif
                         <div class="card-header align-items-center px-2">
                             <div class="card-toolbar"></div> 
                             <div class="card-title flex-row-fluid justify-content-end gap-5">
