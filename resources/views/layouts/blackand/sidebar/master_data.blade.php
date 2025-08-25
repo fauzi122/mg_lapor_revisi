@@ -81,6 +81,14 @@
                 <span class="menu-title">Email</span>
             </a>
         </div>
+
+        <div class="menu-item">
+            <a href="{{ url('/master/sektor') }}"
+                class="menu-link {{ request()->is('master/sektor') ? 'active shadow' : '' }}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Sektor</span>
+            </a>
+        </div>
     </div>
     <!--end:Menu sub-->
 </div>
