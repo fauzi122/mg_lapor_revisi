@@ -441,7 +441,7 @@ class HasilolahController extends Controller
         ->where('id_permohonan', $id_permohonan)
         ->where('id_sub_page', $id_sub_page)
         ->get();
-        
+
         $successCount = 0;
 
         try {
