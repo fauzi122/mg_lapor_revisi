@@ -68,7 +68,8 @@
                                 <tr class="fw-bold text-uppercase">
                                     <th>No</th>
                                     <th>Name</th>
-                                    <th>Email</th>           
+                                    <th>Email</th>   
+                                    <th>NPWP</th>        
                                     {{-- <th>Action</th> --}}
                                 </tr>
                             </thead>
@@ -78,6 +79,7 @@
                                         <td>{{ ++$no }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
+                                        <td>{{ $user->npwp }}</td>
                                         
                                         {{-- <td>
                                             <a href="/user/edit/admin/{{ $user->id }}" class="btn btn-sm btn-info">
