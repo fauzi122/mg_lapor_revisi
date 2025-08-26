@@ -69,7 +69,7 @@
                                     <th>No</th>
                                     <th>Name</th>
                                     <th>Email</th>           
-                                    <th>Action</th>
+                                    {{-- <th>Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody class="fw-semibold text-gray-600">
@@ -79,7 +79,7 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         
-                                        <td>
+                                        {{-- <td>
                                             <a href="/user/edit/admin/{{ $user->id }}" class="btn btn-sm btn-info">
                                                 <i class="bi bi-pencil-fill"></i> Edit
                                             </a>
@@ -91,7 +91,7 @@
                                                     <i class="bi bi-trash3-fill"></i> Delete
                                                 </button>
                                             </form>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
