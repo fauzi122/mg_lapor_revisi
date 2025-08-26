@@ -54,9 +54,8 @@ class EvHasilOlahController extends Controller
 
     public function periode($kode = '')
     {
-
-
         $p = !empty($kode) ? Crypt::decrypt($kode) : null;
+
         if ($p) {
             $query = DB::table('jual_hasil_olah_bbms as a')
                 ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
