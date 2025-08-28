@@ -165,7 +165,7 @@
                                         <td>{{ $pgb->nama_perusahaan }}</td>
                                         <td>{{ $pgb->nomor_izin }}</td>
                                         <td>{{ \Carbon\Carbon::parse($pgb->tgl_pengajuan)->format('Y-m-d') }}</td>
-                                        <td>{{ $pgb->TGL_DISETUJUI }}</td>
+                                        <td>{{ $pgb->tgl_disetujui }}</td>
                                         <td>{{ getBulan($pgb->bulan) }}</td>
                                         <td>{{ getTahun($pgb->bulan) }}</td>
                                         <td>

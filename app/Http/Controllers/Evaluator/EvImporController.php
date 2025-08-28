@@ -44,34 +44,11 @@ class EvImporController extends Controller
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
+
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
             ->select(
-            'a.id',
-            'a.npwp',
-            'a.id_permohonan',
-            'a.bulan_pib',
-            'a.produk',
-            'a.hs_code',
-            'a.volume_pib',
-            'a.invoice_amount_nilai_pabean',
-            'a.invoice_amount_final',
-            'a.satuan',
-            'a.nama_supplier',
-            'a.negara_asal',
-            'a.pelabuhan_muat',
-            'a.vessel_name',
-            'a.tanggal_bl',
-            'a.bl_no',
-            'a.no_pendaf_pib',
-            'a.tanggal_pendaf_pib',
-            'a.incoterms',
-            'a.status',
-            'a.tgl_kirim',
-            'a.catatan',
-            'a.created_at',
-            'a.updated_at',
-            'a.id_sub_page',
-            'a.pelabuhan_bongkar',
+            'a.*',
             'u.name as nama_perusahaan',
             DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
             DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
@@ -107,8 +84,7 @@ class EvImporController extends Controller
             )
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->where(function ($q) use ($t_awal, $t_akhir) {
-                $q->whereBetween(DB::raw('a.bulan_pib::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                    ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
+                $q->whereBetween(DB::raw('a.bulan_pib::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')]);
             });
 
         if ($perusahaan != 'all') {
@@ -321,8 +297,16 @@ class EvImporController extends Controller
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->where('a.bulan_pib', $tgl->startOfMonth()->format('Y-m-d'))
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->select(
+                'a.*',
+                'u.name as nama_perusahaan',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
             ->groupBy(
                 'a.id',
                 'a.npwp',
@@ -352,14 +336,6 @@ class EvImporController extends Controller
                 'a.pelabuhan_bongkar',
                 'u.name',
             )
-
-            ->select(
-                'a.*',
-                'u.name as nama_perusahaan',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-            )
             ->get();
         // dd($query);
 
@@ -385,34 +361,10 @@ class EvImporController extends Controller
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
         ->select(
-            'a.id',
-            'a.npwp',
-            'a.id_permohonan',
-            'a.bulan_pib',
-            'a.produk',
-            'a.hs_code',
-            'a.volume_pib',
-            'a.invoice_amount_nilai_pabean',
-            'a.invoice_amount_final',
-            'a.satuan',
-            'a.nama_supplier',
-            'a.negara_asal',
-            'a.pelabuhan_muat',
-            'a.vessel_name',
-            'a.tanggal_bl',
-            'a.bl_no',
-            'a.no_pendaf_pib',
-            'a.tanggal_pendaf_pib',
-            'a.incoterms',
-            'a.status',
-            'a.tgl_kirim',
-            'a.catatan',
-            'a.created_at',
-            'a.updated_at',
-            'a.id_sub_page',
-            'a.pelabuhan_bongkar',
+            'a.*',
             'u.name as nama_perusahaan',
             DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
             DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
@@ -445,15 +397,14 @@ class EvImporController extends Controller
             'a.id_sub_page',
             'a.pelabuhan_bongkar',
             'u.name'
-        )->where(function ($q) use ($t_awal, $t_akhir) {
-            $q->whereBetween('a.bulan_pib', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
-        })
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
+        );
 
         if ($request->perusahaan !== 'all') {
             $query->where('a.npwp', $request->perusahaan);
         }
+
+        $query->whereBetween('a.bulan_pib', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
 
         $result = $query->get();
 

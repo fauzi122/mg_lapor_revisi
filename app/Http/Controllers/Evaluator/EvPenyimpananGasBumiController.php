@@ -44,33 +44,10 @@ class EvPenyimpananGasBumiController extends Controller
         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
             ->select(
-                'a.id',
-                'a.npwp',
-                'a.id_permohonan',
-                'a.bulan',
-                'a.no_tangki',
-                'a.produk',
-                'a.kab_kota',
-                'a.volume_stok_awal',
-                'a.volume_supply',
-                'a.volume_output',
-                'a.volume_stok_akhir',
-                'a.satuan',
-                'a.utilisasi_tangki',
-                'a.pengguna',
-                'a.pengguna',
-                'a.tanggal_awal',
-                'a.tanggal_berakhir',
-                'a.tarif_penyimpanan',
-                'a.satuan_tarif',
-                'a.status',
-                'a.tgl_kirim',
-                'a.catatan',
-                'a.created_at',
-                'a.updated_at',
-                'a.id_sub_page',
+                'a.*',
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
@@ -105,8 +82,7 @@ class EvPenyimpananGasBumiController extends Controller
             )
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->where(function ($q) use ($t_awal, $t_akhir) {
-                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                    ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
+                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')]);
             });
 
         // Penanganan untuk semua perusahaan
@@ -319,7 +295,11 @@ class EvPenyimpananGasBumiController extends Controller
         $query = DB::table('penygasbumis as a')
         ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
         ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
+        ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
+        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
         ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+        ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
+
         ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
         ->select(
             'a.*',
@@ -359,8 +339,6 @@ class EvPenyimpananGasBumiController extends Controller
             'i.npwp',
             'm.status'
         )
-        ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
-        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
         ->get();
 
         // Perusahaan
@@ -386,6 +364,7 @@ class EvPenyimpananGasBumiController extends Controller
         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->select(
                 'a.*',
@@ -423,19 +402,11 @@ class EvPenyimpananGasBumiController extends Controller
             );
 
         if ($request->perusahaan != 'all') {
-            $query->where('badan_usaha_id', $request->perusahaan);
+            $query->where('a.npwp', $request->perusahaan);
         }
 
-        // $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-        //             ->whereIn('a.status', [1, 2, 3])->get();
-
-        $query->where(function ($q) use ($t_awal, $t_akhir) {
-            $q->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
-        });
-
-        // Filter status aktif
-        $query->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
+        $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
 
         $result = $query->get();
 

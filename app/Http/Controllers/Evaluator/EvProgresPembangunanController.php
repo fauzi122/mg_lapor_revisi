@@ -30,7 +30,8 @@ class EvProgresPembangunanController extends Controller
                 DB::raw("MIN((d ->> 'Tanggal_Berakhir_izin')::date) as tanggal_berakhir_izin")
             )
             ->whereIn(DB::raw('p.status::int'), [0, 1, 2, 3])
-            ->groupBy('u.name', 'i.npwp') // ✅ cukup per perusahaan saja
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
+            ->groupBy('u.name', 'i.npwp', DB::raw("(d ->> 'Id_Permohonan')::int")) // ✅ cukup per perusahaan saja
             ->get();
 
         // dd($perusahaan);
