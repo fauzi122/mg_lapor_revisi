@@ -244,6 +244,7 @@ class EvHargaBBMController extends Controller
         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
             ->select(
                 'a.*',
@@ -282,8 +283,7 @@ class EvHargaBBMController extends Controller
             )
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->where(function ($q) use ($t_awal, $t_akhir) {
-                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                    ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
+                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')]);     
             });
 
         if ($perusahaan != 'all') {
@@ -317,6 +317,9 @@ class EvHargaBBMController extends Controller
         ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
         ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
         ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+        ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
+        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+        ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
         ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
         ->select(
             'a.*',
@@ -354,11 +357,7 @@ class EvHargaBBMController extends Controller
             'u.name',
             'i.npwp',
             'm.status'
-        )
-
-        ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
-        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-        ->get();
+        )->get();
 
         $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
@@ -382,6 +381,7 @@ class EvHargaBBMController extends Controller
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->select(
                 'a.*',
@@ -419,15 +419,15 @@ class EvHargaBBMController extends Controller
                 'u.name',
                 'i.npwp',
                 'm.status'
-            )->where(function ($q) use ($t_awal, $t_akhir) {
-            $q->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
-        })
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
+            );
 
         if ($request->perusahaan !== 'all') {
             $query->where('a.npwp', $request->perusahaan);
         }
+
+        // 🔥 Gunakan filter: bulan dan status
+        $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
 
         $result = $query->get();
 

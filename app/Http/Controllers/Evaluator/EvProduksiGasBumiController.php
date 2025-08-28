@@ -60,48 +60,15 @@ class EvProduksiGasBumiController extends Controller
         $t_akhir = Carbon::parse($request->input('t_akhir'));
     
         $query = DB::table('pengolahans as a')
-            //     ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            //     ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-            //     ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-            //     ->where('a.tipe', 'Produksi')
-            //     ->whereIn('a.status', [1, 2, 3])
-            //     ->whereBetween('bulan', [$t_awal, $t_akhir]);
-
-            // if ($perusahaan != 'all') {
-            //     $query->where('a.badan_usaha_id', $perusahaan);
-            // }
-
-            // $result = $query->get();
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
+
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
             ->where('a.tipe', 'Produksi')
             ->select(
-                'a.id',
-                'a.npwp',
-                'a.id_permohonan',
-                'a.bulan',
-                'a.kategori_pemasok',
-                'a.intake_kilang',
-                'a.produk',
-                'a.provinsi',
-                'a.kabupaten_kota',
-                'a.sektor',
-                'a.volume',
-                'a.satuan',
-                'a.keterangan',
-                'a.jenis',
-                'a.tipe',
-                'a.status',
-                'a.tgl_kirim',
-                'a.catatan',
-                'a.petugas',
-                'a.nama',
-                'a.nama_bu_niaga',
-                'a.created_at',
-                'a.updated_at',
-                'a.id_sub_page',
+                'a.*',
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
@@ -135,8 +102,7 @@ class EvProduksiGasBumiController extends Controller
             )
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->where(function ($q) use ($t_awal, $t_akhir) {
-                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                    ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
+                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')]);
             });
 
         if ($perusahaan != 'all') {
@@ -185,7 +151,8 @@ class EvProduksiGasBumiController extends Controller
                 MAX(u.badan_usaha_id) as badan_usaha_id
                 ')
                 ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-                ->where('a.npwp', $p)
+                ->where('a.npwp', $p[0])
+                ->where('a.id_permohonan', $p[1])
                 ->where('a.jenis', 'Gas Bumi')
                 ->where('a.tipe', 'Produksi')
                 ->groupBy('a.bulan')
@@ -247,7 +214,7 @@ class EvProduksiGasBumiController extends Controller
             $pecah = explode(',', Crypt::decryptString($kode));
 
             // Pastikan jumlah elemen valid
-            if (count($pecah) !== 3) {
+            if (count($pecah) !== 4) {
                 abort(404, 'Format kode salah');
             }
 
@@ -426,37 +393,6 @@ class EvProduksiGasBumiController extends Controller
         }
     }
 
-    // public function lihatSemuaData()
-    // {
-    //     $tgl = Carbon::now();
-
-    //     $query = DB::table('pengolahans as a')
-    //     ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-    //     ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-    //     ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-    //     ->where('a.jenis', 'Gas Bumi')
-    //     ->where('a.tipe', 'Produksi')
-    //     ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
-    //     ->whereIn('a.status', [1, 2, 3])
-    //     ->get();
-
-    //     $perusahaan = DB::table('pengolahans as a')
-    //     ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-    //     ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-    //     ->whereIn('a.status', [1, 2, 3])
-    //     ->groupBy('a.badan_usaha_id')
-    //     ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-    //     ->get();
-
-    //     // return json_decode($query); exit;
-    //     return view('evaluator.laporan_bu.gb.produksi.lihat-semua-data', [
-    //         'title' => 'Laporan Gas Bumi Produksi Kilang',
-    //         'periode' => 'Bulan ' . $tgl->monthName . " " . $tgl->year,
-    //         'query' => $query,
-    //         'perusahaan' => $perusahaan,
-    //     ]);
-    // }
-
     public function lihatSemuaData()
     {
         $tgl = Carbon::now();
@@ -465,6 +401,7 @@ class EvProduksiGasBumiController extends Controller
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->where('a.jenis', 'Gas Bumi')
             ->where('a.tipe', 'Produksi')
@@ -531,41 +468,6 @@ class EvProduksiGasBumiController extends Controller
         ]);
     }
 
-    // public function filterData(Request $request)
-    // {
-    //     $t_awal = Carbon::parse($request->t_awal);
-    //     $t_akhir = Carbon::parse($request->t_akhir);
-
-    //     $perusahaan = DB::table('pengolahans as a')
-    //     ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-    //     ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-    //     ->whereIn('a.status', [1, 2, 3])
-    //     ->groupBy('a.badan_usaha_id')
-    //     ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-    //     ->get();
-
-    //     $query = DB::table('pengolahans as a')
-    //     ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-    //     ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-    //     ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-    //     ->where('a.jenis', 'Gas Bumi')
-    //     ->where('a.tipe', 'Produksi');
-
-    //     if ($request->perusahaan != 'all') {
-    //         $query->where('badan_usaha_id', $request->perusahaan);
-    //     }
-
-    //     $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-    //                 ->whereIn('a.status', [1, 2, 3])->get();
-
-    //     return view('evaluator.laporan_bu.gb.produksi.lihat-semua-data', [
-    //         'title' => 'Laporan Gas Bumi Produksi Kilang',
-    //         'periode' => 'Tanggal ' . $t_awal->format('d F Y') . " - " . $t_akhir->format('d F Y'),
-    //         'query' => $result,
-    //         'perusahaan' => $perusahaan,
-    //     ]);
-    // }
-
     public function filterData(Request $request)
     {
         $t_awal = Carbon::parse($request->t_awal);
@@ -591,6 +493,7 @@ class EvProduksiGasBumiController extends Controller
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->where('a.jenis', 'Gas Bumi')
             ->where('a.tipe', 'Produksi')
@@ -632,17 +535,8 @@ class EvProduksiGasBumiController extends Controller
             $query->where('a.npwp', $request->perusahaan);
         }
 
-        // $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-        //         ->whereIn(DB::raw('a.status::int'), [1, 2, 3])->get();
-
-        // 🔥 Gunakan OR filter: bulan ATAU tgl_kirim
-        $query->where(function ($q) use ($t_awal, $t_akhir) {
-            $q->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
-        });
-
-        // Filter status aktif
-        $query->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
+        $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+                ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
 
         $result = $query->get();
 

@@ -87,16 +87,18 @@
 
                                                             <div class="mb-3">
                                                                 <label for="example-text-input" class="form-label">Tanggal
-                                                                    Awal</label>
-                                                                <input class="form-control" name="t_awal" type="date"
-                                                                    id="example-text-input" required>
+                                                                    Awal (Bulan yang di laporkan)</label>
+                                                                <input class="form-control flatpickr" name="t_awal" required>
+                                                                {{-- <input class="form-control" name="t_awal" type="date"
+                                                                    id="example-text-input" required> --}}
                                                             </div>
 
                                                             <div class="mb-3">
                                                                 <label for="example-text-input" class="form-label">Tanggal
-                                                                    Akhir</label>
-                                                                <input class="form-control" name="t_akhir" type="date"
-                                                                    id="example-text-input" required>
+                                                                    Akhir (Bulan yang di laporkan)</label>
+                                                                <input class="form-control flatpickr" name="t_akhir" required>
+                                                                {{-- <input class="form-control" name="t_akhir" type="date"
+                                                                    id="example-text-input" required> --}}
                                                             </div>
 
                                                             <div class="mb-3">

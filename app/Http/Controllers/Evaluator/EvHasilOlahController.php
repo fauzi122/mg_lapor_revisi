@@ -271,31 +271,16 @@ class EvHasilOlahController extends Controller
         $perusahaan = $request->input('perusahaan');
         $t_awal = Carbon::parse($request->input('t_awal'));
         $t_akhir = Carbon::parse($request->input('t_akhir'));
-    
+
         // Query untuk mendapatkan data penjualan berdasarkan perusahaan dan tanggal
         $query = DB::table('jual_hasil_olah_bbms as a')
-        ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
             ->select(
-                'a.id',
-                'a.npwp',
-                'a.id_permohonan',
-                'a.bulan',
-                'a.produk',
-                'a.provinsi',
-                'a.kabupaten_kota',
-                'a.sektor',
-                'a.volume',
-                'a.satuan',
-                'a.status',
-                'a.tgl_kirim',
-                'a.catatan',
-                'a.petugas',
-                'a.created_at',
-                'a.updated_at',
-                'a.id_sub_page',
+                'a.*',
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
@@ -322,8 +307,7 @@ class EvHasilOlahController extends Controller
             )
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->where(function ($q) use ($t_awal, $t_akhir) {
-                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                    ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
+                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')]);
             });
 
         if ($perusahaan != 'all') {
@@ -339,16 +323,17 @@ class EvHasilOlahController extends Controller
                 'title' => 'Laporan Penjualan Hasil Olahan/Minyak Bumi',
                 'result' => $result
             ];
-    
+
             $view = view('evaluator.laporan_bu.hasil_olah_mb.jual_hasil.cetak', $data);
-    
+
             // Menambahkan script JavaScript untuk reload halaman
             $view->with('reload', true);
-    
+
             return response($view);
         }
     }
-    
+
+
 
     public function lihatSemuaData()
     {
@@ -359,7 +344,15 @@ class EvHasilOlahController extends Controller
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->select(
+                'a.*',
+                'u.name as nama_perusahaan',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
             ->groupBy(
                 'a.id',
                 'a.npwp',
@@ -380,17 +373,23 @@ class EvHasilOlahController extends Controller
                 'a.id_sub_page',
                 'u.name',
             )
+            ->get();
 
+        $perusahaan = DB::table('jual_hasil_olah_bbms as a')
+            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
+            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->groupBy('u.name', 'i.npwp')
             ->select(
-                'a.*',
+                DB::raw("MAX(a.bulan) as bulan_terbaru"),
                 'u.name as nama_perusahaan',
+                'i.npwp',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
             )
             ->get();
-
-        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
         // return json_decode($query); exit;
         return view('evaluator.laporan_bu.hasil_olah_mb.jual_hasil.lihat-semua-data', [
@@ -406,31 +405,30 @@ class EvHasilOlahController extends Controller
         $t_awal = Carbon::parse($request->t_awal);
         $t_akhir = Carbon::parse($request->t_akhir);
 
-        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
+        $perusahaan = DB::table('jual_hasil_olah_bbms as a')
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->groupBy('u.name', 'i.npwp')
+            ->select(
+                DB::raw("MAX(a.bulan) as bulan_terbaru"),
+                'u.name as nama_perusahaan',
+                'i.npwp',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+            )
+            ->get();
 
         $query = DB::table('jual_hasil_olah_bbms as a')
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->select(
-                'a.id',
-                'a.npwp',
-                'a.id_permohonan',
-                'a.bulan',
-                'a.produk',
-                'a.provinsi',
-                'a.kabupaten_kota',
-                'a.sektor',
-                'a.volume',
-                'a.satuan',
-                'a.status',
-                'a.tgl_kirim',
-                'a.catatan',
-                'a.petugas',
-                'a.created_at',
-                'a.updated_at',
-                'a.id_sub_page',
+                'a.*',
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
@@ -461,17 +459,18 @@ class EvHasilOlahController extends Controller
             $query->where('a.npwp', $request->perusahaan);
         }
 
-        // $result = $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-        //         ->whereIn(DB::raw('a.status::int'), [1, 2, 3])->get();
+        // 🔥 Gunakan filter: bulan dan status
+        $query->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
 
         // 🔥 Gunakan OR filter: bulan ATAU tgl_kirim
-        $query->where(function ($q) use ($t_awal, $t_akhir) {
-            $q->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
-                ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
-        });
+        // $query->where(function ($q) use ($t_awal, $t_akhir) {
+        //     $q->whereBetween('a.bulan', [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')])
+        //         ->orWhereBetween('a.created_at', [$t_awal, $t_akhir]);
+        // });
 
-        // Filter status aktif
-        $query->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
+        // // Filter status aktif
+        // $query->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
 
         $result = $query->get();
 
@@ -482,5 +481,4 @@ class EvHasilOlahController extends Controller
             'perusahaan' => $perusahaan,
         ]);
     }
-
 }
