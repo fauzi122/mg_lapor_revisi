@@ -41,14 +41,12 @@ class EvPengangkutanGasBumiController extends Controller
         $query = DB::table('pengangkutan_gaskbumis as a')
         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
         ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-        ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+        // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
         ->select(
             'a.*',
             'u.name as nama_perusahaan',
-            'i.npwp',
-            'm.status',
             DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
             DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
             DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
@@ -74,7 +72,6 @@ class EvPengangkutanGasBumiController extends Controller
             'a.id_sub_page',
             'u.name',
             'i.npwp',
-            'm.status'
         )
         ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
         ->where(function ($q) use ($t_awal, $t_akhir) {
@@ -345,7 +342,7 @@ class EvPengangkutanGasBumiController extends Controller
         $query = DB::table('pengangkutan_gaskbumis as a')
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->select(

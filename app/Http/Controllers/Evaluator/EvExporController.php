@@ -44,7 +44,7 @@ class EvExporController extends Controller
         $query = DB::table('ekspors as a')
         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
         ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-        ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+        // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
 
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
@@ -378,14 +378,13 @@ class EvExporController extends Controller
         $query = DB::table('ekspors as a')
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->where('a.bulan_peb', $tgl->startOfMonth()->format('Y-m-d'))
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->select(
                 'a.*',
-                'm.status',
                 'i.npwp',
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
@@ -420,7 +419,6 @@ class EvExporController extends Controller
                 'a.id_sub_page',
                 'u.name',
                 'i.npwp',
-                'm.status'
             )->get();
 
 
@@ -450,7 +448,7 @@ class EvExporController extends Controller
         $query = DB::table('ekspors as a')
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->select(

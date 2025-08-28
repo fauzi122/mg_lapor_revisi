@@ -289,14 +289,11 @@ class EvHargaLpgController extends Controller
         $query = DB::table('harga_l_p_g_s as a')
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
             ->select(
                 'a.*',
                 'u.name as nama_perusahaan',
-                'm.nama_opsi',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
@@ -325,7 +322,6 @@ class EvHargaLpgController extends Controller
             'a.updated_at',
             'a.created_at',
             'a.id_sub_page',
-            "m.nama_opsi",
             'u.name',
         )
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
@@ -360,7 +356,6 @@ class EvHargaLpgController extends Controller
         $query = DB::table('harga_l_p_g_s as a')
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
@@ -369,7 +364,7 @@ class EvHargaLpgController extends Controller
                 'a.*',
                 'u.name as nama_perusahaan',
                 'i.npwp',
-                'm.status',
+                // 'm.status',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
@@ -399,7 +394,7 @@ class EvHargaLpgController extends Controller
             'a.updated_at',
             'a.created_at',
             'a.id_sub_page',
-            'm.status',
+            // 'm.status',
             'u.name',
             'i.npwp'
             )
@@ -430,13 +425,12 @@ class EvHargaLpgController extends Controller
         $query = DB::table('harga_l_p_g_s as a')
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->select(
                 'a.*',
                 'u.name as nama_perusahaan',
-                'm.nama_opsi',
+                // 'm.nama_opsi',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
@@ -467,7 +461,7 @@ class EvHargaLpgController extends Controller
                 'a.created_at',
                 'a.id_sub_page',
                 'u.name',
-                'm.nama_opsi'
+                // 'm.nama_opsi'
             );
 
         // Filter perusahaan
