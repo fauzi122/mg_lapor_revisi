@@ -51,7 +51,10 @@
                                         </h4>
                                     </div>
                                     <div class="d-flex justify-content-end gap-2">
-                                        <a href="{{ url('laporan/penyimpanan/mb/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->npwp) }}"
+                                        @php
+                                            $kode = Crypt::encryptString($per->npwp . ',' . $per->id_permohonan);
+                                        @endphp
+                                        <a href="{{ url('laporan/penyimpanan/mb/periode') . '/' . $kode }}"
                                             class="btn btn-danger waves-effect waves-light">
                                             <i class='bi bi-arrow-left'></i> Kembali
                                         </a>
@@ -60,9 +63,10 @@
                                             <i class='bi bi-funnel'></i> Update Status
                                         </button>
 
-                                        <button type="button" class="btn btn-info waves-effect waves-light btn-selesai-status">
+                                        {{-- <button type="button"
+                                            class="btn btn-info waves-effect waves-light btn-selesai-status">
                                             <i class="bi bi-check-lg"></i> Selesai
-                                        </button>
+                                        </button> --}}
 
                                         <div class="modal fade" id="kt_modal_update" tabindex="-1" aria-hidden="true">
                                             <!--begin::Modal dialog-->
@@ -150,7 +154,7 @@
                                             <th style="text-align: center; vertical-align: middle;">Volume Stok Akhir</th>
                                             <th style="text-align: center; vertical-align: middle;">Satuan</th>
                                             <th style="text-align: center; vertical-align: middle;">Utilisasi Tangki</th>
-                                            
+
                                             <th style="text-align: center; vertical-align: middle;">Pengguna</th>
                                             <th style="text-align: center; vertical-align: middle;">Tarif Penyimpanan</th>
                                             <th style="text-align: center; vertical-align: middle;">Satuan Tarif</th>
@@ -193,20 +197,21 @@
                                                     @if ($pgb->status == 1)
                                                         <button type="button"
                                                             class="btn btn-icon btn-sm btn-info btn-update mb-3"
-                                                            data-bs-toggle="modal" data-bs-target="#kt_modal_update_{{ $pgb->id }}"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_update_{{ $pgb->id }}"
                                                             title="Revisi data">
                                                             <i class="ki-solid ki-pencil align-middle"></i>
                                                         </button>
 
                                                         @if ($pgb->status == 1 && $pgb->catatan)
-                                                            <button class="btn btn-primary btn-icon btn-sm btn-selesai"
+                                                            {{-- <button class="btn btn-primary btn-icon btn-sm btn-selesai"
                                                                 data-id="{{ $pgb->id }}">
                                                                 <i class="bi bi-check-lg" title="Selesai"></i>
-                                                            </button>
+                                                            </button> --}}
                                                         @endif
 
-                                                        <div class="modal fade" id="kt_modal_update_{{ $pgb->id }}" tabindex="-1"
-                                                            aria-hidden="true">
+                                                        <div class="modal fade" id="kt_modal_update_{{ $pgb->id }}"
+                                                            tabindex="-1" aria-hidden="true">
                                                             <!--begin::Modal dialog-->
                                                             <div class="modal-dialog modal-dialog-centered mw-650px">
                                                                 <!--begin::Modal content-->
@@ -277,7 +282,7 @@
                                                 <td>{{ $pgb->volume_stok_akhir }}</td>
                                                 <td>{{ $pgb->satuan }}</td>
                                                 <td>{{ $pgb->utilisasi_tangki }}</td>
-                                                
+
                                                 <td>{{ $pgb->pengguna }}</td>
                                                 <td>{{ $pgb->tarif_penyimpanan }}</td>
                                                 <td>{{ $pgb->satuan_tarif }}</td>

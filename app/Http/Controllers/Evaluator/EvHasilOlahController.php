@@ -5,45 +5,21 @@ namespace App\Http\Controllers\Evaluator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Jual_hasil_olah_bbm;
-use App\Models\Penyminyakbumi;
+use App\Traits\EvaluatorTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
-use App\Traits\SentEmailTrait;
 use Illuminate\Support\Facades\DB;
 
 class EvHasilOlahController extends Controller
 {
-    use SentEmailTrait;
+    use EvaluatorTrait;
+
+    protected $tableName = "jual_hasil_olah_bbms";
 
     public function index()
     {
-
-        $perusahaan = DB::table('jual_hasil_olah_bbms as a')
-            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'a.npwp')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->select(
-                'u.name as nama_perusahaan',
-                'i.npwp',
-                DB::raw("(d ->> 'Id_Permohonan')::int as id_permohonan"),
-                DB::raw("MIN(d ->> 'No_SK_Izin') as no_sk_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tanggal_izin"),
-                DB::raw("MIN(d ->> 'Kode_Izin_Desc') as kode_izin_desc"),
-                DB::raw("MIN(d ->> 'Jenis_Izin_Desc') as jenis_izin_desc"),
-                DB::raw("MIN(d ->> 'Jenis_Pengesahan') as jenis_pengesahan"),
-                DB::raw("MIN(d ->> 'Status_Pengesahan') as status_pengesahan"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tanggal_pengesahan"),
-                DB::raw("MIN((d ->> 'Tanggal_Berakhir_izin')::date) as tanggal_berakhir_izin")
-            )
-            ->groupBy('u.name', 'i.npwp', DB::raw("(d ->> 'Id_Permohonan')::int"))
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->get();
-            // ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            // ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-            // ->whereIn('a.status', [1, 2, 3])
-            // ->groupBy('a.badan_usaha_id')
-            // ->select('b.id_perusahaan', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-            // ->get();
+        $perusahaan =  $this->indexQuery($this->tableName)->get();
+            
         $data = [
             'title' => 'Laporan Penjualan Hasil Olahan/Minyak Bumi',
             'perusahaan' => $perusahaan,
@@ -54,24 +30,10 @@ class EvHasilOlahController extends Controller
 
     public function periode($kode = '')
     {
-        $p = !empty($kode) ? Crypt::decrypt($kode) : null;
+        $p = !empty($kode) ? explode(',', Crypt::decryptString($kode)) : null;
 
         if ($p) {
-            $query = DB::table('jual_hasil_olah_bbms as a')
-                ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-                ->selectRaw('
-                    MAX(a.npwp) as npwp, 
-                    a.bulan, 
-                    MAX(a.status) as status, 
-                    MAX(a.catatan) as catatan, 
-                    MAX(u.name) as nama_perusahaan,
-                    MAX(u.badan_usaha_id) as badan_usaha_id
-                    ')
-                ->where('a.npwp', $p)
-                ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-                ->groupBy('a.bulan')
-                ->get();
-
+            $query = $this->periodeQuery($this->tableName, $p)->get();
         } else {
             $query = '';
         }
@@ -88,13 +50,14 @@ class EvHasilOlahController extends Controller
     {
         $pecah = explode(',', Crypt::decryptString($kode));
 
-        if (count($pecah) !== 3) {
+        if (count($pecah) !== 4) {
             abort(404, 'Format kode salah');
         }
 
         $mode  = $pecah[0]; // 'bulan' atau 'tahun'
         $bulan = $pecah[1]; // ex: 2025-06-01
         $npwp  = $pecah[2];
+        $id_permohonan  = $pecah[3];
 
         // Atur filter berdasarkan mode
         if ($mode === 'tahun') {
@@ -104,16 +67,7 @@ class EvHasilOlahController extends Controller
             $like = $bulan; // exact match bulan
         }
 
-        $query = DB::table('jual_hasil_olah_bbms as a')
-            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-            ->select('a.*', 'u.name as nama_perusahaan', 'm.nama_opsi')
-            ->where('a.npwp', $npwp)
-            ->where('a.bulan', 'like', $like)
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->get();
-
-
+        $query = $this->showQuery($this->tableName, $npwp, $id_permohonan, $like)->get();
         //        var_dump($query);die();
 
         $data = [
@@ -436,21 +390,7 @@ class EvHasilOlahController extends Controller
             )
             ->get();
 
-        $perusahaan = DB::table('jual_hasil_olah_bbms as a')
-        ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-        ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-        ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-        ->groupBy('u.name', 'i.npwp')
-        ->select(
-            DB::raw("MAX(a.bulan) as bulan_terbaru"),
-            'u.name as nama_perusahaan',
-            'i.npwp',
-            DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-            DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-            DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-        )
-        ->get();
+        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
         // return json_decode($query); exit;
         return view('evaluator.laporan_bu.hasil_olah_mb.jual_hasil.lihat-semua-data', [
@@ -466,21 +406,7 @@ class EvHasilOlahController extends Controller
         $t_awal = Carbon::parse($request->t_awal);
         $t_akhir = Carbon::parse($request->t_akhir);
 
-        $perusahaan = DB::table('jual_hasil_olah_bbms as a')
-            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->groupBy('u.name', 'i.npwp')
-            ->select(
-                DB::raw("MAX(a.bulan) as bulan_terbaru"),
-                'u.name as nama_perusahaan',
-                'i.npwp',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-            )
-            ->get();
+        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
         $query = DB::table('jual_hasil_olah_bbms as a')
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')

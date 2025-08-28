@@ -5,34 +5,21 @@ namespace App\Http\Controllers\Evaluator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Harga_bbm_jbu;
+use App\Traits\EvaluatorTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class EvHargaBBMController extends Controller
 {
+    use EvaluatorTrait;
+
+    protected $tableName = "harga_bbm_jbus";
+    
     public function index(){
 
-        $perusahaan = DB::table('harga_bbm_jbus as a')
-        ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-        ->leftJoin('izin_migas as i', 'i.npwp', '=', 'a.npwp')
-        ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-        ->groupBy('u.name', 'i.npwp', DB::raw("(d ->> 'Id_Permohonan')::int"))
-        ->select( 
-            'u.name as nama_perusahaan',
-            'i.npwp',
-            DB::raw("(d ->> 'Id_Permohonan')::int as id_permohonan"),
-            DB::raw("MIN(d ->> 'No_SK_Izin') as no_sk_izin"),
-            DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tanggal_izin"),
-            DB::raw("MIN(d ->> 'Kode_Izin_Desc') as kode_izin_desc"),
-            DB::raw("MIN(d ->> 'Jenis_Izin_Desc') as jenis_izin_desc"),
-            DB::raw("MIN(d ->> 'Jenis_Pengesahan') as jenis_pengesahan"),
-            DB::raw("MIN(d ->> 'Status_Pengesahan') as status_pengesahan"),
-            DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tanggal_pengesahan"),
-            DB::raw("MIN((d ->> 'Tanggal_Berakhir_izin')::date) as tanggal_berakhir_izin")
-        )
-        ->get();
+        $perusahaan = $this->indexQuery($this->tableName)->get();
+
         $data = [
             'title'=>'Laporan Harga BBM JBU',
             'perusahaan' => $perusahaan,
@@ -43,28 +30,14 @@ class EvHargaBBMController extends Controller
 
     public function periode($kode = '')
     {
+        $p = !empty($kode) ? explode(',', Crypt::decryptString($kode)) : null;
 
-
-        $p = !empty($kode) ? Crypt::decrypt($kode) : null;
         if ($p) {
-            $query = DB::table('harga_bbm_jbus as a')
-            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-            ->selectRaw('
-            MAX(a.npwp) as npwp, 
-            a.bulan, 
-            MAX(a.status) as status, 
-            MAX(a.catatan) as catatan, 
-            MAX(u.name) as nama_perusahaan,
-            MAX(u.badan_usaha_id) as badan_usaha_id
-            ')
-            ->where('a.npwp', $p)
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->groupBy('a.bulan')
-            ->get();
+            $query = $this->periodeQuery($this->tableName, $p)->get();
         } else {
             $query = '';
-
         }
+
         $data = [
             'title'=>'Laporan Harga BBM JBU',
             'p' => $p,
@@ -76,16 +49,16 @@ class EvHargaBBMController extends Controller
 
     public function show($kode = '')
     {
-
         $pecah = explode(',', Crypt::decryptString($kode));
 
-        if (count($pecah) !== 3) {
+        if (count($pecah) !== 4) {
             abort(404, 'Format kode salah');
         }
 
         $mode  = $pecah[0]; // 'bulan' atau 'tahun'
         $bulan = $pecah[1]; // ex: 2025-06-01
         $npwp  = $pecah[2];
+        $id_permohonan  = $pecah[3];
 
         // Atur filter berdasarkan mode
         if ($mode === 'tahun') {
@@ -95,16 +68,8 @@ class EvHargaBBMController extends Controller
             $like = $bulan; // exact match bulan
         }
         
-        $query = DB::table('harga_bbm_jbus as a')
-        ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-        ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-        ->select('a.*', 'u.name as nama_perusahaan', 'm.nama_opsi')
-        ->where('a.npwp', $npwp)
-        ->where('a.bulan', 'like', $like)
-        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-        ->get();
-
-        //        var_dump($query);die();
+        $query = $this->showQuery($this->tableName, $npwp, $id_permohonan, $like)->get();
+        //var_dump($query);die();
 
         $data = [
             'title'=>'Laporan Harga BBM JBU',
@@ -395,21 +360,7 @@ class EvHargaBBMController extends Controller
         ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
         ->get();
 
-        $perusahaan = DB::table('harga_bbm_jbus as a')
-        ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-        ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-        ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-        ->groupBy('u.name', 'i.npwp')
-        ->select(
-            DB::raw("MAX(a.bulan) as bulan_terbaru"),
-            'u.name as nama_perusahaan',
-            'i.npwp',
-            DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-            DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-            DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-        )
-        ->get();
+        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
         // return json_decode($query); exit;
         return view('evaluator.laporan_bu.harga.bbm.lihat-semua-data', [
@@ -425,21 +376,7 @@ class EvHargaBBMController extends Controller
         $t_awal = Carbon::parse($request->t_awal);
         $t_akhir = Carbon::parse($request->t_akhir);
 
-        $perusahaan = DB::table('harga_bbm_jbus as a')
-        ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-        ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-        ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-        ->groupBy('u.name', 'i.npwp')
-        ->select(
-            DB::raw("MAX(a.bulan) as bulan_terbaru"),
-            'u.name as nama_perusahaan',
-            'i.npwp',
-            DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-            DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-            DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-        )
-        ->get();
+        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
         $query = DB::table('harga_bbm_jbus as a')
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
