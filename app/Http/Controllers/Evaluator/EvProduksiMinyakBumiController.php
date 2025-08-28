@@ -15,7 +15,7 @@ class EvProduksiMinyakBumiController extends Controller
     public function index(){
 
         $perusahaan = DB::table('pengolahans as a')
-        ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
+            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'a.npwp')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->where('a.jenis', 'Minyak Bumi')
@@ -35,9 +35,8 @@ class EvProduksiMinyakBumiController extends Controller
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tanggal_pengesahan"),
                 DB::raw("MIN((d ->> 'Tanggal_Berakhir_izin')::date) as tanggal_berakhir_izin")
             )
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->get();
-
-
 
         $data = [
             'title'=>'Laporan Minyak Bumi Produksi Kilang',
@@ -151,26 +150,26 @@ class EvProduksiMinyakBumiController extends Controller
 
     public function periode($kode = '')
     {
-
-
-        $p = !empty($kode) ? Crypt::decrypt($kode) : null;
+        $p = !empty($kode) ? explode(',', Crypt::decryptString($kode)) : null;
         if ($p) {
             $query = DB::table('pengolahans as a')
             ->selectRaw('
             MAX(a.npwp) as npwp, 
+            MAX(a.id_permohonan) as id_permohonan, 
             a.bulan, 
             MAX(a.status) as status, 
             MAX(a.catatan) as catatan, 
             MAX(u.name) as nama_perusahaan,
             MAX(u.badan_usaha_id) as badan_usaha_id
             ')
-                ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-                ->where('a.npwp', $p)
-                ->where('a.jenis', 'Minyak Bumi')
-                ->where('a.tipe', 'Produksi')
-                ->groupBy('a.bulan')
-                ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-                ->get();
+            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
+            ->where('a.npwp', $p[0])
+            ->where('a.id_permohonan', $p[1])
+            ->where('a.jenis', 'Minyak Bumi')
+            ->where('a.tipe', 'Produksi')
+            ->groupBy('a.bulan')
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->get();
         } else {
             $query = '';
 
@@ -234,11 +233,11 @@ class EvProduksiMinyakBumiController extends Controller
             $pecah = explode(',', Crypt::decryptString($kode));
 
             // Pastikan jumlah elemen valid
-            if (count($pecah) !== 3) {
+            if (count($pecah) !== 4) {
                 abort(404, 'Format kode salah');
             }
 
-            [$mode, $bulan, $npwp] = $pecah;
+            [$mode, $bulan, $npwp, $id_permohonan] = $pecah;
 
             // Validasi isi mode
             if (!in_array($mode, ['bulan', 'tahun'])) {
@@ -255,6 +254,7 @@ class EvProduksiMinyakBumiController extends Controller
                 ->where('a.jenis', 'Minyak Bumi')
                 ->where('a.tipe', 'Produksi')
                 ->where('a.npwp', $npwp)
+                ->where('a.id_permohonan', $id_permohonan)
                 ->where('a.bulan', 'like', $like)
                 ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
                 ->get();

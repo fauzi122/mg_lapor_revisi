@@ -51,7 +51,10 @@
                                         </h4>
                                     </div>
                                     <div class="d-flex justify-content-end gap-2">
-                                        <a href="{{ url('laporan/jual-hasil-olahan/periode') . '/' . \Illuminate\Support\Facades\Crypt::encrypt($per->npwp) }}"
+                                        @php
+                                            $kode = Crypt::encryptString($per->npwp . ',' . $per->id_permohonan);
+                                        @endphp
+                                        <a href="{{ url('laporan/jual-hasil-olahan/periode') . '/' . $kode }}"
                                             class="btn btn-danger waves-effect waves-light">
                                             <i class='bi bi-arrow-left'></i> Kembali
                                         </a>
@@ -60,9 +63,9 @@
                                             <i class='bi bi-funnel'></i> Update Status
                                         </button>
 
-                                        <button type="button" class="btn btn-info waves-effect waves-light">
+                                        {{-- <button type="button" class="btn btn-info waves-effect waves-light">
                                             <i class="bi bi-check-lg"></i> Selesai
-                                        </button>
+                                        </button> --}}
 
                                         <div class="modal fade" id="kt_modal_update" tabindex="-1" aria-hidden="true">
                                             <!--begin::Modal dialog-->
@@ -185,9 +188,9 @@
                                                             <i class="ki-solid ki-pencil align-middle"></i>
                                                         </button>
                                                         @if ($pgb->status == 1 && $pgb->catatan)
-                                                            <button class="btn btn-primary btn-icon btn-sm btn-selesai"
+                                                            {{-- <button class="btn btn-primary btn-icon btn-sm btn-selesai"
                                                                 data-id="{{ $pgb->id }}"><i class="bi bi-check-lg"
-                                                                    title="Selesai"></i></button>
+                                                                    title="Selesai"></i></button> --}}
                                                         @endif
 
                                                         <div class="modal fade" id="kt_modal_update_{{ $pgb->id }}"

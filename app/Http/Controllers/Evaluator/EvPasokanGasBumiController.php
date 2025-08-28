@@ -42,6 +42,7 @@ class EvPasokanGasBumiController extends Controller
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tanggal_pengesahan"),
                 DB::raw("MIN((d ->> 'Tanggal_Berakhir_izin')::date) as tanggal_berakhir_izin")
             )
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->get();
 
 
@@ -160,11 +161,12 @@ class EvPasokanGasBumiController extends Controller
     {
 
 
-        $p = !empty($kode) ? Crypt::decrypt($kode) : null;
+        $p = !empty($kode) ? explode(',', Crypt::decryptString($kode)) : null;
         if ($p) {
             $query = DB::table('pengolahans as a')
                 ->selectRaw('
                 MAX(a.npwp) as npwp, 
+                MAX(a.id_permohonan) as id_permohonan, 
                 a.bulan, 
                 MAX(a.status) as status, 
                 MAX(a.catatan) as catatan, 
@@ -238,7 +240,7 @@ class EvPasokanGasBumiController extends Controller
                 abort(404, 'Format kode salah');
             }
 
-            [$mode, $bulan, $npwp] = $pecah;
+            [$mode, $bulan, $npwp, $id_permohonan] = $pecah;
 
             // Validasi isi mode
             if (!in_array($mode, ['bulan', 'tahun'])) {
@@ -255,6 +257,7 @@ class EvPasokanGasBumiController extends Controller
                 ->where('a.jenis', 'Gas Bumi')
                 ->where('a.tipe', 'Pasokan')
                 ->where('a.npwp', $npwp)
+                ->where('a.id_permohonan', $id_permohonan)
                 ->where('a.bulan', 'like', $like)
                 ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
                 ->get();
