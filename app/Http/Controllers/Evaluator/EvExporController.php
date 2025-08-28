@@ -56,6 +56,7 @@ class EvExporController extends Controller
             DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
             )->groupBy(
             'a.id',
+            'a.id_permohonan',
             'a.npwp',
             'a.bulan_peb',
             'a.produk',
