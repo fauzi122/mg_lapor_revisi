@@ -102,18 +102,20 @@
                                                         </div>
                                                         <div class="fv-row mb-7">
                                                             <label for="example-text-input" class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                                                <span>Tanggal Awal</span>
+                                                                <span>Tanggal Awal (Bulan yang di laporkan)</span>
                                                                 
                                                             </label>
-                                                            <input class="form-control" name="t_awal" type="date"
-                                                                    required>
+                                                            <input class="form-control flatpickr" name="t_awal" required>
+                                                            {{-- <input class="form-control" name="t_awal" type="date"
+                                                                    required> --}}
                                                         </div>
                                                         <div class="fv-row mb-7">
                                                             <label for="example-text-input" class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                                                <span>Tanggal Akhir</span>
+                                                                <span>Tanggal Akhir (Bulan yang di laporkan)</span>
                                                             </label>
-                                                            <input class="form-control" name="t_akhir" type="date"
-                                                                    required>
+                                                            <input class="form-control flatpickr" name="t_akhir" required>
+                                                            {{-- <input class="form-control" name="t_akhir" type="date"
+                                                                    required> --}}
                                                         </div>
                                                         <div class="modal-footer flex-center">
                                                             <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Proses</button>

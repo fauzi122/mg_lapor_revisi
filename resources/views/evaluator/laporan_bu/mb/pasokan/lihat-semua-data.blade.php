@@ -101,17 +101,17 @@
                                                         </div>
                                                         <div class="fv-row mb-7">
                                                             <label for="example-text-input" class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                                                <span>Tanggal Awal</span>
+                                                                <span>Tanggal Awal (Bulan yang di laporkan)</span>
                                                                 
                                                             </label>
-                                                            <input class="form-control" name="t_awal" type="date" required>
+                                                            <input class="form-control flatpickr" name="t_awal" required>
                                                         </div>
                                                         <div class="fv-row mb-7">
                                                             <label for="example-text-input" class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                                                <span>Tanggal Akhir</span>
+                                                                <span>Tanggal Akhir (Bulan yang di laporkan)</span>
                                                                 
                                                             </label>
-                                                            <input class="form-control" name="t_akhir" type="date" required>
+                                                            <input class="form-control flatpickr" name="t_akhir" required>
                                                         </div>
                                                         <div class="modal-footer flex-center">
                                                             <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Proses</button>
@@ -192,7 +192,7 @@
                                         <td>
                                             @if ($pgb->status == 1)
                                                 <button type="button"
-                                                    class="btn btn-icon btn-sm btn-info btn-update"
+                                                    class="btn btn-icon btn-sm btn-info btn-update mb-3"
                                                     data-bs-toggle="modal" data-bs-target="#modal-update"
                                                     title="Revisi data">
                                                     <i class="bi bi-pencil-fill align-middle"></i>
@@ -200,7 +200,7 @@
 
                                                 @if ($pgb->status == 1 && $pgb->catatan)
                                                     <button
-                                                        class="btn btn-primary btn-rounded btn-sm btn-selesai"
+                                                        class="btn btn-primary btn-icon btn-sm btn-selesai"
                                                         data-id="{{ $pgb->id }}"><i class="bi bi-check"
                                                             title="Selesai"></i></button>
                                                 @endif
