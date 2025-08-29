@@ -402,8 +402,8 @@ class EvHasilOlahController extends Controller
 
     public function filterData(Request $request)
     {
-        $t_awal = Carbon::parse($request->t_awal);
-        $t_akhir = Carbon::parse($request->t_akhir);
+        $t_awal = Carbon::parse($request->t_awal . '-01')->startOfMonth();
+        $t_akhir = Carbon::parse($request->t_akhir . '-01')->endOfMonth();
 
         $perusahaan = DB::table('jual_hasil_olah_bbms as a')
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')

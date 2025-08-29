@@ -352,8 +352,8 @@ class EvImporController extends Controller
 
     public function filterData(Request $request)
     {
-        $t_awal = Carbon::parse($request->t_awal);
-        $t_akhir = Carbon::parse($request->t_akhir);
+        $t_awal = Carbon::parse($request->t_awal . '-01')->startOfMonth();
+        $t_akhir = Carbon::parse($request->t_akhir . '-01')->endOfMonth();
 
         $perusahaan = $this->perusahaanQuery($this->tableName, 'bulan_pib')->get();
 
