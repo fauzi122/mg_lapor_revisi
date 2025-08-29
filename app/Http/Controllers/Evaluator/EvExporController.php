@@ -440,8 +440,8 @@ class EvExporController extends Controller
 
     public function filterData(Request $request)
     {
-        $t_awal = Carbon::parse($request->t_awal)->startOfDay();
-        $t_akhir = Carbon::parse($request->t_akhir)->endOfDay();
+        $t_awal = Carbon::parse($request->t_awal . '-01')->startOfMonth();
+        $t_akhir = Carbon::parse($request->t_akhir . '-01')->endOfMonth();
 
         // Data perusahaan (dropdown)
         $perusahaan = $this->perusahaanQuery($this->tableName, 'bulan_peb')->get();

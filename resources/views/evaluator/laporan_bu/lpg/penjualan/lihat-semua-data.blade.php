@@ -104,20 +104,20 @@
                                                                 <div class="fv-row mb-7">
                                                                     <label for="example-text-input"
                                                                         class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                                                        <span>Tanggal Awal</span>
+                                                                        <span>Tanggal Awal (Bulan yang di laporkan)</span>
 
                                                                     </label>
-                                                                    <input class="form-control" name="t_awal"
-                                                                        type="date" required>
+                                                                    <input class="form-control flatpickr" name="t_awal"
+                                                                        required>
                                                                 </div>
                                                                 <div class="fv-row mb-7">
                                                                     <label for="example-text-input"
                                                                         class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                                                        <span>Tanggal Akhir</span>
+                                                                        <span>Tanggal Akhir (Bulan yang di laporkan)</span>
 
                                                                     </label>
-                                                                    <input class="form-control" name="t_akhir"
-                                                                        type="date" required>
+                                                                    <input class="form-control flatpickr" name="t_akhir"
+                                                                        required>
                                                                 </div>
                                                                 <div class="modal-footer flex-center">
                                                                     <button type="submit" data-bs-dismiss="modal"
@@ -197,14 +197,9 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $pgb->catatan }}</td>
-
                                                 {{--                                                <td>{{ $pgb->kategori_pemasok }}</td> --}}
                                                 {{--                                                <td>{{ $pgb->intake_kilang }}</td> --}}
                                                 <td>{{ $pgb->produk }}</td>
-
-
-
-
                                                 <td>
                                                     @if ($pgb->status == 1)
                                                         <button type="button"
@@ -261,8 +256,6 @@
 
 
                                                 </td>
-
-
                                                 <td>{{ $pgb->provinsi }}</td>
                                                 <td>{{ $pgb->kabupaten_kota }}</td>
                                                 <td>{{ $pgb->sektor }}</td>
@@ -271,7 +264,6 @@
                                                 <td>{{ $pgb->satuan }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($pgb->created_at)->format('d F Y') }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('d F Y') }}</td>
-
                                                 <td>{{ $pgb->kegiatan_usaha }}</td>
 
 
