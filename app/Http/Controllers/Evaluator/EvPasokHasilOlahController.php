@@ -222,7 +222,6 @@ class EvPasokHasilOlahController extends Controller
         $query = DB::table('pasokan_hasil_olah_bbms as a')
         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
 
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
@@ -285,7 +284,6 @@ class EvPasokHasilOlahController extends Controller
         $query = DB::table('pasokan_hasil_olah_bbms as a')
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
@@ -337,7 +335,6 @@ class EvPasokHasilOlahController extends Controller
         $query = DB::table('pasokan_hasil_olah_bbms as a')
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
             ->select(
