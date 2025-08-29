@@ -297,6 +297,7 @@ class EvImporController extends Controller
             ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->where('a.bulan_pib', $tgl->startOfMonth()->format('Y-m-d'))
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
@@ -305,7 +306,8 @@ class EvImporController extends Controller
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
+                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
             )
             ->groupBy(
                 'a.id',
@@ -363,41 +365,43 @@ class EvImporController extends Controller
             // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-        ->select(
-            'a.*',
-            'u.name as nama_perusahaan',
-            DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-            DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-            DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-        )->groupBy(
-            'a.id',
-            'a.npwp',
-            'a.id_permohonan',
-            'a.bulan_pib',
-            'a.produk',
-            'a.hs_code',
-            'a.volume_pib',
-            'a.invoice_amount_nilai_pabean',
-            'a.invoice_amount_final',
-            'a.satuan',
-            'a.nama_supplier',
-            'a.negara_asal',
-            'a.pelabuhan_muat',
-            'a.vessel_name',
-            'a.tanggal_bl',
-            'a.bl_no',
-            'a.no_pendaf_pib',
-            'a.tanggal_pendaf_pib',
-            'a.incoterms',
-            'a.status',
-            'a.tgl_kirim',
-            'a.catatan',
-            'a.created_at',
-            'a.updated_at',
-            'a.id_sub_page',
-            'a.pelabuhan_bongkar',
-            'u.name'
-        );
+            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
+            ->select(
+                'a.*',
+                'u.name as nama_perusahaan',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
+                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
+            )->groupBy(
+                'a.id',
+                'a.npwp',
+                'a.id_permohonan',
+                'a.bulan_pib',
+                'a.produk',
+                'a.hs_code',
+                'a.volume_pib',
+                'a.invoice_amount_nilai_pabean',
+                'a.invoice_amount_final',
+                'a.satuan',
+                'a.nama_supplier',
+                'a.negara_asal',
+                'a.pelabuhan_muat',
+                'a.vessel_name',
+                'a.tanggal_bl',
+                'a.bl_no',
+                'a.no_pendaf_pib',
+                'a.tanggal_pendaf_pib',
+                'a.incoterms',
+                'a.status',
+                'a.tgl_kirim',
+                'a.catatan',
+                'a.created_at',
+                'a.updated_at',
+                'a.id_sub_page',
+                'a.pelabuhan_bongkar',
+                'u.name'
+            );
 
         if ($request->perusahaan !== 'all') {
             $query->where('a.npwp', $request->perusahaan);
