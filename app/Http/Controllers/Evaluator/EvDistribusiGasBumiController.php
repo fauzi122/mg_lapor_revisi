@@ -57,42 +57,29 @@ class EvDistribusiGasBumiController extends Controller
     }
     public function cetakperiode(Request $request)
     {
-        $request->validate([
-            'perusahaan' => 'required',
-            't_awal' => 'required|date',
-            't_akhir' => 'required|date|after_or_equal:t_awal',
-        ]);
+        // $request->validate([
+        //     'perusahaan' => 'required',
+        //     't_awal' => 'required|date',
+        //     't_akhir' => 'required|date|after_or_equal:t_awal',
+        // ]);
     
         $perusahaan = $request->input('perusahaan');
-        $t_awal = Carbon::parse($request->input('t_awal'));
-        $t_akhir = Carbon::parse($request->input('t_akhir'));
+        $t_awal = Carbon::parse($request->t_awal . '-01')->startOfMonth();
+        $t_akhir = Carbon::parse($request->t_akhir . '-01')->endOfMonth();
     
         $query = DB::table('pengolahans as a')
-            //     ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-            //     ->leftJoin('r_permohonan_izin as c', 'b.ID_PERUSAHAAN', '=', 'c.ID_PERUSAHAAN')
-            //     ->select('a.*', 'b.NAMA_PERUSAHAAN','c.TGL_DISETUJUI','c.NOMOR_IZIN','c.TGL_PENGAJUAN')
-            //     ->where('a.tipe', 'Distribusi')
-            //     ->whereIn('a.status', [1, 2, 3])
-            //     ->whereBetween('bulan', [$t_awal, $t_akhir]);
-
-            // // Penanganan untuk semua perusahaan
-            // if ($perusahaan != 'all') {
-            //     $query->where('a.badan_usaha_id', $perusahaan);
-            // }
-
-            // $result = $query->get();
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
+            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
             ->where('a.tipe', 'Distribusi')
             ->select(
                 'a.*',
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha"),
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
             )->groupBy(
                 'a.id',

@@ -31,47 +31,50 @@ class EvJualLpgController extends Controller
     public function cetakperiode(Request $request)
     {
         $perusahaan = $request->input('perusahaan');
-        $t_awal = Carbon::parse($request->input('t_awal'));
-        $t_akhir = Carbon::parse($request->input('t_akhir'));
+        $t_awal = Carbon::parse($request->t_awal . '-01')->startOfMonth();
+        $t_akhir = Carbon::parse($request->t_akhir . '-01')->endOfMonth();
     
         // Query dasar untuk mendapatkan data penjualan
         $query = DB::table('penjualan_lpgs as a')
         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
-            ->select(
-                'a.*',
-                'u.name as nama_perusahaan',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-            )->groupBy(
-                'a.id',
-                'a.npwp',
-                'a.id_permohonan',
-                'a.bulan',
-                'a.provinsi',
-                'a.kabupaten_kota',
-                'a.produk',
-                'a.sektor',
-                'a.kemasan',
-                'a.volume',
-                'a.satuan',
-                'a.status',
-                'a.tgl_kirim',
-                'a.catatan',
-                'a.petugas',
-                'a.created_at',
-                'a.updated_at',
-                'a.id_sub_page',
-                'u.name'
-            )
+        ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
+        ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
+        ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
+        ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
 
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->where(function ($q) use ($t_awal, $t_akhir) {
-                $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')]);
-            });
+        ->select(
+            'a.*',
+            'u.name as nama_perusahaan',
+            DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+            DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+            DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha"),
+            DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+        )->groupBy(
+            'a.id',
+            'a.npwp',
+            'a.id_permohonan',
+            'a.bulan',
+            'a.provinsi',
+            'a.kabupaten_kota',
+            'a.produk',
+            'a.sektor',
+            'a.kemasan',
+            'a.volume',
+            'a.satuan',
+            'a.status',
+            'a.tgl_kirim',
+            'a.catatan',
+            'a.petugas',
+            'a.created_at',
+            'a.updated_at',
+            'a.id_sub_page',
+            'u.name'
+        )
+
+        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+        ->where(function ($q) use ($t_awal, $t_akhir) {
+            $q->whereBetween(DB::raw('a.bulan::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')]);
+        });
 
         if ($perusahaan != 'all') {
             $query->where('a.npwp', $perusahaan);
