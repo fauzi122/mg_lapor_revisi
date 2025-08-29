@@ -289,6 +289,7 @@ class EvJualLpgController extends Controller
             ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
             ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->select(
@@ -296,7 +297,8 @@ class EvJualLpgController extends Controller
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
+                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
             )->groupBy(
                 'a.id',
                 'a.npwp',
@@ -343,12 +345,14 @@ class EvJualLpgController extends Controller
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
             ->select(
                 'a.*',
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
+                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
             )->groupBy(
                 'a.id',
                 'a.npwp',
