@@ -83,7 +83,7 @@ header('Pragma: no-cache');
                 <th style="border: 1px solid black;">CATATAN</th>
                 <th style="border: 1px solid black;">Tgl Dibuat Laporan</th>
                 <th style="border: 1px solid black;">Tgl Pengajuan Laporan</th>
-                {{-- <th style="border: 1px solid black;">Jenis Kegiatan Usaha</th> --}}
+                <th style="border: 1px solid black;">JENIS KEGIATAN USAHA</th>
             </tr>
 
         </thead>
@@ -131,7 +131,7 @@ header('Pragma: no-cache');
                     <td style="border: 1px solid black;">
                         {{ \Carbon\Carbon::parse($pgb->tgl_kirim)->format('Y-m-d') }}
                     </td>
-                    {{-- <td style="border: 1px solid black;">{{ $pgb->nama_opsi }}</td> --}}
+                    <td style="border: 1px solid black;">{{ $pgb->kegiatan_usaha }}</td>
                 </tr>
             @endforeach
 

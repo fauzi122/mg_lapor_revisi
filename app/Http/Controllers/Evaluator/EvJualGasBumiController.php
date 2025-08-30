@@ -31,21 +31,23 @@ class EvJualGasBumiController extends Controller
     public function cetakperiode(Request $request)
     {
         $perusahaan = $request->input('perusahaan');
-        $t_awal = Carbon::parse($request->input('t_awal'));
-        $t_akhir = Carbon::parse($request->input('t_akhir'));
+        $t_awal = Carbon::parse($request->t_awal . '-01')->startOfMonth();
+        $t_akhir = Carbon::parse($request->t_akhir . '-01')->endOfMonth();
     
         // Query dasar untuk mendapatkan data penjualan
         $query = DB::table('penjualan_g_b_p_s as a')
-        ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
             // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
+            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
             ->select(
                 'a.*',
                 'u.name as nama_perusahaan',
                 DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
                 DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha"),
                 DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
             )->groupBy(
                 'a.id',

@@ -30,31 +30,31 @@ class EvExporController extends Controller
 
     public function cetakperiode(Request $request)
     {
-        $request->validate([
-            'perusahaan' => 'required',
-            't_awal' => 'required|date',
-            't_akhir' => 'required|date|after_or_equal:t_awal',
-        ]);
+        // $request->validate([
+        //     'perusahaan' => 'required',
+        //     't_awal' => 'required|date',
+        //     't_akhir' => 'required|date|after_or_equal:t_awal',
+        // ]);
     
         $perusahaan = $request->input('perusahaan');
-        $t_awal = Carbon::parse($request->input('t_awal'));
-        $t_akhir = Carbon::parse($request->input('t_akhir'));
+        $t_awal = Carbon::parse($request->t_awal . '-01')->startOfMonth();
+        $t_akhir = Carbon::parse($request->t_akhir . '-01')->endOfMonth();
 
 
         $query = DB::table('ekspors as a')
         ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
         ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-        // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
-            ->select(
+        ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
+        ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d(data)"))
+        ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
+        ->select(
             'a.*',
             'u.name as nama_perusahaan',
             DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
             DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+            DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha"),
             DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-            )->groupBy(
+        )->groupBy(
             'a.id',
             'a.id_permohonan',
             'a.npwp',
@@ -82,10 +82,10 @@ class EvExporController extends Controller
             'a.id_sub_page',
             'u.name',
             )
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->where(function ($q) use ($t_awal, $t_akhir) {
-                $q->whereBetween(DB::raw('a.bulan_peb::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')]);
-            });
+        ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+        ->where(function ($q) use ($t_awal, $t_akhir) {
+            $q->whereBetween(DB::raw('a.bulan_peb::date'), [$t_awal->format('Y-m-d'), $t_akhir->format('Y-m-d')]);
+        });
     
         if ($perusahaan != 'all') {
             $query->where('a.npwp', $perusahaan);
