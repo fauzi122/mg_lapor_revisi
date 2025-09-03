@@ -222,6 +222,7 @@
                                 <span class="text-muted fw-semibold me-1">{{ date('Y') }}&copy;</span>
                                 <a href="#" class="text-gray-800 text-hover-primary">Aplikasi Pelaporan
                                     Migas</a>
+                                <p class="text-gray-800 d-inline"> 2.1.0-alpha</p>
                             </div>
                         </div>
                     </div>
