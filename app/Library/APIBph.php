@@ -71,7 +71,7 @@ class APIBph
         $token = $this->tokenBphApi(); // Mendapatkan token yang valid
 
         try {
-            $response = Http::timeout(3000)
+            $response = Http::timeout(6000)
                 ->withToken($token)
                 ->post(self::BASEURL . $endpoint, [
                     "tahun" => $year,
@@ -81,7 +81,7 @@ class APIBph
             // Jika status 401 (Unauthorized), refresh token dan coba lagi
             if ($response->status() === 401) {
                 $this->refreshToken();  // Refresh token
-                $response = Http::timeout(3000)
+                $response = Http::timeout(6000)
                     ->withToken(Cache::get('access_token')) // Gunakan token baru
                     ->post(self::BASEURL . $endpoint, [
                         "tahun" => $year,

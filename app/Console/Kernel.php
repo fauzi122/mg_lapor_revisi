@@ -24,19 +24,43 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->call(function () {
-            $year = Carbon::now()->year;
-            // SyncJbtJob::dispatchSync($startYear);
-            SyncPenjualanJbkp::dispatchSync($year);
-            BphSyncPenjualanJbt::dispatchSync($year);
-            SyncPenjualanJbu::dispatchSync($year);
-            SyncPasokanBbm::dispatchSync($year);
-            SyncPenjualanGasBumi::dispatchSync($year);
-            SyncPasokanGasBumi::dispatchSync($year);
-            SyncPengangkutanGasBumi::dispatchSync($year);
-            SyncJbtKuota::dispatchSync($year);
-            SyncJbkpKuota::dispatchSync($year);
-        })->dailyAt('15:15'); // Menjadwalkan job setiap hari pukul 01:00 AM
+        $year = Carbon::now()->year;
+
+        $schedule->call(function () use ($year) {
+            SyncPenjualanJbkp::dispatch($year);
+        })->dailyAt('20:00');
+
+        $schedule->call(function () use ($year) {
+            BphSyncPenjualanJbt::dispatch($year);
+        })->dailyAt('21:00');
+
+        $schedule->call(function () use ($year) {
+            SyncPenjualanJbu::dispatch($year);
+        })->dailyAt('22:00');
+
+        $schedule->call(function () use ($year) {
+            SyncPasokanBbm::dispatch($year);
+        })->dailyAt('23:00');
+
+        $schedule->call(function () use ($year) {
+            SyncPenjualanGasBumi::dispatch($year);
+        })->dailyAt('00:00');
+
+        $schedule->call(function () use ($year) {
+            SyncPasokanGasBumi::dispatch($year);
+        })->dailyAt('01:00');
+
+        $schedule->call(function () use ($year) {
+            SyncPengangkutanGasBumi::dispatch($year);
+        })->dailyAt('02:00');
+
+        $schedule->call(function () use ($year) {
+            SyncJbtKuota::dispatch($year);
+        })->dailyAt('03:00');
+
+        $schedule->call(function () use ($year) {
+            SyncJbkpKuota::dispatch($year);
+        })->dailyAt('04:00');
         // $schedule->command('inspire')->hourly();
 
     }
