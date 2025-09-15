@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Evaluator;
 
+use App\Exports\PenjualanJbtExport;
 use App\Http\Controllers\Controller;
 use App\Models\PenjualanJbt;
 use Carbon\Carbon;
@@ -61,20 +62,52 @@ class EvPenjualanJbt extends Controller
     }
 
 
-    public function show($kode = '')
+    public function show($kode = '', Request $request)
     {
         $pecah = explode(",", Crypt::decryptString($kode));
 
+        // Query dasar untuk menampilkan semua data sesuai npwp, tahun, dan bulan
         $query = PenjualanJbt::where([
                         ['npwp_badan_usaha', $pecah[0]],
                         ['tahun', $pecah[1]],
                         ['bulan', $pecah[2]],
-                    ])->get();
-                    
+                    ]);
+
+        // Mengambil data perusahaan untuk ditampilkan di header
+        $per = PenjualanJbt::where('npwp_badan_usaha', $pecah[0])
+            ->where('tahun', $pecah[1])
+            ->where('bulan', $pecah[2])
+            ->first();
+
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('produk', 'ILIKE', "%{$search}%")
+                    ->orWhere('provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('kabupaten_kota', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%")
+                    ->orWhere('bulan', 'ILIKE', "%{$search}%")
+                    ->orWhere('tahun', 'ILIKE', "%{$search}%");
+
+                    // Volume Menggunakan Numeric tidak bisa string
+                    if (is_numeric($search)) {
+                        $q->orWhere('volume', $search);
+                    }
+            });
+        }
+
+
+        // Pagination 10 per halaman, dengan membawa semua parameter request agar tetap tersimpan
+        $query = $query->paginate(10)->appends($request->all());
+
+        // Data dikirim ke view
         $data = [
             'title'=>'Laporan Penjualan JBT',
             'query'=>$query,
-            'per'=>$query->first()
+            'per'=>$per
 
         ];
         return view('evaluator.laporan_bu.bph_inline.penjualan_jbt.pilihbulan', $data);
@@ -169,53 +202,61 @@ class EvPenjualanJbt extends Controller
 
     public function cetakperiode(Request $request)
     {
+        // Ambil nilai "perusahaan" dari input request (biasanya dari form/filter di frontend)
         $perusahaan = $request->input('perusahaan');
 
+        // Ubah input tanggal awal menjadi format integer "YYYYMM"
+        // Contoh: "2025-01-15" -> 202501
         $t_awal = (int) date('Ym', strtotime($request->input("t_awal")));
-        $t_akhir   = (int) date('Ym', strtotime($request->input("t_akhir"))); 
+        $t_akhir   = (int) date('Ym', strtotime($request->input("t_akhir")));
 
-        // Query untuk mendapatkan data penjualan berdasarkan perusahaan dan tanggal
-        $query = DB::table('bph_penjualan_jbt')
-                ->whereRaw('((tahun::int * 100) + bulan::int) BETWEEN ? AND ?', [$t_awal, $t_akhir])
-                ->orderByRaw('tahun::int')
-                ->orderByRaw('bulan::int');
-    
-        // Jika yang dipilih adalah 'all', maka tidak ada filter berdasarkan perusahaan
-        if ($perusahaan !== 'all') {
-            $query->where('id_badan_usaha', $perusahaan);
-        }
-    
-        $result = $query->get();
+        // Buat instance dari class PenjualanJbtExport
+        // lalu passing parameter: tanggal awal, tanggal akhir, dan perusahaan
+        $export = new PenjualanJbtExport($t_awal, $t_akhir, $perusahaan);
 
-        if ($result->isEmpty()) {
-            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
-        } else {
-            $data = [
-                'title' => 'Laporan Penjualan JBT',
-                'result' => $result
-            ];
-    
-            $view = view('evaluator.laporan_bu.bph_inline.penjualan_jbt.cetak', $data);
-    
-            // Menambahkan script JavaScript untuk reload halaman
-            $view->with('reload', true);
-    
-            return response($view);
-        }
+        // Jalankan fungsi export() dari class PenjualanJbtExport
+        // dan return hasilnya (biasanya file Excel/CSV yang akan didownload)
+        return $export->export();
     }
 
-    public function lihatSemuaData()
+    public function lihatSemuaData(Request $request)
     {
         $tgl = Carbon::now();
         $bulan = $tgl->month; // hasilnya 1–12
         $tahun = $tgl->year;
-        
+
+        // Base query: bulan berjalan saja
         $query = PenjualanJbt::where('bulan', $bulan)
-                    ->where('tahun', $tahun)
-                    ->get();
+                    ->where('tahun', $tahun);
+
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('produk', 'ILIKE', "%{$search}%")
+                    ->orWhere('provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('kabupaten_kota', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%")
+                    ->orWhere('bulan', 'ILIKE', "%{$search}%")
+                    ->orWhere('tahun', 'ILIKE', "%{$search}%");
+
+                    // Volume Menggunakan Numeric tidak bisa string
+                    if (is_numeric($search)) {
+                        $q->orWhere('volume', $search);
+                    }
+            });
+        }
+
+        // Daftar perusahaan untuk dropdown/filter
         $perusahaan  = PenjualanJbt::select('npwp_badan_usaha', 'nama_badan_usaha')
                     ->groupBy('npwp_badan_usaha', 'nama_badan_usaha')->get();
+
         $periode = $tgl->translatedFormat('F Y'); // contoh: "Mei 2025"
+
+        // Pagination 10 per halaman
+        $query = $query->paginate(10)->appends($request->all());
 
         return view('evaluator.laporan_bu.bph_inline.penjualan_jbt.lihat-semua-data', [
             'title'     => 'Laporan Penjualan JBT',
@@ -231,26 +272,49 @@ class EvPenjualanJbt extends Controller
         $t_awal = Carbon::parse($request->t_awal);
         $t_akhir = Carbon::parse($request->t_akhir);
 
-        $perusahaan = PenjualanJbt::select('id_badan_usaha', 'izin_usaha','nama_badan_usaha','npwp_badan_usaha') 
-            ->groupBy('id_badan_usaha', 'izin_usaha','nama_badan_usaha','npwp_badan_usaha')
+        // Daftar perusahaan
+        $perusahaan = PenjualanJbt::select('id_badan_usaha', 'izin_usaha', 'nama_badan_usaha', 'npwp_badan_usaha')
+            ->groupBy('id_badan_usaha', 'izin_usaha', 'nama_badan_usaha', 'npwp_badan_usaha')
             ->get();
 
-        // Query untuk mendapatkan data penjualan berdasarkan perusahaan dan tanggal
+        // Base query
         $query = DB::table('bph_penjualan_jbt')
-                ->whereRaw('((tahun::int * 100) + bulan::int) BETWEEN ? AND ?', [$t_awal->format('Ym'), $t_akhir->format('Ym')])
-                ->orderByRaw('tahun::int')
-                ->orderByRaw('bulan::int');
-    
-        // Jika yang dipilih adalah 'all', maka tidak ada filter berdasarkan perusahaan
-        if ($request->input("perusahaan") !== 'all') {
-            $query->where('id_badan_usaha', $request->input("perusahaan"));
+            ->whereRaw('((tahun::int * 100) + bulan::int) BETWEEN ? AND ?', [
+                $t_awal->format('Ym'),
+                $t_akhir->format('Ym')
+            ])
+            ->orderByRaw('tahun::int')
+            ->orderByRaw('bulan::int');
+
+        // Filter perusahaan
+        if ($request->filled("perusahaan") && $request->perusahaan !== 'all') {
+            $query->where('id_badan_usaha', $request->perusahaan);
         }
 
-        $result = $query->get();
+        // Fitur search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('produk', 'ILIKE', "%{$search}%")
+                    ->orWhere('provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('kabupaten_kota', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%");
+
+                    // Volume Menggunakan Numeric tidak bisa string
+                    if (is_numeric($search)) {
+                        $q->orWhere('volume', $search);
+                    }
+            });
+        }
+
+        // Pagination dengan appends supaya filter & search tetap terbawa
+        $result = $query->paginate(10)->appends($request->all());
 
         return view('evaluator.laporan_bu.bph_inline.penjualan_jbt.lihat-semua-data', [
             'title' => 'Laporan Penjualan JBT',
-            'periode' =>  bulan($t_awal->month) ." ".$t_awal->year ." - ". bulan($t_akhir->month) ." ". $t_akhir->year,
+            'periode' => bulan($t_awal->month) . " " . $t_awal->year . " - " . bulan($t_akhir->month) . " " . $t_akhir->year,
             'query' => $result,
             'perusahaan' => $perusahaan,
         ]);
