@@ -147,6 +147,25 @@
                     <div class="card-body p-2">
                         <div class="card">
                             <div class="card-header align-items-center px-2">
+                                <div class="card-title">
+                                    <button type="button" class="btn btn-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="ki-duotone ki-exit-down fs-2"><span class="path1"></span><span class="path2"></span></i>
+                                        Export Table
+                                    </button>
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-200px py-4" data-kt-menu="true">
+                                        <div class="menu-item px-3">
+                                            <a href="{{ url()->current() }}?export=excel&t_awal={{ request('t_awal') }}&t_akhir={{ request('t_akhir') }}&perusahaan={{ request('perusahaan', 'all') }}&search={{ request('search') }}" class="menu-link px-3">
+                                                Export as Excel
+                                            </a>
+                                        </div>
+                                        <div class="menu-item px-3">
+                                            <a href="{{ url()->current() }}?export=csv&t_awal={{ request('t_awal') }}&t_akhir={{ request('t_akhir') }}&perusahaan={{ request('perusahaan', 'all') }}&search={{ request('search') }}" class="menu-link px-3">
+                                                Export as CSV
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="card-toolbar ms-auto">
                                     <form method="GET" action="{{ url('laporan/penjualan-jbt-lihat-semua-data') }}" class="d-flex" role="search">
                                         <input type="hidden" name="t_awal" value="{{ request('t_awal') }}">
