@@ -79,7 +79,7 @@
                                                 </div>
 
                                                 <form action="{{ url('laporan/penjualan-jbt-lihat-semua-data') }}"
-                                                    method="post">
+                                                    method="GET">
                                                     @csrf
                                                     <div class="modal-body py-10 px-lg-17">
                                                         <!--begin::Scroll-->
@@ -147,64 +147,84 @@
                     <div class="card-body p-2">
                         <div class="card">
                             <div class="card-header align-items-center px-2">
-                                <div class="card-toolbar"></div>
-                                <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                    <input type="hidden" class="export-title"
-                                        value="Laporan Penjualan JBT {{ $periode }}" />
+                                <div class="card-toolbar ms-auto">
+                                    <form method="GET" action="{{ url('laporan/penjualan-jbt-lihat-semua-data') }}" class="d-flex" role="search">
+                                        <input type="hidden" name="t_awal" value="{{ request('t_awal') }}">
+                                        <input type="hidden" name="t_akhir" value="{{ request('t_akhir') }}">
+                                        <input type="hidden" name="perusahaan" value="{{ request('perusahaan', 'all') }}">
+                                        
+                                        <input type="text" name="search" value="{{ request('search') }}"
+                                            class="form-control form-control-sm me-2"
+                                            placeholder="Cari...">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-                            <table class="kt-datatable table table-bordered table-hover">
-                                <thead class="bg-light">
-                                    <tr class="fw-bold text-uppercase">
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Nama Badan Usaha</th>
-                                        <th class="text-center">NPWP Badan Usaha</th>
-                                        <th class="text-center">Izin Usaha</th>
-                                        <th class="text-center">Bulan</th>
-                                        <th class="text-center">Tahun</th>
-                                        <th class="text-center">Produk</th>
-                                        <th class="text-center">Provinsi</th>
-                                        <th class="text-center">Kabupaten/Kota</th>
-                                        <th class="text-center">Sektor</th>
-                                        <th class="text-center">Volume</th>
-                                        <th class="text-center">Satuan</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="fw-semibold text-gray-600">
-                                    @foreach ($query as $pgb)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $pgb->nama_badan_usaha }}</td>
-                                            <td>{{ $pgb->npwp_badan_usaha }}</td>
-                                            <td>
-                                                @php
-                                                    $izinList = json_decode($pgb->izin_usaha, true); // jika izin_usaha disimpan dalam bentuk JSON string
-                                                @endphp
 
-                                                @if (is_array($izinList))
-                                                    <ul style="margin: 0; padding-left: 15px;">
-                                                        @foreach ($izinList as $izin)
-                                                            <li>ID: {{ $izin['id_izin_usaha'] ?? '-' }} - Nomor:
-                                                                {{ $izin['nomor_izin_usaha'] ?? '-' }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                @else
-                                                    <span class="text-muted">Tidak ada data</span>
-                                                @endif
-                                            </td>
-
-                                            <td>{{ bulan($pgb->bulan) }}</td>
-                                            <td>{{ $pgb->tahun }}</td>
-                                            <td>{{ $pgb->produk }}</td>
-                                            <td>{{ $pgb->provinsi }}</td>
-                                            <td>{{ $pgb->kabupaten_kota }}</td>
-                                            <td>{{ $pgb->sektor }}</td>
-                                            <td>{{ $pgb->volume }}</td>
-                                            <td>{{ $pgb->satuan }}</td>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+                                    <thead class="bg-light">
+                                        <tr class="fw-bold text-uppercase text-center">
+                                            <th style="width: 70px;">No</th>
+                                            <th>Nama Badan Usaha</th>
+                                            <th>NPWP Badan Usaha</th>
+                                            <th>Izin Usaha</th>
+                                            <th>Bulan</th>
+                                            <th>Tahun</th>
+                                            <th>Produk</th>
+                                            <th>Provinsi</th>
+                                            <th>Kabupaten/Kota</th>
+                                            <th>Sektor</th>
+                                            <th>Volume</th>
+                                            <th>Satuan</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($query as $pgb)
+                                            <tr>
+                                                <td class="text-center">{{ ($query->currentPage() - 1) * $query->perPage() + $loop->iteration }}</td>
+                                                <td>{{ $pgb->nama_badan_usaha }}</td>
+                                                <td>{{ $pgb->npwp_badan_usaha }}</td>
+                                                <td class="text-start">
+                                                    @php $izinList = json_decode($pgb->izin_usaha, true); @endphp
+                                                    @if (is_array($izinList))
+                                                        <ul class="mb-0 ps-3">
+                                                            @foreach ($izinList as $izin)
+                                                                <li>ID: {{ $izin['id_izin_usaha'] ?? '-' }} -
+                                                                    Nomor: {{ $izin['nomor_izin_usaha'] ?? '-' }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @else
+                                                        <span class="text-muted">Tidak ada data</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ bulan($pgb->bulan) }}</td>
+                                                <td>{{ $pgb->tahun }}</td>
+                                                <td>{{ $pgb->produk }}</td>
+                                                <td>{{ $pgb->provinsi }}</td>
+                                                <td>{{ $pgb->kabupaten_kota }}</td>
+                                                <td>{{ $pgb->sektor }}</td>
+                                                <td>{{ $pgb->volume }}</td>
+                                                <td>{{ $pgb->satuan }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="12" class="text-center text-muted">
+                                                    Data tidak ditemukan
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <!--end::Datatable wrapper-->
+
+                            <div class="d-flex justify-content-end mt-3">
+                                {{ $query->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

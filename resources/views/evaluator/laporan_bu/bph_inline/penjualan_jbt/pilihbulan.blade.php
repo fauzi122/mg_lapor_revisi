@@ -55,43 +55,61 @@
                     <div class="card-body p-2">
                         <div class="card">
                             <div class="card-header align-items-center px-2">
-                                <div class="card-toolbar"></div> 
-                                <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                    <input type="hidden" class="export-title" value="Laporan Penjualan JBT {{ bulan($per->bulan) }}" />
+                                <div class="card-toolbar ms-auto">
+                                    <form method="GET" action="{{ url()->current() }}" class="d-flex" role="search">
+                                        <input type="text" name="search" value="{{ request('search') }}"
+                                            class="form-control form-control-sm me-2"
+                                            placeholder="Cari...">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </form>
+                                </div> 
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="bg-light">
+                                        <tr class="fw-bold text-uppercase">
+                                            <th style="width: 70px;">No</th>
+                                            <th>Bulan</th>
+                                            <th>Tahun</th>
+                                            <th>Produk</th>
+                                            <th>Provinsi</th>
+                                            <th>Kabupaten kota</th>
+                                            <th>Sektor</th>
+                                            <th>Volume</th>
+                                            <th>Satuan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-semibold text-gray-600">
+                                        @forelse ($query as $jbt)
+                                            <tr>
+                                                <td class="text-center">{{ ($query->currentPage() - 1) * $query->perPage() + $loop->iteration }}</td>
+                                                <td>{{ bulan($jbt->bulan) }}</td>
+                                                <td>{{ $jbt->tahun }}</td>
+                                                <td>{{ $jbt->produk }}</td>
+                                                <td>{{ $jbt->provinsi }}</td>
+                                                <td>{{ $jbt->kabupaten_kota }}</td>
+                                                <td>{{ $jbt->sektor }}</td>
+                                                <td>{{ $jbt->volume }}</td>
+                                                <td>{{ $jbt->satuan }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="9" class="text-center text-muted">Data tidak ditemukan</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>  
+
+                                <div class="d-flex justify-content-end mt-3">
+                                    {{ $query->links('pagination::bootstrap-5') }}
                                 </div>
                             </div>
-                            <table class="kt-datatable table table-bordered table-hover">
-                                <thead class="bg-light">
-                                    <tr class="fw-bold text-uppercase">
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Bulan</th>
-                                        <th class="text-center">Tahun</th>
-                                        <th class="text-center">Produk</th>
-                                        <th class="text-center">Provinsi</th>
-                                        <th class="text-center">Kabupaten kota</th>
-                                        <th class="text-center">Sektor</th>
-                                        <th class="text-center">Volume</th>
-                                        <th class="text-center">Satuan</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="fw-semibold text-gray-600">
-                                    @foreach ($query as $jbt)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ bulan($jbt->bulan) }}</td>
-                                            <td>{{ $jbt->tahun }}</td>
-                                            <td>{{ $jbt->produk }}</td>
-                                            <td>{{ $jbt->provinsi }}</td>
-                                            <td>{{ $jbt->kabupaten_kota }}</td>
-                                            <td>{{ $jbt->sektor }}</td>
-                                            <td>{{ $jbt->volume }}</td>
-                                            <td>{{ $jbt->satuan }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>                            
                         </div>
                     </div>
+
                 @endif
             </div>
         </div>

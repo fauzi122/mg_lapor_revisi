@@ -884,7 +884,11 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/penjualan-jbt', 'index');
 		Route::get('/laporan/penjualan-jbt/{kode}', 'show');
 		Route::get('/laporan/penjualan-jbt-lihat-semua-data', 'lihatSemuaData');
-		Route::post('/laporan/penjualan-jbt-lihat-semua-data', 'filterData');
+
+		
+		// Route::post('/laporan/penjualan-jbt-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-jbt-lihat-semua-data', 'filterData');
+
 		Route::get('/laporan/penjualan-jbt/periode/{kode}', 'periode');
 		Route::post('/laporan/penjualan-jbt/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/penjualan-jbt', 'sinkronisasiData');
