@@ -190,7 +190,7 @@ class AuthBuController extends Controller
             $credentials = ['email' => $email, 'password' => '-'];
 
             if (Auth::attempt($credentials)) {
-                Http::get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
+                dd(Http::get(url('/izin-migas/simpan'), ['npwp' => $npwp]));
                 return redirect('/');
                 // return response()->json([
                 //     'status' => 'success',
