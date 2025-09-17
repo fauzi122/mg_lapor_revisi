@@ -37,7 +37,7 @@ class IzinMigasController extends Controller
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan internal',
                 'error' => $e->getMessage()
-            ], 500);
+            ], 400);
         }
     }
 }
