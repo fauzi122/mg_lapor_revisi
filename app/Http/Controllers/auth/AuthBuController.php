@@ -194,19 +194,20 @@ class AuthBuController extends Controller
                 try {
                     $result = SaveIzinMigasJob::dispatchSync($npwp);
                     // dd($result);
-                    return response()->json([
-                        'status' => $result['status'],
-                        'message' => $result['message']
-                    ]);
+                    // return response()->json([
+                    //     'status' => $result['status'],
+                    //     'message' => $result['message']
+                    // ]);
+                    return redirect('/');
                 } catch (\Throwable $e) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Terjadi kesalahan internal',
-                        'error' => $e->getMessage()
-                    ], 400);
+                    // return response()->json([
+                    //     'status' => 'error',
+                    //     'message' => 'Terjadi kesalahan internal',
+                    //     'error' => $e->getMessage()
+                    // ], 500);
+                    return redirect('/');
                 }
                 // dd("oke");
-                return redirect('/');
                 // return response()->json([
                 //     'status' => 'success',
                 //     'message' => 'Login Non OSS berhasil',
