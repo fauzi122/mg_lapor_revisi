@@ -341,23 +341,7 @@ class EvHasilOlahController extends Controller
     {
         $tgl = Carbon::now();
 
-        $query = DB::table('jual_hasil_olah_bbms as a')
-            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
-            ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
-            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->select(
-                'a.*',
-                'u.name as nama_perusahaan',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
-                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
-            )
-            ->groupBy(
+        $query = $this->lihatSemuaDataQuery($this->tableName, $tgl)->groupBy(
                 'a.id',
                 'a.npwp',
                 'a.id_permohonan',
@@ -379,21 +363,7 @@ class EvHasilOlahController extends Controller
             )
             ->get();
 
-        $perusahaan = DB::table('jual_hasil_olah_bbms as a')
-            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->groupBy('u.name', 'i.npwp')
-            ->select(
-                DB::raw("MAX(a.bulan) as bulan_terbaru"),
-                'u.name as nama_perusahaan',
-                'i.npwp',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-            )
-            ->get();
+        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
         // return json_decode($query); exit;
         return view('evaluator.laporan_bu.hasil_olah_mb.jual_hasil.lihat-semua-data', [
@@ -409,36 +379,9 @@ class EvHasilOlahController extends Controller
         $t_awal = Carbon::parse($request->t_awal . '-01')->startOfMonth();
         $t_akhir = Carbon::parse($request->t_akhir . '-01')->endOfMonth();
 
-        $perusahaan = DB::table('jual_hasil_olah_bbms as a')
-            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->groupBy('u.name', 'i.npwp')
-            ->select(
-                DB::raw("MAX(a.bulan) as bulan_terbaru"),
-                'u.name as nama_perusahaan',
-                'i.npwp',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-            )
-            ->get();
+        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
-        $query = DB::table('jual_hasil_olah_bbms as a')
-            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
-            ->select(
-                'a.*',
-                'u.name as nama_perusahaan',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
-                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
-            )->groupBy(
+        $query = $this->FilterDataQuery($this->tableName)->groupBy(
                 'a.id',
                 'a.npwp',
                 'a.id_permohonan',

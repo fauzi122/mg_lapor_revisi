@@ -355,52 +355,35 @@ class EvHargaLpgController extends Controller
     {
         $tgl = Carbon::now();
 
-        $query = DB::table('harga_l_p_g_s as a')
-            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
-            ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->select(
-                'a.*',
-                'u.name as nama_perusahaan',
-                'i.npwp',
-                // 'm.status',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
-                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
-            )
+        $query = $this->lihatSemuaDataQuery($this->tableName, $tgl)
             ->groupBy(
-            'a.id',
-            'a.npwp',
-            'a.bulan',
-            'a.status',
-            'a.catatan',
-            'a.provinsi',
-            'a.kabupaten_kota',
-            'a.sektor',
-            'a.volume',
-            'a.biaya_perolehan',
-            'a.biaya_distribusi',
-            'a.biaya_penyimpanan',
-            'a.margin',
-            'a.ppn',
-            'a.harga_jual',
-            'a.created_at',
-            'a.tgl_kirim',
-            'a.id_permohonan',
-            'a.formula_harga',
-            'a.keterangan',
-            'a.petugas',
-            'a.updated_at',
-            'a.created_at',
-            'a.id_sub_page',
-            // 'm.status',
-            'u.name',
-            'i.npwp'
+                'a.id',
+                'a.npwp',
+                'a.bulan',
+                'a.status',
+                'a.catatan',
+                'a.provinsi',
+                'a.kabupaten_kota',
+                'a.sektor',
+                'a.volume',
+                'a.biaya_perolehan',
+                'a.biaya_distribusi',
+                'a.biaya_penyimpanan',
+                'a.margin',
+                'a.ppn',
+                'a.harga_jual',
+                'a.created_at',
+                'a.tgl_kirim',
+                'a.id_permohonan',
+                'a.formula_harga',
+                'a.keterangan',
+                'a.petugas',
+                'a.updated_at',
+                'a.created_at',
+                'a.id_sub_page',
+                // 'm.status',
+                'u.name',
+                'i.npwp'
             )
             ->get();
         // dd($query);
@@ -426,22 +409,7 @@ class EvHargaLpgController extends Controller
         $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
         // Query data utama
-        $query = DB::table('harga_l_p_g_s as a')
-            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
-            ->select(
-                'a.*',
-                'u.name as nama_perusahaan',
-                // 'm.nama_opsi',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
-                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
-            )
-            ->groupBy(
+        $query = $this->FilterDataQuery($this->tableName)->groupBy(
                 'a.id',
                 'a.npwp',
                 'a.bulan',
