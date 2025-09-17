@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use App\Library\APIOss;
+use App\Jobs\SaveIzinMigasJob;
 use Illuminate\Support\Facades\Log;
 
 class AuthBuController extends Controller
@@ -190,7 +191,21 @@ class AuthBuController extends Controller
             $credentials = ['email' => $email, 'password' => '-'];
 
             if (Auth::attempt($credentials)) {
-                dd(Http::get(url('/izin-migas/simpan'), ['npwp' => $npwp]));
+                try {
+                    $result = SaveIzinMigasJob::dispatchSync($npwp);
+                    // dd($result);
+                    return response()->json([
+                        'status' => $result['status'],
+                        'message' => $result['message']
+                    ]);
+                } catch (\Throwable $e) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Terjadi kesalahan internal',
+                        'error' => $e->getMessage()
+                    ], 400);
+                }
+                // dd("oke");
                 return redirect('/');
                 // return response()->json([
                 //     'status' => 'success',
