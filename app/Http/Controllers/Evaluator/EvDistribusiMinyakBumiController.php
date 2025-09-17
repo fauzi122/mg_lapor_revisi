@@ -6,39 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Models\Pengolahan;
 use Illuminate\Http\Request;
 use App\Models\PengolahanMBDistribusi;
+use App\Traits\EvaluatorTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class EvDistribusiMinyakBumiController extends Controller
 {
+    use EvaluatorTrait;
+
+    protected 
+    $tableName = "pengolahans", 
+    $jenis = "Minyak Bumi",
+    $tipe = 'Distribusi';
+
     public function index(){
 
-        $perusahaan = DB::table('pengolahans as a')
-        ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'a.npwp')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->where('a.jenis', 'Minyak Bumi')
-            ->where('a.tipe', 'Distribusi')
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->groupBy('u.name', 'i.npwp', DB::raw("(d ->> 'Id_Permohonan')::int"))
-            ->select(
-                'u.name as nama_perusahaan',
-                'i.npwp',
-                DB::raw("(d ->> 'Id_Permohonan')::int as id_permohonan"),
-                DB::raw("MIN(d ->> 'No_SK_Izin') as no_sk_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tanggal_izin"),
-                DB::raw("MIN(d ->> 'Kode_Izin_Desc') as kode_izin_desc"),
-                DB::raw("MIN(d ->> 'Jenis_Izin_Desc') as jenis_izin_desc"),
-                DB::raw("MIN(d ->> 'Jenis_Pengesahan') as jenis_pengesahan"),
-                DB::raw("MIN(d ->> 'Status_Pengesahan') as status_pengesahan"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tanggal_pengesahan"),
-                DB::raw("MIN((d ->> 'Tanggal_Berakhir_izin')::date) as tanggal_berakhir_izin")
-            )
-            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-            ->get();
-
-
+        $perusahaan = $this->indexQuery($this->tableName, $this->jenis, $this->tipe)->get();
 
         $data = [
             'title'=>'Laporan Minyak Bumi Distribusi',
@@ -135,26 +119,7 @@ class EvDistribusiMinyakBumiController extends Controller
 
         $p = !empty($kode) ? explode(',', Crypt::decryptString($kode)) : null;
         if ($p) {
-            $query = DB::table('pengolahans as a')
-            ->selectRaw('
-            MAX(a.npwp) as npwp, 
-            MAX(a.id_permohonan) as id_permohonan, 
-            a.bulan, 
-            MAX(a.status) as status, 
-            MAX(a.catatan) as catatan, 
-            MAX(u.name) as nama_perusahaan,
-            MAX(u.badan_usaha_id) as badan_usaha_id
-            ')
-                // ->leftJoin('t_perusahaan as b', 'a.badan_usaha_id', '=', 'b.ID_PERUSAHAAN')
-                // ->select('a.*', 'b.NAMA_PERUSAHAAN')
-                ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-                ->where('a.npwp', $p[0])
-                ->where('a.id_permohonan', $p[1])
-                ->where('a.jenis', 'Minyak Bumi')
-                ->where('a.tipe', 'Distribusi')
-                ->groupBy('a.bulan')
-                ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-                ->get();
+            $query = $this->periodeQuery($this->tableName, $p, 'bulan', $this->jenis, $this->tipe)->get();
         } else {
             $query = '';
 
@@ -191,16 +156,7 @@ class EvDistribusiMinyakBumiController extends Controller
             $like = $mode === 'tahun' ? substr($bulan, 0, 4) . '%' : $bulan;
 
             // Jika kolom bulan adalah tipe string: YYYY-MM-DD
-            $query = DB::table('pengolahans as a')
-                ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-                ->select('a.*', 'u.name as nama_perusahaan')
-                ->where('a.jenis', 'Minyak Bumi')
-                ->where('a.tipe', 'Distribusi')
-                ->where('a.npwp', $npwp)
-                ->where('a.id_permohonan', $id_permohonan)
-                ->where('a.bulan', 'like', $like)
-                ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-                ->get();
+            $query = $this->showQuery($this->tableName, $npwp, $id_permohonan, $like, 'bulan', $this->jenis, $this->tipe)->get();
 
             // Jika tidak ada data, tampilkan halaman 404
             if ($query->isEmpty()) {
@@ -361,25 +317,7 @@ class EvDistribusiMinyakBumiController extends Controller
     {
         $tgl = Carbon::now();
 
-        $query = DB::table('pengolahans as a')
-            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
-            ->where('a.jenis', 'Minyak Bumi')
-            ->where('a.tipe', 'Distribusi')
-            ->where('a.bulan', $tgl->startOfMonth()->format('Y-m-d'))
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->select(
-                'a.*',
-                'u.name as nama_perusahaan',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
-                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
-            )->groupBy(
+        $query = $this->lihatSemuaDataQuery($this->tableName, $tgl, 'bulan', $this->jenis, $this->tipe)->groupBy(
                 'a.id',
                 'a.npwp',
                 'a.id_permohonan',
@@ -409,21 +347,7 @@ class EvDistribusiMinyakBumiController extends Controller
             ->get();
 
 
-        $perusahaan = DB::table('pengolahans as a')
-            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->groupBy('u.name', 'i.npwp')
-            ->select(
-                DB::raw("MAX(a.bulan) as bulan_terbaru"),
-                'u.name as nama_perusahaan',
-                'i.npwp',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-            )
-            ->get();
+        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
         // return json_decode($query); exit;
         return view('evaluator.laporan_bu.mb.distribusi.lihat-semua-data', [
@@ -439,39 +363,9 @@ class EvDistribusiMinyakBumiController extends Controller
         $t_awal = Carbon::parse($request->t_awal . '-01')->startOfMonth();
         $t_akhir = Carbon::parse($request->t_akhir . '-01')->endOfMonth();
 
-        $perusahaan = DB::table('pengolahans as a')
-            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
-            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
-            ->groupBy('u.name', 'i.npwp')
-            ->select(
-                DB::raw("MAX(a.bulan) as bulan_terbaru"),
-                'u.name as nama_perusahaan',
-                'i.npwp',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
-            )
-            ->get();
+        $perusahaan = $this->perusahaanQuery($this->tableName)->get();
 
-        $query = DB::table('pengolahans as a')
-            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
-            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
-            // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
-            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
-            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
-            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
-            ->where('a.jenis', 'Minyak Bumi')
-            ->where('a.tipe', 'Distribusi')
-            ->select(
-                'a.*',
-                'u.name as nama_perusahaan',
-                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
-                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
-                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
-                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
-            )->groupBy(
+        $query = $this->FilterDataQuery($this->tableName, $this->jenis, $this->tipe)->groupBy(
                 'a.id',
                 'a.npwp',
                 'a.id_permohonan',

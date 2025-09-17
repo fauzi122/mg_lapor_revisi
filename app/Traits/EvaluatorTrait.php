@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\DB;
 
 trait EvaluatorTrait
 {
-    public function indexQuery(string $tableName)
+    public function indexQuery(string $tableName, $jenis = null, $tipe = null)
     {
-        return DB::table($tableName . ' as h')
+        $query = DB::table($tableName . ' as h')
             ->join('izin_migas as i', 'i.npwp', '=', 'h.npwp')
             ->join('users as u', 'u.npwp', '=', 'i.npwp')
             ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
@@ -28,11 +28,18 @@ trait EvaluatorTrait
             ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'h.id_permohonan')
             ->whereIn(DB::raw('h.status::int'), [1, 2, 3])
             ->groupBy('u.name', 'i.npwp', DB::raw("(d ->> 'Id_Permohonan')::int"));
+            
+        // Untuk Pengelolaan
+        if ($jenis) {
+            $query->where('h.jenis', $jenis)->where('h.tipe', $tipe);
+        }
+
+        return $query;
     }
 
-    public function periodeQuery(string $tableName, $data, $colBulan = 'bulan')
+    public function periodeQuery(string $tableName, $data, $colBulan = 'bulan', $jenis = null, $tipe = null)
     {
-        return DB::table($tableName . ' as a')
+        $query = DB::table($tableName . ' as a')
             ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
             ->selectRaw('
                 MAX(a.npwp) as npwp, 
@@ -47,12 +54,18 @@ trait EvaluatorTrait
             ->where('a.id_permohonan', $data[1])
             ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
             ->groupBy('a.'. $colBulan);
+
+        // Untuk Pengelolaan
+        if ($jenis) {
+            $query->where('a.jenis', $jenis)->where('a.tipe', $tipe);
+        }
+        return $query;
     }
 
-    public function showQuery (string $tableName, $npwp, $id_permohonan, $filter, $colBulan = 'bulan')
+    public function showQuery (string $tableName, $npwp, $id_permohonan, $filter, $colBulan = 'bulan', $jenis = null, $tipe = null)
     {
 
-        return DB::table($tableName . ' as a')
+        $query = DB::table($tableName . ' as a')
                 ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
                 // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
                 // ->select('a.*', 'u.name as nama_perusahaan', 'm.nama_opsi')
@@ -61,6 +74,12 @@ trait EvaluatorTrait
                 ->where('a.id_permohonan', $id_permohonan)
                 ->where('a.'. $colBulan, 'like', $filter)
                 ->whereIn(DB::raw('a.status::int'), [1, 2, 3]);
+
+        // Untuk Pengelolaan
+        if ($jenis) {
+            $query->where('a.jenis', $jenis)->where('a.tipe', $tipe);
+        }
+        return $query;
     }
 
     public function perusahaanQuery(string $tableName, $colBulan = 'bulan')
@@ -83,4 +102,54 @@ trait EvaluatorTrait
                     DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan")
                 );
     }    
+
+    public function lihatSemuaDataQuery(String $tableName, $tgl, $colBulan = 'bulan', $jenis = null, $tipe = null) 
+    {
+        $query = DB::table($tableName . ' as a')
+            ->leftJoin('users as u', 'u.npwp', '=', 'a.npwp')
+            ->leftJoin('izin_migas as i', 'i.npwp', '=', 'u.npwp')
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
+            ->where('a.'.$colBulan, $tgl->startOfMonth()->format('Y-m-d'))
+            ->whereIn(DB::raw('a.status::int'), [1, 2, 3])
+            ->select(
+                'a.*',
+                'u.name as nama_perusahaan',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
+                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
+            );
+            
+        // Untuk Pengelolaan
+        if ($jenis) {
+            $query->where('a.jenis', $jenis)->where('a.tipe', $tipe);
+        }
+        return $query;
+    }
+
+    public function FilterDataQuery(String $tableName, $jenis = null, $tipe = null) 
+    {
+        $query = DB::table($tableName . ' as a')
+            ->leftJoin('users as u', 'a.npwp', '=', 'u.npwp')
+            ->leftJoin('izin_migas as i', 'u.npwp', '=', 'i.npwp')
+            // ->leftJoin('mepings as m', DB::raw("CAST(a.id_sub_page AS TEXT)"), '=', DB::raw("m.id_sub_page"))
+            ->whereColumn(DB::raw("(d ->> 'Id_Permohonan')::int"), 'a.id_permohonan')
+            ->crossJoin(DB::raw("jsonb_array_elements(i.data_izin::jsonb) as d"))
+            ->leftJoin(DB::raw("jsonb_array_elements(d->'multiple_id') as elem"), DB::raw("(elem->>'sub_page_id')::int"), '=', 'a.id_sub_page')
+            ->select(
+                'a.*',
+                'u.name as nama_perusahaan',
+                DB::raw("MIN(d ->> 'No_SK_Izin') as nomor_izin"),
+                DB::raw("MIN((d ->> 'Tanggal_Pengesahan')::timestamp) as tgl_disetujui"),
+                DB::raw("MIN((d ->> 'Tanggal_izin')::date) as tgl_pengajuan"),
+                DB::raw("MIN(elem->>'sub_page_desc') as kegiatan_usaha")
+            );
+        // Untuk Pengelolaan
+        if ($jenis) {
+            $query->where('a.jenis', $jenis)->where('a.tipe', $tipe);
+        }
+        return $query;
+    }
 }
