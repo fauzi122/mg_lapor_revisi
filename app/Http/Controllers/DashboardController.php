@@ -29,7 +29,7 @@ class DashboardController extends Controller
     $sub_menu = Meping::select('id_sub_menu')->groupBy('id_sub_menu')->get();
 
     // Jalankan query utama
-    $result = DB::select("
+   $result = DB::select("
     SELECT
         m.*,
         i.id AS izin_id,
@@ -71,6 +71,7 @@ class DashboardController extends Controller
     ) jt ON m.id_sub_page::int = jt.sub_page_id AND m.id_template::int = jt.id_izin
     WHERE i.npwp = ?
 ", [auth()->user()->npwp]);
+
 
 // dd($result);
 
