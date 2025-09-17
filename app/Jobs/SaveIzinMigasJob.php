@@ -78,7 +78,7 @@ class SaveIzinMigasJob
                     'name' => $data['data_badan_usaha']['Nama_perusahaan']
                 ]);
             }
-            dd($data);
+            // dd($data);
             // Iterasi data_izin untuk setiap sub_page_id
             foreach ($data['data_izin'] as $izin) {
                 foreach ($izin['multiple_id'] as $subPage) {
