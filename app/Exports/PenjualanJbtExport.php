@@ -3,34 +3,46 @@
 namespace App\Exports;
 
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
-use Box\Spout\Common\Entity\Row;
-use Illuminate\Support\Facades\DB;
 
 class PenjualanJbtExport
 {
-    protected $t_awal;
-    protected $t_akhir;
-    protected $perusahaan;
+    protected $query;
+    protected $format;
 
-    public function __construct($t_awal, $t_akhir, $perusahaan)
+    public function __construct($query, $format = 'xlsx')
     {
-        $this->t_awal = $t_awal;
-        $this->t_akhir = $t_akhir;
-        $this->perusahaan = $perusahaan;
+        $this->query = $query;
+
+        // Mapping 'excel' menjadi 'xlsx'
+        $format = strtolower($format);
+        if ($format === 'excel') $format = 'xlsx';
+
+        $this->format = $format;
     }
 
     public function export()
     {
-        // Buat writer untuk XLSX
-        $writer = WriterEntityFactory::createXLSXWriter();
+        $filename = 'penjualan_jbt.' . $this->format;
 
-        // Kirim output langsung ke browser (download otomatis)
-        $writer->openToBrowser('penjualan_jbt.xlsx');
+        // Pilih writer sesuai format
+        if ($this->format === 'csv') {
+            $writer = WriterEntityFactory::createCSVWriter();
+            header('Content-Type: text/csv; charset=utf-8');
+        } else {
+            $writer = WriterEntityFactory::createXLSXWriter();
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        }
 
-        // Header (Judul Kolom Excel)
+        header("Content-Disposition: attachment; filename=\"{$filename}\"");
+
+        // Open writer ke browser (argumen wajib)
+        $writer->openToBrowser($filename);
+
+        // Header kolom
         $header = WriterEntityFactory::createRowFromArray([
+            'No',
             'Nama Badan Usaha',
-            'NPWP Badan Usaha',
+            'NPWP',
             'Izin Usaha',
             'Bulan',
             'Tahun',
@@ -39,26 +51,17 @@ class PenjualanJbtExport
             'Kabupaten/Kota',
             'Sektor',
             'Volume',
-            'Satuan',
+            'Satuan'
         ]);
         $writer->addRow($header);
 
-        // Ambil data dari tabel bph_penjualan_jbt
-        $query = DB::table('bph_penjualan_jbt')
-            ->whereRaw('((tahun::int * 100) + bulan::int) BETWEEN ? AND ?', [$this->t_awal, $this->t_akhir])
-            ->orderByRaw('tahun::int')
-            ->orderByRaw('bulan::int');
+        // Nomor urut mulai dari 1
+        $no = 1;
 
-
-        // Jika ada filter perusahaan selain 'all'
-        if ($this->perusahaan && $this->perusahaan !== 'all') {
-            $query->where('id_badan_usaha', (int)$this->perusahaan);
-        }
-
-        // Gunakan cursor() supaya hemat memory
-        foreach ($query->cursor() as $row) {
-            $izin = json_decode($row->izin_usaha);
+        // Data (jika query kosong, hanya header)
+        foreach ($this->query->cursor() as $row) {
             $izinText = '';
+            $izin = json_decode($row->izin_usaha);
             if (!empty($izin)) {
                 foreach ($izin as $item) {
                     $izinText .= "ID: {$item->id_izin_usaha} - NOMOR: {$item->nomor_izin_usaha} | ";
@@ -66,8 +69,8 @@ class PenjualanJbtExport
                 $izinText = rtrim($izinText, " | ");
             }
 
-            // Tambahkan baris data ke Excel
             $writer->addRow(WriterEntityFactory::createRowFromArray([
+                $no,
                 $row->nama_badan_usaha,
                 $row->npwp_badan_usaha,
                 $izinText,
@@ -80,9 +83,69 @@ class PenjualanJbtExport
                 $row->volume,
                 $row->satuan,
             ]));
+
+            $no++;
         }
 
-        // Tutup writer (selesai menulis)
         $writer->close();
+        exit; // hentikan eksekusi Laravel setelah export
+    }
+
+
+    public function exportMini()
+    {
+        $filename = 'penjualan_jbt.' . $this->format;
+
+        // Pilih writer sesuai format
+        if ($this->format === 'csv') {
+            $writer = WriterEntityFactory::createCSVWriter();
+            header('Content-Type: text/csv; charset=utf-8');
+        } else {
+            $writer = WriterEntityFactory::createXLSXWriter();
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        }
+
+        header("Content-Disposition: attachment; filename=\"{$filename}\"");
+
+        // Open writer ke browser (argumen wajib)
+        $writer->openToBrowser($filename);
+
+        // Header kolom
+        $header = WriterEntityFactory::createRowFromArray([
+            'No',
+            'Bulan',
+            'Tahun',
+            'Produk',
+            'Provinsi',
+            'Kabupaten/Kota',
+            'Sektor',
+            'Volume',
+            'Satuan'
+        ]);
+        $writer->addRow($header);
+
+        // Nomor urut mulai dari 1
+        $no = 1;
+
+        // Data (jika query kosong, hanya header)
+        foreach ($this->query->cursor() as $row) {
+
+            $writer->addRow(WriterEntityFactory::createRowFromArray([
+                $no,
+                $row->bulan,
+                $row->tahun,
+                $row->produk,
+                $row->provinsi,
+                $row->kabupaten_kota,
+                $row->sektor,
+                $row->volume,
+                $row->satuan,
+            ]));
+
+            $no++;
+        }
+
+        $writer->close();
+        exit; // hentikan eksekusi Laravel setelah export
     }
 }

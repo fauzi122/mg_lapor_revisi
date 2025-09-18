@@ -882,7 +882,10 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	//Penjualan JBT
 	Route::controller(EvPenjualanJbt::class)->group(function () {
 		Route::get('/laporan/penjualan-jbt', 'index');
+		
 		Route::get('/laporan/penjualan-jbt/{kode}', 'show');
+		Route::get('laporan/penjualan-jbt/export/{format}/{kode}', 'export')->name('penjualan-jbt.export');
+
 		Route::get('/laporan/penjualan-jbt-lihat-semua-data', 'lihatSemuaData');
 
 		

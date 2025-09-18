@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Evaluator;
 
+use App\Exports\PenjualanJbtCsvExport;
 use App\Exports\PenjualanJbtExport;
 use App\Http\Controllers\Controller;
 use App\Models\PenjualanJbt;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EvPenjualanJbt extends Controller
 {
@@ -66,20 +68,12 @@ class EvPenjualanJbt extends Controller
     {
         $pecah = explode(",", Crypt::decryptString($kode));
 
-        // Query dasar untuk menampilkan semua data sesuai npwp, tahun, dan bulan
         $query = PenjualanJbt::where([
-                        ['npwp_badan_usaha', $pecah[0]],
-                        ['tahun', $pecah[1]],
-                        ['bulan', $pecah[2]],
-                    ]);
+            ['npwp_badan_usaha', $pecah[0]],
+            ['tahun', $pecah[1]],
+            ['bulan', $pecah[2]],
+        ]);
 
-        // Mengambil data perusahaan untuk ditampilkan di header
-        $per = PenjualanJbt::where('npwp_badan_usaha', $pecah[0])
-            ->where('tahun', $pecah[1])
-            ->where('bulan', $pecah[2])
-            ->first();
-
-        // Fitur Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -92,27 +86,48 @@ class EvPenjualanJbt extends Controller
                     ->orWhere('bulan', 'ILIKE', "%{$search}%")
                     ->orWhere('tahun', 'ILIKE', "%{$search}%");
 
-                    // Volume Menggunakan Numeric tidak bisa string
-                    if (is_numeric($search)) {
-                        $q->orWhere('volume', $search);
-                    }
+                if (is_numeric($search)) {
+                    $q->orWhere('volume', $search);
+                }
             });
         }
 
+        if ($request->filled('export')) {
+            $export = new PenjualanJbtExport($query, $request->export);
+            return $export->exportMini();
+        }
 
-        // Pagination 10 per halaman, dengan membawa semua parameter request agar tetap tersimpan
-        $query = $query->paginate(10)->appends($request->all());
+        $queryPaginate = $query->paginate(10)->appends($request->all());
 
-        // Data dikirim ke view
-        $data = [
-            'title'=>'Laporan Penjualan JBT',
-            'query'=>$query,
-            'per'=>$per
+        $per = $query->first();
 
-        ];
-        return view('evaluator.laporan_bu.bph_inline.penjualan_jbt.pilihbulan', $data);
-
+        return view('evaluator.laporan_bu.bph_inline.penjualan_jbt.pilihbulan', [
+            'title' => 'Laporan Penjualan JBT',
+            'query' => $queryPaginate,
+            'per' => $per,
+            'kode' => $kode, // dibawa untuk export link
+        ]);
     }
+
+    // Method export Excel/CSV
+    // public function export($format, $kode, Request $request)
+    // {
+    //     $pecah = explode(",", Crypt::decryptString($kode));
+
+    //     $filename = 'penjualan_jbt_' . date('Ymd_His');
+    //     $export = new PenjualanJbtCsvExport($pecah[0], $pecah[1], $pecah[2], $request->search ?? null);
+
+    //     if ($format === 'excel') {
+    //         return Excel::download($export, $filename . '.xlsx');
+    //     }
+
+    //     if ($format === 'csv') {
+    //         return Excel::download($export, $filename . '.csv');
+    //     }
+
+    //     abort(404);
+    // }
+
 
     public function sinkronisasiData() 
     {
@@ -202,20 +217,28 @@ class EvPenjualanJbt extends Controller
 
     public function cetakperiode(Request $request)
     {
-        // Ambil nilai "perusahaan" dari input request (biasanya dari form/filter di frontend)
         $perusahaan = $request->input('perusahaan');
 
-        // Ubah input tanggal awal menjadi format integer "YYYYMM"
-        // Contoh: "2025-01-15" -> 202501
         $t_awal = (int) date('Ym', strtotime($request->input("t_awal")));
-        $t_akhir   = (int) date('Ym', strtotime($request->input("t_akhir")));
+        $t_akhir = (int) date('Ym', strtotime($request->input("t_akhir")));
 
-        // Buat instance dari class PenjualanJbtExport
-        // lalu passing parameter: tanggal awal, tanggal akhir, dan perusahaan
-        $export = new PenjualanJbtExport($t_awal, $t_akhir, $perusahaan);
+        // Query builder
+        $query = DB::table('bph_penjualan_jbt')
+            ->whereRaw('((tahun::int * 100) + bulan::int) BETWEEN ? AND ?', [$t_awal, $t_akhir])
+            ->orderByRaw('tahun::int')
+            ->orderByRaw('bulan::int');
 
-        // Jalankan fungsi export() dari class PenjualanJbtExport
-        // dan return hasilnya (biasanya file Excel/CSV yang akan didownload)
+        if ($perusahaan !== 'all') {
+            $query->where('id_badan_usaha', $perusahaan);
+        }
+
+        // Cek apakah data kosong
+        if ($query->count() === 0) {
+            return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
+        }
+
+        // Paksa export Excel (.xlsx)
+        $export = new PenjualanJbtExport($query, 'xlsx');
         return $export->export();
     }
 
@@ -249,6 +272,12 @@ class EvPenjualanJbt extends Controller
             });
         }
 
+
+        if ($request->filled('export')) {
+            $export = new PenjualanJbtExport($query, $request->export);
+            return $export->export();
+        }
+
         // Daftar perusahaan untuk dropdown/filter
         $perusahaan  = PenjualanJbt::select('npwp_badan_usaha', 'nama_badan_usaha')
                     ->groupBy('npwp_badan_usaha', 'nama_badan_usaha')->get();
@@ -278,7 +307,7 @@ class EvPenjualanJbt extends Controller
             ->get();
 
         // Base query
-        $query = DB::table('bph_penjualan_jbt')
+        $query = PenjualanJbt::query()
             ->whereRaw('((tahun::int * 100) + bulan::int) BETWEEN ? AND ?', [
                 $t_awal->format('Ym'),
                 $t_akhir->format('Ym')
@@ -309,6 +338,11 @@ class EvPenjualanJbt extends Controller
             });
         }
 
+        if ($request->filled('export')) {
+            $export = new PenjualanJbtExport($query, $request->export);
+            return $export->export();
+        }
+
         // Pagination dengan appends supaya filter & search tetap terbawa
         $result = $query->paginate(10)->appends($request->all());
 
@@ -319,4 +353,5 @@ class EvPenjualanJbt extends Controller
             'perusahaan' => $perusahaan,
         ]);
     }
+
 }
