@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Evaluator;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\bph\SyncPenjualanJbkp;
 use App\Models\PenjualanJbkp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -21,6 +22,8 @@ class EvPenjualanJbkp extends Controller
             ->groupBy('id_badan_usaha','izin_usaha','nama_badan_usaha','npwp_badan_usaha')
             ->get();
 
+        $lastSync = PenjualanJbkp::latest()->first();
+
         // Dekode JSON pada field izin_usaha
         foreach ($perusahaan as $item) {
             $item->izin_list = json_decode($item->izin_usaha, true);
@@ -29,6 +32,7 @@ class EvPenjualanJbkp extends Controller
         $data = [
             'title' => 'Laporan Penjualan JBKP',
             'perusahaan' => $perusahaan,
+            'lastSync' => $lastSync,
         ];
         // dd($perusahaan);
         return view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.index', $data);
@@ -84,88 +88,9 @@ class EvPenjualanJbkp extends Controller
 
     public function sinkronisasiData() 
     {
-
-        $url = "https://ngembangin.esdm.go.id/inline/hilir/internal/api/dev/pelaporan-migas/bbm/penjualan-jbkp";
-
-        $token = Cache::get('access_token');
-        $items = collect();
-        $tgl = Carbon::now();
-        $bulan = $tgl->month; // hasilnya 1–12
-        $tahun = $tgl->year;
-        $page = 1;
+        SyncPenjualanJbkp::dispatch('2023', session()->getId());
         
-        while (true) {
-            // Gunakan token untuk akses API
-            $response = Http::withToken($token)->post($url, [
-                'tahun' => $tahun,
-                'page' => $page
-            ]);
-
-            if ($response->status() === 401) {
-                $token = tokenBphApi();
-                $response = Http::withToken($token)->post($url, [
-                    'tahun' => $tahun
-                ]);
-            }
-
-            if ($response->status() === 404) {
-                break;
-            }
-
-            if ($response->failed()) {
-                Log::error('Gagal sinkronisasi data', [
-                    'status' => $response->status(),
-                    'body' => $response->body()
-                ]);
-                return back()->with('sweet_error', 'Gagal sinkronisasi data');
-            }
-            
-            // Jika berhasil
-            $response =  $response->json();
-
-            foreach ($response['data'] as $value) {
-
-                if ($value['bulan'] == $bulan) {
-                    $items->push($value);
-                }
-            }
-
-            $page++;
-        }
-        
-        // Update Or Create data di Database
-        if (count($items) > 0) {
-            foreach ($items as $item) {
-                PenjualanJbkp::updateOrCreate(
-                    [
-                        'id_badan_usaha'    => $item['id_badan_usaha'],
-                        'tahun'             => $item['tahun'],
-                        'bulan'             => $item['bulan'],
-                        'produk'            => $item['produk'],
-                        'provinsi'          => $item['provinsi'],
-                        'kabupaten_kota'    => $item['kabupaten_kota'],
-                        'sektor'            => $item['sektor'],
-                    ],
-                    [
-                        'id_badan_usaha'    => $item['id_badan_usaha'],
-                        'nama_badan_usaha'  => $item['nama_badan_usaha'],
-                        'npwp_badan_usaha'  => $item['npwp_badan_usaha'],
-                        'izin_usaha'        => json_encode($item['izin_usaha']),
-                        'tahun'             => $item['tahun'],
-                        'bulan'             => $item['bulan'],
-                        'produk'            => $item['produk'],
-                        'provinsi'          => $item['provinsi'],
-                        'kabupaten_kota'    => $item['kabupaten_kota'],
-                        'sektor'            => $item['sektor'],
-                        'volume'            => $item['volume'],
-                        'satuan'            => $item['satuan'],
-                    ]
-                );
-    
-            }
-        }
-
-        return back()->with('sweet_success', 'Sinkronisasi Data Berhasil');
+        return back()->with('sweet_success', 'Sinkronisasi data sedang diproses.');
     }
 
     public function cetakperiode(Request $request)
