@@ -11,7 +11,7 @@
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
     <!-- Include Choices.js from CDN for demonstration -->
-
+    @vite(['resources/js/app.js'])
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
     {{-- <!-- DataTables -->
     <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet"
@@ -73,6 +73,35 @@
         html[data-bs-theme="dark"] .app-sidebar-secondary {
             background-color: #121212 !important;
         }
+
+        /* #notif {
+            position: relative;
+        } */
+
+        .notifikasi {
+            position: relative;
+            top: 0;
+            /* Mulai dari atas layar */
+            left: 50%;
+            transform: translateX(-50%);
+            animation: slideDown 0.5s ease forwards;
+            /* Animasi muncul */
+        }
+
+        /* Keyframes animasi */
+        @keyframes slideDown {
+            0% {
+                top: -100px;
+                /* Mulai di luar layar atas */
+                opacity: 0;
+            }
+
+            100% {
+                top: 5px;
+                /* Posisi akhir */
+                opacity: 1;
+            }
+        }
     </style>
 
 </head>
@@ -93,6 +122,20 @@
             <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
                 <!--Sidebar-->
                 @include('layouts.blackand.menu')
+
+                {{-- Notifikasi --}}
+                {{-- <div class="notifikasi">
+                    <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-0"
+                        role="alert">
+                        <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                        <div>
+                            Data yang ditampilkan merupakan informasi perusahaan berdasarkan nomor izin yang telah
+                            mengajukan laporan.
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div> --}}
+                {{-- Notifikasi --}}
 
                 <!--Main-->
                 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
