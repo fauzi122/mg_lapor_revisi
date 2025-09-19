@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
+	// tes
     public function __construct()
     {
         $this->middleware('auth');
