@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Evaluator;
 
+use App\Exports\PenjualanJbkpExport;
+use App\Exports\PenjualanJbtExport;
 use App\Http\Controllers\Controller;
 use App\Jobs\bph\SyncPenjualanJbkp;
 use App\Models\PenjualanJbkp;
@@ -66,7 +68,7 @@ class EvPenjualanJbkp extends Controller
     }
 
 
-    public function show($kode = '')
+    public function show($kode = '', Request $request)
     {
         $pecah = explode(",", Crypt::decryptString($kode));
 
@@ -74,12 +76,40 @@ class EvPenjualanJbkp extends Controller
                         ['npwp_badan_usaha', $pecah[0]],
                         ['tahun', $pecah[1]],
                         ['bulan', $pecah[2]],
-                    ])->get();
-                    
+                    ]);
+
+        // Wajib Taruh di bawah query agar ketika searchnya tidak sesuai dia tidak error
+        $per = (clone $query)->first();
+
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->Where('produk', 'ILIKE', "%{$search}%")
+                    ->orWhere('provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('kabupaten_kota', 'ILIKE', "%{$search}%")
+                    ->orWhere('satuan', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%");
+
+                if (is_numeric($search)) {
+                    $q->orWhere('volume', $search);
+                }
+            });
+        }
+        
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new PenjualanJbkpExport($query, $request->export);
+            return $export->exportMini();
+        }
+
+        // Tampilkan 10 data di table
+        $queryPaginate = $query->paginate(10)->appends($request->all());
+
         $data = [
             'title'=>'Laporan Penjualan JBKP',
-            'query'=>$query,
-            'per'=>$query->first()
+            'query'=>$queryPaginate,
+            'per'=>$per
 
         ];
         return view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.pilihbulan', $data);
@@ -111,38 +141,58 @@ class EvPenjualanJbkp extends Controller
         if ($perusahaan !== 'all') {
             $query->where('id_badan_usaha', $perusahaan);
         }
-    
-        $result = $query->get();
 
-        if ($result->isEmpty()) {
-            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
-        } else {
-            $data = [
-                'title' => 'Laporan Penjualan JBKP',
-                'result' => $result
-            ];
-            
-            $view = view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.cetak', $data);
-    
-            // Menambahkan script JavaScript untuk reload halaman
-            $view->with('reload', true);
-    
-            return response($view);
+        // Cek apakah data kosong
+        if ($query->count() === 0) {
+            return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
         }
+
+        $export = new PenjualanJbkpExport($query, 'xlsx');
+        return $export->export();
+
     }
 
-    public function lihatSemuaData()
+    public function lihatSemuaData(Request $request)
     {
         $tgl = Carbon::now();
         $bulan = $tgl->month; // hasilnya 1–12
         $tahun = $tgl->year;
         
         $query = PenjualanJbkp::where('bulan', $bulan)
-                    ->where('tahun', $tahun)
-                    ->get();
+                    ->where('tahun', $tahun);
+
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('produk', 'ILIKE', "%{$search}%")
+                    ->orWhere('provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('kabupaten_kota', 'ILIKE', "%{$search}%")
+                    ->orWhere('satuan', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%");
+
+                // Volume Menggunakan Numeric tidak bisa string
+                if (is_numeric($search)) {
+                    $q->orWhere('volume', $search);
+                }
+            });
+        }
+
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new PenjualanJbtExport($query, $request->export);
+            return $export->export();
+        }
+
         $perusahaan  = PenjualanJbkp::select('npwp_badan_usaha', 'nama_badan_usaha')
                     ->groupBy('npwp_badan_usaha', 'nama_badan_usaha')->get();
+
         $periode = $tgl->translatedFormat('F Y'); // contoh: "Mei 2025"
+
+        // Tampilkan 10 data di table
+        $query = $query->paginate(10)->appends($request->all());
 
         return view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.lihat-semua-data', [
             'title'     => 'Laporan Penjualan JBKP',
@@ -173,7 +223,32 @@ class EvPenjualanJbkp extends Controller
             $query->where('id_badan_usaha', $request->input("perusahaan"));
         }
 
-        $result = $query->get();
+        // Fitur search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('produk', 'ILIKE', "%{$search}%")
+                    ->orWhere('provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('kabupaten_kota', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%");
+
+                // Volume Menggunakan Numeric tidak bisa string
+                if (is_numeric($search)) {
+                    $q->orWhere('volume', $search);
+                }
+            });
+        }
+
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new PenjualanJbtExport($query, $request->export);
+            return $export->export();
+        }
+
+        // Pagination dengan appends supaya filter & search tetap terbawa
+        $result = $query->paginate(10)->appends($request->all());
 
         return view('evaluator.laporan_bu.bph_inline.penjualan_jbkp.lihat-semua-data', [
             'title' => 'Laporan Penjualan JBKP',

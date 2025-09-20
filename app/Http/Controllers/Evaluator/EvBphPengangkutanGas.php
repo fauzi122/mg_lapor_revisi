@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Evaluator;
 
+use App\Exports\PenjualanBphPengangkutanGasExport;
 use App\Http\Controllers\Controller;
 use App\Models\BphPengangkutanGas;
 use Carbon\Carbon;
@@ -61,7 +62,7 @@ class EvBphPengangkutanGas extends Controller
     }
 
 
-    public function show($kode = '')
+    public function show($kode = '', Request $request)
     {
         $pecah = explode(",", Crypt::decryptString($kode));
 
@@ -69,12 +70,41 @@ class EvBphPengangkutanGas extends Controller
                         ['npwp_badan_usaha', $pecah[0]],
                         ['tahun', $pecah[1]],
                         ['bulan', $pecah[2]],
-                    ])->get();
+                    ]);
+
+        // Wajib Taruh di bawah query agar ketika searchnya tidak sesuai dia tidak error
+        $per = (clone $query)->first();
+
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->Where('ruas_angkut', 'ILIKE', "%{$search}%")
+                    ->orWhere('diameter', 'ILIKE', "%{$search}%")
+                    ->orWhere('satuan_mscf', 'ILIKE', "%{$search}%")
+                    ->orWhere('shipper', 'ILIKE', "%{$search}%");
+
+
+                if (is_numeric($search)) {
+                    $q->orWhere('tarif_mscf', $search)
+                    ->orWhere('volume_mscf', $search);
+                }
+            });
+        }
+
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new PenjualanBphPengangkutanGasExport($query, $request->export);
+            return $export->exportMini();
+        }
+
+        // Tampilkan 10 data di table
+        $queryPaginate = $query->paginate(10)->appends($request->all());
                     
         $data = [
             'title'=>'Laporan Pengangkutan Gas',
-            'query'=>$query,
-            'per'=>$query->first()
+            'query'=>$queryPaginate,
+            'per'=>$per
 
         ];
         return view('evaluator.laporan_bu.bph_inline.pengangkutan_gas.pilihbulan', $data);
@@ -184,38 +214,54 @@ class EvBphPengangkutanGas extends Controller
         if ($perusahaan !== 'all') {
             $query->where('id_badan_usaha', $perusahaan);
         }
-    
-        $result = $query->get();
 
-        if ($result->isEmpty()) {
-            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
-        } else {
-            $data = [
-                'title' => 'Laporan Pengangkutan Gas',
-                'result' => $result
-            ];
-    
-            $view = view('evaluator.laporan_bu.bph_inline.pengangkutan_gas.cetak', $data);
-    
-            // Menambahkan script JavaScript untuk reload halaman
-            $view->with('reload', true);
-    
-            return response($view);
+        // Cek apakah data kosong
+        if ($query->count() === 0) {
+            return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
         }
+
+        $export = new PenjualanBphPengangkutanGasExport($query, 'xlsx');
+        return $export->export();
     }
 
-    public function lihatSemuaData()
+    public function lihatSemuaData(Request $request)
     {
         $tgl = Carbon::now();
         $bulan = $tgl->month; // hasilnya 1–12
         $tahun = $tgl->year;
         
         $query = BphPengangkutanGas::where('bulan', $bulan)
-                    ->where('tahun', $tahun)
-                    ->get();
+                    ->where('tahun', $tahun);
+
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->Where('ruas_angkut', 'ILIKE', "%{$search}%")
+                    ->orWhere('nama_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('diameter', 'ILIKE', "%{$search}%")
+                    ->orWhere('satuan_mscf', 'ILIKE', "%{$search}%")
+                    ->orWhere('shipper', 'ILIKE', "%{$search}%");
+
+
+                if (is_numeric($search)) {
+                    $q->orWhere('tarif_mscf', $search)
+                        ->orWhere('volume_mscf', $search);
+                }
+            });
+        }
+
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new PenjualanBphPengangkutanGasExport($query, $request->export);
+            return $export->exportMini();
+        }
         $perusahaan  = BphPengangkutanGas::select('npwp_badan_usaha', 'nama_badan_usaha')
                     ->groupBy('npwp_badan_usaha', 'nama_badan_usaha')->get();
         $periode = $tgl->translatedFormat('F Y'); // contoh: "Mei 2025"
+
+        $query = $query->paginate(10)->appends($request->all());
 
         return view('evaluator.laporan_bu.bph_inline.pengangkutan_gas.lihat-semua-data', [
             'title'     => 'Laporan Pengangkutan Gas',
@@ -246,7 +292,32 @@ class EvBphPengangkutanGas extends Controller
             $query->where('id_badan_usaha', $request->input("perusahaan"));
         }
 
-        $result = $query->get();
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->Where('ruas_angkut', 'ILIKE', "%{$search}%")
+                    ->orWhere('nama_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('diameter', 'ILIKE', "%{$search}%")
+                    ->orWhere('satuan_mscf', 'ILIKE', "%{$search}%")
+                    ->orWhere('shipper', 'ILIKE', "%{$search}%");
+
+
+                if (is_numeric($search)) {
+                    $q->orWhere('tarif_mscf', $search)
+                        ->orWhere('volume_mscf', $search);
+                }
+            });
+        }
+
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new PenjualanBphPengangkutanGasExport($query, $request->export);
+            return $export->exportMini();
+        }
+
+        $result = $query->paginate(10)->appends($request->all());
 
         return view('evaluator.laporan_bu.bph_inline.pengangkutan_gas.lihat-semua-data', [
             'title' => 'Laporan Pengangkutan Gas',

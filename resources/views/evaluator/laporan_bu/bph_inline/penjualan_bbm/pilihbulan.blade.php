@@ -55,39 +55,72 @@
                     <div class="card-body p-2">
                         <div class="card">
                             <div class="card-header align-items-center px-2">
-                                <div class="card-toolbar"></div> 
-                                <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                    <input type="hidden" class="export-title" value="Laporan Penjualan BBM {{ bulan($per->bulan) }}" />
+                                <div class="card-title">
+                                    <button type="button" class="btn btn-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="ki-duotone ki-exit-down fs-2"><span class="path1"></span><span class="path2"></span></i>
+                                        Export Table
+                                    </button>
+                                    <div id="kt_datatable_example_export_menu" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-200px py-4" data-kt-menu="true">
+                                        <div class="menu-item px-3">
+                                            <a href="{{ url()->current() }}?export=excel&search={{ request('search') }}" class="menu-link px-3">
+                                                Export as Excel
+                                            </a>
+                                        </div>
+                                        <div class="menu-item px-3">
+                                            <a href="{{ url()->current() }}?export=csv&search={{ request('search') }}" class="menu-link px-3">
+                                                Export as CSV
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="card-toolbar">
+                                    <form method="GET" action="{{ url()->current() }}" class="d-flex" role="search">
+                                        <input type="text" name="search" value="{{ request('search') }}"
+                                            class="form-control form-control-sm me-2"
+                                            placeholder="Cari...">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </form>
+                                </div> 
                             </div>
-                            <table class="kt-datatable table table-bordered table-hover">
-                                <thead class="bg-light">
-                                    <tr class="fw-bold text-uppercase">
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Bulan</th>
-                                        <th class="text-center">Tahun</th>
-                                        <th class="text-center">Produk</th>
-                                        <th class="text-center">Sumber</th>
-                                        <th class="text-center">Supplier</th>
-                                        <th class="text-center">Volume</th>
-                                        <th class="text-center">Satuan</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="fw-semibold text-gray-600">
-                                    @foreach ($query as $bbm)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ bulan($bbm->bulan) }}</td>
-                                            <td>{{ $bbm->tahun }}</td>
-                                            <td>{{ $bbm->produk }}</td>
-                                            <td>{{ $bbm->sumber }}</td>
-                                            <td>{{ $bbm->supplier }}</td>
-                                            <td>{{ $bbm->volume }}</td>
-                                            <td>{{ $bbm->satuan }}</td>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="bg-light">
+                                        <tr class="fw-bold text-uppercase">
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">Bulan</th>
+                                            <th class="text-center">Tahun</th>
+                                            <th class="text-center">Produk</th>
+                                            <th class="text-center">Sumber</th>
+                                            <th class="text-center">Supplier</th>
+                                            <th class="text-center">Volume</th>
+                                            <th class="text-center">Satuan</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class="fw-semibold text-gray-600">
+                                        @forelse ($query as $bbm)
+                                            <tr>
+                                                <td class="text-center">{{ ($query->currentPage() - 1) * $query->perPage() + $loop->iteration }}</td>
+                                                <td>{{ bulan($bbm->bulan) }}</td>
+                                                <td>{{ $bbm->tahun }}</td>
+                                                <td>{{ $bbm->produk }}</td>
+                                                <td>{{ $bbm->sumber }}</td>
+                                                <td>{{ $bbm->supplier }}</td>
+                                                <td>{{ $bbm->volume }}</td>
+                                                <td>{{ $bbm->satuan }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="9" class="text-center text-muted">Data tidak ditemukan</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                    {{ $query->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

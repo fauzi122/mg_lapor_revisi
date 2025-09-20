@@ -55,49 +55,82 @@
                     <div class="card-body p-2">
                         <div class="card">
                             <div class="card-header align-items-center px-2">
-                                <div class="card-toolbar"></div> 
-                                <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                    <input type="hidden" class="export-title" value="Laporan Penjualan Gas Bumi {{ bulan($per->bulan) }}" />
+                                <div class="card-title">
+                                    <button type="button" class="btn btn-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="ki-duotone ki-exit-down fs-2"><span class="path1"></span><span class="path2"></span></i>
+                                        Export Table
+                                    </button>
+                                    <div id="kt_datatable_example_export_menu" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-200px py-4" data-kt-menu="true">
+                                        <div class="menu-item px-3">
+                                            <a href="{{ url()->current() }}?export=excel&search={{ request('search') }}" class="menu-link px-3">
+                                                Export as Excel
+                                            </a>
+                                        </div>
+                                        <div class="menu-item px-3">
+                                            <a href="{{ url()->current() }}?export=csv&search={{ request('search') }}" class="menu-link px-3">
+                                                Export as CSV
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-toolbar">
+                                    <form method="GET" action="{{ url()->current() }}" class="d-flex" role="search">
+                                        <input type="text" name="search" value="{{ request('search') }}"
+                                            class="form-control form-control-sm me-2"
+                                            placeholder="Cari...">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-                            <table class="kt-datatable table table-bordered table-hover">
-                                <thead class="bg-light">
-                                    <tr class="fw-bold text-uppercase">
-                                        <th class="text-center">No</th>
-                                        <th class="text-center">Bulan</th>
-                                        <th class="text-center">Tahun</th>
-                                        <th class="text-center">Provinsi</th>
-                                        <th class="text-center">Kabupaten kota</th>
-                                        <th class="text-center">Sektor</th>
-                                        <th class="text-center">Konsumen</th>
-                                        <th class="text-center">Jumlah Hari Penyaluran</th>
-                                        <th class="text-center">Ghv</th>
-                                        <th class="text-center">Keterangan</th>
-                                        <th class="text-center">Volume MMBTU</th>
-                                        <th class="text-center">Satuan MMBTU</th>
-                                        <th class="text-center">Harga MMBTU</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="fw-semibold text-gray-600">
-                                    @foreach ($query as $pgb)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ bulan($pgb->bulan) }}</td>
-                                            <td>{{ $pgb->tahun }}</td>
-                                            <td>{{ $pgb->provinsi }}</td>
-                                            <td>{{ $pgb->kabkot }}</td>
-                                            <td>{{ $pgb->sektor }}</td>
-                                            <td>{{ $pgb->konsumen }}</td>
-                                            <td>{{ $pgb->jml_hari_penyaluran }}</td>
-                                            <td>{{ $pgb->ghv }}</td>
-                                            <td>{{ $pgb->keterangan }}</td>
-                                            <td>{{ $pgb->volume_mmbtu }}</td>
-                                            <td>{{ $pgb->satuan_mmbtu }}</td>
-                                            <td>{{ $pgb->harga_mmbtu }}</td>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="bg-light">
+                                        <tr class="fw-bold text-uppercase">
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">Bulan</th>
+                                            <th class="text-center">Tahun</th>
+                                            <th class="text-center">Provinsi</th>
+                                            <th class="text-center">Kabupaten kota</th>
+                                            <th class="text-center">Sektor</th>
+                                            <th class="text-center">Konsumen</th>
+                                            <th class="text-center">Jumlah Hari Penyaluran</th>
+                                            <th class="text-center">Ghv</th>
+                                            <th class="text-center">Keterangan</th>
+                                            <th class="text-center">Volume MMBTU</th>
+                                            <th class="text-center">Satuan MMBTU</th>
+                                            <th class="text-center">Harga MMBTU</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>                            
+                                    </thead>
+                                    <tbody class="fw-semibold text-gray-600">
+                                        @forelse ($query as $pgb)
+                                            <tr>
+                                                <td class="text-center">{{ ($query->currentPage() - 1) * $query->perPage() + $loop->iteration }}</td>
+                                                <td>{{ bulan($pgb->bulan) }}</td>
+                                                <td>{{ $pgb->tahun }}</td>
+                                                <td>{{ $pgb->provinsi }}</td>
+                                                <td>{{ $pgb->kabkot }}</td>
+                                                <td>{{ $pgb->sektor }}</td>
+                                                <td>{{ $pgb->konsumen }}</td>
+                                                <td>{{ $pgb->jml_hari_penyaluran }}</td>
+                                                <td>{{ $pgb->ghv }}</td>
+                                                <td>{{ $pgb->keterangan }}</td>
+                                                <td>{{ $pgb->volume_mmbtu }}</td>
+                                                <td>{{ $pgb->satuan_mmbtu }}</td>
+                                                <td>{{ $pgb->harga_mmbtu }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="13" class="text-center text-muted">Data tidak ditemukan</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>             
+                            </div> 
+                            <div class="d-flex justify-content-end mt-3">
+                                    {{ $query->links('pagination::bootstrap-5') }}
+                            </div>              
                         </div>
                     </div>
                 @endif

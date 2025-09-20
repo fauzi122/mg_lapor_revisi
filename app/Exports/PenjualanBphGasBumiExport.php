@@ -1,0 +1,168 @@
+<?php
+
+namespace App\Exports;
+
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+
+
+class PenjualanBphGasBumiExport
+{
+    protected $query;
+    protected $format;
+
+    public function __construct($query, $format = 'xlsx')
+    {
+        $this->query = $query;
+
+        // Mapping 'excel' menjadi 'xlsx'
+        $format = strtolower($format);
+        if ($format === 'excel') $format = 'xlsx';
+
+        $this->format = $format;
+    }
+
+    public function export()
+    {
+        $filename = 'penjualan_Gas_Bumi.' . $this->format;
+
+        // Pilih writer sesuai format
+        if ($this->format === 'csv') {
+            $writer = WriterEntityFactory::createCSVWriter();
+            header('Content-Type: text/csv; charset=utf-8');
+        } else {
+            $writer = WriterEntityFactory::createXLSXWriter();
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        }
+
+        header("Content-Disposition: attachment; filename=\"{$filename}\"");
+
+        // Open writer ke browser (argumen wajib)
+        $writer->openToBrowser($filename);
+
+        // Header kolom
+        $header = WriterEntityFactory::createRowFromArray([
+            'No',
+            'Nama Badan Usaha',
+            'NPWP',
+            'Izin Usaha',
+            'Bulan',
+            'Tahun',
+            'Provinsi',
+            'Kabupaten/Kota',
+            'Sektor',
+            'Konsumen',
+            'Jumlah Hari Penyaluran',
+            'GHV',
+            'Keterangan',
+            'Volume MMBTU',
+            'Satuan MMBTU',
+            'Harga MMBTU'
+        ]);
+        $writer->addRow($header);
+
+        // Nomor urut mulai dari 1
+        $no = 1;
+
+        // Data (jika query kosong, hanya header)
+        foreach ($this->query->cursor() as $row) {
+            $izinText = '';
+            $izin = json_decode($row->izin_usaha);
+            if (!empty($izin)) {
+                foreach ($izin as $item) {
+                    $izinText .= "ID: {$item->id_izin_usaha} - NOMOR: {$item->nomor_izin_usaha} | ";
+                }
+                $izinText = rtrim($izinText, " | ");
+            }
+
+            $writer->addRow(WriterEntityFactory::createRowFromArray([
+                $no,
+                $row->nama_badan_usaha,
+                $row->npwp_badan_usaha,
+                $izinText,
+                $row->bulan,
+                $row->tahun,
+                $row->provinsi,
+                $row->kabkot,
+                $row->sektor,
+                $row->konsumen,
+                $row->jml_hari_penyaluran,
+                $row->ghv,
+                $row->keterangan,
+                $row->volume_mmbtu,
+                $row->satuan_mmbtu,
+                $row->harga_mmbtu,
+            ]));
+
+            $no++;
+        }
+
+        $writer->close();
+        exit; // hentikan eksekusi Laravel setelah export
+    }
+
+
+    public function exportMini()
+    {
+        $filename = 'penjualan_Gas_Bumi.' . $this->format;
+
+        // Pilih writer sesuai format
+        if ($this->format === 'csv') {
+            $writer = WriterEntityFactory::createCSVWriter();
+            header('Content-Type: text/csv; charset=utf-8');
+        } else {
+            $writer = WriterEntityFactory::createXLSXWriter();
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        }
+
+        header("Content-Disposition: attachment; filename=\"{$filename}\"");
+
+        // Open writer ke browser (argumen wajib)
+        $writer->openToBrowser($filename);
+
+        // Header kolom
+        $header = WriterEntityFactory::createRowFromArray([
+            'No',
+            'Bulan',
+            'Tahun',
+            'Provinsi',
+            'Kabupaten/Kota',
+            'Sektor',
+            'Konsumen',
+            'Jumlah Hari Penyaluran',
+            'GHV',
+            'Keterangan',
+            'Volume MMBTU',
+            'Satuan MMBTU',
+            'Harga MMBTU'
+        ]);
+        $writer->addRow($header);
+
+        // Nomor urut mulai dari 1
+        $no = 1;
+
+        // Data (jika query kosong, hanya header)
+        foreach ($this->query->cursor() as $row) {
+
+            $writer->addRow(WriterEntityFactory::createRowFromArray([
+                $no,
+                $row->bulan,
+                $row->tahun,
+                $row->provinsi,
+                $row->kabkot,
+                $row->sektor,
+                $row->konsumen,
+                $row->jml_hari_penyaluran,
+                $row->ghv,
+                $row->keterangan,
+                $row->volume_mmbtu,
+                $row->satuan_mmbtu,
+                $row->harga_mmbtu,
+            ]));
+
+            $no++;
+        }
+
+        $writer->close();
+        exit; // hentikan eksekusi Laravel setelah export
+    }
+}
