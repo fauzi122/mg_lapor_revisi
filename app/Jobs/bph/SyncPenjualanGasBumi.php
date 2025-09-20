@@ -2,6 +2,7 @@
 
 namespace App\Jobs\bph;
 
+use App\Events\BphSyncNotification;
 use App\Library\APIBph;
 use App\Models\BphPenjualanGasBumi;
 use Carbon\Carbon;
@@ -17,13 +18,14 @@ class SyncPenjualanGasBumi implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $tahun;
+    protected $tahun, $sessionId;
     /**
      * Create a new job instance.
      */
-    public function __construct($tahun)
+    public function __construct($tahun, $sessionId)
     {
         $this->tahun = $tahun;
+        $this->sessionId = $sessionId;
     }
 
     /**
@@ -99,16 +101,23 @@ class SyncPenjualanGasBumi implements ShouldQueue
 
 
             DB::commit();
-            Log::info("Simpan data ke database");
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            Log::error("GAGAL : " . $th->getMessage(), [
-                'file' => $th->getFile(),
-                'line' => $th->getLine(),
-            ]);
 
-            throw $th;
-        }
+            if ($this->sessionId) {
+                broadcast(new BphSyncNotification("Sinkronisasi Penjualan gas bumi selesai.", $this->sessionId, "penjualan-gas-bumi"));
+            }
+        } catch (\Throwable $e) {
+            Log::error("Gagal menghapus data lama", [
+                'tahun' => $this->tahun,
+                'error' => $e->getMessage()
+            ]);
+            DB::rollBack();
+
+            if ($this->sessionId) {
+                broadcast(new BphSyncNotification("Sinkronisasi Penjualan gas bumi gagal", $this->sessionId, "penjualan-gas-bumi"));
+            }
+
+            return;
+        }   
         Log::info("TOTAL PAGE = " . $page);
     }
 

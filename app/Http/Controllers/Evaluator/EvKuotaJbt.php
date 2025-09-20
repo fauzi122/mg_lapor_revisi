@@ -4,6 +4,7 @@ namespace App\Http\Controllers\evaluator;
 
 use App\Exports\PenjualanJBTKuotaExport;
 use App\Http\Controllers\Controller;
+use App\Jobs\bph\SyncJbtKuota;
 use App\Models\KuotaJbt;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ class EvKuotaJbt extends Controller
             ->groupBy('id_badan_usaha','izin_usaha','nama_badan_usaha','npwp_badan_usaha')
             ->get();
 
+        $lastSync = KuotaJbt::latest()->first();
         // Dekode JSON pada field izin_usaha
         foreach ($perusahaan as $item) {
             $item->izin_list = json_decode($item->izin_usaha, true);
@@ -30,6 +32,7 @@ class EvKuotaJbt extends Controller
         $data = [
             'title' => 'Laporan JBT Kuota',
             'perusahaan' => $perusahaan,
+            'lastSync' => $lastSync,
         ];
         // dd($perusahaan);
         return view('evaluator.laporan_bu.bph_inline.kuota_jbt.index', $data);
@@ -113,84 +116,11 @@ class EvKuotaJbt extends Controller
 
     public function sinkronisasiData() 
     {
+        $year = Carbon::now()->year;
 
-        $url = "https://ngembangin.esdm.go.id/inline/hilir/internal/api/dev/pelaporan-migas/bbm/kuota-jbt";
-
-        $token = Cache::get('access_token');
-        $items = collect();
-        $tgl = Carbon::now();
-        $bulan = $tgl->month; // hasilnya 1–12
-        $tahun = $tgl->year;
-        $page = 1;
+        SyncJbtKuota::dispatch($year, session()->getId());
         
-        while (true) {
-            // Gunakan token untuk akses API
-            $response = Http::withToken($token)->post($url, [
-                'tahun' => $tahun,
-                'page' => $page
-            ]);
-
-            if ($response->status() === 401) {
-                $token = tokenBphApi();
-                $response = Http::withToken($token)->post($url, [
-                    'tahun' => $tahun
-                ]);
-            }
-
-            if ($response->status() === 404) {
-                break;
-            }
-
-            if ($response->failed()) {
-                Log::error('Gagal sinkronisasi data', [
-                    'status' => $response->status(),
-                    'body' => $response->body()
-                ]);
-                return back()->with('sweet_error', 'Gagal sinkronisasi data');
-            }
-            
-            // Jika berhasil
-            $response =  $response->json();
-
-            foreach ($response['data'] as $value) {
-
-                if ($value['bulan'] == $bulan) {
-                    $items->push($value);
-                }
-            }
-
-            $page++;
-        }
-
-        // Update Or Create data di Database
-        if (count($items) > 0) {
-            foreach ($items as $item) {
-                KuotaJbt::updateOrCreate(
-                    [
-                        'id_badan_usaha'   => $item['id_badan_usaha'],
-                        'tahun'            => $item['tahun'],
-                        'produk'           => $item['produk'],
-                        'provinsi'           => $item['provinsi'],
-                        'kabupaten_kota'         => $item['kabupaten_kota'],
-                        'volume_kl'         => $item['volume_kl'],
-                    ],
-                    [
-                        "id_badan_usaha" => $item['id_badan_usaha'],
-                        "nama_badan_usaha" => $item['nama_badan_usaha'],
-                        "npwp_badan_usaha" => $item['npwp_badan_usaha'],
-                        "izin_usaha" => json_encode($item['izin_usaha']),
-                        'tahun' => $item['tahun'],
-                        'produk' => $item['produk'],
-                        'provinsi' => $item['provinsi'],
-                        'kabupaten_kota' => $item['kabupaten_kota'],
-                        'volume_kl' => $item['volume_kl'],
-                    ]
-                );
-    
-            }
-        }
-
-        return back()->with('sweet_success', 'Sinkronisasi Data Berhasil');
+        return back()->with('sweet_success', 'Sinkronisasi data sedang diproses.');
     }
 
     public function cetakperiode(Request $request)

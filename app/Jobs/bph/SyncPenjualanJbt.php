@@ -2,6 +2,7 @@
 
 namespace App\Jobs\bph;
 
+use App\Events\BphSyncNotification;
 use App\Library\APIBph;
 use App\Models\PenjualanJbt;
 use Carbon\Carbon;
@@ -17,13 +18,14 @@ class SyncPenjualanJbt implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $tahun;
+    protected $tahun, $sessionId;
     /**
      * Create a new job instance.
      */
-    public function __construct($tahun)
+    public function __construct($tahun, $sessionId)
     {
         $this->tahun = $tahun;
+        $this->sessionId = $sessionId;
     }
 
     /**
@@ -94,14 +96,23 @@ class SyncPenjualanJbt implements ShouldQueue
             });
 
             DB::commit();
+
+            if ($this->sessionId) {
+                broadcast(new BphSyncNotification("Sinkronisasi Penjualan JBT selesai.", $this->sessionId, "penjualan-jbt"));
+            }
         } catch (\Throwable $e) {
             Log::error("Gagal menghapus data lama", [
                 'tahun' => $this->tahun,
                 'error' => $e->getMessage()
             ]);
             DB::rollBack();
+
+            if ($this->sessionId) {
+                broadcast(new BphSyncNotification("Sinkronisasi Penjualan JBT gagal", $this->sessionId, "penjualan-jbt"));
+            }
+
             return;
-        }        
+        }           
 
         Log::info("TOTAL PAGE = " . $page - 1);
 
