@@ -88,7 +88,9 @@ class EvPenjualanJbkp extends Controller
 
     public function sinkronisasiData() 
     {
-        SyncPenjualanJbkp::dispatch('2023', session()->getId());
+        $year = Carbon::now()->year;
+
+        SyncPenjualanJbkp::dispatch($year, session()->getId());
         
         return back()->with('sweet_success', 'Sinkronisasi data sedang diproses.');
     }
