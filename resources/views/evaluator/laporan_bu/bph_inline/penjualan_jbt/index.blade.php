@@ -31,8 +31,14 @@
         <div id="kt_app_content_container" class="app-container container-xxl">
             <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-0" role="alert">
                 <i class="mdi mdi-alert-circle-outline label-icon"></i>
-                <strong>Informasi:</strong> Data yang ditampilkan merupakan informasi perusahaan berdasarkan nomor izin yang
-                telah mengajukan laporan.
+                <div>
+                    <strong>Informasi:</strong> Data yang ditampilkan merupakan informasi perusahaan berdasarkan nomor izin
+                    yang telah mengajukan laporan.
+                </div>
+                <div>
+                    <strong>Sinkronisasi Terakhir:</strong>
+                    {{ \Carbon\Carbon::parse($lastSync->created_at)->diffForHumans() }}
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="card-body mt-4">
@@ -158,7 +164,7 @@
                                         <th class="text-center">Nama Perusahaan</th>
                                         <th class="text-center">Nomor Izin</th>
                                         <!-- <th>Tanggal Pengajuan Izin</th>
-                                                                    <th>Tanggal Disetujui Izin</th> -->
+                                                                            <th>Tanggal Disetujui Izin</th> -->
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>

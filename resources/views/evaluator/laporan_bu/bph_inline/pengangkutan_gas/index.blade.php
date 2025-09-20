@@ -6,6 +6,7 @@
             <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
                 <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
                     <h3 class="text-dark fw-bold">{{ $title }}</h3>
+                    <div id="notif"></div>
                 </div>
                 <div class="d-flex align-items-center gap-2 gap-lg-3">
                     <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
@@ -30,8 +31,14 @@
         <div id="kt_app_content_container" class="app-container container-xxl">
             <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-0" role="alert">
                 <i class="mdi mdi-alert-circle-outline label-icon"></i>
-                <strong>Informasi:</strong> Data yang ditampilkan merupakan informasi perusahaan berdasarkan nomor izin yang
-                telah mengajukan laporan.
+                <div>
+                    <strong>Informasi:</strong> Data yang ditampilkan merupakan informasi perusahaan berdasarkan nomor izin
+                    yang telah mengajukan laporan.
+                </div>
+                <div>
+                    <strong>Sinkronisasi Terakhir:</strong>
+                    {{ \Carbon\Carbon::parse($lastSync->created_at)->diffForHumans() }}
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="card-body mt-4">
@@ -157,7 +164,7 @@
                                         <th class="text-center">Nama Perusahaan</th>
                                         <th class="text-center">Nomor Izin</th>
                                         <!-- <th>Tanggal Pengajuan Izin</th>
-                                                        <th>Tanggal Disetujui Izin</th> -->
+                                                                    <th>Tanggal Disetujui Izin</th> -->
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -379,4 +386,40 @@
 @endsection
 
 @section('script')
+    {{-- Reverb Notifikasi Job Sync BPH --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const sessionId = "{{ session()->getId() }}";
+
+            if (!window.Echo) {
+                console.error("Echo belum tersedia!");
+                return;
+            }
+
+            // Debug koneksi Echo
+            window.Echo.connector.pusher.connection.bind('connected', () => {
+                console.log("✅ Echo connected");
+
+                Echo.private(`jobs.session.${sessionId}.pengangkutan-gas-bumi`)
+                    .listen('.JobSyncCompleted', (e) => {
+                        console.log("Event diterima:", e);
+
+                        // Buat notifikasi baru
+                        const notif = document.createElement('div');
+                        notif.classList.add('notifikasi');
+                        notif.innerHTML = `
+                    <div class="alert alert-info alert-dismissible alert-label-icon label-arrow fade show mb-0" role="alert">
+                        <i class="mdi mdi-alert-circle-outline label-icon"></i>
+                        <div>${e.message}</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                        // document.body.appendChild(notif);
+                        document.getElementById('notif').appendChild(notif);
+                    });
+
+                console.log("Subscribed to private channel: jobs.session." + sessionId);
+            });
+        });
+    </script>
 @endsection
