@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Evaluator;
 
+use App\Exports\PenjualanBphGasBumi;
+use App\Exports\PenjualanBphGasBumiExport;
 use App\Http\Controllers\Controller;
 use App\Jobs\bph\SyncPenjualanGasBumi;
 use App\Models\BphPenjualanGasBumi;
@@ -65,7 +67,7 @@ class EvBphPenjualanGasBumi extends Controller
     }
 
 
-    public function show($kode = '')
+    public function show($kode = '', Request $request)
     {
         $pecah = explode(",", Crypt::decryptString($kode));
 
@@ -73,12 +75,46 @@ class EvBphPenjualanGasBumi extends Controller
                         ['npwp_badan_usaha', $pecah[0]],
                         ['tahun', $pecah[1]],
                         ['bulan', $pecah[2]],
-                    ])->get();
+                    ]);
+
+        // Wajib Taruh di bawah query agar ketika searchnya tidak sesuai dia tidak error
+        $per = (clone $query)->first();
+
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->Where('provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('kabkot', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%")
+                    ->orWhere('konsumen', 'ILIKE', "%{$search}%")
+                    ->orWhere('jml_hari_penyaluran', 'ILIKE', "%{$search}%")
+                    ->orWhere('keterangan', 'ILIKE', "%{$search}%")
+                    ->orWhere('satuan_mmbtu', 'ILIKE', "%{$search}%");
+
+
+                if (is_numeric($search)) {
+                    $q->orWhere('volume_mmbtu', $search)
+                      ->orWhere('ghv', $search)
+                      ->orWhere('jml_hari_penyaluran', $search)
+                      ->orWhere('harga_mmbtu', $search);
+                }
+            });
+        }
+
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new PenjualanBphGasBumiExport($query, $request->export);
+            return $export->exportMini();
+        }
+
+        // Tampilkan 10 data di table
+        $queryPaginate = $query->paginate(10)->appends($request->all());
                     
         $data = [
             'title'=>'Laporan Penjualan Gas Bumi',
-            'query'=>$query,
-            'per'=>$query->first()
+            'query'=>$queryPaginate,
+            'per'=>$per
 
         ];
         return view('evaluator.laporan_bu.bph_inline.penjualan_gas_bumi.pilihbulan', $data);
@@ -111,38 +147,62 @@ class EvBphPenjualanGasBumi extends Controller
         if ($perusahaan !== 'all') {
             $query->where('id_badan_usaha', $perusahaan);
         }
-    
-        $result = $query->get();
 
-        if ($result->isEmpty()) {
-            return redirect()->back()->with('sweet_error', 'Data yang anda minta kosong.');
-        } else {
-            $data = [
-                'title' => 'Laporan Penjualan Gas Bumi',
-                'result' => $result
-            ];
-    
-            $view = view('evaluator.laporan_bu.bph_inline.penjualan_gas_bumi.cetak', $data);
-    
-            // Menambahkan script JavaScript untuk reload halaman
-            $view->with('reload', true);
-    
-            return response($view);
+        // Cek apakah data kosong
+        if ($query->count() === 0) {
+            return redirect()->back()->with('sweet_error', 'Data yang Anda minta kosong.');
         }
+
+        $export = new PenjualanBphGasBumiExport($query, 'xlsx');
+        return $export->export();
     }
 
-    public function lihatSemuaData()
+    public function lihatSemuaData(Request $request)
     {
         $tgl = Carbon::now();
         $bulan = $tgl->month; // hasilnya 1–12
         $tahun = $tgl->year;
         
         $query = BphPenjualanGasBumi::where('bulan', $bulan)
-                    ->where('tahun', $tahun)
-                    ->get();
+                    ->where('tahun', $tahun);
+
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->Where('nama_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('kabkot', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%")
+                    ->orWhere('konsumen', 'ILIKE', "%{$search}%")
+                    ->orWhere('jml_hari_penyaluran', 'ILIKE', "%{$search}%")
+                    ->orWhere('keterangan', 'ILIKE', "%{$search}%")
+                    ->orWhere('satuan_mmbtu', 'ILIKE', "%{$search}%");
+
+
+                if (is_numeric($search)) {
+                    $q->orWhere('volume_mmbtu', $search)
+                        ->orWhere('ghv', $search)
+                        ->orWhere('jml_hari_penyaluran', $search)
+                        ->orWhere('harga_mmbtu', $search);
+                }
+            });
+        }
+
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new PenjualanBphGasBumiExport($query, $request->export);
+            return $export->exportMini();
+        }
+
         $perusahaan  = BphPenjualanGasBumi::select('npwp_badan_usaha', 'nama_badan_usaha')
                     ->groupBy('npwp_badan_usaha', 'nama_badan_usaha')->get();
+
         $periode = $tgl->translatedFormat('F Y'); // contoh: "Mei 2025"
+
+        // Tampilkan 10 data di table
+        $query = $query->paginate(10)->appends($request->all());
 
         return view('evaluator.laporan_bu.bph_inline.penjualan_gas_bumi.lihat-semua-data', [
             'title'     => 'Laporan Penjualan Gas Bumi',
@@ -173,7 +233,37 @@ class EvBphPenjualanGasBumi extends Controller
             $query->where('id_badan_usaha', $request->input("perusahaan"));
         }
 
-        $result = $query->get();
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->Where('nama_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
+                    ->orWhere('provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('kabkot', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%")
+                    ->orWhere('konsumen', 'ILIKE', "%{$search}%")
+                    ->orWhere('jml_hari_penyaluran', 'ILIKE', "%{$search}%")
+                    ->orWhere('keterangan', 'ILIKE', "%{$search}%")
+                    ->orWhere('satuan_mmbtu', 'ILIKE', "%{$search}%");
+
+
+                if (is_numeric($search)) {
+                    $q->orWhere('volume_mmbtu', $search)
+                        ->orWhere('ghv', $search)
+                        ->orWhere('jml_hari_penyaluran', $search)
+                        ->orWhere('harga_mmbtu', $search);
+                }
+            });
+        }
+
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new PenjualanBphGasBumiExport($query, $request->export);
+            return $export->exportMini();
+        }
+
+        $result = $query->paginate(10)->appends($request->all());
 
         return view('evaluator.laporan_bu.bph_inline.penjualan_gas_bumi.lihat-semua-data', [
             'title' => 'Laporan Penjualan Gas Bumi',

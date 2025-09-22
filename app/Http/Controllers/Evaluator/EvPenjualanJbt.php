@@ -78,17 +78,18 @@ class EvPenjualanJbt extends Controller
             ['bulan', $pecah[2]],
         ]);
 
+        // Wajib Taruh di bawah query agar ketika searchnya tidak sesuai dia tidak error
+        $per = (clone $query)->first();
+
+        // Fitur Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('nama_badan_usaha', 'ILIKE', "%{$search}%")
-                    ->orWhere('npwp_badan_usaha', 'ILIKE', "%{$search}%")
-                    ->orWhere('produk', 'ILIKE', "%{$search}%")
+                $q->Where('produk', 'ILIKE', "%{$search}%")
                     ->orWhere('provinsi', 'ILIKE', "%{$search}%")
                     ->orWhere('kabupaten_kota', 'ILIKE', "%{$search}%")
-                    ->orWhere('sektor', 'ILIKE', "%{$search}%")
-                    ->orWhere('bulan', 'ILIKE', "%{$search}%")
-                    ->orWhere('tahun', 'ILIKE', "%{$search}%");
+                    ->orWhere('satuan', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%");
 
                 if (is_numeric($search)) {
                     $q->orWhere('volume', $search);
@@ -96,14 +97,15 @@ class EvPenjualanJbt extends Controller
             });
         }
 
+        // Fitur Export Excel
         if ($request->filled('export')) {
             $export = new PenjualanJbtExport($query, $request->export);
             return $export->exportMini();
         }
 
+        // Tampilkan Data Dengan 10 Page
         $queryPaginate = $query->paginate(10)->appends($request->all());
 
-        $per = $query->first();
 
         return view('evaluator.laporan_bu.bph_inline.penjualan_jbt.pilihbulan', [
             'title' => 'Laporan Penjualan JBT',
@@ -188,9 +190,8 @@ class EvPenjualanJbt extends Controller
                     ->orWhere('produk', 'ILIKE', "%{$search}%")
                     ->orWhere('provinsi', 'ILIKE', "%{$search}%")
                     ->orWhere('kabupaten_kota', 'ILIKE', "%{$search}%")
-                    ->orWhere('sektor', 'ILIKE', "%{$search}%")
-                    ->orWhere('bulan', 'ILIKE', "%{$search}%")
-                    ->orWhere('tahun', 'ILIKE', "%{$search}%");
+                    ->orWhere('satuan', 'ILIKE', "%{$search}%")
+                    ->orWhere('sektor', 'ILIKE', "%{$search}%");
 
                     // Volume Menggunakan Numeric tidak bisa string
                     if (is_numeric($search)) {
@@ -265,6 +266,7 @@ class EvPenjualanJbt extends Controller
             });
         }
 
+        // Fitur Export Data
         if ($request->filled('export')) {
             $export = new PenjualanJbtExport($query, $request->export);
             return $export->export();

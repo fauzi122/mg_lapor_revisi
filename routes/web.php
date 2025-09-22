@@ -875,23 +875,16 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/penjualan-jbkp/periode/{kode}', 'periode');
 		Route::get('/laporan/penjualan-jbkp/{kode}', 'show');
 		Route::get('/laporan/penjualan-jbkp-lihat-semua-data', 'lihatSemuaData');
-		Route::post('/laporan/penjualan-jbkp-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-jbkp-lihat-semua-data', 'filterData');
 		Route::post('/laporan/penjualan-jbkp/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/penjualan-jbkp', 'sinkronisasiData');
 	});
 	//Penjualan JBT
 	Route::controller(EvPenjualanJbt::class)->group(function () {
 		Route::get('/laporan/penjualan-jbt', 'index');
-		
 		Route::get('/laporan/penjualan-jbt/{kode}', 'show');
-		Route::get('laporan/penjualan-jbt/export/{format}/{kode}', 'export')->name('penjualan-jbt.export');
-
 		Route::get('/laporan/penjualan-jbt-lihat-semua-data', 'lihatSemuaData');
-
-		
-		// Route::post('/laporan/penjualan-jbt-lihat-semua-data', 'filterData');
 		Route::get('/laporan/penjualan-jbt-lihat-semua-data', 'filterData');
-
 		Route::get('/laporan/penjualan-jbt/periode/{kode}', 'periode');
 		Route::post('/laporan/penjualan-jbt/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/penjualan-jbt', 'sinkronisasiData');
@@ -901,7 +894,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/penjualan-jbu', 'index');
 		Route::get('/laporan/penjualan-jbu/{kode}', 'show');
 		Route::get('/laporan/penjualan-jbu-lihat-semua-data', 'lihatSemuaData');
-		Route::post('/laporan/penjualan-jbu-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-jbu-lihat-semua-data', 'filterData');
 		Route::get('/laporan/penjualan-jbu/periode/{kode}', 'periode');
 		Route::post('/laporan/penjualan-jbu/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/penjualan-jbu', 'sinkronisasiData');
@@ -911,7 +904,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/penjualan-bbm', 'index');
 		Route::get('/laporan/penjualan-bbm/{kode}', 'show');
 		Route::get('/laporan/penjualan-bbm-lihat-semua-data', 'lihatSemuaData');
-		Route::post('/laporan/penjualan-bbm-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-bbm-lihat-semua-data', 'filterData');
 		Route::get('/laporan/penjualan-bbm/periode/{kode}', 'periode');
 		Route::post('/laporan/penjualan-bbm/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/penjualan-bbm', 'sinkronisasiData');
@@ -921,7 +914,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/kuota-jbt', 'index');
 		Route::get('/laporan/kuota-jbt/{kode}', 'show');
 		Route::get('/laporan/kuota-jbt-lihat-semua-data', 'lihatSemuaData');
-		Route::post('/laporan/kuota-jbt-lihat-semua-data', 'filterData');
+		Route::get('/laporan/kuota-jbt-lihat-semua-data', 'filterData');
 		Route::get('/laporan/kuota-jbt/periode/{kode}', 'periode');
 		Route::post('/laporan/kuota-jbt/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/kuota-jbt', 'sinkronisasiData');
@@ -931,7 +924,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/kuota-jbkp', 'index');
 		Route::get('/laporan/kuota-jbkp/{kode}', 'show');
 		Route::get('/laporan/kuota-jbkp-lihat-semua-data', 'lihatSemuaData');
-		Route::post('/laporan/kuota-jbkp-lihat-semua-data', 'filterData');
+		Route::get('/laporan/kuota-jbkp-lihat-semua-data', 'filterData');
 		Route::get('/laporan/kuota-jbkp/periode/{kode}', 'periode');
 		Route::post('/laporan/kuota-jbkp/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/kuota-jbkp', 'sinkronisasiData');
@@ -941,7 +934,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/penjualan-gas-bumi', 'index');
 		Route::get('/laporan/penjualan-gas-bumi/{kode}', 'show');
 		Route::get('/laporan/penjualan-gas-bumi-lihat-semua-data', 'lihatSemuaData');
-		Route::post('/laporan/penjualan-gas-bumi-lihat-semua-data', 'filterData');
+		Route::get('/laporan/penjualan-gas-bumi-lihat-semua-data', 'filterData');
 		Route::get('/laporan/penjualan-gas-bumi/periode/{kode}', 'periode');
 		Route::post('/laporan/penjualan-gas-bumi/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/penjualan-gas-bumi', 'sinkronisasiData');
@@ -951,7 +944,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/pasokan-gas-bumi', 'index');
 		Route::get('/laporan/pasokan-gas-bumi/{kode}', 'show');
 		Route::get('/laporan/pasokan-gas-bumi-lihat-semua-data', 'lihatSemuaData');
-		Route::post('/laporan/pasokan-gas-bumi-lihat-semua-data', 'filterData');
+		Route::get('/laporan/pasokan-gas-bumi-lihat-semua-data', 'filterData');
 		Route::get('/laporan/pasokan-gas-bumi/periode/{kode}', 'periode');
 		Route::post('/laporan/pasokan-gas-bumi/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/pasokan-gas-bumi', 'sinkronisasiData');
@@ -961,7 +954,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::get('/laporan/pengangkutan-gas', 'index');
 		Route::get('/laporan/pengangkutan-gas/{kode}', 'show');
 		Route::get('/laporan/pengangkutan-gas-lihat-semua-data', 'lihatSemuaData');
-		Route::post('/laporan/pengangkutan-gas-lihat-semua-data', 'filterData');
+		Route::get('/laporan/pengangkutan-gas-lihat-semua-data', 'filterData');
 		Route::get('/laporan/pengangkutan-gas/periode/{kode}', 'periode');
 		Route::post('/laporan/pengangkutan-gas/cetak-periode', 'cetakperiode');
 		Route::get('/laporan/sinkronisasi-data/pengangkutan-gas', 'sinkronisasiData');
