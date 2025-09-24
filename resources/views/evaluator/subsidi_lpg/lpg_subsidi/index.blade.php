@@ -95,7 +95,7 @@
                                             data-bulan="{{ $data->bulan }}"
                                             data-provinsi="{{ $data->provinsi }}"
                                             data-volume="{{ $data->volume }}"
-                                            data-bs-toggle="modal" data-bs-target="#editKuotaModal" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Data">
+                                            data-bs-toggle="modal" data-bs-target="#editKuotaModal{{ $data->id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Data">
                                             <i class="fa fa-edit"></i> Edit
                                             </button>
 

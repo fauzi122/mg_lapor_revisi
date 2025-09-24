@@ -15,7 +15,7 @@
             </div>
             <!--end::Close-->
         </div>  
-            <form action="/lpg/subsidi/store" method="post" id="myform" enctype="multipart/form-data">
+            <form action="{{ url('/lpg/subsidi/store') }}" method="post" id="myform" enctype="multipart/form-data">
             @csrf
                 <div class="modal-body py-10 px-lg-17">
                     <!--begin::Scroll-->
@@ -27,7 +27,7 @@
                                     <i class="ki-outline ki-information fs-7"></i>
                                 </span>
                             </label>
-                            <input class="form-control mb-2" type="month" id="editBulan" name="bulan"  required>
+                            <input class="form-control flatpickr mb-2" id="editBulan" name="bulan"  required>
                         </div>
                         <div class="fv-row mb-7">
                             <label for="provinsi" class="d-flex align-items-center fs-6 fw-semibold mb-2">

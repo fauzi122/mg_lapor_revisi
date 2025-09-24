@@ -392,7 +392,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 	// Subsidi lpg dan kuota subsidi
 
 	Route::controller(SubsidiLpg::class)->group(function () {
-		Route::get('/get-kabkot/{provinceName}', 'getKabkot');
+		Route::get('/get-kabkot/{nama_provinsi}', 'getKabkot');
 		Route::get('/data-subsidi-lpg/verified', 'index');
 		Route::post('/lpg/subsidi/store', 'store')->name('lpg.store');
 		Route::post('/lpg/storeSubsidi_excel', 'storeSubsidi_excel')->name('lpg.storeSubsidi_excel');

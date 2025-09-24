@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Evaluator;
 
+use App\Exports\DataizinBu;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ class DataIzinBuController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index_minyak()
+    public function index_minyak(Request $request)
     {
         $meping = Meping::select('id_template')->distinct()->get();
         $sub_page = Meping::select('id_sub_page')->distinct()->get();
@@ -93,9 +94,33 @@ class DataIzinBuController extends Controller
                 'k.NOMOR_IZIN as NOMOR_IZIN',
                 'k.FILE_IZIN as FILE_IZIN',
                 'd.nama_opsi',
-            ])
+            ]);
 
-            ->get();
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $result->where(function ($q) use ($search) {
+                $q->where('k.NAMA_PERUSAHAAN', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.nama_provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.nama_kota', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.EMAIL_PERUSAHAAN', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.TELEPON', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.NAMA_TEMPLATE', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.ALAMAT', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.NOMOR_IZIN', 'ILIKE', "%{$search}%")
+                    ->orWhere('d.nama_opsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.TGL_DISETUJUI', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.FILE_IZIN', 'ILIKE', "%{$search}%");
+            });
+        }
+
+        // Fitur Export Data
+        if ($request->filled('export')) {
+            $export = new DataizinBu($result, $request->export);
+            return $export->exportMinyakBumi();
+        }
+
+        $result = $result->paginate(10)->appends($request->all());
 
         return view('evaluator.data_bu.index_minyak', compact(
             'result',
@@ -105,7 +130,7 @@ class DataIzinBuController extends Controller
         ));
     }
 
-    public function index_gas()
+    public function index_gas(Request $request)
     {
         $meping = Meping::select('id_template')->distinct()->get();
         $sub_page = Meping::select('id_sub_page')->distinct()->get();
@@ -178,8 +203,32 @@ class DataIzinBuController extends Controller
             'k.NOMOR_IZIN as NOMOR_IZIN',
             'k.FILE_IZIN as FILE_IZIN',
             'd.nama_opsi',
-            ])->get();
+            ]);
 
+        // Fitur Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $result->where(function ($q) use ($search) {
+                $q->where('k.NAMA_PERUSAHAAN', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.nama_provinsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.nama_kota', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.EMAIL_PERUSAHAAN', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.TELEPON', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.NAMA_TEMPLATE', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.ALAMAT', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.NOMOR_IZIN', 'ILIKE', "%{$search}%")
+                    ->orWhere('d.nama_opsi', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.TGL_DISETUJUI', 'ILIKE', "%{$search}%")
+                    ->orWhere('k.FILE_IZIN', 'ILIKE', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('export')) {
+            $export = new DataizinBu($result, $request->export);
+            return $export->exportGasBumi();
+        }
+
+        $result = $result->paginate(10)->appends($request->all());
             // dd($result);
 
         return view('evaluator.data_bu.index_gas', compact(
