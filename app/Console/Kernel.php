@@ -39,7 +39,8 @@ class Kernel extends ConsoleKernel
         })->dailyAt('22:00');
 
         $schedule->call(function () use ($year) {
-            SyncPasokanBbm::dispatch($year);
+            // SyncPasokanBbm::dispatch($year);
+            SyncPasokanBbm::dispatch('2023');
         })->dailyAt('23:00');
 
         $schedule->call(function () use ($year) {
