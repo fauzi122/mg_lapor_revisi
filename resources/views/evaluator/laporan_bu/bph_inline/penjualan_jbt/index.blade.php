@@ -164,7 +164,7 @@
                                         <th class="text-center">Nama Perusahaan</th>
                                         <th class="text-center">Nomor Izin</th>
                                         <!-- <th>Tanggal Pengajuan Izin</th>
-                                                                            <th>Tanggal Disetujui Izin</th> -->
+                                                                                <th>Tanggal Disetujui Izin</th> -->
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -399,7 +399,7 @@
             window.Echo.connector.pusher.connection.bind('connected', () => {
                 console.log("✅ Echo connected");
 
-                Echo.private(`jobs.session.${sessionId}c`)
+                Echo.private(`jobs.session.${sessionId}.penjualan-jbt`)
                     .listen('.JobSyncCompleted', (e) => {
                         console.log("Event diterima:", e);
 
