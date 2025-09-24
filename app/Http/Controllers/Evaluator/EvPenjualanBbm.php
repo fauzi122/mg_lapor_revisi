@@ -88,7 +88,7 @@ class EvPenjualanBbm extends Controller
     {
         $year = Carbon::now()->year;
 
-        SyncPasokanBbm::dispatch($year, session()->getId());
+        SyncPasokanBbm::dispatch('2023', session()->getId());
         
         return back()->with('sweet_success', 'Sinkronisasi data sedang diproses.');
     }
