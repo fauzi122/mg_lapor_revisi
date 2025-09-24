@@ -331,6 +331,24 @@
         @endif
     </script>
 
+    <script>
+        function hapusData(form) {
+            Swal.fire({
+                title: "Hapus Data",
+                text: "Apakah yakin ingin menghapus data?",
+                icon: "warning",
+                showCancelButton: !0,
+                confirmButtonColor: "#2ab57d",
+                cancelButtonColor: "#fd625e",
+                confirmButtonText: "Ya, hapus!",
+            }).then(function(result) {
+                if (result.value) {
+                    form.submit();
+                }
+            });
+        }
+    </script>
+
     {{-- flatpickr (Untuk data tanggal pada laporan badan usaha) --}}
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>

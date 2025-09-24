@@ -143,18 +143,20 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $role = Role::findOrFail($id);
-        $permissions = $role->permissions;
-        $role->revokePermissionTo($permissions);
+        // $permissions = $role->permissions;
+        // $role->revokePermissionTo($permissions);
         $role->delete();
 
         if ($role) {
-            return response()->json([
-                'status' => 'success'
-            ]);
+            // return response()->json([
+            //     'status' => 'success'
+            // ]);
+            return back()->with('sweet_success', 'Data Berhasil Dihapus');
         } else {
-            return response()->json([
-                'status' => 'error'
-            ]);
+            // return response()->json([
+            //     'status' => 'error'
+            // ]);
+            return back()->with('sweet_error', 'Data Gagal Dihapus');
         }
     }
 }

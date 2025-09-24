@@ -844,6 +844,7 @@ Route::middleware(['auth', 'checkRole'])->group(function () {
 		Route::post('/role', 'store')->name('role.store');
 		Route::get('/role/edit/{role}', 'edit')->name('role.edit');
 		Route::patch('/role/update/{role}', 'update')->name('role.update');
+		Route::delete('/role/destroy/{id}', 'destroy')->name('role.destroy');
 	});
 
 	Route::controller(UserController::class)->group(function () {
