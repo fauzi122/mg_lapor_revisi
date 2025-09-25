@@ -89,7 +89,7 @@
                                     </td>
                                     <td class="text-center">
                                         {{-- @can('PPIC_role.edit')  --}}
-                                        <a href="/role/edit/{{ $role->id }}" class="btn btn-sm btn-primary">
+                                        <a href="{{ url('/role/edit') }}/{{ $role->id }}" class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil-fill"></i> Edit
                                         </a>
                                         {{-- @endcan  --}}
