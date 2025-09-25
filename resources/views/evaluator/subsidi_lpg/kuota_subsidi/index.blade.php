@@ -289,8 +289,9 @@
             });
         }
     </script>
+
+    {{-- Bagian Provinsi dan Kabkot --}}
 <script>
-    // Cek environment untuk set baseUrl
     var isLocalhost =
         window.location.hostname === "mg_lapor_revisi.test" ||
         window.location.hostname === "127.0.0.1" ||
@@ -299,7 +300,6 @@
 
     var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
 
-    // Fungsi umum untuk load kabupaten/kota
     function loadKabkot(provinsi, kabkotSelected, targetSelect) {
         $.ajax({
             url: baseUrl + "get-kabkot/" + encodeURIComponent(provinsi),
@@ -310,13 +310,13 @@
                 $.each(data, function (index, kabkot) {
                     var selected =
                         kabkotSelected &&
-                        kabkot.nama_kabkot.trim().toLowerCase() === kabkotSelected.trim().toLowerCase()
+                        kabkot.nama_kota.trim().toLowerCase() === kabkotSelected.trim().toLowerCase()
                             ? " selected"
                             : "";
 
                     targetSelect.append(
-                        '<option value="' + kabkot.nama_kabkot + '"' + selected + ">" +
-                        kabkot.nama_kabkot +
+                        '<option value="' + kabkot.nama_kota + '"' + selected + ">" +
+                        kabkot.nama_kota +
                         "</option>"
                     );
                 });
@@ -330,7 +330,7 @@
     }
 
     $(document).ready(function () {
-        // ================== CREATE MODE ==================
+        // ============= CREATE MODE =============
         $("#provinsiTambah").on("change", function () {
             var provinsi = $(this).val();
             var kabkotSelect = $("#kabkotTambah");
@@ -342,27 +342,30 @@
             }
         });
 
-        // ================== EDIT MODE ==================
+        // ============= EDIT MODE =============
         $(".edit-button").on("click", function () {
             var kuotaId = $(this).data("id");
             var bulan = $(this).data("bulan");
             var provinsi = $(this).data("provinsi");
-            var kabkotSelected = $(this).data("kabkot"); // data lama
+            var kabkotSelected = $(this).data("kabkot");
             var volume = $(this).data("volume");
 
-            // Temukan modal sesuai id
             var modal = $("#kt_modal_edit" + kuotaId);
 
-            // Set field form
             modal.find("#editBulan").val(bulan);
             modal.find("#editProvinsi").val(provinsi);
             modal.find("#editVolume").val(volume);
             modal.find("#editKuotaForm").attr("action", "/lpg/kuota/update/" + kuotaId);
 
-            // Load kabkot sesuai provinsi & pilih otomatis
+            // load kabkot default (data lama)
             loadKabkot(provinsi, kabkotSelected, modal.find("#editKabkot"));
 
-            // Tampilkan modal
+            // supaya kalau provinsi diganti di modal edit, kabkot ikut update
+            modal.find("#editProvinsi").off("change").on("change", function () {
+                var provinsiBaru = $(this).val();
+                loadKabkot(provinsiBaru, null, modal.find("#editKabkot"));
+            });
+
             modal.modal("show");
         });
     });
@@ -387,7 +390,7 @@
 
                             // Add new options
                             $.each(data, function (index, kabkot) {
-                                var option = '<option value="' + kabkot.ID_KABKOT + '">' + kabkot.NAMA_KABKOT + '</option>';
+                                var option = '<option value="' + kabkot.ID_KABKOT + '">' + kabkot.nama_kota + '</option>';
                                 kabkotSelect.append(option);
                             });
 

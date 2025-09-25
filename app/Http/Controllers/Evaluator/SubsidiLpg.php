@@ -36,10 +36,10 @@ class SubsidiLpg extends Controller
 
     public function getKabkot($nama_provinsi)
     {
-        $kabkot = DB::table('t_kabkot')
-            ->join('provinces', 'provinces.id', '=', 't_kabkot.id_provinsi')
+        $kabkot = DB::table('kotas')
+            ->join('provinces', 'provinces.id', '=', 'kotas.id_prov')
             ->where('provinces.name', $nama_provinsi)
-            ->select('t_kabkot.nama_kabkot')
+            ->select('kotas.nama_kota')
             ->get();
 
         return response()->json($kabkot);
