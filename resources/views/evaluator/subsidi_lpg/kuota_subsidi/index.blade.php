@@ -289,85 +289,88 @@
             });
         }
     </script>
+
+    {{-- Bagian Provinsi dan Kabkot --}}
 <script>
-$(document).ready(function () {
-    $('#provinsiTambah').on('change', function () {
-        var id_provinsi = $(this).val();
+    var isLocalhost =
+        window.location.hostname === "mg_lapor_revisi.test" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.hostname === "localhost" ||
+        window.location.hostname.endsWith("duniasakha.com");
 
-        if (id_provinsi !== '') {
-            $.ajax({
-                url: '/get-kabkot/' + id_provinsi,
-                type: 'GET',
-                success: function (data) {
-                    var kabkotSelect = $('#kabkotTambah');
-                    kabkotSelect.empty().append('<option value="">--Pilih Kabupaten--</option>');
+    var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
 
-                    if (data.length > 0) {
-                        $.each(data, function (index, kabkot) {
-                            kabkotSelect.append('<option value="' + kabkot.nama_kabkot + '">' + kabkot.nama_kabkot + '</option>');
-                        });
-                        kabkotSelect.show();
-                    } else {
-                        kabkotSelect.append('<option value="">Tidak ada Kabupaten/Kota</option>');
-                    }
-                },
-                error: function () {
-                    alert('Error retrieving Kabupaten/Kota.');
-                }
-            });
-        } else {
-            $('#kabkotTambah').empty().append('<option value="">--Pilih Kabupaten--</option>').hide();
-        }
-    });
-});
-</script>
-
-<script>
-$(document).ready(function () {
-    $('.edit-button').on('click', function () {
-        var kuotaId = $(this).data('id');
-        var bulan = $(this).data('bulan');
-        var provinsi = $(this).data('provinsi');
-        var kabkotSelected = $(this).data('kabkot'); // data lama
-        var volume = $(this).data('volume');
-
-        // Temukan modal yang terkait tombol ini
-        var modal = $('#kt_modal_edit' + kuotaId);
-
-        // Set data bulan, provinsi, dan volume
-        modal.find('#editBulan').val(bulan);
-        modal.find('#editProvinsi').val(provinsi);
-        modal.find('#editVolume').val(volume);
-
-        // Set action form sesuai kuotaId
-        modal.find('#editKuotaForm').attr('action', '/lpg/kuota/update/' + kuotaId);
-
-        // Fetch kabupaten/kota berdasarkan provinsi
+    function loadKabkot(provinsi, kabkotSelected, targetSelect) {
         $.ajax({
-            url: '/get-kabkot/' + encodeURIComponent(provinsi),
-            type: 'GET',
+            url: baseUrl + "get-kabkot/" + encodeURIComponent(provinsi),
+            type: "GET",
             success: function (data) {
-                var kabkotSelect = modal.find('#editKabkot');
-                kabkotSelect.empty().append('<option value="">--Pilih Kabupaten--</option>');
+                targetSelect.empty().append('<option value="">--Pilih Kabupaten--</option>');
 
                 $.each(data, function (index, kabkot) {
-                    var selected = (kabkot.nama_kabkot.trim().toLowerCase() === kabkotSelected.trim().toLowerCase()) ? ' selected' : '';
-                    kabkotSelect.append('<option value="' + kabkot.nama_kabkot + '"' + selected + '>' + kabkot.nama_kabkot + '</option>');
+                    var selected =
+                        kabkotSelected &&
+                        kabkot.nama_kota.trim().toLowerCase() === kabkotSelected.trim().toLowerCase()
+                            ? " selected"
+                            : "";
+
+                    targetSelect.append(
+                        '<option value="' + kabkot.nama_kota + '"' + selected + ">" +
+                        kabkot.nama_kota +
+                        "</option>"
+                    );
                 });
 
-                kabkotSelect.show();
-                modal.modal('show');
+                targetSelect.show();
             },
             error: function () {
-                alert('Error retrieving Kabupaten/Kota.');
+                alert("Error retrieving Kabupaten/Kota.");
+            },
+        });
+    }
+
+    $(document).ready(function () {
+        // ============= CREATE MODE =============
+        $("#provinsiTambah").on("change", function () {
+            var provinsi = $(this).val();
+            var kabkotSelect = $("#kabkotTambah");
+
+            if (provinsi !== "") {
+                loadKabkot(provinsi, null, kabkotSelect);
+            } else {
+                kabkotSelect.empty().append('<option value="">--Pilih Kabupaten--</option>').hide();
             }
         });
 
+        // ============= EDIT MODE =============
+        $(".edit-button").on("click", function () {
+            var kuotaId = $(this).data("id");
+            var bulan = $(this).data("bulan");
+            var provinsi = $(this).data("provinsi");
+            var kabkotSelected = $(this).data("kabkot");
+            var volume = $(this).data("volume");
+
+            var modal = $("#kt_modal_edit" + kuotaId);
+
+            modal.find("#editBulan").val(bulan);
+            modal.find("#editProvinsi").val(provinsi);
+            modal.find("#editVolume").val(volume);
+            modal.find("#editKuotaForm").attr("action", "/lpg/kuota/update/" + kuotaId);
+
+            // load kabkot default (data lama)
+            loadKabkot(provinsi, kabkotSelected, modal.find("#editKabkot"));
+
+            // supaya kalau provinsi diganti di modal edit, kabkot ikut update
+            modal.find("#editProvinsi").off("change").on("change", function () {
+                var provinsiBaru = $(this).val();
+                loadKabkot(provinsiBaru, null, modal.find("#editKabkot"));
+            });
+
+            modal.modal("show");
+        });
     });
-});
-
-
 </script>
+
 
     <!-- Pastikan jQuery sudah di-include sebelum script ini -->
 
@@ -387,7 +390,7 @@ $(document).ready(function () {
 
                             // Add new options
                             $.each(data, function (index, kabkot) {
-                                var option = '<option value="' + kabkot.ID_KABKOT + '">' + kabkot.NAMA_KABKOT + '</option>';
+                                var option = '<option value="' + kabkot.ID_KABKOT + '">' + kabkot.nama_kota + '</option>';
                                 kabkotSelect.append(option);
                             });
 
