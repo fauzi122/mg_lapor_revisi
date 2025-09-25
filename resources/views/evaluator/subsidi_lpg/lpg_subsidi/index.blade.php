@@ -120,77 +120,72 @@
 </div>
 @endsection
 @section('script')
-    <script>
-        function deleteItem(itemId) {
-            Swal.fire({
-                title: 'Anda yakin?',
-                text: "Anda tidak akan dapat mengembalikan tindakan ini!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                    $.ajax({
-                        url: '/lpg/subsidi/delete/' + itemId,
-                        type: 'post',
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        success: function (data) {
-                            Swal.fire({
-                                title: 'Dihapus!',
-                                text: 'Item telah dihapus.',
-                                icon: 'success',
-                                timer: 2000, // Set waktu (dalam milidetik) sebelum SweetAlert ditutup otomatis
-                                showConfirmButton: false // Atur menjadi false untuk menghilangkan tombol "OK"
-                            }).then(() => {
-                                location.reload();
-                            });
-                        },
-                        error: function (error) {
-                            Swal.fire(
-                                'Gagal!',
-                                'Terjadi kesalahan saat menghapus item.',
-                                'error'
-                            );
-                        }
-                    });
-                }
-            });
-        }
-    </script>
 <script>
-<script>
+    var isLocalhost =
+        window.location.hostname === "mg_lapor_revisi.test" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.hostname === "localhost" ||
+        window.location.hostname.endsWith("duniasakha.com");
+
+    var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
+
+    // ================= DELETE =================
+    function deleteItem(itemId) {
+        Swal.fire({
+            title: 'Anda yakin?',
+            text: "Anda tidak akan dapat mengembalikan tindakan ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: baseUrl + 'lpg/subsidi/delete/' + itemId, // tanpa slash ganda
+                    type: 'post',
+                    headers: { 'X-CSRF-TOKEN': csrfToken },
+                    success: function () {
+                        Swal.fire({
+                            title: 'Dihapus!',
+                            text: 'Item telah dihapus.',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        Swal.fire('Gagal!', 'Terjadi kesalahan saat menghapus item.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    // ================= EDIT =================
     $(document).ready(function () {
-    // Ketika tombol edit ditekan
-    $('.edit-button').on('click', function () {
-        var kuotaId = $(this).data('id');
-        var bulan = $(this).data('bulan');  // Ambil data bulan (tahun)
-        var provinsi = $(this).data('provinsi');  // Ambil data provinsi
-       
-        var volume = $(this).data('volume');  // Ambil data volume
+        $('.edit-button').on('click', function () {
+            var kuotaId = $(this).data('id');
+            var bulan = $(this).data('bulan');
+            var provinsi = $(this).data('provinsi');
+            var volume = $(this).data('volume');
 
-        // Isi form edit di modal
-        $('#editBulan').val(bulan);
-        $('#editProvinsi').val(provinsi);
-        $('#editVolume').val(volume);
+            $('#editBulan').val(bulan);
+            $('#editProvinsi').val(provinsi);
+            $('#editVolume').val(volume);
 
-       
+            // kalau mau set action form:
+            // $('#editKuotaForm').attr('action', baseUrl + 'lpg/kuota/update/' + kuotaId);
 
-        // Set form action URL sesuai dengan kuota ID
-        // $('#editKuotaForm').attr('action', '/lpg/kuota/updateaaa/' + kuotaId);
-
-        // Tampilkan modal edit
-        $('#editKuotaModal').modal('show');
+            $('#editKuotaModal').modal('show');
+        });
     });
-});
 </script>
-
-
-
 @endsection
+
 
