@@ -1,5 +1,5 @@
 <!-- Modal Edit Kuota -->
-<div class="modal fade" id="editKuotaModal" tabindex="-1" role="dialog" aria-labelledby="editKuotaModalLabel" aria-hidden="true">
+<div class="modal fade" id="editKuotaModal{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="editKuotaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <!--begin::Modal content-->
         <div class="modal-content rounded">
@@ -14,7 +14,7 @@
                 </div>
                 <!--end::Close-->
             </div>
-            <form action="/lpg/subsidi/update/{{ $data->id }}" method="post" id="editKuotaForm">
+            <form action="{{ url('/lpg/subsidi/update/' . $data->id) }}" method="post" id="editKuotaForm">
                 @csrf
                 @method('PUT')
                 <div class="modal-body py-10 px-lg-17">
@@ -26,7 +26,7 @@
                                     <i class="ki-outline ki-information fs-7"></i>
                                 </span>
                             </label>
-                            <input class="form-control mb-2" type="month" id="editBulan" name="bulan" value="{{ substr($data->bulan, 0, 7) }}" required>
+                            <input class="form-control flatpickr mb-2" id="editBulan" name="bulan" value="{{ substr($data->bulan, 0, 7) }}" required>
                         </div>
                         <div class="fv-row mb-7">
                             <label for="editProvinsi" class="d-flex align-items-center fs-6 fw-semibold mb-2">

@@ -44,51 +44,82 @@
                 <div class="card-body p-2">
                     <div class="card">
                         <div class="card-header align-items-center px-2">
-                            <div class="card-toolbar"></div> 
-                            <div class="card-title flex-row-fluid justify-content-end gap-5">
-                                <input type="hidden" class="export-title" value="Data Izin Badan Usaha Gas" />
+                            <div class="card-title">
+                                <button type="button" class="btn btn-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                    <i class="ki-duotone ki-exit-down fs-2"><span class="path1"></span><span class="path2"></span></i>
+                                    Export Table
+                                </button>
+                                <div id="kt_datatable_example_export_menu" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-200px py-4" data-kt-menu="true">
+                                    <div class="menu-item px-3">
+                                        <a href="{{ url()->current() }}?export=excel&search={{ request('search') }}" class="menu-link px-3">
+                                            Export as Excel
+                                        </a>
+                                    </div>
+                                    <div class="menu-item px-3">
+                                        <a href="{{ url()->current() }}?export=csv&search={{ request('search') }}" class="menu-link px-3">
+                                            Export as CSV
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="card-toolbar">
+                                <form method="GET" action="{{ url()->current() }}" class="d-flex" role="search">
+                                    <input type="text" name="search" value="{{ request('search') }}"
+                                        class="form-control form-control-sm me-2"
+                                        placeholder="Cari...">
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </form>
+                            </div> 
                         </div>
-                        <table class="kt-datatable table table-bordered table-hover">
-                            <thead class="bg-light">
-                                <tr class="fw-bold text-uppercase">
-                                    <th class="text-center">No</th>
-                                    <td class="text-center">Nama Perusahaan</td>                                               
-                                    <td class="text-center">Nama Provinsi</td>
-                                    <td class="text-center">Nama Kota</td>
-                                    <td class="text-center">Email Perusahaan</td>
-                                    <td class="text-center">Telepon</td>
-                                    <td class="text-center">Izin</td>
-                                    <td class="text-center">Alamat</td>
-                                    <td class="text-center">Jenis Izin</td>
-                                    <td class="text-center">Nama Opsi</td>
-                                    <td class="text-center">Tanggal Disetujui</td> 
-                                    <td class="text-center">Nomor Izin</td>
-                                    <td class="text-center">File Izin</td>
-                                </tr>
-                            </thead>
-                            <tbody class="fw-semibold text-gray-600">
-                                @foreach($result as $item)
-                                    <tr>
-                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                        <td>{{ $item->NAMA_PERUSAHAAN }}</td>                                                
-                                        <td>{{ $item->nama_provinsi }}</td>
-                                        <td>{{ $item->nama_kota }}</td>
-                                        <td>{{ $item->EMAIL_PERUSAHAAN }}</td>
-                                        <td>{{ $item->TELEPON }}</td>
-                                        <td>{{ $item->NAMA_TEMPLATE }}</td>
-                                        <td>{{ $item->ALAMAT }}</td>
-                                        <td>{{ $item->SUB_PAGE }}</td>
-                                        <td>{{ $item->nama_opsi }}</td>
-                                        <td>{{ $item->TGL_DISETUJUI }}</td>
-                                        <td>{{ $item->NOMOR_IZIN }}</td>
-                                        <td>{{ $item->FILE_IZIN }}</td>
-                                        
-
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="bg-light">
+                                    <tr class="fw-bold text-uppercase">
+                                        <th class="text-center">No</th>
+                                        <td class="text-center">Nama Perusahaan</td>                                               
+                                        <td class="text-center">Nama Provinsi</td>
+                                        <td class="text-center">Nama Kota</td>
+                                        <td class="text-center">Email Perusahaan</td>
+                                        <td class="text-center">Telepon</td>
+                                        <td class="text-center">Izin</td>
+                                        <td class="text-center">Alamat</td>
+                                        <td class="text-center">Jenis Izin</td>
+                                        <td class="text-center">Nama Opsi</td>
+                                        <td class="text-center">Tanggal Disetujui</td> 
+                                        <td class="text-center">Nomor Izin</td>
+                                        <td class="text-center">File Izin</td>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody class="fw-semibold text-gray-600">
+                                    @forelse ($result as $item)
+                                        <tr>
+                                            <td class="text-center">{{ ($result->currentPage() - 1) * $result->perPage() + $loop->iteration }}</td>
+                                            <td>{{ $item->NAMA_PERUSAHAAN }}</td>                                                
+                                            <td>{{ $item->nama_provinsi }}</td>
+                                            <td>{{ $item->nama_kota }}</td>
+                                            <td>{{ $item->EMAIL_PERUSAHAAN }}</td>
+                                            <td>{{ $item->TELEPON }}</td>
+                                            <td>{{ $item->NAMA_TEMPLATE }}</td>
+                                            <td>{{ $item->ALAMAT }}</td>
+                                            <td>{{ $item->SUB_PAGE }}</td>
+                                            <td>{{ $item->nama_opsi }}</td>
+                                            <td>{{ $item->TGL_DISETUJUI }}</td>
+                                            <td>{{ $item->NOMOR_IZIN }}</td>
+                                            <td>{{ $item->FILE_IZIN }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="18" class="text-center text-muted">Data tidak ditemukan</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            {{ $result->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>

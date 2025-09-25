@@ -1,6 +1,6 @@
 <!-- Modal Edit Kuota -->
 
-<div class="modal fade" id="kt_modal_edit" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="kt_modal_edit{{ $data->id }}" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <!--begin::Modal content-->
@@ -37,7 +37,7 @@
                                     <i class="ki-outline ki-information fs-7"></i>
                                 </span>
                             </label>
-                            <input class="form-control mb-2" type="month" id="editBulan" name="bulan" value="{{ substr($data->tahun, 0, 7) }}" required>
+                            <input class="form-control flatpickr mb-2" id="editBulan" name="bulan" value="{{ substr($data->tahun, 0, 7) }}" required>
                         </div>
 
                         <div class="fv-row mb-7">
