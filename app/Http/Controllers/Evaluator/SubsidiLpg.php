@@ -28,20 +28,20 @@ class SubsidiLpg extends Controller
 
 
     public function index_kuota(){
-        $provinsi=province::get();
+        $provinsi = province::get();
         $lpg_subsidi=kuota_lpg_subsidi::get();
         return view('evaluator.subsidi_lpg.kuota_subsidi.index', compact('lpg_subsidi','provinsi'));
 
     }
 
-    public function getKabkot($provinsi)
+    public function getKabkot($nama_provinsi)
     {
-        $kabkot = DB::table('t_kabkot')
-                    ->join('t_provinsi', 't_provinsi.ID_PROVINSI', '=', 't_kabkot.ID_PROVINSI')
-                    ->where('t_provinsi.NAMA_PROVINSI', $provinsi)
-                    ->select('t_kabkot.NAMA_KABKOT')
-                    ->get();
-    
+        $kabkot = DB::table('kotas')
+            ->join('provinces', 'provinces.id', '=', 'kotas.id_prov')
+            ->where('provinces.name', $nama_provinsi)
+            ->select('kotas.nama_kota')
+            ->get();
+
         return response()->json($kabkot);
     }
     
@@ -57,7 +57,7 @@ class SubsidiLpg extends Controller
 
 
         $data = [
-            'bulan' => $request->input('bulan'),
+            'bulan' => $request->input('bulan') . '-01',
             'provinsi'=>$request->input('provinsi'),
             'volume'=>$request->input('volume'),
             'created_at'=>Carbon::now()
@@ -94,7 +94,7 @@ class SubsidiLpg extends Controller
     
             // Assuming you have a model to store the form data
             $kuota = new kuota_lpg_subsidi();
-            $kuota->tahun = $validated['bulan'];
+            $kuota->tahun = $validated['bulan'] . '-01';
             $kuota->provinsi = strtoupper($validated['provinsi']); 
             $kuota->kabupaten_kota = strtoupper($validated['kabkot']); 
             $kuota->volume = $validated['volume'];

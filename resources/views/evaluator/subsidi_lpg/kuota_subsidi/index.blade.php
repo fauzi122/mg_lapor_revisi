@@ -96,7 +96,7 @@
                                                 data-provinsi="{{ $data->provinsi }}"
                                                 data-kabkot="{{ $data->kabupaten_kota }}"
                                                 data-volume="{{ $data->volume }}"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_edit">
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_edit{{ $data->id }}">
                                                 <i class="fa fa-edit"></i> Edit
                                             </button>
                                             
@@ -289,77 +289,88 @@
             });
         }
     </script>
+
+    {{-- Bagian Provinsi dan Kabkot --}}
 <script>
-    $(document).ready(function () {
-        // When the province is selected
-        $('#provinsiTambah').on('change', function () {
-            var selectedProvince = $(this).val();
+    var isLocalhost =
+        window.location.hostname === "mg_lapor_revisi.test" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.hostname === "localhost" ||
+        window.location.hostname.endsWith("duniasakha.com");
 
-            if (selectedProvince !== '') {
-                $.ajax({
-                    url: '/get-kabkot/' + selectedProvince, // Fetch kabkot data based on province
-                    type: 'GET',
-                    success: function (data) {
-                        var kabkotSelect = $('#kabkotTambah');
-                        kabkotSelect.empty().append('<option value="">--Pilih Kabupaten--</option>');
-                        $.each(data, function (index, kabkot) {
-                            kabkotSelect.append('<option value="' + kabkot.NAMA_KABKOT + '">' + kabkot.NAMA_KABKOT + '</option>');
-                        });
-                        kabkotSelect.show();
-                    },
-                    error: function () {
-                        alert('Error retrieving Kabupaten/Kota.');
-                    }
-                });
-            } else {
-                $('#kabkotTambah').hide();
-            }
-        });
-    });
-</script>
-<script>
-$(document).ready(function () {
-    // Ketika tombol edit ditekan
-    $('.edit-button').on('click', function () {
-        var kuotaId = $(this).data('id');
-        var bulan = $(this).data('bulan');  // Ambil data bulan (tahun)
-        var provinsi = $(this).data('provinsi');  // Ambil data provinsi
-        var kabkotSelected = $(this).data('kabkot');  // Ambil data kabupaten/kota yang tersimpan sebelumnya
-        var volume = $(this).data('volume');  // Ambil data volume
+    var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
 
-        // Isi form edit di modal
-        $('#editBulan').val(bulan);
-        $('#editProvinsi').val(provinsi);
-        $('#editVolume').val(volume);
-
-        // Fetch kabupaten/kota berdasarkan provinsi
+    function loadKabkot(provinsi, kabkotSelected, targetSelect) {
         $.ajax({
-            url: '/get-kabkot/' + provinsi,  // Pastikan endpoint ini benar
-            type: 'GET',
+            url: baseUrl + "get-kabkot/" + encodeURIComponent(provinsi),
+            type: "GET",
             success: function (data) {
-                var kabkotSelect = $('#editKabkot');
-                kabkotSelect.empty().append('<option value="">--Pilih Kabupaten--</option>'); // Kosongkan dropdown dan tambahkan placeholder
+                targetSelect.empty().append('<option value="">--Pilih Kabupaten--</option>');
+
                 $.each(data, function (index, kabkot) {
-                    // Tambahkan setiap kabupaten/kota ke dropdown, dan set sebagai selected jika sama dengan kabkot yang sudah tersimpan
-                    kabkotSelect.append('<option value="' + kabkot.NAMA_KABKOT + '" ' + (kabkot.NAMA_KABKOT == kabkotSelected ? 'selected' : '') + '>' + kabkot.NAMA_KABKOT + '</option>');
+                    var selected =
+                        kabkotSelected &&
+                        kabkot.nama_kota.trim().toLowerCase() === kabkotSelected.trim().toLowerCase()
+                            ? " selected"
+                            : "";
+
+                    targetSelect.append(
+                        '<option value="' + kabkot.nama_kota + '"' + selected + ">" +
+                        kabkot.nama_kota +
+                        "</option>"
+                    );
                 });
-                kabkotSelect.show();
+
+                targetSelect.show();
             },
             error: function () {
-                alert('Error retrieving Kabupaten/Kota.');
+                alert("Error retrieving Kabupaten/Kota.");
+            },
+        });
+    }
+
+    $(document).ready(function () {
+        // ============= CREATE MODE =============
+        $("#provinsiTambah").on("change", function () {
+            var provinsi = $(this).val();
+            var kabkotSelect = $("#kabkotTambah");
+
+            if (provinsi !== "") {
+                loadKabkot(provinsi, null, kabkotSelect);
+            } else {
+                kabkotSelect.empty().append('<option value="">--Pilih Kabupaten--</option>').hide();
             }
         });
 
-        // Set form action URL sesuai dengan kuota ID
-        $('#editKuotaForm').attr('action', '/lpg/kuota/update/' + kuotaId);
+        // ============= EDIT MODE =============
+        $(".edit-button").on("click", function () {
+            var kuotaId = $(this).data("id");
+            var bulan = $(this).data("bulan");
+            var provinsi = $(this).data("provinsi");
+            var kabkotSelected = $(this).data("kabkot");
+            var volume = $(this).data("volume");
 
-        // Tampilkan modal edit
-        $('#editKuotaModal').modal('show');
+            var modal = $("#kt_modal_edit" + kuotaId);
+
+            modal.find("#editBulan").val(bulan);
+            modal.find("#editProvinsi").val(provinsi);
+            modal.find("#editVolume").val(volume);
+            modal.find("#editKuotaForm").attr("action", "/lpg/kuota/update/" + kuotaId);
+
+            // load kabkot default (data lama)
+            loadKabkot(provinsi, kabkotSelected, modal.find("#editKabkot"));
+
+            // supaya kalau provinsi diganti di modal edit, kabkot ikut update
+            modal.find("#editProvinsi").off("change").on("change", function () {
+                var provinsiBaru = $(this).val();
+                loadKabkot(provinsiBaru, null, modal.find("#editKabkot"));
+            });
+
+            modal.modal("show");
+        });
     });
-});
-
-
 </script>
+
 
     <!-- Pastikan jQuery sudah di-include sebelum script ini -->
 
@@ -379,7 +390,7 @@ $(document).ready(function () {
 
                             // Add new options
                             $.each(data, function (index, kabkot) {
-                                var option = '<option value="' + kabkot.ID_KABKOT + '">' + kabkot.NAMA_KABKOT + '</option>';
+                                var option = '<option value="' + kabkot.ID_KABKOT + '">' + kabkot.nama_kota + '</option>';
                                 kabkotSelect.append(option);
                             });
 

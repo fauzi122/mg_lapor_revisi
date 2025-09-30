@@ -109,6 +109,49 @@
                                 </tbody>
                             </table>
                         </div>
+<<<<<<< HEAD
+=======
+                        <table class="kt-datatable table table-bordered table-hover">
+                            <thead class="bg-light">
+                                <tr class="fw-bold text-uppercase">
+                                    <th th class="text-center">No.</th>
+                                    <th class="text-center">Nama Role</th>
+                                    <th class="text-center">Permissions</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-semibold text-gray-600">
+                                @foreach ($roles as $no => $role)
+                                <tr>
+                                    <td style="text-align: center">{{ $loop->iteration }}</td>
+                                    <td>{{ $role->name }}</td>
+                                        
+                                    <td>
+                                        @foreach($role->getPermissionNames() as $permission)
+                                            @if(Str::contains($permission, '_ujian'))
+
+                                            <button class="btn btn-sm btn-warning mb-1 mt-1 mr-1">{{ $permission }}</button>
+
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td class="text-center">
+                                        {{-- @can('PPIC_role.edit')  --}}
+                                        <a href="{{ url('/role/edit') }}/{{ $role->id }}" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-pencil-fill"></i> Edit
+                                        </a>
+                                        {{-- @endcan  --}}
+                                        {{-- @can('PPIC_role.delete')  --}}
+                                        <button onClick="Delete(this.id)" class="btn btn-sm btn-danger" id="{{ $role->id }}">
+                                            <i class="bi bi-trash3-fill"></i> Delete
+                                        </button>
+                                        {{-- @endcan --}}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+>>>>>>> faa0d5c60c2d9b704e8d0eb9c606de423a7c586a
                     </div>
                 </div>
             </div>

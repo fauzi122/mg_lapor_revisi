@@ -17,7 +17,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/lpg/storekuota_excel" method="post" id="myform" enctype="multipart/form-data">
+            <form action="{{ url('/lpg/storekuota_excel') }}" method="post" id="myform" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body py-10 px-lg-17">
                     <div class="scroll-y me-n7 pe-7" id="kt_modal_new_excel_scroll" data-kt-scroll="true"
@@ -34,7 +34,7 @@
                                     <i class="ki-outline ki-information fs-7"></i>
                                 </span>
                             </label>
-                            <input class="form-control mb-2" type="month" id="bulan" name="tahun" required>
+                            <input class="form-control flatpickr mb-2" id="bulan" name="tahun" required>
                         </div>
 
                         <div class="fv-row mb-7">

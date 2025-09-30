@@ -61,7 +61,7 @@
                 </div>
                 <div class="card-body p-2">
                     <div class="card p-3">
-                        <form action="/role/update/{{ $role->id }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url('/role/update') }}/{{ $role->id }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('patch')
                             <div class="form-group">
