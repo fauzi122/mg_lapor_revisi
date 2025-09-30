@@ -301,11 +301,11 @@
                                                             <h6>Biaya Perolehan : <span
                                                                     class="text-info">{{ $hargaLPG->biaya_perolehan }}</span>
                                                             </h6>
-                                                            <h6>Biaya Distribusi : <span
-                                                                    class="text-info">{{ $hargaLPG->biaya_distribusi }}</span>
-                                                            </h6>
                                                             <h6>Biaya Penyimpanan : <span
                                                                     class="text-info">{{ $hargaLPG->biaya_penyimpanan }}</span>
+                                                            </h6>
+                                                            <h6>Biaya Distribusi : <span
+                                                                    class="text-info">{{ $hargaLPG->biaya_distribusi }}</span>
                                                             </h6>
                                                             <h6>Margin : <span
                                                                     class="text-info">{{ $hargaLPG->margin }}</span></h6>

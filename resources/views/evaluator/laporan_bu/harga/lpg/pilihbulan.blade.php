@@ -151,8 +151,8 @@
                                             <th style="text-align: center; vertical-align: middle;">Sektor</th>
                                             <th style="text-align: center; vertical-align: middle;">Volume</th>
                                             <th style="text-align: center; vertical-align: middle;">Biaya Perolehan</th>
-                                            <th style="text-align: center; vertical-align: middle;">Biaya Distribusi</th>
                                             <th style="text-align: center; vertical-align: middle;">Biaya Penyimpanan</th>
+                                            <th style="text-align: center; vertical-align: middle;">Biaya Distribusi</th>
                                             <th style="text-align: center; vertical-align: middle;">Margin</th>
                                             <th style="text-align: center; vertical-align: middle;">PPN</th>
                                             {{-- <th style="text-align: center; vertical-align: middle;">PBBKB</th> --}}
@@ -254,8 +254,8 @@
                                                 <td>{{ $pgb->sektor }}</td>
                                                 <td>{{ $pgb->volume }}</td>
                                                 <td>{{ $pgb->biaya_perolehan }}</td>
-                                                <td>{{ $pgb->biaya_distribusi }}</td>
                                                 <td>{{ $pgb->biaya_penyimpanan }}</td>
+                                                <td>{{ $pgb->biaya_distribusi }}</td>
                                                 <td>{{ $pgb->margin }}</td>
                                                 <td>{{ $pgb->ppn }}</td>
                                                 {{-- <td>{{ $pgb->pbbkp }}</td> --}}
