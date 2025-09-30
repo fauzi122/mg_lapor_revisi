@@ -207,17 +207,6 @@
                                                                 </form>
                                                             @endif
 
-                                                            <br>
-                                                            @if ($hargabbmjbu->status == 1 && $hargabbmjbu->catatan)
-                                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($hargabbmjbu->status == 1)
-                                                                <span class="badge badge-success">Diterima</span>
-                                                            @elseif ($hargabbmjbu->status == 2)
-                                                                <span class="badge badge-danger" data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-updateStatus-{{ $hargabbmjbu->id }}">
-                                                                    Cek Revisi
-                                                                </span>
-                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -312,11 +301,11 @@
                                                             <h6>Biaya Perolehan : <span
                                                                     class="text-info">{{ $hargaLPG->biaya_perolehan }}</span>
                                                             </h6>
-                                                            <h6>Biaya Distribusi : <span
-                                                                    class="text-info">{{ $hargaLPG->biaya_distribusi }}</span>
-                                                            </h6>
                                                             <h6>Biaya Penyimpanan : <span
                                                                     class="text-info">{{ $hargaLPG->biaya_penyimpanan }}</span>
+                                                            </h6>
+                                                            <h6>Biaya Distribusi : <span
+                                                                    class="text-info">{{ $hargaLPG->biaya_distribusi }}</span>
                                                             </h6>
                                                             <h6>Margin : <span
                                                                     class="text-info">{{ $hargaLPG->margin }}</span></h6>
@@ -405,17 +394,6 @@
                                                                 </form>
                                                             @endif
 
-                                                            <br>
-                                                            @if ($hargaLPG->status == 1 && $hargaLPG->catatan)
-                                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($hargaLPG->status == 1)
-                                                                <span class="badge badge-success">Diterima</span>
-                                                            @elseif ($hargaLPG->status == 2)
-                                                                <span class="badge badge-danger" data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-updateStatus-{{ $hargaLPG->id }}">
-                                                                    Cek Revisi
-                                                                </span>
-                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach

@@ -69,8 +69,13 @@
                         @enderror
                     </div>
                     <div class="mb-6">
-                        <label for="example-text-input" class="form-label">Biaya Perolehan <span
-                                class="text-danger">(Satuan RP / KL)</span></label>
+                        <label for="example-text-input" class="form-label">Biaya Perolehan
+                            <span data-bs-toggle="tooltip" aria-label="Harga Pembelian/Pengadaan Produk"
+                                data-bs-original-title="Harga Pembelian/Pengadaan Produk">
+                                <i class="ki-outline ki-information-5 text-gray-500 fs-6"></i>
+                            </span>
+                            <span class="text-danger ms-1">(Satuan RP / KL)</span>
+                        </label>
                         <input class="form-control" type="text" id="example-text-input" name="biaya_perolehan"
                             value="{{ old('biaya_perolehan') }}"
                             oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
@@ -108,7 +113,9 @@
                         <label for="example-text-input" class="form-label">Margin <span class="text-danger">(Satuan
                                 RP / KL)</span></label>
                         <input class="form-control" type="text" id="example-text-input" name="margin"
-                            value="{{ old('margin') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                            value="{{ old('margin') }}"
+                            oninput="this.value = this.value.replace(/(?!^-)[^0-9.]/g, '');">
+
                         @error('margin')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
@@ -127,8 +134,8 @@
                         @enderror
                     </div>
                     <div class="mb-6">
-                        <label for="example-text-input" class="form-label">PBBKP <span class="text-danger">(Satuan RP
-                                / KL)</span></label>
+                        <label for="example-text-input" class="form-label">PBBKP
+                            <span class="text-danger">(Satuan RP / KL)</span></label>
                         <input class="form-control" type="text" id="example-text-input" name="pbbkp"
                             value="{{ old('pbbkp') }}" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
                         @error('pbbkp')
@@ -600,24 +607,24 @@
                         @enderror
                     </div>
                     <div class="mb-6">
-                        <label for="example-text-input" class="form-label">Biaya Distribusi <span
-                                class="text-danger">(Satuan RP / Mton)</span></label>
-                        <input class="form-control" type="text" id="example-text-input" name="biaya_distribusi"
-                            value="{{ old('biaya_distribusi') }}"
-                            oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                        @error('biaya_distribusi')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-6">
                         <label for="example-text-input" class="form-label">Biaya Penyimpanan <span
                                 class="text-danger">(Satuan RP / Mton)</span></label>
                         <input class="form-control" type="text" id="example-text-input" name="biaya_penyimpanan"
                             value="{{ old('biaya_penyimpanan') }}"
                             oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
                         @error('biaya_penyimpanan')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="mb-6">
+                        <label for="example-text-input" class="form-label">Biaya Distribusi <span
+                                class="text-danger">(Satuan RP / Mton)</span></label>
+                        <input class="form-control" type="text" id="example-text-input" name="biaya_distribusi"
+                            value="{{ old('biaya_distribusi') }}"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                        @error('biaya_distribusi')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -777,23 +784,23 @@
                         @enderror
                     </div>
                     <div class="mb-6">
-                        <label for="example-text-input" class="form-label">Biaya Distribusi <span
-                                class="text-danger">(Satuan RP / Mton)</span></label>
-                        <input class="form-control" type="text" name="biaya_distribusi"
-                            id="biaya_distribusi_hargaLPG" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                        @error('biaya_distribusi')
-                            <div class="form-group has-danger mb-0">
-                                <div class="form-control-feedback">{{ $message }}</div>
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-6">
                         <label for="example-text-input" class="form-label">Biaya Penyimpanan <span
                                 class="text-danger">(Satuan RP / Mton)</span></label>
                         <input class="form-control" type="text" name="biaya_penyimpanan"
                             id="biaya_penyimpanan_hargaLPG"
                             oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
                         @error('biaya_penyimpanan')
+                            <div class="form-group has-danger mb-0">
+                                <div class="form-control-feedback">{{ $message }}</div>
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="mb-6">
+                        <label for="example-text-input" class="form-label">Biaya Distribusi <span
+                                class="text-danger">(Satuan RP / Mton)</span></label>
+                        <input class="form-control" type="text" name="biaya_distribusi"
+                            id="biaya_distribusi_hargaLPG" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                        @error('biaya_distribusi')
                             <div class="form-group has-danger mb-0">
                                 <div class="form-control-feedback">{{ $message }}</div>
                             </div>
@@ -904,16 +911,16 @@
                         id="lihat_biaya_perolehan_hargaLPG" readonly>
                 </div>
                 <div class="mb-6">
-                    <label for="example-text-input" class="form-label">Biaya Distribusi <span
-                            class="text-danger">(Satuan RP / Mton)</span></label>
-                    <input class="form-control" type="number" name="biaya_distribusi"
-                        id="lihat_biaya_distribusi_hargaLPG" readonly>
-                </div>
-                <div class="mb-6">
                     <label for="example-text-input" class="form-label">Biaya Penyimpanan <span
                             class="text-danger">(Satuan RP / Mton)</span></label>
                     <input class="form-control" type="number" name="biaya_penyimpanan"
                         id="lihat_biaya_penyimpanan_hargaLPG" readonly>
+                </div>
+                <div class="mb-6">
+                    <label for="example-text-input" class="form-label">Biaya Distribusi <span
+                            class="text-danger">(Satuan RP / Mton)</span></label>
+                    <input class="form-control" type="number" name="biaya_distribusi"
+                        id="lihat_biaya_distribusi_hargaLPG" readonly>
                 </div>
                 <div class="mb-6">
                     <label for="example-text-input" class="form-label">Margin <span class="text-danger">(Satuan RP /
@@ -957,7 +964,8 @@
                 <h5 class="modal-title text-white">Import Harga LPG</h5>
                 <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
                     aria-label="Close">
-                    <i class="ki-duotone ki-cross fs-2x"><span class="path1"></span><span class="path2"></span></i>
+                    <i class="ki-duotone ki-cross fs-2x"><span class="path1"></span><span
+                            class="path2"></span></i>
                 </div>
             </div>
             <form method="post" action="{{ url('/importHargaLPG') }}" class="form-material m-t-40"

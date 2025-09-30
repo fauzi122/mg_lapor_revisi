@@ -173,18 +173,6 @@
                                                                     </button>
                                                                 </form>
                                                             @endif
-
-                                                            <br>
-                                                            @if ($data->status == 1 && $data->catatan)
-                                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($data->status == 1)
-                                                                <span class="badge badge-success">Diterima</span>
-                                                            @elseif ($data->status == 2)
-                                                                <span class="badge badge-danger" data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-updateStatus-{{ $data->id }}">
-                                                                    Cek Revisi
-                                                                </span>
-                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -352,17 +340,6 @@
                                                                 </form>
                                                             @endif
 
-                                                            <br>
-                                                            @if ($pasokan->status == 1 && $pasokan->catatan)
-                                                                <span class="badge badge-warning">Sudah Diperbaiki</span>
-                                                            @elseif ($pasokan->status == 1)
-                                                                <span class="badge badge-success">Diterima</span>
-                                                            @elseif ($pasokan->status == 2)
-                                                                <span class="badge badge-danger" data-bs-toggle="modal"
-                                                                    data-bs-target="#modal-updateStatus-{{ $pasokan->id }}">
-                                                                    Cek Revisi
-                                                                </span>
-                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
