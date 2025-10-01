@@ -2,7 +2,7 @@
 <div class="modal fade" id="editKuotaModal" tabindex="-1" role="dialog" aria-labelledby="editKuotaModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
-          <form action="" method="post" id="editKuotaForm">
+          <form action="{{ url('/lpg/subsidi/update/'. $data->id) }}" method="post" id="editKuotaForm">
               @csrf
               @method('PUT')
               <div class="modal-header">

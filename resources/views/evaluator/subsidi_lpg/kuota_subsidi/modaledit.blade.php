@@ -17,7 +17,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="" method="post" id="editKuotaForm" enctype="multipart/form-data">
+            <form action="{{ url('/lpg/kuota/update/'. $data->id) }}" method="post" id="editKuotaForm" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="modal-body py-10 px-lg-17">
