@@ -247,6 +247,14 @@
 @endsection
 @section('script')
     <script>
+        var isLocalhost =
+            window.location.hostname === "mg_lapor_revisi.test" ||
+            window.location.hostname === "127.0.0.1" ||
+            window.location.hostname === "localhost" ||
+            window.location.hostname.endsWith("duniasakha.com");
+
+        var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
+        
         function deleteItem(itemId) {
             Swal.fire({
                 title: 'Anda yakin?',
@@ -261,7 +269,7 @@
                 if (result.isConfirmed) {
                     var csrfToken = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
-                        url: '/lpg/kuota/delete/' + itemId,
+                        url: baseUrl + 'lpg/kuota/delete/' + itemId,
                         type: 'post',
                         headers: {
                             'X-CSRF-TOKEN': csrfToken
@@ -288,17 +296,6 @@
                 }
             });
         }
-    </script>
-
-    {{-- Bagian Provinsi dan Kabkot --}}
-<script>
-    var isLocalhost =
-        window.location.hostname === "mg_lapor_revisi.test" ||
-        window.location.hostname === "127.0.0.1" ||
-        window.location.hostname === "localhost" ||
-        window.location.hostname.endsWith("duniasakha.com");
-
-    var baseUrl = isLocalhost ? "/" : "/pelaporan-hilir/";
 
     function loadKabkot(provinsi, kabkotSelected, targetSelect) {
         $.ajax({
