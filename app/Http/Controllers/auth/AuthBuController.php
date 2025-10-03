@@ -253,8 +253,10 @@ class AuthBuController extends Controller
         //     'bearer_token' => $bearerToken
         // ]);
 
-        $response = $apiOss->post('oss/v1.0/sso/users/userinfo-token', [], $bearerToken);
-        dd($response->json());
+        // $response = $apiOss->post('oss/v1.0/sso/users/userinfo-token', [], $bearerToken);
+        $response = Http::withToken($bearerToken)
+    ->post('oss/v1.0/sso/users/userinfo-token');
+
         // Log Response API
         // Log::info('Received response from API OSS', [
         //     'status' => $response->status(),
