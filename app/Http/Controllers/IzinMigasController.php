@@ -24,7 +24,7 @@ class IzinMigasController extends Controller
         }
 
         $npwp = $request->query('npwp');
-        dd($npwp);
+        // dd($npwp);
         try {
             $result = SaveIzinMigasJob::dispatchSync($npwp);
             // dd($result);
