@@ -254,7 +254,7 @@ class AuthBuController extends Controller
         // ]);
 
         $response = $apiOss->post('oss/v1.0/sso/users/userinfo-token', [], $bearerToken);
-        dd($response->json());
+        // dd($response->json());
     //     $response = Http::withToken($bearerToken)
     // ->post('oss/v1.0/sso/users/userinfo-token');
 
@@ -311,9 +311,10 @@ class AuthBuController extends Controller
         if (Auth::attempt($credentials)) {
             // Log sukses login
             // Log::info('User authenticated successfully', ['user_id' => $user->id]);
-
+            // dd($credentials);
             // Panggil endpoint simpan
-            Http::withoutVerifying()->get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
+            // Http::withoutVerifying()->get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
+            SaveIzinMigasJob::dispatchSync($npwp);
 
             // Redirect ke homepage setelah login berhasil
             return redirect('/');

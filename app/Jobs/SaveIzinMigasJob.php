@@ -33,6 +33,8 @@ class SaveIzinMigasJob
             ],
         ]);
 
+        // dd($response);
+
         // Pastikan respons API berhasil
         if (!$response->successful()) {
             logger()->error("Gagal mendapatkan data dari API MIGAS", ['body' => $response->body()]);
