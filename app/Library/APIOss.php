@@ -5,6 +5,8 @@ namespace App\Library;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Client\Response as ClientResponse;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class APIOss
 {
@@ -33,7 +35,7 @@ class APIOss
                 ->withOptions([
                     'verify' => App::environment('production'), // false di local
                 ])
-                ->post(self::BASEURL . ltrim($endpoint, '/'), $data);
+                ->post(self::BASEURL . ltrim($endpoint, '/'), $data)->throw();
 
             // Log response
             // Log::info('Received response from API OSS', [
@@ -44,11 +46,25 @@ class APIOss
             return $response;
         } catch (\Exception $e) {
             // Log::error('Error saat POST ke API OSS', ['error' => $e->getMessage()]);
-            return response()->json([
+            // return response()->json([
+            //     'status' => 'failed',
+            //     'message' => 'Error saat POST ke API OSS',
+            //     'error' => $e->getMessage()
+            // ], 500);
+
+            $body = [
                 'status' => 'failed',
                 'message' => 'Error saat POST ke API OSS',
-                'error' => $e->getMessage()
-            ], 500);
+                'error' => $e->getMessage(),
+            ];
+
+            $guzzleResponse = new GuzzleResponse(
+                500,
+                ['Content-Type' => 'application/json'],
+                json_encode($body)
+            );
+
+            return new ClientResponse($guzzleResponse);
         }
     }
 
