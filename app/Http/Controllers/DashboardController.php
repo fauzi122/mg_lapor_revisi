@@ -22,64 +22,67 @@ class DashboardController extends Controller
         // $this->middleware(['permission:permissions.index']);
     }
 
-    public function dashboard()
+   public function dashboard()
 {
-    // Ambil data dasar
+    // 1. Ambil data meping dasar
     $meping = Meping::select('id_template')->groupBy('id_template')->get();
     $sub_page = Meping::all();
     $sub_menu = Meping::select('id_sub_menu')->groupBy('id_sub_menu')->get();
 
-    // Jalankan query utama
-   $result = DB::select("
-    SELECT
-        m.*,
-        i.id AS izin_id,
-        i.npwp,
-        i.status_djp,
-        jt.id_izin,
-        jt.tanggal_izin,
-        jt.id_permohonan,
-        jt.kode_izin_desc,
-        jt.jenis_izin_desc,
-        jt.jenis_pengesahan,
-        jt.status_pengesahan,
-        jt.no_sertifikat_izin,
-        jt.tanggal_pengesahan,
-        jt.sub_page_id,
-        jt.no_sk_izin
-    FROM mepings m
-    JOIN izin_migas i ON TRUE
-    JOIN LATERAL (
+    // 2. Jalankan query utama dengan parsing JSON aman
+    $result = DB::select("
         SELECT
-            (d ->> 'Id_Izin')::int AS id_izin,
-            (d ->> 'status_djp')::int AS status_djp,
-            (d ->> 'Tanggal_izin')::date AS tanggal_izin,
-            (d ->> 'Id_Permohonan')::int AS id_permohonan,
-            (d ->> 'Kode_Izin_Desc') AS kode_izin_desc,
-            (d ->> 'Jenis_Izin_Desc') AS jenis_izin_desc,
-            (d ->> 'Jenis_Pengesahan') AS jenis_pengesahan,
-            (d ->> 'Status_Pengesahan') AS status_pengesahan,
-            (d ->> 'No_Sertifikat_izin') AS no_sertifikat_izin,
-            (d ->> 'No_SK_Izin') AS no_sk_izin,
-            -- Memeriksa apakah 'Tanggal_Pengesahan' valid sebelum mengonversinya
-            CASE
-                WHEN (d ->> 'Tanggal_Pengesahan') = '-' THEN NULL
-                ELSE (d ->> 'Tanggal_Pengesahan')::timestamp
-            END AS tanggal_pengesahan,
-            (mi ->> 'sub_page_id')::int AS sub_page_id
-        FROM jsonb_array_elements(i.data_izin::jsonb) d
-        LEFT JOIN LATERAL jsonb_array_elements(d -> 'multiple_id') mi ON TRUE
-    ) jt ON m.id_sub_page::int = jt.sub_page_id AND m.id_template::int = jt.id_izin
-    WHERE i.npwp = ?
-", [auth()->user()->npwp]);
+            m.*,
+            i.id AS izin_id,
+            i.npwp,
+            i.status_djp,
+            jt.id_izin,
+            jt.tanggal_izin,
+            jt.id_permohonan,
+            jt.kode_izin_desc,
+            jt.jenis_izin_desc,
+            jt.jenis_pengesahan,
+            jt.status_pengesahan,
+            jt.no_sertifikat_izin,
+            jt.tanggal_pengesahan,
+            jt.sub_page_id,
+            jt.no_sk_izin
+        FROM mepings m
+        JOIN izin_migas i ON TRUE
+        JOIN LATERAL (
+            SELECT
+                CASE WHEN (d ->> 'Id_Izin') ~ '^\\d+$' THEN (d ->> 'Id_Izin')::int ELSE NULL END AS id_izin,
+                CASE WHEN (d ->> 'status_djp') ~ '^\\d+$' THEN (d ->> 'status_djp')::int ELSE NULL END AS status_djp,
+                CASE WHEN (d ->> 'Tanggal_izin') ~ '^\\d{4}-\\d{2}-\\d{2}$' THEN (d ->> 'Tanggal_izin')::date ELSE NULL END AS tanggal_izin,
+                CASE WHEN (d ->> 'Id_Permohonan') ~ '^\\d+$' THEN (d ->> 'Id_Permohonan')::int ELSE NULL END AS id_permohonan,
+                (d ->> 'Kode_Izin_Desc') AS kode_izin_desc,
+                (d ->> 'Jenis_Izin_Desc') AS jenis_izin_desc,
+                (d ->> 'Jenis_Pengesahan') AS jenis_pengesahan,
+                (d ->> 'Status_Pengesahan') AS status_pengesahan,
+                (d ->> 'No_Sertifikat_izin') AS no_sertifikat_izin,
+                (d ->> 'No_SK_Izin') AS no_sk_izin,
+                CASE WHEN (d ->> 'Tanggal_Pengesahan') ~ '^\\d{4}-\\d{2}-\\d{2}' THEN (d ->> 'Tanggal_Pengesahan')::timestamp ELSE NULL END AS tanggal_pengesahan,
+                CASE WHEN (mi ->> 'sub_page_id') ~ '^\\d+$' THEN (mi ->> 'sub_page_id')::int ELSE NULL END AS sub_page_id
+            FROM jsonb_array_elements(i.data_izin::jsonb) d
+            LEFT JOIN LATERAL jsonb_array_elements(d -> 'multiple_id') mi ON TRUE
+        ) jt ON m.id_sub_page::int = jt.sub_page_id
+             AND m.id_template::int = jt.id_izin
+        WHERE i.npwp = ?
+    ", [auth()->user()->npwp]);
 
+    // 3. Cek apakah ada data yang tidak lengkap (misalnya NULL)
+    $incomplete = collect($result)->filter(function ($row) {
+        return is_null($row->id_izin) || is_null($row->sub_page_id) || is_null($row->tanggal_izin);
+    });
 
-// dd($result);
+    if ($incomplete->count() > 0) {
+        Session::flash('warning', 'Beberapa data izin tidak lengkap dan mungkin tidak ditampilkan dengan sempurna.');
+    }
 
-    // Ambil status_djp pertama (jika ada)
+    // 4. Ambil status_djp pertama (jika ada)
     $firstStatusDjp = $result[0]->status_djp ?? null;
 
-    // Hitung jumlah berdasarkan kode_izin_desc unik per id_permohonan
+    // 5. Hitung jumlah berdasarkan kode_izin_desc unik per id_permohonan
     $template_counts = collect($result)
         ->unique('id_permohonan')
         ->reduce(function ($carry, $row) {
@@ -87,18 +90,12 @@ class DashboardController extends Controller
             $carry[$key] = ($carry[$key] ?? 0) + 1;
             return $carry;
         }, []);
-// dd([
-//     'j_pengolahan' => Session::get('j_pengolahan'),
-//     'template_counts' => $template_counts,
-// ]);
-    // Simpan hasil ke dalam $data
-    $data['template_counts'] = $template_counts;
 
-    // Simpan kategori pengolahan ke session
+    // 6. Simpan kategori pengolahan
     $kategoriPengolahan = Meping::select('kategori')->groupBy('kategori')->get();
     Session::put('kategori_pengolahan', $kategoriPengolahan);
 
-    // Simpan jumlah kategori ke session
+    // 7. Hitung jumlah kategori berdasarkan keyword
     $kategoriList = [
         'j_niaga_s'     => 'sementara niaga',
         'j_niaga'       => 'niaga',
@@ -106,13 +103,12 @@ class DashboardController extends Controller
         'j_penyimpanan' => 'penyimpanan',
         'j_pengangkutan'=> 'pengangkutan',
     ];
-	// dd($kategoriList);
 
     foreach ($kategoriList as $sessionKey => $keyword) {
         Session::put($sessionKey, $this->sumSimilarTemplates($template_counts, $keyword));
     }
 
-    // Kirim ke view
+    // 8. Kirim semua ke view
     return view('badanUsaha.dashboard', compact(
         'result',
         'meping',
@@ -122,6 +118,7 @@ class DashboardController extends Controller
         'firstStatusDjp'
     ));
 }
+
 
 
 	function sumSimilarTemplates($templateCounts, $templateNameToMatch)
