@@ -192,7 +192,7 @@ class AuthBuController extends Controller
 
             if (Auth::attempt($credentials)) {
                 try {
-                    $result = SaveIzinMigasJob::dispatchSync($npwp);
+                    $result = SaveIzinMigasJob::dispatch($npwp)->onConnection('sync');
                     // dd($result);
                     // return response()->json([
                     //     'status' => $result['status'],
@@ -314,7 +314,7 @@ class AuthBuController extends Controller
             // dd($credentials);
             // Panggil endpoint simpan
             // Http::withoutVerifying()->get(url('/izin-migas/simpan'), ['npwp' => $npwp]);
-            SaveIzinMigasJob::dispatchSync($npwp);
+            SaveIzinMigasJob::dispatch($npwp)->onConnection('sync');
 
             // Redirect ke homepage setelah login berhasil
             return redirect('/');
