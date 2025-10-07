@@ -263,7 +263,7 @@ class AuthBuController extends Controller
         //     'status' => $response->status(),
         //     'body' => $response->body()
         // ]);
-
+        
         if (!$response->successful()) {
             return response()->json([
                 'status' => 'error',
